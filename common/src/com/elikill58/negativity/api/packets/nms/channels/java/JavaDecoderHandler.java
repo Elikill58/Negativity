@@ -58,6 +58,8 @@ public class JavaDecoderHandler implements Consumer<SelectionKey> {
                 ByteBuffer payload = content.asByteBuffer(content.readerOffset());
                 final int packetId = new PacketSerializer(Unpooled.wrappedBuffer(payload)).readVarInt();
     			NPacket packet = Adapter.getAdapter().getVersionAdapter().getVersion().getPacket(PacketDirection.CLIENT_TO_SERVER, packetId);
+    			if(packet == null)
+    				return;
     			packet.read(new PacketSerializer(Unpooled.wrappedBuffer(payload)));
     			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
     			EventManager.callEvent(event);

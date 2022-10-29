@@ -17,7 +17,6 @@ import org.bukkit.plugin.messaging.Messenger;
 
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
@@ -77,7 +76,6 @@ public class SpigotNegativity extends JavaPlugin {
 		getLogger().info("Running with Java " + System.getProperty("java.version"));
 
 		Negativity.loadNegativity();
-		SpigotFakePlayer.loadClass();
 
 		try {
 			Class.forName("com.google.gson.JsonObject");

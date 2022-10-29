@@ -18,24 +18,24 @@ public abstract class NamedVersion {
 	public NPacket getPacket(PacketDirection dir, int packetId) {
 		switch (dir) {
 		case CLIENT_TO_SERVER:
-			return createPacket(packetId, playIn);
+			return createPacket(dir, packetId, playIn);
 		case SERVER_TO_CLIENT:
-			return createPacket(packetId, playOut);
+			return createPacket(dir, packetId, playOut);
 		case HANDSHAKE:
-			return createPacket(packetId, handshake);
+			return createPacket(dir, packetId, handshake);
 		case LOGIN:
-			return createPacket(packetId, login);
+			return createPacket(dir, packetId, login);
 		case STATUS:
-			return createPacket(packetId, status);
+			return createPacket(dir, packetId, status);
 		}
 		return null;
 	}
 	
-	private NPacket createPacket(int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
+	private NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
 		PacketType type = packetTypes.get(packetId);
 		if(type != null)
 			return type.createNewPacket();
-		Adapter.getAdapter().debug("Failed to find packetId " + packetId);
-		return null;
+		Adapter.getAdapter().debug("Failed to find packetId " + packetId + " for " + dir.name() + " (registered: " + packetTypes.size() + ")");
+		return dir.createUnsetPacket(null);
 	}
 }

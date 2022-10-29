@@ -18,8 +18,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,11 +32,6 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	public Spigot_1_18_R1() {
 		super("v1_18_R1");
 	}
-	
-	@Override
-	protected String getOnGroundFieldName() {
-		throw new UnsupportedOperationException("Should not be called");
-	}
 
 	@Override
 	public double getAverageTps() {
@@ -51,11 +44,6 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	}
 
 	@Override
-	public Class<?> getEnumPlayerInfoAction() {
-		return ServerboundPlayerActionPacket.Action.class;
-	}
-
-	@Override
 	public double[] getTps() {
 		return getServer().recentTps;
 	}
@@ -65,6 +53,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 		return ((ServerPlayer) PacketUtils.getEntityPlayer(p)).connection;
 	}
 
+	@Override
 	public Channel getChannel(Player p) {
 		return getPlayerConnection(p).connection.channel;
 	}
@@ -95,22 +84,6 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			e.printStackTrace();
 			return new ArrayList<>();
 		}
-	}
-
-	@Override
-	public float cos(float f) {
-		return Mth.cos(f);
-	}
-
-	@Override
-	public float sin(float f) {
-		return Mth.sin(f);
-	}
-
-	@Override
-	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
-		BlockPos pos = (BlockPos) obj;
-		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override

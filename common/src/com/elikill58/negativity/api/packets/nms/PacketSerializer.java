@@ -484,6 +484,14 @@ public class PacketSerializer {
 	    int z = (int) (value << 38 >> 38);
 		return new BlockPosition(x, y, z);
 	}
+
+	public BlockPosition readBlockPositionShort() {
+		long value = readShort();
+	    int x = (int) (value >> 38);
+	    int y = (int) (value << 26 >> 52);
+	    int z = (int) (value << 38 >> 38);
+		return new BlockPosition(x, y, z);
+	}
 	
 	public Vector readVector() {
 		return new Vector(readFloat(), readFloat(), readFloat());

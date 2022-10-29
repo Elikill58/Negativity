@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.nms;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public class Spigot_UnknowVersion extends SpigotVersionAdapter {
@@ -20,11 +19,6 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	}
 
 	@Override
-	protected String getOnGroundFieldName() {
-		return "f";
-	}
-
-	@Override
 	public double getAverageTps() {
 		return 0;
 	}
@@ -32,20 +26,5 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	@Override
 	public int getPlayerPing(Player player) {
 		return 0;
-	}
-
-	@Override
-	public float cos(float f) {
-		return b[(int) (f * 10430.378F + 16384.0F) & 0xFFFF];
-	}
-
-	@Override
-	public float sin(float f) {
-		return b[(int) (f * 10430.378F) & 0xFFFF];
-	}
-	
-	@Override
-	public BlockPosition getBlockPosition(Object obj) {
-		return new BlockPosition(get(obj, "x"), get(obj, "y"), get(obj, "z"));
 	}
 }

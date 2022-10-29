@@ -20,6 +20,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
@@ -45,6 +46,7 @@ public class PacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
+		Adapter.getAdapter().debug("Packet from " + packet.getPacketName());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();
@@ -167,6 +169,10 @@ public class PacketListener implements Listeners {
 
 	@EventListener
 	public void onPacketSend(PacketSendEvent e) {
+		if(e.getPacket().getPacketType().equals(PacketType.Handshake.IS_SET_PROTOCOL)) {
+			NPacketHandshakeInSetProtocol p = (NPacketHandshakeInSetProtocol) e.getPacket();
+			Adapter.getAdapter().debug("> " + p.protocol + " : " + p.hostname + ":" + p.port + " >> " + p.nextState);
+		}
 		if(!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();

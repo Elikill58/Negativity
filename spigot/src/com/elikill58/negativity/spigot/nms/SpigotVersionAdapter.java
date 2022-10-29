@@ -13,7 +13,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketContent;
@@ -34,35 +33,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		super(version);
 	}
 
-	protected abstract String getOnGroundFieldName();
-
 	public abstract double getAverageTps();
-
-	public abstract float cos(float f);
-	public abstract float sin(float f);
 
 	public List<Player> getOnlinePlayers() {
 		return new ArrayList<>(Bukkit.getOnlinePlayers());
 	}
 
 	public abstract int getPlayerPing(Player player);
-
-	public Class<?> getEnumPlayerInfoAction() {
-		try {
-			try {
-				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
-			} catch (Exception e) {
-				for (Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo")
-						.getDeclaredClasses())
-					if (clazz.getName().contains("EnumPlayerInfoAction"))
-						return clazz;
-				return null;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	public double[] getTps() {
 		try {
@@ -164,8 +141,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 		return null;
 	}
-	
-	public abstract BlockPosition getBlockPosition(Object obj);
 	
 	public org.bukkit.inventory.ItemStack createSkull(OfflinePlayer owner) { // method used by old versions
 		// should be "PLAYER_HEAD" and nothing else.

@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyDecoderHandler;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyEncoderHandler;
 import com.elikill58.negativity.fabric.GlobalFabricNegativity;
@@ -42,7 +43,7 @@ public class PacketListeners {
 			try {
 				channel = ReflectionUtils.getFirstWith(pe.networkHandler.connection, ClientConnection.class, Channel.class);
 				// Managing incoming packet (from player)
-				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(p));
+				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER));
 				
 				// Managing outgoing packet (to the player)
 				channel.pipeline().addAfter("encoder", "negativity_encoder", new NettyEncoderHandler(p));

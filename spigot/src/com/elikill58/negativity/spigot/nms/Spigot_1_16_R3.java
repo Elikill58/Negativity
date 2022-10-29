@@ -7,11 +7,6 @@ public class Spigot_1_16_R3 extends NoRemapSpigotVersionAdapter {
 	}
 	
 	@Override
-	protected String getOnGroundFieldName() {
-		return "f";
-	}
-	
-	@Override
 	public String getTpsFieldName() {
 		return "h";
 	}

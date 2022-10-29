@@ -8,12 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyDecoderHandler;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyEncoderHandler;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 import io.netty.channel.Channel;
@@ -26,6 +27,40 @@ public class PacketListeners implements Listener {
 		return addChannelExecutor;
 	}
 	
+	public PacketListeners() {
+		/*SpigotVersionAdapter.getVersionAdapter().getFuturChannel().forEach((channelFuture) -> {
+			channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
+				@Override
+				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+					ctx.fireChannelRead(msg);
+					((Channel) msg).pipeline().addFirst(new ChannelInitializer<Channel>() {
+						@Override
+						protected void initChannel(Channel channel) {
+							try {
+								channel.eventLoop().submit(() -> {
+									try {
+										ChannelHandler interceptor = channel.pipeline().get("negativity_handshake_decoder");
+										// Inject our packet interceptor
+										if (interceptor == null) {
+											interceptor = new NettyDecoderHandler(null, PacketDirection.HANDSHAKE);
+											channel.pipeline().addBefore("decoder", "negativity_handshake_decoder", interceptor);
+										}
+										return interceptor;
+									} catch (IllegalArgumentException e) {
+										// Try again
+										return channel.pipeline().get("negativity_handshake_decoder");
+									}
+								});
+							} catch (Exception e) {
+								SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Cannot inject incomming channel " + channel, e);
+							}
+						}
+					});
+				}
+			});
+		});*/
+	}
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
@@ -34,16 +69,25 @@ public class PacketListeners implements Listener {
 		addChannel(p);
 	}
 	
+	@EventHandler
+	public void onLeft(PlayerQuitEvent e) {
+		Player p = e.getPlayer();
+		if(p.hasMetadata("NPC"))
+			return;
+		Channel channel = SpigotVersionAdapter.getVersionAdapter().getChannel(p);
+		removeChannel(channel, "negativity_decoder");
+		removeChannel(channel, "negativity_encoder");
+	}
+	
 	private void addChannel(Player p) {
 		getOrCreateAddChannelExecutor().execute(() -> {
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 			Channel channel = SpigotVersionAdapter.getVersionAdapter().getChannel(p);
 			try {
 				// Managing incoming packet (from player)
-				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(np.getPlayer()));
+				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(SpigotEntityManager.getPlayer(p), PacketDirection.CLIENT_TO_SERVER));
 				
 				// Managing outgoing packet (to the player)
-				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(np.getPlayer()));
+				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(SpigotEntityManager.getPlayer(p)));
 			} catch (NoSuchElementException exc) {
 				// appear when the player's channel isn't accessible because of reload.
 				SpigotNegativity.getInstance().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + p.getName() + " isn't fully checked because of that. More details: " + exc.getMessage() + " (NoSuchElementException)");

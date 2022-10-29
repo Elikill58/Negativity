@@ -91,7 +91,20 @@ public interface PacketType {
 	 * 
 	 * @return a new instance of his packet
 	 */
-	NPacket createNewPacket();
+	default NPacket createNewPacket() {
+		try {
+			NPacket packet = getPacketCreatorFunction().call();
+			if(packet.getPacketType().isUnset()) {
+				((NPacketUnset) packet).setPacketTypeCible(this);
+			}
+			return packet;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	Callable<NPacket> getPacketCreatorFunction();
 	
 	/**
 	 * Get the packet direction
@@ -225,13 +238,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -363,13 +371,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -413,13 +416,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -460,13 +458,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -500,15 +493,10 @@ public interface PacketType {
 		public boolean isUnset() {
 			return this == UNSET;
 		}
-
+		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override

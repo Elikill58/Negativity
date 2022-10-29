@@ -45,7 +45,6 @@ public class PacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
-		Adapter.getAdapter().debug("Packet " + packet.getPacketName() + " from " + p.getName());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();
@@ -190,7 +189,6 @@ public class PacketListener implements Listeners {
 			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) e.getPacket();
 			Adapter.getAdapter().debug(e.getPlayer().getName() + " will know player " + spawn.uuid + " (" + spawn.x + "/" + spawn.y + "/" + spawn.z + ") is spawned.");
 		}
-		Adapter.getAdapter().debug(e.getPlayer().getName() + " will receive " + e.getPacket().getPacketName());
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 	}
 }

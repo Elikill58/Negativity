@@ -22,7 +22,7 @@ public class NPacketPlayOutEntityVelocity implements NPacketPlayOut {
 	@Override
 	public void read(PacketSerializer serializer) {
 		this.entityId = serializer.readVarInt();
-		this.vec = serializer.readVector(); // maybe should make read vector with short and not float
+		this.vec = serializer.readShortVector();
 	}
 
 	@Override

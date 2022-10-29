@@ -488,4 +488,8 @@ public class PacketSerializer {
 	public Vector readVector() {
 		return new Vector(readFloat(), readFloat(), readFloat());
 	}
+	
+	public Vector readShortVector() {
+		return new Vector(readShort(), readShort(), readShort());
+	}
 }

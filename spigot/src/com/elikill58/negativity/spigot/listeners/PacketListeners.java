@@ -43,7 +43,7 @@ public class PacketListeners implements Listener {
 				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(np.getPlayer()));
 				
 				// Managing outgoing packet (to the player)
-				channel.pipeline().addAfter("encoder", "negativity_encoder", new NettyEncoderHandler(np.getPlayer()));
+				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(np.getPlayer()));
 			} catch (NoSuchElementException exc) {
 				// appear when the player's channel isn't accessible because of reload.
 				SpigotNegativity.getInstance().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + p.getName() + " isn't fully checked because of that. More details: " + exc.getMessage() + " (NoSuchElementException)");

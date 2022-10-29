@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInUseItem implements NPacketPlayIn {
 
@@ -20,12 +21,19 @@ public class NPacketPlayInUseItem implements NPacketPlayIn {
 
 	@Override
 	public void read(PacketSerializer serializer) {
-	    this.pos = serializer.readBlockPosition();
-	    this.face = BlockFace.getById(serializer.readVarInt());
-	    this.hand = serializer.getEnum(Hand.class);
-	    this.f1 = serializer.readUnsignedByte() / 16.0F;
-	    this.f2 = serializer.readUnsignedByte() / 16.0F;
-	    this.f3 = serializer.readUnsignedByte() / 16.0F;
+	    if(Version.getVersion().isNewerOrEquals(Version.V1_19)) {
+		    this.hand = serializer.getEnum(Hand.class);
+		    this.pos = serializer.readBlockPosition();
+		    this.face = BlockFace.getById(serializer.readVarInt());
+	    } else {
+		    this.pos = serializer.readBlockPosition();
+		    this.face = BlockFace.getById(serializer.readVarInt());
+		    this.hand = serializer.getEnum(Hand.class);
+		    // 1.8 things
+		    this.f1 = serializer.readUnsignedByte() / 16.0F;
+		    this.f2 = serializer.readUnsignedByte() / 16.0F;
+		    this.f3 = serializer.readUnsignedByte() / 16.0F;
+	    }
 	}
 	
 	@Override

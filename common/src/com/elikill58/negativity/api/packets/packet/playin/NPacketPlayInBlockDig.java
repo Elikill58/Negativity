@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 
@@ -20,7 +21,10 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 	@Override
 	public void read(PacketSerializer serializer) {
 		this.action = DigAction.getById(serializer.readVarInt());
-		this.pos = serializer.readBlockPosition();
+		if(Version.getVersion().isNewerOrEquals(Version.V1_19))
+			this.pos = serializer.readBlockPositionNew();
+		else
+			this.pos = serializer.readBlockPosition();
 		this.face = BlockFace.getById(serializer.readUnsignedByte());
 	}
 

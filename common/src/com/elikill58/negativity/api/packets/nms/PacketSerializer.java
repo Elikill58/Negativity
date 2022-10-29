@@ -9,6 +9,7 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.block.BlockPosition;
@@ -437,6 +438,10 @@ public class PacketSerializer {
 		return this.buf.release(i);
 	}
 
+	public Instant readInstant() {
+		return Instant.ofEpochMilli(readLong());
+	}
+
 	public String readString(int size) {
 		int j = readVarInt();
 		if (j > size * 4)
@@ -479,24 +484,32 @@ public class PacketSerializer {
 
 	public BlockPosition readBlockPosition() {
 		long value = readLong();
-	    int x = (int) (value >> 38);
-	    int y = (int) (value << 26 >> 52);
-	    int z = (int) (value << 38 >> 38);
+		int x = (int) (value >> 38);
+		int y = (int) (value << 26 >> 52);
+		int z = (int) (value << 38 >> 38);
+		return new BlockPosition(x, y, z);
+	}
+
+	public BlockPosition readBlockPositionNew() {
+		long value = readLong();
+		int x = (int) (value >> 38);
+		int y = (int) (value << 52 >> 52);
+		int z = (int) (value << 26 >> 38);
 		return new BlockPosition(x, y, z);
 	}
 
 	public BlockPosition readBlockPositionShort() {
 		long value = readShort();
-	    int x = (int) (value >> 38);
-	    int y = (int) (value << 26 >> 52);
-	    int z = (int) (value << 38 >> 38);
+		int x = (int) (value >> 38);
+		int y = (int) (value << 26 >> 52);
+		int z = (int) (value << 38 >> 38);
 		return new BlockPosition(x, y, z);
 	}
-	
+
 	public Vector readVector() {
 		return new Vector(readFloat(), readFloat(), readFloat());
 	}
-	
+
 	public Vector readShortVector() {
 		return new Vector(readShort(), readShort(), readShort());
 	}

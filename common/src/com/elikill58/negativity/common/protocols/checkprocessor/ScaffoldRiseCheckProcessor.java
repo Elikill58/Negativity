@@ -9,8 +9,8 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
@@ -45,9 +45,9 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			return;
 		
 		Player p = e.getPlayer();
-		Packet pa = e.getPacket();
+		NPacket pa = e.getPacket();
 		if(pa.getPacketType().equals(PacketType.Client.HELD_ITEM_SLOT)) {
-			NPacketPlayInHeldItemSlot held = (NPacketPlayInHeldItemSlot) pa.getPacket();
+			NPacketPlayInHeldItemSlot held = (NPacketPlayInHeldItemSlot) pa;
 			int possibleSlot = -1;
 			PlayerInventory inv = p.getInventory();
 			ItemStack item = null;
@@ -68,7 +68,7 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			amount = 0;
 			amountInvalid = 0;
 		} else if(pa.getPacketType().isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) pa.getPacket();
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) pa;
 			if(lastFlying == null)
 				lastFlying = flying; // prevent NPE
 			if(!flying.hasLook) {
@@ -111,9 +111,9 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			}
 			lastFlying = flying;
 		} else if(pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
-			NPacketPlayInBlockPlace place = (NPacketPlayInBlockPlace) pa.getPacket();
+			NPacketPlayInBlockPlace place = (NPacketPlayInBlockPlace) pa;
 			Location loc = p.getLocation();
-			if(place.x == loc.getBlockX() && place.y == loc.getBlockY() - 1 && place.z == loc.getBlockZ()) {
+			if(place.getBlockX() == loc.getBlockX() && place.getBlockY() == loc.getBlockY() - 1 && place.getBlockZ() == loc.getBlockZ()) {
 				if(amountInvalid > 40 && speed >= p.getWalkSpeed()) // if lot of invalid changes and go fast
 					Negativity.alertMod(ReportType.WARNING, p, c, UniversalUtils.parseInPorcent(amountInvalid), "rise-slot", proofs.toString(), new CheatHover.Literal("Pitch: " + lastFlying.pitch), amount);
 				else

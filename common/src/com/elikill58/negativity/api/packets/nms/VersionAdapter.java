@@ -4,36 +4,29 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
-import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
-import com.elikill58.negativity.api.packets.packet.NPacketStatus;
-import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
+
+import io.netty.buffer.ByteBuf;
 
 public abstract class VersionAdapter<R> {
 
-	protected final HashMap<String, BiFunction<R, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
-	protected final HashMap<String, BiFunction<R, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
-	protected final HashMap<String, BiFunction<R, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
-	protected final HashMap<String, BiFunction<R, Object, NPacketStatus>> packetsStatus = new HashMap<>();
-	protected final HashMap<PacketType, BiFunction<R, NPacket, Object>> negativityToPlatform = new HashMap<>();
 	protected final List<String> unknownPacket = new ArrayList<>();
-	protected final String version;
+	protected NamedVersion version;
 	
 	public VersionAdapter(String version) {
-		this.version = version;
+		this.version = Version.getVersion(version).createNamedVersion();
 	}
 	
-	public String getVersion() {
+	public NamedVersion getVersion() {
 		return version;
 	}
 	
@@ -41,83 +34,31 @@ public abstract class VersionAdapter<R> {
 		return (R) p.getDefault();
 	}
 	
-	protected void log() {
-		Adapter.getAdapter().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
-		+ " PlayIn, " + packetsPlayOut.size() + " PlayOut, " + packetsHandshake.size() + " Handshake, " + packetsStatus.size() + " Status and " + negativityToPlatform.size() + " negativity-to-platform.");
+	public abstract AbstractChannel getPlayerChannel(R p);
+	
+	public void sendPacket(Player p, NPacket packet) {
+		sendPacket(getR(p), packet.create());
 	}
 	
-	public void sendPacket(Player pl, NPacket packet) {
-		BiFunction<R, NPacket, Object> packetMaker = negativityToPlatform.get(packet.getPacketType());
-		if(packetMaker == null)
-			return;
-		R p = getR(pl);
-		sendPacket(p, packetMaker.apply(p, packet));
+	public void sendPacket(R p, ByteBuf buf) {
+		getPlayerChannel(p).write(buf);
 	}
 	
-	public abstract void sendPacket(R p, Object basicPacket);
-
-	
-	public void queuePacket(Player pl, NPacket packet) {
-		BiFunction<R, NPacket, Object> packetMaker = negativityToPlatform.get(packet.getPacketType());
-		if(packetMaker == null)
-			return;
-		R p = getR(pl);
-		queuePacket(p, packetMaker.apply(p, packet));
+	public void queuePacket(Player p, NPacket packet) {
+		queuePacket(getR(p), packet.create());
 	}
 	
-	public abstract void queuePacket(R p, Object basicPacket);
-
-	public NPacket getPacket(Player pl, PacketDirection dir, Object nms) {
-		return getPacket(getR(pl), dir, nms);
+	public void queuePacket(R p, ByteBuf buf) {
+		getPlayerChannel(p).write(buf);
 	}
 
-	public NPacket getPacket(R player, PacketDirection dir, Object nms) {
-		return getPacket(player, dir, nms, getNameOfPacket(nms));
-	}
-
-	public NPacket getPacket(R player, PacketDirection dir, Object nms, String packetName) {
-		try {
-			BiFunction<R, Object, ? extends NPacket> packetCreator = null;
-			switch (dir) {
-			case CLIENT_TO_SERVER:
-				packetCreator = packetsPlayIn.get(packetName);
-				break;
-			case SERVER_TO_CLIENT:
-				packetCreator = packetsPlayOut.get(packetName);
-				break;
-			case HANDSHAKE:
-				packetCreator = packetsHandshake.get(packetName);
-				break;
-			case LOGIN:
-				return new NPacketLoginUnset(packetName);
-			case STATUS:
-				packetCreator = packetsStatus.get(packetName);
-				break;
-			}
-			if(packetCreator != null)
-				return packetCreator.apply(player, nms);
-		} catch (Exception e) {
-			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
-			e.printStackTrace();
-		}
-		NPacket packet = PacketType.createEmptyOrUnsetPacket(dir, packetName);
-		if(!unknownPacket.contains(packetName) && !dir.equals(PacketDirection.HANDSHAKE)) { // if wasn't present
-			unknownPacket.add(packetName);
-			Adapter a = Adapter.getAdapter();
-			a.debug("[VersionAdapter] Unknow packet " + packetName + " for dir " + dir.name() + ":");
-			for(Field f : nms.getClass().getDeclaredFields()) {
-				a.debug(" " + f.getName() + " (type: " + f.getType().getSimpleName() + ")");
-			}
-			Class<?> superClass = nms.getClass().getSuperclass();
-			if(!superClass.equals(Object.class)) {
-				a.debug(" SuperClass: " + superClass.getSimpleName());
-			}
-		}
-		return packet;
-	}
-	
-	public String getNameOfPacket(Object nms) {
-		return nms.getClass().getSimpleName();
+	public boolean readPacket(Player p, PacketDirection dir, ByteBuf buf) {
+		int packetId = new PacketSerializer(buf).readVarInt();
+		NPacket packet = version.getPacket(dir, packetId);
+		packet.read(new PacketSerializer(buf));
+		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+		EventManager.callEvent(event);
+		return event.isCancelled();
 	}
 
 	protected <T> T get(Object obj, Class<?> clazz, String name) {

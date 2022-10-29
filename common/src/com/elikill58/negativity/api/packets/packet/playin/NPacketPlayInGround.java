@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 
 /**
  * This packet is since the 1.17 (include). Before, it will never be called
@@ -14,8 +15,9 @@ public class NPacketPlayInGround extends NPacketPlayInFlying {
 		
 	}
 
-	public NPacketPlayInGround(boolean isGround) {
-		super(0, 0, 0, 0, 0, isGround, false, false);
+	@Override
+	public void read(PacketSerializer serializer) {
+		super.read(serializer); // only has ground value
 	}
 	
 	@Override

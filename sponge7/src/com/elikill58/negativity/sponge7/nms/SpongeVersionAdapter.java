@@ -10,12 +10,6 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<Player> {
 		super(version);
 	}
 	
-	@Override
-	public String getNameOfPacket(Object nms) {
-		String packetClassName = nms.getClass().getName();
-		return packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
-	}
-	
 	private static SpongeVersionAdapter instance = new Sponge_1_12_2();
 	
 	public static SpongeVersionAdapter getVersionAdapter() {

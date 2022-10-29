@@ -10,8 +10,8 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
@@ -42,12 +42,12 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
 		Player p = e.getPlayer();
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
 			long pingId = R.nextInt(50000);
 			waitingIds.add(pingId);
 			timeById.put(pingId, System.currentTimeMillis());
-			lastKeepAliveSent = (NPacketPlayOutKeepAlive) packet.getPacket();
+			lastKeepAliveSent = (NPacketPlayOutKeepAlive) packet;
 			p.queuePacket(new NPacketPlayOutPing(pingId)); // send ping packet
 		}
 	}
@@ -57,11 +57,11 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
 		Player p = e.getPlayer();
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Client.KEEP_ALIVE)) {
 			lastKeepAliveSent = null;
-		} else if(packet.getPacket() instanceof NPacketPlayInPong || packet.getPacket().getPacketType().equals(PacketType.Client.PONG)) {
-			NPacketPlayInPong pong = (NPacketPlayInPong) packet.getPacket();
+		} else if(packet instanceof NPacketPlayInPong || packet.getPacketType().equals(PacketType.Client.PONG)) {
+			NPacketPlayInPong pong = (NPacketPlayInPong) packet;
 			if(lastKeepAliveSent == null)// already received
 				return;
 			if(waitingIds.remove(pong.id)) { // is good id

@@ -1,9 +1,11 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 /**
@@ -18,34 +20,42 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 	public Hand hand;
-	public BlockFace direction;
-	public int x, y, z;
+	public BlockFace face;
+	public BlockPosition pos;
+	/**
+	 * This field are not known yet.
+	 * TODO find what are those field (present at least for 1.8)
+	 */
+	public float f1, f2, f3;
 	
 	public NPacketPlayInBlockPlace() {
 		
 	}
 	
-	public NPacketPlayInBlockPlace(Hand hand, int x, int y, int z, BlockFace dir) {
-		this.hand = hand;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.direction = dir;
+	@Override
+	public void read(PacketSerializer serializer) {
+	    this.pos = serializer.readBlockPosition();
+	    this.face = BlockFace.getById(serializer.readUnsignedByte());
+	    this.hand = Hand.MAIN;
+	    serializer.readItemStack();
+	    this.f1 = serializer.readUnsignedByte() / 16.0F;
+	    this.f2 = serializer.readUnsignedByte() / 16.0F;
+	    this.f3 = serializer.readUnsignedByte() / 16.0F;
 	}
 
 	@Override
 	public double getX() {
-		return x;
+		return pos.getX();
 	}
 
 	@Override
 	public double getY() {
-		return y;
+		return pos.getY();
 	}
 
 	@Override
 	public double getZ() {
-		return z;
+		return pos.getZ();
 	}
 
 	@Override

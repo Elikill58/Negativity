@@ -4,28 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 public class NPacketPlayInEntityAction implements NPacketPlayIn {
 
-	public int entityId, c;
+	public int entityId, sequence;
 	public EnumPlayerAction action;
 	
 	public NPacketPlayInEntityAction() {
 		
 	}
 	
-	/**
-	 * Create a new entity action packet
-	 * 
-	 * @param entityId the Id of the concerned ID
-	 * @param action the action made by the entity
-	 * @param c unknow value yet
-	 */
-	public NPacketPlayInEntityAction(int entityId, EnumPlayerAction action, int c) {
-		this.entityId = entityId;
-		this.action = action;
-		this.c = c;
+	@Override
+	public void read(PacketSerializer serializer) {
+		this.entityId = serializer.readVarInt();
+		this.action = serializer.getEnum(EnumPlayerAction.class);
+		this.sequence = serializer.readVarInt();
 	}
 	
 	public static enum EnumPlayerAction {

@@ -8,7 +8,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 
-@SuppressWarnings("unchecked")
 public abstract class AbstractRayBuilder<T extends AbstractRayBuilder<T, R>, R extends AbstractRay<? extends AbstractRayResult<?>>> {
 
 	protected final World w;

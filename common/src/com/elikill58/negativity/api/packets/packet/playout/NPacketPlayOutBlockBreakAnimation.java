@@ -3,43 +3,39 @@ package com.elikill58.negativity.api.packets.packet.playout;
 import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 
 public class NPacketPlayOutBlockBreakAnimation implements NPacketPlayOut, LocatedPacket {
 
-	public int x, y, z;
 	public int entityId;
+	public BlockPosition pos;
 	public int destroyStage;
 	
 	public NPacketPlayOutBlockBreakAnimation() {
 		
 	}
 	
-	public NPacketPlayOutBlockBreakAnimation(BlockPosition pos, int entityId, int destroyStage) {
-		this(pos.getX(), pos.getY(), pos.getZ(), entityId, destroyStage);
-	}
-	
-	public NPacketPlayOutBlockBreakAnimation(int x, int y, int z, int entityId, int destroyStage) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.entityId = entityId;
-		this.destroyStage = destroyStage;
+	@Override
+	public void read(PacketSerializer serializer) {
+	    this.entityId = serializer.readVarInt();
+	    this.pos = serializer.readBlockPosition();
+	    this.destroyStage = serializer.readUnsignedByte();
 	}
 
 	@Override
 	public double getX() {
-		return x;
+		return pos.getX();
 	}
 
 	@Override
 	public double getY() {
-		return y;
+		return pos.getY();
 	}
 
 	@Override
 	public double getZ() {
-		return z;
+		return pos.getZ();
 	}
 
 	@Override

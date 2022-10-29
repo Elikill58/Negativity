@@ -38,7 +38,7 @@ public class SpiderExampleCheckProcessor implements CheckProcessor {
 		if(!(e.getPacket().getPacketType().equals(PacketType.Client.POSITION_LOOK) || e.getPacket().getPacketType().equals(PacketType.Client.POSITION)))
 			return; // if it's not moving
 		Player p = e.getPlayer();
-		NPacketPlayInPositionLook pos = (NPacketPlayInPositionLook) e.getPacket().getPacket();
+		NPacketPlayInPositionLook pos = (NPacketPlayInPositionLook) e.getPacket();
 		int amount = 0;
 		Location from = p.getLocation(), to = pos.getLocation(p.getWorld());
 		double y = to.getY() - from.getY();

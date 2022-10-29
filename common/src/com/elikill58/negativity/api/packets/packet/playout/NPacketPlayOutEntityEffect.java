@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 
@@ -15,7 +16,8 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 	 * We not support it.
 	 */
 	public byte flags; // don't support this variable
-
+	public boolean showParticles;
+	
 	public NPacketPlayOutEntityEffect() {}
 	
 	public NPacketPlayOutEntityEffect(int entityId, int typeId, byte amplifier, int duration, byte flags) {
@@ -36,6 +38,16 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 	
 	public boolean isMaxDuration() {
 		return duration >= 32767;
+	}
+	
+	@Override
+	public void read(PacketSerializer serializer) {
+	    this.entityId = serializer.readVarInt();
+	    this.type = PotionEffectType.fromId(serializer.readByte());
+	    this.amplifier = serializer.readByte();
+	    this.duration = serializer.readVarInt();
+	    this.flags = serializer.readByte();
+	    this.showParticles = flags == 1;
 	}
 
 	@Override

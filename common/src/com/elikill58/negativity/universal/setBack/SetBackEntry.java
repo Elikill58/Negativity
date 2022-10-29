@@ -12,7 +12,6 @@ public class SetBackEntry {
 	 * 
 	 * @param json the json object which contains all set back data
 	 */
-	@SuppressWarnings("unchecked")
 	public SetBackEntry(JSONObject json) {
 		this.type = json.get("type").toString();
 		this.key = json.getOrDefault("key", "").toString();

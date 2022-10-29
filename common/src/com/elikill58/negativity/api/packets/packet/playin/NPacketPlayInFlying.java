@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 public class NPacketPlayInFlying implements NPacketPlayIn, LocatedPacket {
@@ -15,16 +16,10 @@ public class NPacketPlayInFlying implements NPacketPlayIn, LocatedPacket {
 	public NPacketPlayInFlying() {
 		
 	}
-
-	public NPacketPlayInFlying(double x, double y, double z, float yaw, float pitch, boolean isGround, boolean hasPos, boolean hasLook) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.yaw = yaw;
-		this.pitch = pitch;
-		this.isGround = isGround;
-		this.hasPos = hasPos;
-		this.hasLook = hasLook;
+	
+	@Override
+	public void read(PacketSerializer serializer) {
+		this.isGround = serializer.readUnsignedByte() != 0;
 	}
 	
 	@Override

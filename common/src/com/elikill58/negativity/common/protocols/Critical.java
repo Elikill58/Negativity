@@ -73,7 +73,7 @@ public class Critical extends Cheat implements Listeners {
 	@EventListener
 	public void onPacket(PacketReceiveEvent e) {
 		if(e.getPacket().getPacketType().isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket();
 			if(flying.hasLocation()) {
 				NegativityPlayer.getNegativityPlayer(e.getPlayer()).<CriticalData>getCheckData(this).add(flying);
 			}

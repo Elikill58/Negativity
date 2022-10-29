@@ -41,7 +41,7 @@ public class UnexpectedPacket extends Cheat {
 					e.setCancelled(true);
 			}
 		} else if (e.getPacket().getPacketType().equals(Client.ENTITY_ACTION)) {
-			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) e.getPacket().getPacket();
+			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) e.getPacket();
 			if (action.action.equals(EnumPlayerAction.START_SNEAKING) && p.isInsideVehicle()) {
 				data.vehicleLeft = System.currentTimeMillis();
 			}
@@ -64,7 +64,7 @@ public class UnexpectedPacket extends Cheat {
 	public void onHeldChange(PacketReceiveEvent e, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && data.alreadySend) {
-			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket().getPacket();
+			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket();
 			if (p.getInventory().getHeldItemSlot() == slot.slot) {
 				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
 						"Change held slot to the same: " + slot.slot,

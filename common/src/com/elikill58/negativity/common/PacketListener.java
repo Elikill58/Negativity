@@ -18,8 +18,8 @@ import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
@@ -44,12 +44,13 @@ public class PacketListener implements Listeners {
 		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
+		Adapter.getAdapter().debug("Packet " + packet.getPacketName() + " from " + p.getName());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();
 		if(type.isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if(flying.hasLook || flying.hasPos) // if it's real flying
 				np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
 			if(flying.hasLook && np.shouldCheckSensitivity) {
@@ -105,8 +106,8 @@ public class PacketListener implements Listeners {
 				np.isTeleporting = false;
 		} else
 			np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
-		if(type == PacketType.Client.BLOCK_DIG && packet.getPacket() instanceof NPacketPlayInBlockDig) {
-			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
+		if(type == PacketType.Client.BLOCK_DIG && packet instanceof NPacketPlayInBlockDig) {
+			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet;
 			if(blockDig.action != DigAction.FINISHED_DIGGING)
 				return;
 			
@@ -114,18 +115,18 @@ public class PacketListener implements Listeners {
 			BlockBreakEvent event = new BlockBreakEvent(p, b);
 			EventManager.callEvent(event);
 			if(event.isCancelled())
-				packet.setCancelled(event.isCancelled());
+				e.setCancelled(event.isCancelled());
 		}
 		if (type == PacketType.Client.USE_ENTITY) {
 			np.isAttacking = true;
-			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
+			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
 			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
 				for(Entity entity : p.getWorld().getEntities()) {
 					if(entity.isSameId(String.valueOf(useEntityPacket.entityId))) {
 						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
 						EventManager.callEvent(event);
 						if(event.isCancelled())
-							packet.setCancelled(event.isCancelled());
+							e.setCancelled(event.isCancelled());
 					}
 				}
 			}
@@ -135,7 +136,7 @@ public class PacketListener implements Listeners {
 		} else if (type == PacketType.Client.STEER_VEHICLE) {
 			np.timeInvincibility = System.currentTimeMillis() + p.getPing() * 2;
 		} else if (type == PacketType.Client.PONG) {
-			NPacketPlayInPong pong = (NPacketPlayInPong) packet.getPacket();
+			NPacketPlayInPong pong = (NPacketPlayInPong) packet;
 			if(np.idWaitingAppliedVelocity != -1 && np.idWaitingAppliedVelocity == pong.id) {
 				p.applyTheoricVelocity();
 				np.idWaitingAppliedVelocity = -1;
@@ -160,7 +161,7 @@ public class PacketListener implements Listeners {
 	public void onJumpBoostUse(PacketSendEvent e) {
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
-		NPacketPlayOutEntityEffect packet = (NPacketPlayOutEntityEffect) e.getPacket().getPacket();
+		NPacketPlayOutEntityEffect packet = (NPacketPlayOutEntityEffect) e.getPacket();
 		if (packet.type.equals(PotionEffectType.JUMP))
 			NegativityPlayer.getNegativityPlayer(e.getPlayer()).isUsingJumpBoost = true;
 	}
@@ -175,7 +176,7 @@ public class PacketListener implements Listeners {
 		if(type.equals(PacketType.Server.POSITION) || type.equals(PacketType.Server.ENTITY_TELEPORT))
 			np.isTeleporting = true;
 		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
-			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
+			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket();
 			if(!p.isSameId(String.valueOf(packet.entityId))) // not giving velocity to itself - not useful to send packet
 				return;
 			int randomNb = new Random().nextInt();
@@ -183,12 +184,13 @@ public class PacketListener implements Listeners {
 				randomNb = -26;
 			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
 		} else if(type.equals(PacketType.Server.SPAWN_ENTITY)) {
-			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) e.getPacket().getPacket();
+			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) e.getPacket();
 			Adapter.getAdapter().debug(e.getPlayer().getName() + " will know entity " + spawn.type + ", id: " + spawn.entityId + " (" + spawn.x + "/" + spawn.y + "/" + spawn.z + ") is spawned.");
 		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
-			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) e.getPacket().getPacket();
+			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) e.getPacket();
 			Adapter.getAdapter().debug(e.getPlayer().getName() + " will know player " + spawn.uuid + " (" + spawn.x + "/" + spawn.y + "/" + spawn.z + ") is spawned.");
 		}
+		Adapter.getAdapter().debug(e.getPlayer().getName() + " will receive " + e.getPacket().getPacketName());
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 	}
 }

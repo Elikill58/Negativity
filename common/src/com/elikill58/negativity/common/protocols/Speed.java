@@ -73,7 +73,7 @@ public class Speed extends Cheat implements Listeners {
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
 		if (!e.getPacket().getPacketType().isFlyingPacket())
 			return;
-		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket();
 		if (!flying.hasPos)
 			return;
 		Player p = e.getPlayer();

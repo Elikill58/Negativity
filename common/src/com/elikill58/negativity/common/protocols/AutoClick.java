@@ -38,7 +38,7 @@ public class AutoClick extends Cheat {
 		if (type.equals(PacketType.Client.USE_ENTITY)) {
 			np.entityClick++;
 		} else if (type.equals(PacketType.Client.BLOCK_DIG)) {
-			NPacketPlayInBlockDig dig = (NPacketPlayInBlockDig) e.getPacket().getPacket();
+			NPacketPlayInBlockDig dig = (NPacketPlayInBlockDig) e.getPacket();
 			if (dig.action.equals(DigAction.START_DIGGING))
 				np.leftBlockClick++;
 			else if (dig.action.equals(DigAction.CANCEL_DIGGING))

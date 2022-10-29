@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 /**
@@ -16,9 +17,10 @@ public class NPacketPlayInTeleportAccept implements NPacketPlayIn {
 	public NPacketPlayInTeleportAccept() {
 		
 	}
-	
-	public NPacketPlayInTeleportAccept(int teleportId) {
-		this.teleportId = teleportId;
+
+	@Override
+	public void read(PacketSerializer serializer) {
+		this.teleportId = serializer.readVarInt();
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 
 public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
@@ -31,6 +32,16 @@ public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 
 	public NPacketPlayOutMultiBlockChange() {
 		
+	}
+	
+	@Override
+	public void read(PacketSerializer serializer) {
+		this.chunkX = serializer.readInt();
+		this.chunkZ = serializer.readInt();
+		int amount = serializer.readVarInt();
+		for(int i = 0; i < amount; i++) {
+			blockStates.put(serializer.readBlockPosition(), (long) serializer.readVarInt());
+		}
 	}
 	
 	@Override

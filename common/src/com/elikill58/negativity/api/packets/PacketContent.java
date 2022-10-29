@@ -9,18 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PacketContent {
 	
-	private final @Nullable Packet packet;
 	private final Object obj;
-	
-	/**
-	 * Create a PacketContent to easily read and write value in it
-	 * 
-	 * @param packet the Negativity's packet
-	 */
-	public PacketContent(Packet packet) {
-		this.packet = packet;
-		this.obj = packet.getNmsPacket();
-	}
 	
 	/**
 	 * Create a PacketContent to easily read and write to the specified object
@@ -28,18 +17,7 @@ public class PacketContent {
 	 * @param obj the object that will be read or edit
 	 */
 	public PacketContent(Object obj) {
-		this.packet = null;
 		this.obj = obj;
-	}
-	
-	/**
-	 * Get the packet where the packet content come from.
-	 * Can be null if we are checking an object and not the packet.
-	 * 
-	 * @return the analyzed packet
-	 */
-	public @Nullable Packet getPacket() {
-		return packet;
 	}
 	
 	/**

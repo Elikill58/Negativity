@@ -25,9 +25,9 @@ import com.elikill58.negativity.spigot.listeners.CommandsListeners;
 import com.elikill58.negativity.spigot.listeners.ElytraListeners;
 import com.elikill58.negativity.spigot.listeners.EntityListeners;
 import com.elikill58.negativity.spigot.listeners.InventoryListeners;
+import com.elikill58.negativity.spigot.listeners.PacketListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
-import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -47,7 +47,6 @@ public class SpigotNegativity extends JavaPlugin {
 		return platform;
 	}
 	public static String CHANNEL_NAME_FML = "";
-	private NegativityPacketManager packetManager;
 		
 	@Override
 	public void onEnable() {
@@ -76,9 +75,6 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
 		}
 		getLogger().info("Running with Java " + System.getProperty("java.version"));
-		
-		packetManager = new NegativityPacketManager(this);
-		packetManager.getPacketManager().load();
 
 		Negativity.loadNegativity();
 		SpigotFakePlayer.loadClass();
@@ -97,6 +93,7 @@ public class SpigotNegativity extends JavaPlugin {
 		pm.registerEvents(new BlockListeners(), this);
 		pm.registerEvents(new EntityListeners(), this);
 		pm.registerEvents(new CommandsListeners(), this);
+		pm.registerEvents(new PacketListeners(), this);
 		if(v.isNewerOrEquals(Version.V1_9))
 			pm.registerEvents(new ElytraListeners(), this);
 
@@ -228,12 +225,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		packetManager.getPacketManager().clear();
 		Negativity.closeNegativity();
-	}
-	
-	public NegativityPacketManager getPacketManager() {
-		return packetManager;
 	}
 
 	public static SpigotNegativity getInstance() {

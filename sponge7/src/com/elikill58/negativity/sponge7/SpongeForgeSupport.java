@@ -9,7 +9,6 @@ public class SpongeForgeSupport {
 
 	public static boolean isOnSpongeForge = false;
 	
-	@SuppressWarnings("unchecked")
 	public static HashMap<String, String> getClientMods(Player p){
 		HashMap<String, String> hash = new HashMap<>();
 		try {

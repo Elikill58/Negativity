@@ -40,7 +40,6 @@ import com.elikill58.negativity.sponge.listeners.EntityListeners;
 import com.elikill58.negativity.sponge.listeners.InventoryListeners;
 import com.elikill58.negativity.sponge.listeners.NegativityCommandWrapper;
 import com.elikill58.negativity.sponge.listeners.PlayersListeners;
-import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -57,7 +56,6 @@ public class SpongeNegativity {
 
 	private final Logger logger;
 	private final PluginContainer container;
-	private NegativityPacketManager packetManager;
 	private final Path configDir;
 	
 	private RawDataChannel channel = null, bungeecordChannel = null;
@@ -102,7 +100,6 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
-		packetManager = new NegativityPacketManager(this);
 		Stats.sendStartupStats(Sponge.server().boundAddress().map(InetSocketAddress::getPort).orElse(-1));
 		logger.info("Negativity v{} fully started !", container.metadata().version());
 	}
@@ -170,10 +167,6 @@ public class SpongeNegativity {
 	
 	public Path getConfigDir() {
 		return configDir;
-	}
-	
-	public NegativityPacketManager getPacketManager() {
-		return packetManager;
 	}
 	
 	public static void sendPluginMessage(byte[] rawMessage) {

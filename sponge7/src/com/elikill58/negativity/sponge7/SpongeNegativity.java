@@ -53,7 +53,6 @@ import com.elikill58.negativity.sponge7.listeners.CommandsListeners;
 import com.elikill58.negativity.sponge7.listeners.EntityListeners;
 import com.elikill58.negativity.sponge7.listeners.InventoryListeners;
 import com.elikill58.negativity.sponge7.listeners.PlayersListeners;
-import com.elikill58.negativity.sponge7.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge7.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -80,7 +79,6 @@ public class SpongeNegativity {
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
-	private NegativityPacketManager packetManager;
 	public static RawDataChannel channel = null, fmlChannel = null, bungeecordChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
@@ -119,7 +117,6 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
-		packetManager = new NegativityPacketManager(this);
 		try {
 			Class.forName("net.minecraftforge.fml.common.network.handshake.NetworkDispatcher");
 			SpongeForgeSupport.isOnSpongeForge = true;
@@ -243,10 +240,6 @@ public class SpongeNegativity {
 
 	public Path getDataFolder() {
 		return configDir;
-	}
-
-	public NegativityPacketManager getPacketManager() {
-		return packetManager;
 	}
 
 	public Logger getLogger() {

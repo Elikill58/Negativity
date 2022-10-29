@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.handshake;
 
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.api.packets.packet.NPacketUnset;
 
@@ -16,6 +17,11 @@ public class NPacketHandshakeUnset implements NPacketHandshake, NPacketUnset {
 	public NPacketHandshakeUnset(String packetName) {
 		this.packetName = packetName;
 		this.cible = PacketType.getType(packetName);
+	}
+	
+	@Override
+	public void read(PacketSerializer serializer) {
+		
 	}
 
 	@Override

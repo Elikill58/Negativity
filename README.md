@@ -1,10 +1,10 @@
 # Negativity
 
 It's a Minecraft AntiCheat for multiples platforms :
-- **Spigot** 1.7.10 to 1.19 (*and fork like PaperSpigot or Tuinity*)
-- **Sponge** API 7, 8 & 9
-- **Fabric** MC 1.19 & 1.19.2 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
-- **Minestom** 1.18.2
+- **Spigot** 1.8.8 to 1.19 (*and fork like PaperSpigot or Tuinity*)
+- **Sponge** API 7, 8, 9 & 10
+- **Fabric** MC 1.18.2, 1.19 & 1.19.2 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
+- **Minestom** 1.19
 
 Proxies:
 - **BungeeCord**
@@ -26,7 +26,7 @@ Check [installation wiki](https://github.com/Elikill58/Negativity/wiki/Installat
 
 ## I want to test it before download !
 
-You can check it on **play.negativity.fr** (server in 1.18.2, you can connect with 1.9 to 1.19).
+You can check it on **play.negativity.fr** (server in 1.19.2, you can connect with 1.8.8 to 1.19.2). Server can be down.
 
 ## What are the detected cheat ?
 
@@ -107,17 +107,9 @@ On Windows, you must use [Git bash](https://gitforwindows.org/). On Linux and Ma
 
 Run `./setup_spigot.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
 
-You just need to copy 1.7.10 spigot jar file.
-
 #### Manually install spigot jars
 
-- Create a folder called `spigotJars` in `spigot/`
-
-- Download every spigot version of spigot listed below from [this link](https://getbukkit.org/download/spigot) and put them in `spigot/spigotJars` Versions: 
- `1.7.10, 1.8.8, 1.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13`(you need to add a + at the beginning of the name (+spigot1.13.jar for example)`, 
- 1.13.2, 1.14.4, 1.15.2, 1.16.1, 1.16.5`
-
-- You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
+You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
 
 4. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`

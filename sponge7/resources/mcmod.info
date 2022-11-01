@@ -8,8 +8,7 @@
         "RedNesto"
     ],
     "dependencies": [
-        "spongeapi@7.1.0",
-        "packetgate"
+        "spongeapi@7.1.0"
     ],
     "requiredMods": [
         "spongeapi@7.1.0"

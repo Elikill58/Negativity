@@ -26,6 +26,10 @@ public abstract class VersionAdapter<R> {
 		this.version = Version.getVersion(version).createNamedVersion();
 	}
 	
+	public VersionAdapter(Version version) {
+		this.version = version.createNamedVersion();
+	}
+	
 	public NamedVersion getVersion() {
 		return version;
 	}

@@ -46,7 +46,7 @@ public class PacketListeners {
 				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(SpongeEntityManager.getPlayer(p), PacketDirection.CLIENT_TO_SERVER));
 				
 				// Managing outgoing packet (to the player)
-				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(SpongeEntityManager.getPlayer(p)));
+				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(SpongeEntityManager.getPlayer(p), PacketDirection.SERVER_TO_CLIENT));
 			} catch (NoSuchElementException exc) {
 				// appear when the player's channel isn't accessible because of reload.
 				SpongeNegativity.getInstance().getLogger().warn("Please, don't use reload, this can produce some problem. Currently, " + p.name() + " isn't fully checked because of that. More details: " + exc.getMessage() + " (NoSuchElementException)");

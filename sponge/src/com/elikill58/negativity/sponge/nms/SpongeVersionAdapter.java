@@ -1,11 +1,11 @@
 package com.elikill58.negativity.sponge.nms;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
@@ -14,7 +14,7 @@ import net.minecraft.network.Connection;
 public class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
 	public SpongeVersionAdapter() {
-		super(Sponge.platform().minecraftVersion().name());
+		super(Adapter.getAdapter().getServerVersion());
 	}
 
 	public Channel getChannel(ServerPlayer p) {

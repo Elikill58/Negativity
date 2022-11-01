@@ -19,7 +19,7 @@ public class NPacketPlayInChat implements NPacketPlayIn {
 
 	@Override
 	public void read(PacketSerializer serializer) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_19)) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_18)) {
 			// TODO fix chat message reader
 			/*this.message = serializer.readString(256);
 			this.time = serializer.readInstant();*/

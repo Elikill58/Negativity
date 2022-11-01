@@ -358,6 +358,7 @@ public class Negativity {
 				ada.getLogger().info("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
 			}
 		}).start();
+		ada.getLogger().info("Negativity " + ada.getPluginVersion() + " loaded for server version " + ada.getServerVersion().getName());
 	}
 	
 	public static <T> void loadExtensions(Class<T> extensionClass, Predicate<T> extensionConsumer) {

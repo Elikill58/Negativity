@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
@@ -284,7 +283,7 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public VersionAdapter<?> getVersionAdapter() {
+	public SpongeVersionAdapter getVersionAdapter() {
 		return SpongeVersionAdapter.getVersionAdapter();
 	}
 	

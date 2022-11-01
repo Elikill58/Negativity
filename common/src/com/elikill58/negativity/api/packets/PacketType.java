@@ -145,6 +145,8 @@ public interface PacketType {
 	 * @return the packet type, or the UNSET value of the PacketType section or null
 	 */
 	public static PacketType getType(String packetName) {
+		if(packetName == null)
+			return null;
 		for(PacketDirection dir : PacketDirection.values()) {
 			if(packetName.startsWith(dir.getPrefix()))
 				return getPacketTypeFor(dir, packetName);

@@ -20,8 +20,8 @@ public class SpongeVersionAdapter extends VersionAdapter<Player> {
 	public Channel getChannel(Player p) {
 		try {
 			PlayerConnection co = p.getConnection();
-			Channel channel = ReflectionUtils.getFirstWith(co, co.getClass(), Channel.class);
-			return channel;
+			Object networkManager = co.getClass().getDeclaredField("field_147371_a").get(co);
+			return ReflectionUtils.getFirstWith(networkManager, networkManager.getClass(), Channel.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

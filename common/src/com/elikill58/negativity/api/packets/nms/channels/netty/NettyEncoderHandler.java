@@ -48,7 +48,13 @@ public class NettyEncoderHandler extends MessageToMessageEncoder<ByteBuf> {
 			out.add(msg.retain());
 			return;
 		}
-		packet.read(new PacketSerializer(buf));
+		try {
+			packet.read(new PacketSerializer(buf));
+		} catch (IndexOutOfBoundsException e) {
+			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (dir: " + direction.name() + " - Encode)");
+			out.add(msg.retain());
+			return;
+		}
 		PacketSendEvent event = new PacketSendEvent(packet, p);
 		EventManager.callEvent(event);
 		if(!event.isCancelled())

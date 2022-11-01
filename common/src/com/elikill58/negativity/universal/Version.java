@@ -4,6 +4,9 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_10;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_11;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_12;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_18;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_19;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_8;
@@ -15,9 +18,9 @@ public enum Version {
 	LOWER("lower", 0, VersionUnknown::new, 0, 5),
 	V1_8("1.8", 8, Version1_8::new, 6, 47),
 	V1_9("1.9", 9, Version1_9::new, 48, 110),
-	V1_10("1.10", 10, VersionUnknown::new, 201, 210),
-	V1_11("1.11", 11, VersionUnknown::new, 301, 316),
-	V1_12("1.12", 12, VersionUnknown::new, 317, 340),
+	V1_10("1.10", 10, Version1_10::new, 201, 210),
+	V1_11("1.11", 11, Version1_11::new, 301, 316),
+	V1_12("1.12", 12, Version1_12::new, 317, 340),
 	V1_13("1.13", 13, VersionUnknown::new, 341, 404),
 	V1_14("1.14", 14, VersionUnknown::new, 441, 500),
 	V1_15("1.15", 15, VersionUnknown::new, 550, 578),

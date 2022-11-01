@@ -38,8 +38,6 @@ dependencies {
     compileOnly 'org.spongepowered:spongeapi:7.1.0'
 
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
-
-    compileOnly 'eu.crushedpixel:PacketGate:0.1.2'
 }
 
 minecraft {

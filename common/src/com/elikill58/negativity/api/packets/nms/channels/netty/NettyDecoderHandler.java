@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,7 +26,7 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 	public NettyDecoderHandler(Player p, PacketDirection direction) {
 		this.p = p;
 		this.direction = direction;
-		this.version = Adapter.getAdapter().getVersionAdapter().getVersion();
+		this.version = PlayerVersionManager.getPlayerVersion(p).getOrCreateNamedVersion();
 	}
 	
 	@Override

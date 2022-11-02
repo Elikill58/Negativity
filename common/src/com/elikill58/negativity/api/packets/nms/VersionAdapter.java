@@ -23,11 +23,11 @@ public abstract class VersionAdapter<R> {
 	protected NamedVersion version;
 	
 	public VersionAdapter(String version) {
-		this.version = Version.getVersion(version).createNamedVersion();
+		this(Version.getVersion(version));
 	}
 	
 	public VersionAdapter(Version version) {
-		this.version = version.createNamedVersion();
+		this.version = version.getOrCreateNamedVersion();
 	}
 	
 	public NamedVersion getVersion() {

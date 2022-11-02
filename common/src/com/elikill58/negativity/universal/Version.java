@@ -35,6 +35,7 @@ public enum Version {
 	private final int power, firstProtocolNumber, lastProtocolNumber;
 	private final String name;
 	private final Callable<NamedVersion> versionCreator;
+	private NamedVersion version;
 	
 	Version(String name, int power, Callable<NamedVersion> versionCreator, int firstProtocolNumber, int lastProtocolNumber) {
 		this.name = name;
@@ -105,9 +106,11 @@ public enum Version {
 		return power;
 	}
 
-	public NamedVersion createNamedVersion() {
+	public NamedVersion getOrCreateNamedVersion() {
+		if(version != null)
+			return version;
 		try {
-			return versionCreator.call();
+			return version = versionCreator.call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

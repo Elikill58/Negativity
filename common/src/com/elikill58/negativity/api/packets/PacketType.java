@@ -7,42 +7,11 @@ import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnset;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
-import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
+import com.elikill58.negativity.api.packets.packet.handshake.*;
+import com.elikill58.negativity.api.packets.packet.login.*;
+import com.elikill58.negativity.api.packets.packet.playin.*;
+import com.elikill58.negativity.api.packets.packet.playout.*;
+import com.elikill58.negativity.api.packets.packet.status.*;
 
 public interface PacketType {
 
@@ -207,7 +176,7 @@ public interface PacketType {
 		SET_COMMAND_MINECART,
 		SET_CREATIVE_SLOT,
 		SET_JIGSAW,
-		SETTINGS,
+		SETTINGS(NPacketPlayInSettings::new),
 		SPECTATE,
 		STEER_VEHICLE(NPacketPlayInSteerVehicle::new),
 		STRUCT,

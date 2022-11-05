@@ -46,7 +46,7 @@ public class PacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
-		Adapter.getAdapter().debug("Packet from " + packet.getPacketName());
+		Adapter.getAdapter().debug("Packet from " + packet.getPacketName() + ", type: " + packet.getPacketType());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();

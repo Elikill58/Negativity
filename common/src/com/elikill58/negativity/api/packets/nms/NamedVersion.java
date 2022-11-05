@@ -36,6 +36,6 @@ public abstract class NamedVersion {
 		if(type != null)
 			return type.createNewPacket();
 		Adapter.getAdapter().debug("Failed to find packetId " + packetId + " for " + dir.name() + " (registered: " + packetTypes.size() + ")");
-		return dir.createUnsetPacket(null);
+		return dir.createUnsetPacket("ID:" + packetId);
 	}
 }

@@ -21,6 +21,7 @@ public class NPacketPlayInUnset implements NPacketPlayIn, NPacketUnset {
 	@Override
 	public void setPacketTypeCible(PacketType type) {
 		this.cible = type;
+		this.packetName = type.getPacketName();
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class NPacketPlayInUnset implements NPacketPlayIn, NPacketUnset {
 	
 	@Override
 	public String getPacketName() {
-		return packetName;
+		return "Unset:" + packetName;
 	}
 
 	@Override

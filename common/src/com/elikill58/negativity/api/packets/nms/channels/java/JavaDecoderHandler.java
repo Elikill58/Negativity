@@ -11,10 +11,12 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
+import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.nms.channels.java.BinaryBuffer.Marker;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import io.netty.buffer.Unpooled;
 
@@ -22,9 +24,12 @@ public class JavaDecoderHandler implements Consumer<SelectionKey> {
 
 	private final Player p;
 	private boolean compressed = false;
+	private final Version v;
+	private final NamedVersion version;
 	
 	public JavaDecoderHandler(Player p) {
 		this.p = p;
+		this.version = (v = PlayerVersionManager.getPlayerVersion(p)).getOrCreateNamedVersion();
 	}
 	
 	public void read(BinaryBuffer readBuffer, boolean compressed) throws DataFormatException {
@@ -57,10 +62,10 @@ public class JavaDecoderHandler implements Consumer<SelectionKey> {
                 // Slice packet
                 ByteBuffer payload = content.asByteBuffer(content.readerOffset());
                 final int packetId = new PacketSerializer(Unpooled.wrappedBuffer(payload)).readVarInt();
-    			NPacket packet = Adapter.getAdapter().getVersionAdapter().getVersion().getPacket(PacketDirection.CLIENT_TO_SERVER, packetId);
+    			NPacket packet = version.getPacket(PacketDirection.CLIENT_TO_SERVER, packetId);
     			if(packet == null)
     				return;
-    			packet.read(new PacketSerializer(Unpooled.wrappedBuffer(payload)));
+    			packet.read(new PacketSerializer(Unpooled.wrappedBuffer(payload)), v);
     			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
     			EventManager.callEvent(event);
     			
@@ -111,8 +116,8 @@ public class JavaDecoderHandler implements Consumer<SelectionKey> {
 	                // Slice packet
 	                ByteBuffer payload = content.asByteBuffer(content.readerOffset());
 	                final int packetId = new PacketSerializer(Unpooled.wrappedBuffer(payload)).readVarInt();
-	    			NPacket packet = Adapter.getAdapter().getVersionAdapter().getVersion().getPacket(PacketDirection.CLIENT_TO_SERVER, packetId);
-	    			packet.read(new PacketSerializer(Unpooled.wrappedBuffer(payload)));
+	    			NPacket packet = version.getPacket(PacketDirection.CLIENT_TO_SERVER, packetId);
+	    			packet.read(new PacketSerializer(Unpooled.wrappedBuffer(payload)), v);
 	    			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
 	    			EventManager.callEvent(event);
 	    			

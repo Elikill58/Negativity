@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInUseEntity implements NPacketPlayIn {
 
@@ -21,7 +22,7 @@ public class NPacketPlayInUseEntity implements NPacketPlayIn {
 	}
 
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.entityId = serializer.readVarInt();
 		this.action = serializer.getEnum(EnumEntityUseAction.class);
 		if (this.action == EnumEntityUseAction.INTERACT_AT)

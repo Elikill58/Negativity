@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 
@@ -35,7 +36,7 @@ public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.chunkX = serializer.readInt();
 		this.chunkZ = serializer.readInt();
 		int amount = serializer.readVarInt();

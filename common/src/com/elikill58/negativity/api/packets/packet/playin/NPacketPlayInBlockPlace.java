@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 /**
  * Block place packet. Sometimes named "UseItemOn".<br>
@@ -33,7 +34,7 @@ public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.pos = serializer.readBlockPosition();
 	    this.face = BlockFace.getById(serializer.readUnsignedByte());
 	    this.hand = Hand.MAIN;

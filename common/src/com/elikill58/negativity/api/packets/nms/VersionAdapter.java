@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
-import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
@@ -41,7 +38,7 @@ public abstract class VersionAdapter<R> {
 	public abstract AbstractChannel getPlayerChannel(R p);
 	
 	public void sendPacket(Player p, NPacket packet) {
-		sendPacket(getR(p), packet.create());
+		sendPacket(getR(p), packet.create(p.getPlayerVersion()));
 	}
 	
 	public void sendPacket(R p, ByteBuf buf) {
@@ -49,20 +46,11 @@ public abstract class VersionAdapter<R> {
 	}
 	
 	public void queuePacket(Player p, NPacket packet) {
-		queuePacket(getR(p), packet.create());
+		queuePacket(getR(p), packet.create(p.getPlayerVersion()));
 	}
 	
 	public void queuePacket(R p, ByteBuf buf) {
 		getPlayerChannel(p).write(buf);
-	}
-
-	public boolean readPacket(Player p, PacketDirection dir, ByteBuf buf) {
-		int packetId = new PacketSerializer(buf).readVarInt();
-		NPacket packet = version.getPacket(dir, packetId);
-		packet.read(new PacketSerializer(buf));
-		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
-		EventManager.callEvent(event);
-		return event.isCancelled();
 	}
 
 	protected <T> T get(Object obj, Class<?> clazz, String name) {

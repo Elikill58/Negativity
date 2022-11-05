@@ -18,8 +18,7 @@ public class NPacketPlayInPong implements NPacketPlayIn {
 	}
 
 	@Override
-	public void read(PacketSerializer serializer) {
-		Version v = Version.getVersion();
+	public void read(PacketSerializer serializer, Version v) {
 		if(v.isNewerOrEquals(Version.V1_9))
 			this.id = serializer.readUnsignedByte();
 		else

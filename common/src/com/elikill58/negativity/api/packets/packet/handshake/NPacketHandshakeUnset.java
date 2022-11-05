@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.api.packets.packet.NPacketUnset;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketHandshakeUnset implements NPacketHandshake, NPacketUnset {
 
@@ -20,7 +21,7 @@ public class NPacketHandshakeUnset implements NPacketHandshake, NPacketUnset {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		
 	}
 

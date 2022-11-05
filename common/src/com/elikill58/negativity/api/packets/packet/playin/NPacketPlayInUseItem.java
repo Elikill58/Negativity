@@ -20,8 +20,8 @@ public class NPacketPlayInUseItem implements NPacketPlayIn {
 	}
 
 	@Override
-	public void read(PacketSerializer serializer) {
-	    if(Version.getVersion().isNewerOrEquals(Version.V1_19)) {
+	public void read(PacketSerializer serializer, Version version) {
+	    if(version.isNewerOrEquals(Version.V1_19)) {
 		    this.hand = serializer.getEnum(Hand.class);
 		    this.pos = serializer.readBlockPosition();
 		    this.face = BlockFace.getById(serializer.readVarInt());

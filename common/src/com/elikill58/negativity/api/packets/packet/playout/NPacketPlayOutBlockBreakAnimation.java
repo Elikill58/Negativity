@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutBlockBreakAnimation implements NPacketPlayOut, LocatedPacket {
 
@@ -17,7 +18,7 @@ public class NPacketPlayOutBlockBreakAnimation implements NPacketPlayOut, Locate
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.entityId = serializer.readVarInt();
 	    this.pos = serializer.readBlockPosition();
 	    this.destroyStage = serializer.readUnsignedByte();

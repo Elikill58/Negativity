@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.packets.packet.playin;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 /**
  * This packet appear in 1.9
@@ -19,7 +20,7 @@ public class NPacketPlayInTeleportAccept implements NPacketPlayIn {
 	}
 
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.teleportId = serializer.readVarInt();
 	}
 	

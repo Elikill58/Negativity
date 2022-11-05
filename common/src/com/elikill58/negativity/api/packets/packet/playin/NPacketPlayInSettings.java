@@ -15,8 +15,7 @@ public class NPacketPlayInSettings implements NPacketPlayIn {
 	public ChatMode chatMode;
 
 	@Override
-	public void read(PacketSerializer serializer) {
-		Version v = Version.getVersion();
+	public void read(PacketSerializer serializer, Version v) {
 		this.locale = serializer.readString(v.isNewerOrEquals(Version.V1_12) ? 16 : 7);
 		this.viewDistance = serializer.readByte();
 		this.chatMode = serializer.getEnum(ChatMode.class);

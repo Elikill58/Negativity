@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 
@@ -21,7 +22,7 @@ public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.x = serializer.readFloat();
 	    this.y = serializer.readFloat();
 	    this.z = serializer.readFloat();

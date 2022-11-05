@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 
@@ -41,7 +42,7 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.entityId = serializer.readVarInt();
 	    this.type = PotionEffectType.fromId(serializer.readByte());
 	    this.amplifier = serializer.readByte();

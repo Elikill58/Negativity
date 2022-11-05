@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 
@@ -18,7 +19,7 @@ public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.id = serializer.readVarInt();
 	    this.uuid = serializer.readUUID();
 	    this.x = serializer.readInt();

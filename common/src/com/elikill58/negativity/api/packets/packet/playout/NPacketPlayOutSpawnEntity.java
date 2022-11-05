@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 
@@ -21,7 +22,7 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 	}
 
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.entityId = serializer.readVarInt();
 		this.entityUUID = UUID.randomUUID(); // no UUID
 		serializer.readByte();

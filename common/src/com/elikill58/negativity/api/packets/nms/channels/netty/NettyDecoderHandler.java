@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import io.netty.buffer.ByteBuf;
@@ -21,12 +22,13 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 
 	private final Player p;
 	private final PacketDirection direction;
+	private final Version v;
 	private final NamedVersion version;
 	
 	public NettyDecoderHandler(Player p, PacketDirection direction) {
 		this.p = p;
 		this.direction = direction;
-		this.version = PlayerVersionManager.getPlayerVersion(p).getOrCreateNamedVersion();
+		this.version = (v = PlayerVersionManager.getPlayerVersion(p)).getOrCreateNamedVersion();
 	}
 	
 	@Override
@@ -50,7 +52,7 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 			return;
 		}
 		try {
-			packet.read(new PacketSerializer(buf));
+			packet.read(new PacketSerializer(buf), v);
 		} catch (IndexOutOfBoundsException e) {
 			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (dir: " + direction.name() + " - Decode)");
 			out.add(msg.retain());

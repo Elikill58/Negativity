@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.packets.PacketType.Handshake;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketHandshakeInSetProtocol implements NPacketHandshake {
 
@@ -16,7 +17,7 @@ public class NPacketHandshakeInSetProtocol implements NPacketHandshake {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		try {
 		    this.protocol = serializer.readVarInt();
 		    this.hostname = serializer.readString(32767);

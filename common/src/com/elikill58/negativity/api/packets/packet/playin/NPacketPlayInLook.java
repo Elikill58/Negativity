@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInLook extends NPacketPlayInFlying {
 	
@@ -10,12 +11,12 @@ public class NPacketPlayInLook extends NPacketPlayInFlying {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.hasLook = true;
 		this.hasPos = false;
 		this.yaw = serializer.readFloat();
 		this.pitch = serializer.readFloat();
-		super.read(serializer); // read ground value
+		super.read(serializer, version); // read ground value
 	}
 	
 	@Override

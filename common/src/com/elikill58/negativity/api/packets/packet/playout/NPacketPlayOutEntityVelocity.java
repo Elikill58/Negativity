@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutEntityVelocity implements NPacketPlayOut {
 
@@ -20,7 +21,7 @@ public class NPacketPlayOutEntityVelocity implements NPacketPlayOut {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 		this.entityId = serializer.readVarInt();
 		this.vec = serializer.readShortVector();
 	}

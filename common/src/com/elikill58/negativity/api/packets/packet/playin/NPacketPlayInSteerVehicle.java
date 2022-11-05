@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.packets.packet.playin;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInSteerVehicle implements NPacketPlayIn {
 
@@ -21,7 +22,7 @@ public class NPacketPlayInSteerVehicle implements NPacketPlayIn {
 	}
 	
 	@Override
-	public void read(PacketSerializer serializer) {
+	public void read(PacketSerializer serializer, Version version) {
 	    this.sideways = serializer.readFloat();
 	    this.forward = serializer.readFloat();
 	    byte b = serializer.readByte();

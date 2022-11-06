@@ -12,10 +12,10 @@ import io.netty.channel.Channel;
 
 public abstract class NettyPacketListener {
 
-	private ExecutorService addChannelExecutor = Executors.newSingleThreadExecutor();
+	private ExecutorService channelExecutor = Executors.newSingleThreadExecutor();
 
-	public ExecutorService getOrCreateAddChannelExecutor() {
-		return addChannelExecutor;
+	public ExecutorService getOrCreatChannelExecutor() {
+		return channelExecutor;
 	}
 
 	public void join(Player p) {
@@ -29,7 +29,7 @@ public abstract class NettyPacketListener {
 	}
 
 	private void addChannel(Player p) {
-		getOrCreateAddChannelExecutor().execute(() -> {
+		getOrCreatChannelExecutor().execute(() -> {
 			Channel channel = getChannel(p);
 			try {
 				// Managing incoming packet (from player)

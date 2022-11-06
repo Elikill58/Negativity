@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.minestom.listeners.BlockListeners;
 import com.elikill58.negativity.minestom.listeners.EntityListeners;
 import com.elikill58.negativity.minestom.listeners.InventoryListeners;
+import com.elikill58.negativity.minestom.listeners.PacketListeners;
 import com.elikill58.negativity.minestom.listeners.PlayersListeners;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -41,6 +42,7 @@ public class MinestomNegativity extends Extension {
 		new PlayersListeners(getEventNode());
 		new EntityListeners(getEventNode());
 		new InventoryListeners(getEventNode());
+		new PacketListeners(getEventNode());
 		
 		loadCommands();
 		getLogger().info("Negativity v" + getOrigin().getVersion() + " loaded.");

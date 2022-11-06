@@ -2,6 +2,8 @@ package com.elikill58.negativity.api.packets.nms;
 
 import java.util.HashMap;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -31,7 +33,7 @@ public abstract class NamedVersion {
 		return null;
 	}
 	
-	private NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
+	private @NonNull NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
 		PacketType type = packetTypes.get(packetId);
 		if(type != null)
 			return type.createNewPacket();

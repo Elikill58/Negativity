@@ -54,7 +54,7 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 		try {
 			packet.read(new PacketSerializer(buf), v);
 		} catch (IndexOutOfBoundsException e) {
-			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (dir: " + direction.name() + " - Decode)");
+			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + direction.name() + " - Decode)");
 			out.add(msg.retain());
 			return;
 		}

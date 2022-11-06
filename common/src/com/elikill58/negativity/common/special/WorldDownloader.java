@@ -5,10 +5,10 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 
@@ -29,7 +29,7 @@ public class WorldDownloader extends Special implements Listeners {
 							p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 						}
 					} else {
-						BanManager.executeBan(Ban.active(p.getUniqueId(), getName(), "Negativity", BanType.PLUGIN,
+						BanManager.executeBan(Ban.active(p.getUniqueId(), getName(), "Negativity", SanctionnerType.PLUGIN,
 								System.currentTimeMillis() + getConfig().getLong("ban.time", 2629800000l), "world_downloader", p.getIP()));
 					}
 				} else if(getConfig().getBoolean("kick", true)) {

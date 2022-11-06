@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -86,7 +85,10 @@ public abstract class Adapter {
 	 * 
 	 * @param msg the message to log
 	 */
-	public abstract void debug(String msg);
+	public void debug(String msg) {
+		if (getConfig().getBoolean("debug", false))
+			getLogger().info("[Debug] " + msg);
+	}
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	
 	/**
@@ -103,6 +105,8 @@ public abstract class Adapter {
 	
 	/**
 	 * The Minecraft version the server is running
+	 * 
+	 * @return the version of the server
 	 */
 	public abstract Version getServerVersion();
 	
@@ -131,14 +135,6 @@ public abstract class Adapter {
 	 * @param cmd the command which have to be execute
 	 */
 	public abstract void runConsoleCommand(String cmd);
-	
-	/**
-	 * Check if the UUID is a McLeaks account
-	 * 
-	 * @param playerId the player to check
-	 * @return a completable boolean
-	 */
-	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 	
 	/**
 	 * Get UUID of all online players
@@ -230,7 +226,7 @@ public abstract class Adapter {
 	 * Get the UUID with the name
 	 * 
 	 * @param name the name of a possible player
-	 * @return the uuid of the player
+	 * @return the uuid of the player or null if can't find
 	 */
 	public @Nullable UUID getUUID(String name) {
 		OfflinePlayer op = getOfflinePlayer(name);
@@ -304,6 +300,7 @@ public abstract class Adapter {
 	 * Get another plugin
 	 * 
 	 * @param name the plugin name (used by the platform)
+	 * @return the external plugin or null if not found
 	 */
 	public abstract ExternalPlugin getPlugin(String name);
 	

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.impl.location;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import com.elikill58.negativity.universal.Version;
 public class SpigotWorld extends World {
 
 	private final org.bukkit.World w;
+	private List<Entity> entities;
 	
 	public SpigotWorld(org.bukkit.World w) {
 		this.w = w;
@@ -27,20 +29,48 @@ public class SpigotWorld extends World {
 	}
 
 	@Override
-	public Block getBlockAt(int x, int y, int z) {
+	public Block getBlockAt0(int x, int y, int z) {
 		return new SpigotBlock(w.getBlockAt(x, y, z));
 	}
 
 	@Override
-	public Block getBlockAt(Location loc) {
+	public Block getBlockAt0(Location loc) {
 		return new SpigotBlock(w.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 	}
 
+	public void add(Entity e) {
+		if(entities == null)
+			clearEntities();
+		else {
+			synchronized (entities) {
+				entities.add(e);
+			}
+		}
+	}
+
+	public void remove(Entity e) {
+		if(entities == null) {
+			clearEntities();
+			return;
+		}
+		synchronized (entities) {
+			entities.remove(e);
+		}
+	}
+
+	public void clearEntities() {
+		this.entities = SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
+	}
+	
+	private void checkEntities() {
+		if(entities == null || entities.isEmpty())
+			clearEntities();
+	}
+	
 	@Override
 	public List<Entity> getEntities() {
-		synchronized (w) {
-			return SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
-		}
+		checkEntities();
+		return new ArrayList<>(entities);// SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 	}
 	
 	@Override

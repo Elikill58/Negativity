@@ -8,7 +8,7 @@ import java.util.Map;
  * 
  * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(java.io.Reader, ContainerFactory)
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  */
 @SuppressWarnings("rawtypes")
 public interface ContainerFactory {

@@ -111,7 +111,7 @@ public class TranslatedMessages {
 					String prefix = provider.get("prefix");
 					if(prefix == null || prefix.isEmpty())
 						prefix = DEFAULT_PREFIX;
-					return message.replaceAll("%prefix%", prefix);
+					return message.replace("%prefix%", prefix);
 				}
 				return message;
 			}
@@ -124,6 +124,12 @@ public class TranslatedMessages {
 		if (fallbackTranslationProvider != null) {
 			String fallbackMessage = fallbackTranslationProvider.get(key, placeholders);
 			if (fallbackMessage != null) {
+				if(fallbackMessage.contains("%prefix%")) { // contains prefix
+					String prefix = provider.get("prefix");
+					if(prefix == null || prefix.isEmpty())
+						prefix = DEFAULT_PREFIX;
+					return fallbackMessage.replace("%prefix%", prefix);
+				}
 				return fallbackMessage;
 			}
 		}

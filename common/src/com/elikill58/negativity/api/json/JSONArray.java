@@ -14,7 +14,7 @@ import java.util.Iterator;
 /**
  * A JSON array. JSONObject supports java.util.List interface.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
@@ -43,8 +43,10 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
      * 
      * @see com.elikill58.negativity.api.json.JSONValue#writeJSONString(Object, Writer)
      * 
-     * @param collection
-     * @param out
+     * @param collection collection of all json content
+     * @param out writer where json will be print
+     * 
+     * @throws IOException if something gone wrong will writing
      */
 	public static void writeJSONString(Collection collection, Writer out) throws IOException{
 		if(collection == null){
@@ -84,7 +86,7 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
 	 * 
 	 * @see com.elikill58.negativity.api.json.JSONValue#toJSONString(Object)
 	 * 
-	 * @param collection
+	 * @param collection content of json
 	 * @return JSON text, or "null" if list is null.
 	 */
 	public static String toJSONString(Collection collection){

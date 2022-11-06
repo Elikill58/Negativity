@@ -168,7 +168,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 
 	@Override
 	public World getWorld() {
-		return new SpongeWorld(entity.getWorld());
+		return World.getWorld(entity.getWorld().getName(), a -> new SpongeWorld(entity.getWorld()));
 	}
 
 	@Override
@@ -238,8 +238,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 
 	@Override
 	public boolean isUsingRiptide() {
-		// TODO implement riptide for sponge
-		return false;
+		return false; // not in this sponge version
 	}
 	
 	@Override
@@ -448,7 +447,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	
 	@Override
 	public String getServerName() {
-		return "SpongeServer"; // TODO check if sponge can have a server name
+		return "SpongeServer";
 	}
 	
 	@Override

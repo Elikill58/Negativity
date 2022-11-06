@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 buildscript {
     repositories {
         maven {
@@ -18,6 +16,8 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+
+evaluationDependsOn(':common')
 
 sourceSets {
     main {
@@ -38,8 +38,6 @@ dependencies {
     compileOnly 'org.spongepowered:spongeapi:7.1.0'
 
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
-
-    implementation 'org.bstats:bstats-sponge-lite:1.7'
 
     compileOnly 'eu.crushedpixel:PacketGate:0.1.2'
 }
@@ -63,11 +61,9 @@ jar.manifest {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('sponge7')
+    archiveBaseName.set('NegativitySponge')
+    archiveAppendix.set('API-7')
     archiveClassifier.set(null)
-
-    relocate('org.bstats', 'com.elikill58.negativity')
 
     dependencies {
         it.include(it.project(':common'))
@@ -87,11 +83,6 @@ afterEvaluate {
         dependsOn shadowJar
         input = shadowJar.archiveFile
     }
-}
-
-parent.tasks.named('shadowJar', ShadowJar) {
-    it.from(shadowJar.outputs)
-    it.manifest.inheritFrom(tasks.jar.manifest)
 }
 
 task prepareServer(type: Copy) {

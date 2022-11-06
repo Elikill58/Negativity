@@ -17,7 +17,7 @@ public class NegativityMessagesManager {
 	public static final Map<Byte, Supplier<NegativityMessage>> MESSAGES_BY_ID;
 
 	public static final String CHANNEL_ID = "negativity:msg";
-	public static final int PROTOCOL_VERSION = 3;
+	public static final int PROTOCOL_VERSION = 4;
 
 	static {
 		Map<Byte, Supplier<NegativityMessage>> messages = new HashMap<>();
@@ -31,6 +31,8 @@ public class NegativityMessagesManager {
 		messages.put(RedisNegativityMessage.MESSAGE_ID, RedisNegativityMessage::new);
 		messages.put(PlayerVersionMessage.MESSAGE_ID, PlayerVersionMessage::new);
 		messages.put(ShowAlertStatusMessage.MESSAGE_ID, ShowAlertStatusMessage::new);
+		messages.put(ProxyExecuteWarnMessage.MESSAGE_ID, ProxyExecuteWarnMessage::new);
+		messages.put(ProxyRevokeWarnMessage.MESSAGE_ID, ProxyRevokeWarnMessage::new);
 		MESSAGES_BY_ID = Collections.unmodifiableMap(messages);
 	}
 

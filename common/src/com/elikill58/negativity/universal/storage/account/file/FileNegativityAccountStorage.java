@@ -26,10 +26,16 @@ import com.elikill58.negativity.universal.storage.account.NegativityAccountStora
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
 
 	private final File userDir;
-	private final Configuration ipConfig;
+	private Configuration ipConfig;
 	
 	public FileNegativityAccountStorage(File userDir) {
 		this.userDir = userDir;
+	}
+	
+	@Override
+	public void enable() {
+		if(!userDir.exists())
+			userDir.mkdirs();
 		File ipFile = new File(userDir.getParent(), "player-ips.yml");
 		if(!ipFile.exists()) { // file doesn't exist
 			try {
@@ -83,7 +89,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 					file.deleteOnExit();
 				NegativityAccount acc = new NegativityAccount(playerId);
 				// TODO try to get most data as possible from old file
-				saveAccount(acc).join();
+				saveAccount(acc);
 				return acc;
 			}
 		});
@@ -113,14 +119,14 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			serializeReports(account, accountConfig);
 			accountConfig.set("ip", account.getIp());
 			accountConfig.set("creation-time", account.getCreationTime());
-			accountConfig.save();
+			accountConfig.directSave();
 			
 			// now check for IP file
 			if(oldIp == null) { // new account, should just add the UUID to the new IP
 				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
 				uuidPerIP.add(uuid);
 				ipConfig.set(account.getIp(), uuidPerIP);
-				ipConfig.save();
+				ipConfig.directSave();
 			} else if(!oldIp.equalsIgnoreCase(account.getIp())) { // if the IP change
 				List<String> uuidOnOldIp = ipConfig.getStringList(oldIp);
 				if(uuidOnOldIp.size() == 1 && uuidOnOldIp.get(0).equalsIgnoreCase(uuid)) { // only this UUID for this IP
@@ -130,7 +136,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
 				uuidPerIP.add(uuid);
 				ipConfig.set(account.getIp(), uuidPerIP);
-				ipConfig.save();
+				ipConfig.directSave();
 			}
 		});
 	}

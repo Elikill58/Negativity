@@ -10,10 +10,10 @@ import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 
@@ -41,7 +41,7 @@ public class BannedName extends Special implements Listeners {
 						e.setLoginResult(Result.KICK_OTHER);
 					}
 				} else {
-					BanManager.executeBan(Ban.active(playerId, getName(), "Negativity", BanType.PLUGIN,
+					BanManager.executeBan(Ban.active(playerId, getName(), "Negativity", SanctionnerType.PLUGIN,
 							getConfig().getInt("ban.time"), getName(), e.getAddress().getHostAddress()));
 					e.setLoginResult(Result.KICK_BANNED);
 				}

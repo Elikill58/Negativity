@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -23,7 +24,7 @@ public class ForceField extends Cheat {
 	private NumberFormat nf = NumberFormat.getInstance();
 
 	public ForceField() {
-		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD);
+		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD, EmptyData::new);
 		nf.setMaximumIntegerDigits(2);
 	}
 
@@ -32,10 +33,7 @@ public class ForceField extends Cheat {
 		int arm = e.getPackets().getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
 		int useEntity = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
 		if (arm > 16 && useEntity > 20) {
-			ReportType type = ReportType.WARNING;
-			if (np.getWarn(this) > 5)
-				type = ReportType.VIOLATION;
-			Negativity.alertMod(type, e.getPlayer(), this,
+			Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this,
 					UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(this)), "packet",
 					"ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
 							+ useEntity);

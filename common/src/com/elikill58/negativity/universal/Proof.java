@@ -25,11 +25,13 @@ public class Proof {
 	 * Create a new proof object. This is mostly used for new proof (it generate all missing value)
 	 * 
 	 * @param np the player concerned by this proof
+	 * @param reportType type of report
 	 * @param cheat the cheat
 	 * @param checkName the name of the check
+	 * @param ping the ping of player
 	 * @param amount amount of alert
 	 * @param reliability the reliability
-	 * @param explaination all explaination from check
+	 * @param checkInformations explaination all explaination from check
 	 */
 	public Proof(NegativityPlayer np, ReportType reportType, CheatKeys cheat, @Nullable String checkName, int ping, long amount, int reliability, String checkInformations) {
 		this(-1, np.getUUID(), reportType, cheat, checkName, ping, amount, reliability, new Timestamp(System.currentTimeMillis()), checkInformations, np.getPlayer().getPlayerVersion(), np.getAccount().getWarn(checkName), Adapter.getAdapter().getTPS());
@@ -40,13 +42,14 @@ public class Proof {
 	 * 
 	 * @param id the ID in the storage
 	 * @param uuid uuid of concerned player by this proof
+	 * @param reportType type of report
 	 * @param cheatKey the cheat
 	 * @param checkName the name of the check
 	 * @param ping the ping of player
 	 * @param amount amount of alert
 	 * @param reliability the reliability
 	 * @param time the time when the alert have been raised
-	 * @param explaination all explanation from check
+	 * @param checkInformations explaination all explanation from check
 	 * @param version the version of the player when the proof is made
 	 * @param warn amount of warn at the time of proof
 	 * @param tps tps when doing proof

@@ -54,7 +54,7 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 					saveProof(Files.readAllLines(file.toPath()).stream().map(line -> OldProofFileMigration.getProof(uuid, line)).collect(Collectors.toList()));
 					migrated++;
 				} else if(file.getName().endsWith(".yml")) {
-					saveProof(NegativityProofStorage.getStorages().get("file").getProof(uuid).join());
+					NegativityProofStorage.getStorages().get("file").getProof(uuid).thenAccept(this::saveProof);
 					migrated++;
 				}
 			}

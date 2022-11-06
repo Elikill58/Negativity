@@ -15,9 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.entity.BoundingBox;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
@@ -26,6 +27,7 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -40,9 +42,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehi
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -58,7 +58,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
-@SuppressWarnings("unchecked")
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public SpigotVersionAdapter(String version) {
@@ -97,8 +96,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				e.printStackTrace();
 				return null;
 			}
-			// return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f,
-			// "yaw"), get(f, "pitch"));
 		});
 		packetsPlayIn.put("PacketPlayInFlying", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"),
@@ -121,22 +118,12 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
 				Object movingObj = get(f, "a");
 				BlockPosition pos = getBlockPosition(get(movingObj, "c"));
-				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(movingObj, "b").toUpperCase()), get(f, "timestamp"));
+				return new NPacketPlayInBlockPlace(Hand.getHand(getStr(f, "b").toUpperCase()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(movingObj, "b").toUpperCase()));
 			});
 		} else {
 			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
 				BlockPosition pos = getBlockPosition(get(f, "a"));
-				long timestamp = 0l;
-				try {
-					Field timestampField = f.getClass().getDeclaredField("timestamp");
-					timestampField.setAccessible(true);
-					timestamp = timestampField.getLong(f);
-				} catch (NoSuchFieldException e) {
-					// it's an old version of spigot
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(f, "b").toUpperCase()), timestamp);
+				return new NPacketPlayInBlockPlace(Hand.getHand(getStr(f, "c").toUpperCase()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(f, "b").toUpperCase()));
 			});
 		}
 		packetsPlayIn.put("PacketPlayInHeldItemSlot", (p, f) -> new NPacketPlayInHeldItemSlot((int) ReflectionUtils.getField(f, v.isNewerOrEquals(Version.V1_17) ? "a" : "itemInHandIndex")));
@@ -168,10 +155,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				get(f, "c"), get(f, "d"), get(f, "e")));
 		packetsPlayOut.put("PacketPlayOutExplosion", (p, f) -> new NPacketPlayOutExplosion(get(f, "a"), get(f, "b"),
 				get(f, "c"), get(f, "f"), get(f, "g"), get(f, "h")));
-		packetsPlayOut.put("PacketPlayOutEntity", (p, f) -> {
-			return new NPacketPlayOutEntity(get(f, "a"), Double.parseDouble(getStr(f, "b")),
-					Double.parseDouble(getStr(f, "c")), Double.parseDouble(getStr(f, "d")));
-		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (p, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "a"), (byte) get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "e"));
 		});
@@ -250,11 +233,19 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 	}
 
-	public Channel getPlayerChannel(Player p) {
+	public Object getNetworkManager(Player p) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);
+			return new PacketContent(playerConnection).getSpecificModifier(PacketUtils.getNmsClass("NetworkManager", "network.")).readSafely(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Channel getPlayerChannel(Player p) {
+		try {
+			return new PacketContent(getNetworkManager(p)).getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -333,8 +324,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public static SpigotVersionAdapter getVersionAdapter() {
 		if (instance == null) {
 			switch (VERSION) {
-			case "v1_7_R4":
-				return instance = new Spigot_1_7_R4();
 			case "v1_8_R3":
 				return instance = new Spigot_1_8_R3();
 			case "v1_9_R1":
@@ -415,8 +404,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
-			Object network = get(getPlayerConnection(p), "networkManager");
-			Queue queue = (Queue) get(network, Version.getVersion().isNewerOrEquals(Version.V1_13) ? "packetQueue" : "i");
+			Queue queue = (Queue) get(getNetworkManager(p), Version.getVersion().isNewerOrEquals(Version.V1_13) ? "packetQueue" : "i");
 			queue.add(callFirstConstructor(PacketUtils.getNmsClass("NetworkManager$QueuedPacket"), packet, null));
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,8 +1,13 @@
 package com.elikill58.negativity.api.location;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockChecker;
 import com.elikill58.negativity.universal.utils.Maths;
 
 public final class Location implements Cloneable {
@@ -155,42 +160,115 @@ public final class Location implements Cloneable {
 		return new Vector(x, y, z);
 	}
 	
-	public double distance(Location o) {
+	/**
+	 * Get distance with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distance(@NonNull Location o) {
 		return Math.sqrt(distanceSquared(o));
 	}
-
-	public double distanceSquared(Location o) {
+	
+	/**
+	 * Get squared distance with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceSquared(@NonNull Location o) {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
 		if ((o.getWorld() == null) || (getWorld() == null)) {
-			throw new IllegalArgumentException("Cannot measure distance to a null world");
+			return 0;
 		}
 		if (!o.getWorld().getName().equals(getWorld().getName())) {
-			throw new IllegalArgumentException(
-					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+			return 0;
 		}
 		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
 	}
 	
-	public double distanceXZ(Location o) {
+	/**
+	 * Get distance in X/Z axis with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceXZ(@NonNull Location o) {
 		return Math.sqrt(distanceSquaredXZ(o));
 	}
-
-	public double distanceSquaredXZ(Location o) {
+	
+	/**
+	 * Get squared distance in X/Z axis with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceSquaredXZ(@NonNull Location o) {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
 		if ((o.getWorld() == null) || (getWorld() == null)) {
-			throw new IllegalArgumentException("Cannot measure distance to a null world");
+			return 0;
 		}
 		if (!o.getWorld().getName().equals(getWorld().getName())) {
-			throw new IllegalArgumentException(
-					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+			return 0;
 		}
 		return Maths.square(this.x - o.x) + Maths.square(this.z - o.z);
 	}
 
+	/**
+	 * Get block checker with current size
+	 * 
+	 * @param size the size of checker (used for x/y/z)
+	 * @return the checker
+	 */
+	public BlockChecker getBlockChecker(double size) {
+        return getBlockChecker(size, size, size);
+	}
+
+	/**
+	 * Get block checker with current size
+	 * 
+	 * @param size the size of checker (used for x/z)
+	 * @return the checker
+	 */
+	public BlockChecker getBlockCheckerXZ(double size) {
+        return getBlockChecker(size, 0, size);
+	}
+
+	/**
+	 * Get block checker with current size
+	 * 
+	 * @param sizeX the X size
+	 * @param sizeY the Y size
+	 * @param sizeZ the Z size
+	 * @return the checker
+	 */
+	public BlockChecker getBlockChecker(double sizeX, double sizeY, double sizeZ) {
+        List<Block> blocks = new ArrayList<>();
+
+        double minX = x - sizeX, maxX = x + sizeX;
+        double minY = y - sizeY, maxY = y + sizeY;
+        double minZ = z - sizeZ, maxZ = z + sizeZ;
+        
+        for (double x = minX; x <= maxX; x += (maxX - minX)) {
+        	if(sizeY == 0) {
+                for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
+                    blocks.add(w.getBlockAt(x, y, z));
+                }
+        	} else {
+	            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY)) {
+	                for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
+	                    blocks.add(w.getBlockAt(x, y, z));
+	                }
+	            }
+        	}
+        }
+        return new BlockChecker(blocks);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		Objects.requireNonNull(obj);

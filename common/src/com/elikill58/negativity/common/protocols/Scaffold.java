@@ -17,13 +17,15 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.ray.RayResult;
 import com.elikill58.negativity.api.ray.block.BlockRay;
 import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
@@ -34,10 +36,10 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Scaffold extends Cheat {
 
-	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD);
+	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD, Materials.KELP);
 	
 	public Scaffold() {
-		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, CheatDescription.BLOCKS);
+		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, EmptyData::new, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)
@@ -110,7 +112,7 @@ public class Scaffold extends Cheat {
 			double distance = result.getLastDistance();
 			double maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) + 0.2;
 			//Adapter.getAdapter().debug((searched.getX() == place.getX() && searched.getZ() == place.getZ() ? "Result SAME: " : "Result: ") + result.getRayResult() + ", distance: " + distance + ", block: " + searched + ", place: " + place + ", start: " + blockRay.getBasePosition());
-			if (!result.getRayResult().isFounded()) {
+			if (!result.getRayResult().isFounded() && !result.getRayResult().equals(RayResult.NEEDED_NOT_FOUND)) {
 				Negativity.alertMod(distance > maxDistance + 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(distance * 25), "distance",
 						"Place: " + place + ", targetVisual: " + searched + ", vec: " + result.getVector() + ", begin: " + blockRay.getBasePosition()
@@ -123,7 +125,7 @@ public class Scaffold extends Cheat {
 
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
-		AbstractPacket pa = e.getPacket();
+		Packet pa = e.getPacket();
 		if (pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Player p = e.getPlayer();
 			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {

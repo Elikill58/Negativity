@@ -6,13 +6,14 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 
 public final class Ban {
 
 	private final UUID playerId;
 	private final String reason;
 	private final String bannedBy;
-	private final BanType banType;
+	private final SanctionnerType banType;
 	private final long expirationTime;
 	@Nullable
 	private final String cheatName, ip;
@@ -23,7 +24,7 @@ public final class Ban {
 	public Ban(UUID playerId,
 			   String reason,
 			   String bannedBy,
-			   BanType banType,
+			   SanctionnerType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
 			   @Nullable String ip,
@@ -34,7 +35,7 @@ public final class Ban {
 	public Ban(UUID playerId,
 			   String reason,
 			   String bannedBy,
-			   BanType banType,
+			   SanctionnerType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
 			   @Nullable String ip,
@@ -46,7 +47,7 @@ public final class Ban {
 	public Ban(UUID playerId,
 			   String reason,
 			   String bannedBy,
-			   BanType banType,
+			   SanctionnerType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
 			   @Nullable String ip,
@@ -85,7 +86,7 @@ public final class Ban {
 		return expirationTime <= 0;
 	}
 
-	public BanType getBanType() {
+	public SanctionnerType getBanType() {
 		return banType;
 	}
 
@@ -175,7 +176,7 @@ public final class Ban {
 				revocationTime);
 	}
 
-	public static Ban active(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName, @Nullable String ip) {
+	public static Ban active(UUID playerId, String reason, String bannedBy, SanctionnerType banType, long expirationTime, @Nullable String cheatName, @Nullable String ip) {
 		return new Ban(playerId, reason, bannedBy, banType, expirationTime, cheatName, ip, BanStatus.ACTIVE, System.currentTimeMillis());
 	}
 }

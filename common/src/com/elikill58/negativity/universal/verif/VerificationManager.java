@@ -122,6 +122,7 @@ public class VerificationManager {
 	/**
 	 * Record data for each verificator that the player is currently register on
 	 * 
+	 * @param <T> type of what is counted
 	 * @param target the player which create the data
 	 * @param cheat the cheat which record the data
 	 * @param type the type of the data

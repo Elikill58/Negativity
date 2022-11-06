@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -19,7 +20,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 public class AntiPotion extends Cheat implements Listeners {
 
 	public AntiPotion() {
-		super(CheatKeys.ANTI_POTION, CheatCategory.COMBAT, Materials.POTION, CheatDescription.HEALTH);
+		super(CheatKeys.ANTI_POTION, CheatCategory.COMBAT, Materials.POTION, EmptyData::new, CheatDescription.HEALTH);
 	}
 
 	@EventListener

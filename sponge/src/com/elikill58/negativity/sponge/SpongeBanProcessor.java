@@ -20,11 +20,11 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
@@ -143,7 +143,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = ban.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
 		long expirationTime = ban.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = ban.creationDate().toEpochMilli();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, banStatus, executionTime, revocationTime);
+		return new Ban(playerId, reason, bannedBy, SanctionnerType.UNKNOW, expirationTime, null, null, banStatus, executionTime, revocationTime);
 	}
 	
 	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {

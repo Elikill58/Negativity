@@ -41,6 +41,7 @@ public class LocationUtils {
 	 * @param ms Material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasMaterialAround(Location loc, Material... ms) {
 		List<Material> m = Arrays.asList(ms);
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
@@ -70,6 +71,7 @@ public class LocationUtils {
 	 * @param ms Material's name that we are searchingWarn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
 		loc = loc.clone();
 		if (isBlockOfType(loc, ms))
@@ -101,6 +103,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThanExtended(Location loc, Material m) {
 		return hasOtherThanExtended(loc, m.getId());
 	}
@@ -113,6 +116,7 @@ public class LocationUtils {
 	 * @param m the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThanExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
@@ -163,6 +167,7 @@ public class LocationUtils {
 	 * @param m the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
@@ -213,6 +218,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThan(Location loc, Material m) {
 		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
@@ -242,6 +248,7 @@ public class LocationUtils {
 	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material is around
 	 */
+	@Deprecated
 	public static boolean hasOtherThan(Location loc, String name) {
 		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(name))
@@ -494,52 +501,40 @@ public class LocationUtils {
 				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
 	}
 
-	/**
-	 * Get the arrow of the direction from the player to the given location
-	 * 
-	 * @param p the player which is requiring for direction
-	 * @param loc the direction
-	 * @return the arrow already parsed
-	 */
-	public static double getAngleTo(Player p, Location loc) {
-		Location position = p.getLocation();
-		Vector a = loc.clone().sub(position).toVector().normalize();
-		Vector b = position.getDirection();
-		double angle = Math.toDegrees(Math.acos(a.dot(b)));
-		return (angle < 0) ? (360 + angle) : angle;
-	}
-
 	public static Direction getDirection(Player p, Location loc) {
-		return getDirection(getAngleTo(p, loc));
-	}
-	
-	public static Direction getDirection(double yaw) {
-		if (22.50 < yaw && yaw < 67.50)
-			return Direction.FRONT_LEFT;
-		else if (67.50 < yaw && yaw < 112.5)
-			return Direction.LEFT;
-		else if (112.50 < yaw && yaw < 157.5)
-			return Direction.BACK_LEFT;
-		else if (157.50 < yaw && yaw < 202.5)
-			return Direction.BACK;
-		else if (202.50 < yaw && yaw < 247.5)
-			return Direction.BACK_RIGHT;
-		else if (247.50 < yaw && yaw < 292.5)
-			return Direction.RIGHT;
-		else if (292.50 < yaw && yaw < 337.5)
-			return Direction.FRONT_RIGHT;
-		return Direction.FRONT;
-	}
-
-	/**
-	 * Check if a point is on the left or right
-	 * 
-	 * @param a the point where the line comes from
-	 * @param b a point of the line
-	 * @param c the point to check
-	 * @return true if on left
-	 */
-	public static boolean isLeft(Location a, Location b, Vector c) {
-		return ((b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (b.getZ() - a.getZ()) * (c.getX() - a.getX())) > 0;
+		Location playerLocation = p.getLocation();
+		Vector locVector = loc.toVector().subtract(playerLocation.toVector());
+		
+		double locAngle = Math.atan2(locVector.getZ(), locVector.getX());
+		double playerAngle = Math.atan2(playerLocation.getDirection().getZ(), playerLocation.getDirection().getX());
+		
+		double angle = playerAngle - locAngle;
+		
+		while (angle > Math.PI) {
+		    angle = angle - 2 * Math.PI;
+		}
+		
+		while (angle < -Math.PI) {
+		    angle = angle + 2 * Math.PI;
+		}
+		
+		if (angle < -2.749 || angle >= 2.749) { // -7/8 pi
+		    return Direction.BACK;
+		} else if (angle < -1.963) { // -5/8 pi
+		    return Direction.BACK_RIGHT;
+		} else if (angle < -1.178) { // -3/8 pi
+		    return Direction.RIGHT;
+		} else if (angle < -0.393) { // -1/8 pi
+		    return Direction.FRONT_RIGHT;
+		} else if (angle < 0.393) { // 1/8 pi
+		    return Direction.FRONT;
+		} else if (angle < 1.178) { // 3/8 pi
+		    return Direction.FRONT_LEFT;
+		} else if (angle < 1.963) { // 5/8 p
+		    return Direction.LEFT;
+		} else if (angle < 2.749) { // 7/8 pi
+		    return Direction.BACK_LEFT;
+		}
+		return null;
 	}
 }

@@ -11,6 +11,7 @@ import org.spongepowered.math.vector.Vector3d;
 import org.spongepowered.math.vector.Vector3i;
 
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -196,10 +197,10 @@ public class LocationUtils {
 	}
 	
 	public static Location toNegativity(ServerLocation location) {
-		return new Location(new SpongeWorld(location.world()), location.x(), location.y(), location.z());
+		return new Location(World.getWorld(location.world().key().asString(), a -> new SpongeWorld(location.world())), location.x(), location.y(), location.z());
 	}
 	
 	public static Location toNegativity(ServerWorld world, Vector3d vec) {
-		return new Location(new SpongeWorld(world), vec.x(), vec.y(), vec.z());
+		return new Location(World.getWorld(world.world().key().asString(), a -> new SpongeWorld(world.world())), vec.x(), vec.y(), vec.z());
 	}
 }

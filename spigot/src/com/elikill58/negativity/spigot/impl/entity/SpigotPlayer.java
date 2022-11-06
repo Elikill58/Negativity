@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
@@ -18,15 +19,15 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
+import com.elikill58.negativity.spigot.impl.SpigotPotionEffectType;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
@@ -106,13 +107,13 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC")
+		return SpigotNegativity.getSubPlatform().equals(SubPlatform.CRAFTBUKKIT) || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC")
 				|| this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
 	public float getWalkSpeed() {
-		return entity.getWalkSpeed();
+		return entity.getWalkSpeed() / 2.0f;
 	}
 
 	@Override
@@ -158,11 +159,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	@Override
 	public int getPing() {
 		return SpigotVersionAdapter.getVersionAdapter().getPlayerPing(entity);
-	}
-
-	@Override
-	public World getWorld() {
-		return new SpigotWorld(entity.getWorld());
 	}
 
 	@Override
@@ -247,8 +243,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.getActivePotionEffects().stream()
-				.filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name())).findAny().isPresent();
+		return entity.getActivePotionEffects().stream().map(org.bukkit.potion.PotionEffect::getType).map(SpigotPotionEffectType::toCommon).collect(Collectors.toList()).contains(type);
 	}
 
 	@Override
@@ -270,7 +265,10 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		entity.removePotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
+		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
+		if(spigotType != null)
+			Adapter.getAdapter().runSync(() -> entity.removePotionEffect(spigotType));
+		// else can have error
 	}
 
 	@Override
@@ -294,8 +292,9 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		entity.addPotionEffect(new org.bukkit.potion.PotionEffect(
-				org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
+		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
+		if(spigotType != null)
+			Adapter.getAdapter().runSync(() -> entity.addPotionEffect(new org.bukkit.potion.PotionEffect(spigotType, duration, amplifier)));
 	}
 
 	@Override
@@ -326,7 +325,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public float getFlySpeed() {
-		return entity.getFlySpeed();
+		return entity.getFlySpeed() / 2.0f;
 	}
 
 	@Override

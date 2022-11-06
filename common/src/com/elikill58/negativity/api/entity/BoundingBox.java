@@ -6,7 +6,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockChecker;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.maths.Point;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -39,28 +42,105 @@ public class BoundingBox {
 				f.apply(a.maxY, b.maxY), f.apply(a.maxZ, b.maxZ));
 	}
 
+	/**
+	 * Get minimum X
+	 * 
+	 * @return min X
+	 */
 	public double getMinX() {
 		return minX;
 	}
 
+	/**
+	 * Get minimum Y
+	 * 
+	 * @return min Y
+	 */
 	public double getMinY() {
 		return minY;
 	}
 
+	/**
+	 * Get minimum Z
+	 * 
+	 * @return min Z
+	 */
 	public double getMinZ() {
 		return minZ;
 	}
 
+	/**
+	 * Get maximum X
+	 * 
+	 * @return max X
+	 */
 	public double getMaxX() {
 		return maxX;
 	}
 
+	/**
+	 * Get maximum Y
+	 * 
+	 * @return max Y
+	 */
 	public double getMaxY() {
 		return maxY;
 	}
 
+	/**
+	 * Get maximum Z
+	 * 
+	 * @return max Z
+	 */
 	public double getMaxZ() {
 		return maxZ;
+	}
+	
+	/**
+	 * Create new bounding box with expanded values
+	 * 
+	 * @param size the size to add
+	 * @return new bounding box
+	 */
+	public BoundingBox expand(double size) {
+		return expand(size, size, size);
+	}
+
+	
+	/**
+	 * Create new bounding box with expanded values
+	 * 
+	 * @param x the x value to add
+	 * @param y the y value to add
+	 * @param z the z value to add
+	 * @return new bounding box
+	 */
+	public BoundingBox expand(double x, double y, double z) {
+		return new BoundingBox(minX - x, minY - y, minZ - z, maxX + x, maxY + y, maxZ + z);
+	}
+
+	
+	/**
+	 * Create new bounding box with reduced values
+	 * 
+	 * @param size the size to remove
+	 * @return new bounding box
+	 */
+	public BoundingBox reduce(double size) {
+		return reduce(size, size, size);
+	}
+
+	
+	/**
+	 * Create new bounding box with reduced values
+	 * 
+	 * @param x the x value to remove
+	 * @param y the y value to remove
+	 * @param z the z value to remove
+	 * @return new bounding box
+	 */
+	public BoundingBox reduce(double x, double y, double z) {
+		return new BoundingBox(minX + x, minY + y, minZ + z, maxX - x, maxY - y, maxZ - z);
 	}
 	
 	public List<Point> getAllPoints(){
@@ -76,14 +156,29 @@ public class BoundingBox {
 		return list;
 	}
 
+	/**
+	 * Get minimum position as point
+	 * 
+	 * @return min point
+	 */
 	public Point getMin() {
 		return new Point(minX, minY, minZ);
 	}
 
+	/**
+	 * Get centered point (in X/Y/Z)
+	 * 
+	 * @return center mid point
+	 */
 	public Point getMid() {
 		return new Point((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 	}
 
+	/**
+	 * Get maximum position as point
+	 * 
+	 * @return max point
+	 */
 	public Point getMax() {
 		return new Point(maxX, maxY, maxZ);
 	}
@@ -208,6 +303,19 @@ public class BoundingBox {
 		return res;
 	}
 	
+	public BlockChecker getBlocks(World w) {
+        List<Block> blocks = new ArrayList<>();
+
+        for (double x = minX; x <= maxX; x++) {
+            for (double y = minY; y <= maxY + 0.01; y++) {
+                for (double z = minZ; z <= maxZ; z++) {
+                    blocks.add(w.getBlockAt(x, y, z));
+                }
+            }
+        }
+        return new BlockChecker(blocks);
+	}
+	
 	@Override
 	public String toString() {
 		return "BoundingBox[minX=" + fd(minX) + ",minY=" + fd(minY) + ",minZ=" + fd(minZ) + "/then/maxX=" + fd(maxX)
@@ -217,11 +325,48 @@ public class BoundingBox {
 	/**
 	 * Format double
 	 * 
-	 * @param d
-	 *            double to format
+	 * @param d double to format
 	 * @return formatted double for to string
 	 */
 	private String fd(double d) {
 		return String.format("%.3f", d);
+	}
+	
+	public double getWidth() {
+		return maxX - minX;
+	}
+	
+	public double getHeight() {
+		return maxY - minY;
+	}
+	
+	public double getDepth() {
+		return maxZ - minZ;
+	}
+	
+	/**
+	 * Create new bounding box with moved position<br>
+	 * This doesn't change the size of box, just move it
+	 * 
+	 * @param x move in X axis
+	 * @param y move in Y axis
+	 * @param z move in Z axis
+	 * @return new box
+	 */
+	public BoundingBox add(double x, double y, double z) {
+		return new BoundingBox(minX + x, minY + y, minZ + z, maxX + x, maxY + y, maxZ + z);
+	}
+	
+	/**
+	 * Create new bounding box with moved position<br>
+	 * This doesn't change the size of box, just move it
+	 * 
+	 * @param x move in X axis
+	 * @param y move in Y axis
+	 * @param z move in Z axis
+	 * @return new box
+	 */
+	public BoundingBox remove(double x, double y, double z) {
+		return new BoundingBox(minX - x, minY - y, minZ - z, maxX - x, maxY - y, maxZ - z);
 	}
 }

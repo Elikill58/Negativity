@@ -18,13 +18,13 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
+import com.elikill58.negativity.api.protocols.CheckData;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
-import com.elikill58.negativity.common.protocols.InventoryMove.InventoryMoveData;
+import com.elikill58.negativity.common.protocols.checkprocessor.PingSpoofCheckProcessor;
 import com.elikill58.negativity.common.protocols.checkprocessor.ScaffoldRiseCheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -41,6 +41,7 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -53,15 +54,12 @@ public class NegativityPlayer {
 	private final Player p;
 
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
-	//public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> alertNotShowed = new HashMap<>();
 	public HashMap<String, String> mods = new HashMap<>();
 	
 	// packets
-	public HashMap<PacketType, Integer> packets = new HashMap<>();
-	public int allPackets = 0;
-
-	public int lastClick = 0;
+	public ConcurrentHashMap<PacketType, Integer> packets = new ConcurrentHashMap<>();
+	public int allPackets = 0, lastClick = 0;
 	
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
@@ -69,41 +67,29 @@ public class NegativityPlayer {
 	public List<PotionEffect> potionEffects = new ArrayList<>();
 	
 	// detection and bypass
-	public long timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
-	public int LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, bypassSpeed = 0, spiderSameDist = 0;
-	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
+	public long loginTime, timeInvincibility = 0;
+	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
-	public PlayerChatEvent lastChatEvent = null;
-	public List<Integer> timerCount = new ArrayList<>();
-	public List<Double> lastY = new ArrayList<>();
-	public Location lastSpiderLoc = null;
-	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
+	public boolean isOnLadders = false, isTeleporting = false;
 	public List<Location> lastLocations = new ArrayList<>();
-	public InventoryMoveData invMoveData;
+	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
+	
+	public Location delta = new Location(null, 0, 0, 0), lastDelta = new Location(null, 0, 0, 0);
 	
 	// content
-	public Content<List<Location>> listLocations = new Content<>();
-	public Content<List<Integer>> listIntegers = new Content<>();
 	public Content<List<Double>> listDoubles = new Content<>();
-	public Content<Location> locations = new Content<>();
-	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
-	public Content<Entity> entities = new Content<>();
-	public Content<Object> objects = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
-	public Content<Float> floats = new Content<>();
 	public Content<Long> longs = new Content<>();
 	
 	// general values
-	public boolean isInFight = false, already_blink = false, isFreeze = false, isUsingSlimeBlock = false,
-			mustToBeSaved = false, isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
+	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false,
+			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;
 	private String clientName;
 	private @Nullable ScheduledTask fightCooldownTask;
-	public Entity lastHittedEntitty = null, lastHitByEntity = null;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -113,11 +99,13 @@ public class NegativityPlayer {
 		account.setPlayerName(p.getName());
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
+		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		
 		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
 		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));
+		checkProcessors.add(new PingSpoofCheckProcessor(this));
 		checkProcessors.forEach(CheckProcessor::begin);
 	}
 
@@ -285,16 +273,6 @@ public class NegativityPlayer {
 	}
 
 	/**
-	 * Add one warn to the given cheat
-	 * 
-	 * @param c the cheat which create alert
-	 * @param reliability the reliability of alert
-	 */
-	public void addWarn(Cheat c, int reliability) {
-		addWarn(c, reliability, 1);
-	}
-
-	/**
 	 * Add multiple warn
 	 * 
 	 * @param c the cheat which create alert
@@ -308,7 +286,7 @@ public class NegativityPlayer {
 		NegativityAccount account = getAccount();
 		long old = account.getWarn(c);
 		account.setWarnCount(c, old + amount);
-		mustToBeSaved = true;
+		Adapter.getAdapter().getAccountManager().save(getUUID());
 		return old;
 	}
 
@@ -349,16 +327,6 @@ public class NegativityPlayer {
 	}
 	
 	/**
-	 * Save proof and account manager if need to be saved
-	 */
-	public void saveAccount() {
-		if(mustToBeSaved) {
-			mustToBeSaved = false;
-			Adapter.getAdapter().getAccountManager().save(getUUID());
-		}
-	}
-	
-	/**
 	 * Compile and return all cheat alert for each cheat
 	 * 
 	 * @return all cheat alert
@@ -383,7 +351,7 @@ public class NegativityPlayer {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
 		HashMap<Integer, Integer> ping = new HashMap<>();
-		ReportType type = ReportType.NONE;
+		ReportType type = ReportType.INFO;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
 		for(PlayerCheatAlertEvent e : list) {
@@ -395,7 +363,7 @@ public class NegativityPlayer {
 
 			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
 
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+			if(e.getReportType().isStronger(type))
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() || hasRelia;
@@ -409,8 +377,9 @@ public class NegativityPlayer {
 		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
+		PlayerCheatAlertEvent first = list.get(0);
+		// tried to get check and proof for one, such as we can't show multiple
+		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, first.getCheckName(), first.getProof(), hoverProof, nb, nbConsole);
 	}
 
 	/**
@@ -420,9 +389,9 @@ public class NegativityPlayer {
 		checkProcessors.forEach(CheckProcessor::stop);
 		CompletableFuture.runAsync(() -> {
 			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-			accountManager.save(playerId).join();
+			accountManager.save(playerId);
 			accountManager.dispose(playerId);
-		}).join();
+		});
 	}
 
 	/**
@@ -492,6 +461,10 @@ public class NegativityPlayer {
 		entityClick = 0;
 		leftCancelled = 0;
 		leftFinished = 0;
+	}
+	
+	public <D extends CheckData> D getCheckData(Cheat cheat) {
+	    return (D) this.checkDatas.computeIfAbsent(cheat.getKey(), a -> cheat.getCheckDataCreator().apply(this));
 	}
 	
 	/**

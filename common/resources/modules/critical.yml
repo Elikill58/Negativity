@@ -36,3 +36,6 @@ checks:
   # Check Y move only
   ground:
     active: true
+  # Check for Y move before attack
+  y-pos:
+    active: true

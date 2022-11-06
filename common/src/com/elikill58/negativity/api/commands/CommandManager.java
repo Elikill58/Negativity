@@ -9,18 +9,20 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.common.commands.BanCommand;
-import com.elikill58.negativity.common.commands.ClearChatCommand;
 import com.elikill58.negativity.common.commands.KickCommand;
 import com.elikill58.negativity.common.commands.LangCommand;
-import com.elikill58.negativity.common.commands.LockChatCommand;
 import com.elikill58.negativity.common.commands.ModCommand;
 import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.NegativityTpCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
-import com.elikill58.negativity.common.commands.UnbanCommand;
+import com.elikill58.negativity.common.commands.WarnCommand;
+import com.elikill58.negativity.common.commands.ban.BanCommand;
+import com.elikill58.negativity.common.commands.ban.UnbanCommand;
+import com.elikill58.negativity.common.commands.chat.ClearChatCommand;
+import com.elikill58.negativity.common.commands.chat.LockChatCommand;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class CommandManager implements Listeners {
 
@@ -53,6 +55,15 @@ public class CommandManager implements Listeners {
 			commands.put("nreport", report);
 			tabs.put("nreport", report);
 		}
+		if(conf.getBoolean("commands.chat.clear", true)) {
+			ClearChatCommand clearchat = new ClearChatCommand();
+			commands.put("nclearchat", clearchat);
+		}
+		if(conf.getBoolean("commands.chat.lock", true)) {
+			LockChatCommand lockchat = new LockChatCommand();
+			commands.put("nlockchat", lockchat);
+			EventManager.registerEvent(lockchat);
+		}
 		
 		conf = BanManager.getBanConfig();
 		if(conf.getBoolean("commands.ban", false)) {
@@ -65,14 +76,12 @@ public class CommandManager implements Listeners {
 			commands.put("nunban", unban);
 			tabs.put("nunban", unban);
 		}
-		if(conf.getBoolean("commands.chat.clear", true)) {
-			ClearChatCommand clearchat = new ClearChatCommand();
-			commands.put("nclearchat", clearchat);
-		}
-		if(conf.getBoolean("commands.chat.lock", true)) {
-			LockChatCommand lockchat = new LockChatCommand();
-			commands.put("nlockchat", lockchat);
-			EventManager.registerEvent(lockchat);
+		
+		conf = WarnManager.getWarnConfig();
+		if(conf.getBoolean("commands.warn", false)) {
+			WarnCommand unban = new WarnCommand();
+			commands.put("nwarn", unban);
+			tabs.put("nwarn", unban);
 		}
 	}
 	

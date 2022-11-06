@@ -1,11 +1,14 @@
 package com.elikill58.negativity.universal.verif.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class DataCounter<T> {
 
-	protected final List<T> list = new ArrayList<>();
+	protected final List<T> list = Collections.synchronizedList(new ArrayList<>());
+	
+	public abstract T getTotal();
 	
 	/**
 	 * Get all data

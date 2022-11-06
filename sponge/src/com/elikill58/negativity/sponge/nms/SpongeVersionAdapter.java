@@ -57,6 +57,13 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> 
 				} catch (ReflectiveOperationException e) {
 					throw new RuntimeException(e);
 				}
+			case V1_19:
+				try {
+					return instance = (SpongeVersionAdapter) Class
+							.forName("com.elikill58.negativity.sponge19.Sponge_1_19_2").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
 			default:
 				return instance = new Sponge_UnknowVersion();
 			}

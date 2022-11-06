@@ -15,9 +15,9 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 
 public class FileActiveBanStorage implements ActiveBanStorage {
 
@@ -158,7 +158,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		String reason = "";
 		String by = "Negativity";
 		boolean def = false;
-		BanType banType = BanType.UNKNOW;
+		SanctionnerType banType = SanctionnerType.UNKNOW;
 		String ac = null;
 		String ip = null;
 		long executionTime = -1;
@@ -172,7 +172,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 					expirationTime = Long.parseLong(value);
 					break;
 				case "bantype":
-					banType = BanType.valueOf(value.toUpperCase(Locale.ROOT));
+					banType = SanctionnerType.valueOf(value.toUpperCase(Locale.ROOT));
 					break;
 				case "def":
 					// Here for compatibility with files generated from an older version

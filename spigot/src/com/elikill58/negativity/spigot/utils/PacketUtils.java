@@ -14,7 +14,6 @@ public class PacketUtils {
 	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 	public static final String NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
-	public static final Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
 	
 	/**
 	 * This Map is to reduce Reflection action which take more resources than just RAM action
@@ -104,8 +103,7 @@ public class PacketUtils {
 	 */
 	public static Object getEntityPlayer(Player p) {
 		try {
-			Object craftPlayer = getObcClass("entity.CraftPlayer").cast(p);
-			return craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
+			return getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle").invoke(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -119,8 +117,7 @@ public class PacketUtils {
 	 */
 	public static Object getDedicatedServer() {
 		try {
-			Object server = getObcClass("CraftServer").cast(Bukkit.getServer());
-			return server.getClass().getMethod("getServer").invoke(server);
+			return getObcClass("CraftServer").getDeclaredMethod("getServer").invoke(Bukkit.getServer());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -135,8 +132,7 @@ public class PacketUtils {
 	 */
 	public static Object getWorldServer(Location loc) {
 		try {
-			Object object = getObcClass("CraftWorld").cast(loc.getWorld());
-			return object.getClass().getMethod("getHandle").invoke(object);
+			return getObcClass("CraftWorld").getMethod("getHandle").invoke(loc.getWorld());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

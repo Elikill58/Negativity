@@ -12,9 +12,9 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 
 public class FileBanLogsStorage implements BanLogsStorage {
 
@@ -93,7 +93,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 		String reason = "";
 		String by = "Negativity";
 		BanStatus isRevoked = BanStatus.EXPIRED;
-		BanType banType = BanType.UNKNOW;
+		SanctionnerType banType = SanctionnerType.UNKNOW;
 		String ac = null;
 		String ip = null;
 		long executionTime = -1;
@@ -105,7 +105,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 			String type = part[0], value = part[1];
 			switch (type) {
 				case "bantype":
-					banType = BanType.valueOf(value.toUpperCase(Locale.ROOT));
+					banType = SanctionnerType.valueOf(value.toUpperCase(Locale.ROOT));
 					break;
 				case "def":
 					// Here for compatibility with files generated from an older version

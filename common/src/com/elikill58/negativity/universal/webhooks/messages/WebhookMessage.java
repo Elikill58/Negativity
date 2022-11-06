@@ -1,14 +1,12 @@
 package com.elikill58.negativity.universal.webhooks.messages;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.IKey;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.utils.ChatUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class WebhookMessage implements Comparable<WebhookMessage> {
@@ -75,8 +73,7 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 	 */
 	public String applyPlaceHolders(String message) {
 		Adapter ada = Adapter.getAdapter();
-		String sDate = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
-		return UniversalUtils.replacePlaceholders(UniversalUtils.replacePlaceholders(message, getPlaceholders()), "%date%", sDate, "%name%", concerned.getName(),
+		return UniversalUtils.replacePlaceholders(UniversalUtils.replacePlaceholders(message, getPlaceholders()), "%date%", ChatUtils.formatTime(date), "%name%", concerned.getName(),
 				"%uuid%", concerned.getUniqueId(), "%ip%", concerned.getIP(), "%sender%", sender,
 				"%server_name%", concerned.getServerName(), "%player_version%", concerned.getPlayerVersion().getName(),
 				"%server_version%", ada.getServerVersion().getName(), "%tps%", String.format("%.3f", ada.getLastTPS()),
@@ -102,6 +99,10 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 		return false;
 	}
 	
+	public boolean canBeSend(@Nullable Configuration config) {
+		return config != null && config.getBoolean("enabled", true);
+	}
+	
 	@Override
 	public int compareTo(WebhookMessage o) {
 		return (int) (o.date - date);
@@ -111,6 +112,7 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 		ALERT,
 		BAN,
 		KICK,
-		REPORT;
+		REPORT,
+		WARN;
 	}
 }

@@ -157,7 +157,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public World getWorld() {
-		return new SpongeWorld(entity.world());
+		return World.getWorld(entity.world().key().asString(), a -> new SpongeWorld(entity.world()));
 	}
 	
 	@Override
@@ -455,7 +455,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d pos = entity.require(Keys.EYE_POSITION);
-		return new Location(new SpongeWorld(entity.world()), pos.x(), pos.y(), pos.z());
+		return new Location(World.getWorld(entity.world().key().asString(), a -> new SpongeWorld(entity.world())), pos.x(), pos.y(), pos.z());
 	}
 	
 	@Override

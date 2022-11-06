@@ -17,7 +17,6 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
@@ -32,7 +31,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	byte damage = ((SpigotMaterial) type).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
-    		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
+    		if(itemMeta instanceof BannerMeta)
     			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
     		else
     			this.itemStack.setDurability(damage);
@@ -45,7 +44,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	byte damage = ((SpigotMaterial) item.getType()).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
-    		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
+    		if(itemMeta instanceof BannerMeta)
     			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
     		else
     			this.itemStack.setDurability(damage);
@@ -64,7 +63,7 @@ public class SpigotItemBuilder extends ItemBuilder {
 
 	@Override
     public ItemBuilder displayName(@Nullable String displayName) {
-        this.itemMeta.setDisplayName(ChatColor.RESET + Utils.coloredMessage(displayName));
+        this.itemMeta.setDisplayName(ChatColor.WHITE + ChatColor.color(displayName));
         return this;
     }
 
@@ -125,7 +124,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	for(String s : lore)
     		for(String temp : s.split("\\n"))
         		for(String tt : temp.split("/n"))
-        			list.add(Utils.coloredMessage(tt));
+        			list.add(ChatColor.color(tt));
         this.itemMeta.setLore(list);
         return this;
     }

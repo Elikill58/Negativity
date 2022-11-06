@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -41,6 +42,7 @@ public class BanUtils {
 	 * @param cheat the cheat that can ban player
 	 * @param np the concerned player
 	 * @param relia the reliability of the alert
+	 * @param oldWarnAmount old warn of warn before adding some of them
 	 * @return the result of the ban
 	 */
 	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia, long oldWarnAmount) {
@@ -73,6 +75,7 @@ public class BanUtils {
 	 * @param player the player to ban if need
 	 * @param cheat the cheat concerned by the try of need
 	 * @param reliability the reliability of the cheat
+	 * @param oldWarnAmount old warn of warn before adding some of them
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability, long oldWarnAmount) {
@@ -89,10 +92,12 @@ public class BanUtils {
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);
 		}
-		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason, player.getPlayer().getIP()));
+		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", SanctionnerType.MOD, banDuration, reason, player.getPlayer().getIP()));
 	}
 
 	public static void kickForBan(NegativityPlayer player, Ban ban) {
+		if(player == null) // player offline
+			return;
 		player.banEffect();
 		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
 		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());

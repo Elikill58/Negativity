@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
+import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
@@ -276,9 +277,9 @@ public interface Player extends OfflinePlayer {
 	
 	/**
 	 * Send plugin message :
-	 * bungee > spigot
+	 * bungee to spigot
 	 * OR
-	 * spigot > bungee
+	 * spigot to bungee
 	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID
@@ -294,9 +295,9 @@ public interface Player extends OfflinePlayer {
 	
 	/**
 	 * Send plugin message :
-	 * bungee > spigot
+	 * bungee to spigot
 	 * OR
-	 * spigot > bungee
+	 * spigot to bungee
 	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID
@@ -363,6 +364,20 @@ public interface Player extends OfflinePlayer {
 	
 	default void queuePacket(NPacket packet) {
 		Adapter.getAdapter().getVersionAdapter().queuePacket(this, packet);
+	}
+	
+	default boolean isInBoat() {
+		return isInsideVehicle() && getVehicle().getType().equals(EntityType.BOAT);
+	}
+
+	default boolean hasThorns() {
+		ItemStack[] armor = getInventory().getArmorContent();
+		if(armor == null)
+			return false;
+		for(ItemStack item : armor)
+			if(item != null && item.hasEnchant(Enchantment.THORNS))
+				return true;
+		return false;
 	}
 	
 	static boolean isSamePlayer(Player player1, Player player2) {

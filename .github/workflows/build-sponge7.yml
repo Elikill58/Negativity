@@ -1,0 +1,23 @@
+name: Build Negativity for sponge 7
+
+# For each push on all branchs
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew :sponge7:shadowJar --configure-on-demand
+    - name: Upload Artifact to GitHub Action
+      uses: actions/upload-artifact@v3
+      with:
+        path: sponge7/build/libs/*.jar

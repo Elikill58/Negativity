@@ -2,12 +2,17 @@ package com.elikill58.negativity.api.item;
 
 public class Materials {
 
+	/**
+	 * This is used to know for item that can not exist because it have been introduced after.
+	 */
+	public static final String IGNORE_KEY = "ignore";
+	
     public static final Material AIR = ItemRegistrar.getInstance().get("air");
     public static final Material ANVIL = ItemRegistrar.getInstance().get("anvil");
     public static final Material APPLE = ItemRegistrar.getInstance().get("apple");
     public static final Material ARROW = ItemRegistrar.getInstance().get("arrow");
     
-    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier", "redstone"); // redstone for 1.7
+    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier");
     public static final Material BEDROCK = ItemRegistrar.getInstance().get("bedrock");
     public static final Material BEACON = ItemRegistrar.getInstance().get("beacon");
     public static final Material BLAZE_POWDER = ItemRegistrar.getInstance().get("blaze_powder");
@@ -33,8 +38,9 @@ public class Materials {
     public static final Material DIRT = ItemRegistrar.getInstance().get("dirt");
     
     public static final Material EMPTY_MAP = ItemRegistrar.getInstance().get("empty_map", "map");
+    public static final Material EMERALD = ItemRegistrar.getInstance().get("emerald");
     public static final Material EMERALD_ORE = ItemRegistrar.getInstance().get("emerald_ore");
-    public static final Material ELYTRA = ItemRegistrar.getInstance().get("elytra", "diamond_chestplate");
+    public static final Material ELYTRA = ItemRegistrar.getInstance().get("elytra", IGNORE_KEY);
     public static final Material EYE_OF_ENDER = ItemRegistrar.getInstance().get("eye_of_ender", "ender_eye");
     public static final Material ENDER_CHEST = ItemRegistrar.getInstance().get("ender_chest");
     
@@ -52,17 +58,21 @@ public class Materials {
     public static final Material IRON_PICKAXE = ItemRegistrar.getInstance().get("iron_pickaxe");
     public static final Material IRON_SHOVEL = ItemRegistrar.getInstance().get("iron_spade", "iron_shovel");
     public static final Material IRON_SWORD = ItemRegistrar.getInstance().get("iron_sword");
+
+    public static final Material JUKEBOX = ItemRegistrar.getInstance().get("jukebox");
     
     public static final Material FEATHER = ItemRegistrar.getInstance().get("feather");
     public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework_rocket", "firework", "fireworks");
     public static final Material FISHING_ROD = ItemRegistrar.getInstance().get("fishing_rod");
     public static final Material FIREBALL = ItemRegistrar.getInstance().get("fire_charge", "fireball");
 
+    public static final Material KELP = ItemRegistrar.getInstance().get("kelp", IGNORE_KEY);
+    
     public static final Material LADDER = ItemRegistrar.getInstance().get("ladder");
     public static final Material LAPIS_ORE = ItemRegistrar.getInstance().get("lapis_ore");
     public static final Material LEASH = ItemRegistrar.getInstance().get("lead", "leash");
     
-    public static final Material NAME_TAG = ItemRegistrar.getInstance().get("name_tag");    
+    public static final Material NAME_TAG = ItemRegistrar.getInstance().get("name_tag", IGNORE_KEY);
     public static final Material NETHER_STAR = ItemRegistrar.getInstance().get("nether_star");
     
     public static final Material PAPER = ItemRegistrar.getInstance().get("paper");
@@ -81,7 +91,7 @@ public class Materials {
     public static final Material REDSTONE_TORCH_ON = ItemRegistrar.getInstance().get("redstone_torch_on", "redstone_torch");
     public static final Material REDSTONE_TORCH_OFF = ItemRegistrar.getInstance().get("redstone_torch_off", "redstone_torch");
     
-    public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "scaffolding", "ladder");
+    public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "scaffolding", IGNORE_KEY);
     public static final Material SOUL_SAND = ItemRegistrar.getInstance().get("soul_sand");
     public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull_item", "skull");
     public static final Material SLIME_BALL = ItemRegistrar.getInstance().get("slime_ball", "emerald"); // emerald for 1.7 support
@@ -91,6 +101,8 @@ public class Materials {
     public static final Material STATIONARY_WATER = ItemRegistrar.getInstance().get("stationary_water", "water");
     public static final Material STICK = ItemRegistrar.getInstance().get("stick");
     public static final Material STONE_AXE = ItemRegistrar.getInstance().get("stone_axe");
+
+    public static final Material TRIDENT = ItemRegistrar.getInstance().get("trident", IGNORE_KEY);
 
     public static final Material VINE = ItemRegistrar.getInstance().get("vine", "vines");
     
@@ -116,7 +128,7 @@ public class Materials {
     
     public static final Material WATER_BUCKET = ItemRegistrar.getInstance().get("water_bucket");
     public static final Material WEB = ItemRegistrar.getInstance().get("cobweb", "web");
-    public static final Material WATER_LILY = ItemRegistrar.getInstance().get("WATER_LILY", "LILY_PAD");
+    public static final Material WATER_LILY = ItemRegistrar.getInstance().get("water_lily", "lily_pad");
     
     /* WOOL */
     public static final Material LIME_WOOL = ItemRegistrar.getInstance().get("lime_wool", "wool");

@@ -94,8 +94,8 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		BAN_PROCESSOR_MANAGER,
 		CHEAT_CHECKS,
 		CHEAT_DESCRIPTION,
-		CHECK_MENU,
-		CHECK_MENU_OFFLINE,
+		GLOBAL_PLAYER,
+		GLOBAL_PLAYER_OFFLINE,
 		FREEZE,
 		KICK,
 		MOD,
@@ -103,6 +103,11 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ONE_SPECIAL,
 		FORGE_MODS,
 		REPORT,
-		SEE_REPORT
+		SEE_REPORT,
+		SEE_PROOF,
+		WARN_SEE,
+		WARN,
+		WARN_MANAGER,
+		WARN_PROCESSOR_MANAGER
 	}
 }

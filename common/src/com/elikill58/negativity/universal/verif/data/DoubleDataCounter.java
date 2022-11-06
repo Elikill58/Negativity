@@ -5,6 +5,14 @@ import java.util.Comparator;
 public class DoubleDataCounter extends DataCounter<Double> {
 
 	@Override
+	public Double getTotal() {
+		double d = 0;
+		for(Double temp : list)
+			d += temp;
+		return d;
+	}
+
+	@Override
 	public Double getMin() {
 		if(list.isEmpty())
 			return null;

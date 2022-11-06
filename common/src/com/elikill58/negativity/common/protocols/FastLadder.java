@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -18,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastLadder extends Cheat {
 
 	public FastLadder() {
-		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER);
+		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, EmptyData::new);
 	}
 
 	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,

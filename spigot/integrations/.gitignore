@@ -3,13 +3,12 @@
 !/.gitignore
 
 !/essentials/
-!/floodgate/
-!/floodgatev2/
 !/gadgetsmenu/
 !/maxbans/
-!/protocolsupport/
+!/professionalbans/
 !/worldguardv6/
 !/worldguardv7/
+!/ultrapunishments
 
 # Keep src, resources and build.gradle in all dirs included above
 !/*/src/

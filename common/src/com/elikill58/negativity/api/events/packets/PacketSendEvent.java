@@ -2,11 +2,11 @@ package com.elikill58.negativity.api.events.packets;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.CancellableEvent;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 
 public class PacketSendEvent extends PacketEvent implements CancellableEvent {
 
-	public PacketSendEvent(PacketSourceType source, AbstractPacket packet, Player p) {
+	public PacketSendEvent(PacketSourceType source, Packet packet, Player p) {
 		super(source, packet, p);
 	}
 

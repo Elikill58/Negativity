@@ -95,7 +95,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 			}
 		}
 		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, reporter.getUniqueId()));
-		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
+		Adapter.getAdapter().getAccountManager().save(target.getUniqueId());
 
 		NegativityPlayer.getNegativityPlayer(reporter).longs.set(CheatKeys.ALL, "report-cmd", System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report"));

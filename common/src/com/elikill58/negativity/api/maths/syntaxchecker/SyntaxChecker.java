@@ -880,12 +880,10 @@ public final class SyntaxChecker implements SyntaxCheckerConstants {
 				0x0, 0x0, 0x0, };
 	}
 
-	/** Constructor with InputStream. */
 	public SyntaxChecker(java.io.InputStream stream) {
 		this(stream, null);
 	}
 
-	/** Constructor with InputStream and supplied encoding */
 	public SyntaxChecker(java.io.InputStream stream, String encoding) {
 		try {
 			jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
@@ -916,7 +914,6 @@ public final class SyntaxChecker implements SyntaxCheckerConstants {
 		throw generateParseException();
 	}
 
-	/** Get the next Token. */
 	final public Token getNextToken() {
 		if (token.next != null)
 			token = token.next;
@@ -938,7 +935,6 @@ public final class SyntaxChecker implements SyntaxCheckerConstants {
 	private int[] jj_expentry;
 	private int jj_kind = -1;
 
-	/** Generate ParseException. */
 	public ParseException generateParseException() {
 		jj_expentries.clear();
 		boolean[] la1tokens = new boolean[129];

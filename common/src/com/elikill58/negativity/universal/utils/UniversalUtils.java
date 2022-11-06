@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -26,9 +27,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -43,6 +45,10 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
@@ -52,10 +58,9 @@ import com.elikill58.negativity.universal.detections.Special;
 
 public class UniversalUtils {
 
-	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
 	public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
-	public static boolean HAVE_INTERNET = true;
+	public static boolean HAVE_INTERNET = true, checkAgainForMcleaks = true;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
 		return getMultipleOf(i, multiple, more, Integer.MAX_VALUE);
@@ -111,14 +116,7 @@ public class UniversalUtils {
 		return Optional.empty();
 	}
 
-	public static Optional<Cheat> getCheatFromName(String s) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(s))
-				return Optional.of(c);
-		return Optional.empty();
-	}
-
-	public static Optional<Cheat> getCheatFromItem(Object m) {
+	public static Optional<Cheat> getCheatFromItem(Material m) {
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial().equals(m))
 				return Optional.of(c);
@@ -186,12 +184,44 @@ public class UniversalUtils {
 			return false;
 		}
 	}
+	
+	public static boolean getBoolean(String s) {
+		return s.equalsIgnoreCase("true");
+	}
 
 	public static Optional<String> getContentFromURL(String url){
 		return getContentFromURL(url, "");
 	}
 	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 */
 	public static Optional<String> getContentFromURL(String urlName, String post){
+		try {
+			return getContentFromURLWithException(urlName, post);
+        } catch (SSLException | SocketTimeoutException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update.");
+        	HAVE_INTERNET = false;
+        } catch (Exception e) {
+        	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
+        	e.printStackTrace();
+		}
+		return Optional.empty();
+	}
+	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 * @throws Exception if something gone wrong
+	 */
+	public static Optional<String> getContentFromURLWithException(String urlName, String post) throws Exception {
 		if(!HAVE_INTERNET)
 			return Optional.empty();
 		try {
@@ -199,7 +229,7 @@ public class UniversalUtils {
 			URL url = new URL(urlName);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setUseCaches(true);
-			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
+			connection.setRequestProperty("User-Agent", "Negativity" + ada.getName() + "/" + ada.getVersion() + "(Linux x64) GoogleChrome");
 			connection.setDoOutput(true);
 			connection.setConnectTimeout(5000);
 			if(!post.equalsIgnoreCase("")) {
@@ -227,13 +257,73 @@ public class UniversalUtils {
             	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
         	} else
             	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
+		}
+		return Optional.empty();
+	}
+	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @return result of empty
+	 */
+	public static List<String> getListFromURL(String urlName){
+		try {
+			return getListFromURLWithException(urlName, "");
         } catch (SSLException e) {
         	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
-        } catch (IOException e) {
+        } catch (Exception e) {
         	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
         	e.printStackTrace();
 		}
-		return Optional.empty();
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 * @throws Exception if something gone wrong
+	 */
+	public static List<String> getListFromURLWithException(String urlName, String post) throws Exception {
+		if(!HAVE_INTERNET)
+			return Collections.emptyList();
+		List<String> content = new ArrayList<>();
+		try {
+			Adapter ada = Adapter.getAdapter();
+			URL url = new URL(urlName);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setUseCaches(true);
+			connection.setRequestProperty("User-Agent", "Negativity" + ada.getName() + "/" + ada.getVersion() + "(Linux x64) GoogleChrome");
+			connection.setDoOutput(true);
+			connection.setConnectTimeout(5000);
+			if(!post.equalsIgnoreCase("")) {
+				connection.setRequestMethod("POST");
+				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+				writer.write(post);
+				writer.flush();
+				writer.close();
+			} else connection.setRequestMethod("GET");
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String input;
+			while ((input = br.readLine()) != null)
+				content.add(input);
+			br.close();
+        } catch (UnknownHostException | MalformedURLException e) {
+        	if(!HAVE_INTERNET)
+    			return Collections.emptyList();
+        	HAVE_INTERNET = false;
+        	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
+        } catch (ConnectException e) {
+        	HAVE_INTERNET = false;
+        	if(containsChineseCharacters(e.getMessage())) {
+            	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
+        	} else
+            	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
+		}
+		return content;
 	}
 
 	public static Optional<String> getLatestVersionString() {
@@ -258,19 +348,53 @@ public class UniversalUtils {
 		return null;
 	}
 
+	/**
+	 * Check if the UUID is a McLeaks account
+	 * 
+	 * @param playerId the player to check
+	 * @return a completable boolean
+	 */
+	public static CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
+		return requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
+			}
+			try {
+				Object data = new JSONParser().parse(response);
+				if (data instanceof JSONObject) {
+					JSONObject json = (JSONObject) data;
+					Object isMcleaks = json.get("isMcleaks");
+					if (isMcleaks != null) {
+						return Boolean.getBoolean(isMcleaks.toString());
+					}
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return false;
+		});
+	}
+
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {
+		if(!checkAgainForMcleaks) // previously get error
+			return CompletableFuture.completedFuture(null);
 		if(isUUID(uuid)) {
 			UUID id = UUID.fromString(uuid);
 			if(BedrockPlayerManager.isBedrockPlayer(id))
 				return CompletableFuture.supplyAsync(() -> "{ \"isMcleaks\": false }");
 		}
 		return CompletableFuture.supplyAsync(() -> {
-			Optional<String> optContent = getContentFromURL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
-			if(optContent.isPresent()) {
-				String content = optContent.get();
-				if(content == null)
-					Adapter.getAdapter().getLogger().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
-				return content;
+			try {
+				Optional<String> optContent = getContentFromURLWithException("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid, "");
+				if(optContent.isPresent()) {
+					String content = optContent.get();
+					if(content == null)
+						Adapter.getAdapter().getLogger().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
+					return content;
+				}
+			} catch (Exception e) {
+				checkAgainForMcleaks = false;
+				Adapter.getAdapter().getLogger().warn("Can't check mcleaks for " + uuid + ". An error occurred: " + e.getMessage());
 			}
 			return null;
 		});
@@ -338,10 +462,6 @@ public class UniversalUtils {
 	public static boolean containsChineseCharacters(String s) {
 	    return s.codePoints().anyMatch(codepoint ->
 	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
-	}
-	
-	public static void init() {
-		new Thread(() -> getContentFromURL("https://google.fr")).start();
 	}
 	
 	/**

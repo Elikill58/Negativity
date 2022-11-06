@@ -6,11 +6,11 @@ import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -24,7 +24,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -51,7 +50,6 @@ import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-@SuppressWarnings("unchecked")
 public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 
 	public Sponge_UnknowVersion() {
@@ -105,10 +103,8 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 			}
 		});
 		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
-		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot())); // TODO check if it's good packet
+		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot()));
 
-		
-		
 		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
 			BlockState state = get(f, "state");
@@ -123,7 +119,6 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 		packetsPlayOut.put("ClientboundExplodePacket", (p, f) -> {
 			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.put("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
 		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (p, f) -> {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
@@ -137,20 +132,20 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 		log();
 	}
 
-	private DigFace translateDigDirection(Direction direction) {
+	private BlockFace translateDigDirection(Direction direction) {
 		switch (direction) {
 		case DOWN:
-			return DigFace.BOTTOM;
+			return BlockFace.DOWN;
 		case EAST:
-			return DigFace.EAST;
+			return BlockFace.EAST;
 		case NORTH:
-			return DigFace.NORTH;
+			return BlockFace.NORTH;
 		case SOUTH:
-			return DigFace.SOUTH;
+			return BlockFace.SOUTH;
 		case UP:
-			return DigFace.TOP;
+			return BlockFace.UP;
 		case WEST:
-			return DigFace.WEST;
+			return BlockFace.WEST;
 		}
 		return null;
 	}

@@ -18,6 +18,7 @@ import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.sponge.impl.block.SpongeBlockMaterial;
 
 public class SpongeItemRegistrar extends ItemRegistrar {
@@ -45,6 +46,8 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			}
 			
 			for (String alias : aliases) {
+				if(alias.equals(Materials.IGNORE_KEY))
+					return null; // ignore not found item
 				ResourceKey aliasKey = parse(alias);
 				@Nullable BlockType aliasedBlockType = blockTypeRegistry.findValue(aliasKey).orElse(null);
 				if (aliasedBlockType != null && !returnedDefaultValue(aliasKey, aliasedBlockType)) {

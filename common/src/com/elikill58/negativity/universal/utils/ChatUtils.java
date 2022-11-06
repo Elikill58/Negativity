@@ -1,9 +1,16 @@
 package com.elikill58.negativity.universal.utils;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.StringJoiner;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class ChatUtils {
 
+	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	public static final long YEARS = 3600 * 24 * 30 * 12;
 	public static final long MONTHS = 3600 * 24 * 30;
@@ -52,6 +59,8 @@ public class ChatUtils {
 	 * @return a visual string for the given time
 	 */
 	public static String getFullTimeFromLong(long millis) {
+		if(millis <= 0)
+			return "";
 		StringJoiner s = new StringJoiner(" ");
 		long time = millis / 1000; // set in seconds from milliseconds
 		if(time > YEARS) {
@@ -155,5 +164,11 @@ public class ChatUtils {
 		default:
 			throw new IllegalArgumentException("Unknown time marker '" + marker + "'");
 		}
+	}
+	
+	public static @Nullable String formatTime(long time) {
+		if(time <= 0)
+			return null;
+		return GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()));
 	}
 }

@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.ENUM_PLAYER_INFO;
 import static com.elikill58.negativity.spigot.utils.PacketUtils.getNmsClass;
 
 import java.lang.reflect.Constructor;
@@ -21,6 +20,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
@@ -98,12 +98,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	        Object bukkitEntity = entityPlayer.getClass().getMethod("getBukkitEntity").invoke(entityPlayer);
 	        PacketUtils.sendPacket(p, packetEntityMetadataConstructor.newInstance(bukkitEntity.getClass().getMethod("getEntityId").invoke(bukkitEntity), dw, true));
 	        PacketUtils.sendPacket(p, packetEntitySpawnConstructor.newInstance(entityPlayer));
-			if(Version.getVersion().equals(Version.V1_7)) {
-				getNmsClass("PacketPlayOutPlayerInfo").getMethod("addPlayer", entityPlayer.getClass())
-						.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
-			} else {
-				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoAddPlayer, Arrays.asList(entityPlayer)));
-			}
+			PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoAddPlayer, Arrays.asList(entityPlayer)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,12 +106,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 			@Override
 			public void run() {
 				try {
-					if(Version.getVersion().equals(Version.V1_7)) {
-						getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
-								.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
-					} else {
-						PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
-					}
+					PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -134,12 +124,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	public void hide(com.elikill58.negativity.api.entity.Player pl) {
 		Player p = (Player) pl.getDefault();
 		try {
-			if(Version.getVersion().equals(Version.V1_7)) {
-				getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
-							.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
-			} else {
-				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
-			}
+			PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
 			PacketUtils.sendPacket(p, packetEntityDestroyConstructor.newInstance(new int[] {(int) entityPlayer.getClass().getMethod("getId").invoke(entityPlayer)}));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -207,7 +192,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 		// run it async to remove loading time on main thread
 		CompletableFuture.runAsync(() -> {
 			try {
-				gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
+				gameProfileClass = Class.forName("com.mojang.authlib.GameProfile");
 				gameProfileConstructor = gameProfileClass.getConstructor(UUID.class, String.class);
 				
 				Class<?> mcSrvClass = getNmsClass("MinecraftServer"), worldSrvClass = getNmsClass("WorldServer");
@@ -218,11 +203,10 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 				packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
 				packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));
 				packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy").getConstructor(int[].class);
-				if(!Version.getVersion().equals(Version.V1_7)) {
-					packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
-					playerInfoAddPlayer = ENUM_PLAYER_INFO.getField("ADD_PLAYER").get(ENUM_PLAYER_INFO);
-					playerInfoRemovePlayer = ENUM_PLAYER_INFO.getField("REMOVE_PLAYER").get(ENUM_PLAYER_INFO);
-				}
+				Class<?> enumPlayerInfo = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
+				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(enumPlayerInfo, Iterable.class);
+				playerInfoAddPlayer = enumPlayerInfo.getField("ADD_PLAYER").get(enumPlayerInfo);
+				playerInfoRemovePlayer = enumPlayerInfo.getField("REMOVE_PLAYER").get(enumPlayerInfo);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

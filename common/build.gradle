@@ -16,9 +16,9 @@ sourceSets {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    implementation "org.yaml:snakeyaml:1.29"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    implementation "org.yaml:snakeyaml:1.32"
 }
 
 processResources {
@@ -38,10 +38,9 @@ shadowJar {
     mergeServiceFiles()
     from(
             project('integrations:advancedban').jar.outputs.files,
-            project('integrations:dkbans').jar.outputs.files,
-            project('integrations:professionalbans').jar.outputs.files,
             project('integrations:litebans').jar.outputs.files,
-            project('integrations:viaversion').jar.outputs.files
+            project('integrations:viaversion').jar.outputs.files,
+            project('integrations:floodgate').jar.outputs.files
     )
 }
 

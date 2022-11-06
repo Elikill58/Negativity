@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
-import com.elikill58.negativity.api.location.BlockPosition;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;

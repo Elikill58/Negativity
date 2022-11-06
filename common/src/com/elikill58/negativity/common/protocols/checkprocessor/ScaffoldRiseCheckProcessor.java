@@ -9,7 +9,7 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
@@ -45,7 +45,7 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			return;
 		
 		Player p = e.getPlayer();
-		AbstractPacket pa = e.getPacket();
+		Packet pa = e.getPacket();
 		if(pa.getPacketType().equals(PacketType.Client.HELD_ITEM_SLOT)) {
 			NPacketPlayInHeldItemSlot held = (NPacketPlayInHeldItemSlot) pa.getPacket();
 			int possibleSlot = -1;

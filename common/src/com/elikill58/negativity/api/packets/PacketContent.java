@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PacketContent {
 	
-	private final @Nullable AbstractPacket packet;
+	private final @Nullable Packet packet;
 	private final Object obj;
 	
 	/**
@@ -17,7 +17,7 @@ public class PacketContent {
 	 * 
 	 * @param packet the Negativity's packet
 	 */
-	public PacketContent(AbstractPacket packet) {
+	public PacketContent(Packet packet) {
 		this.packet = packet;
 		this.obj = packet.getNmsPacket();
 	}
@@ -38,7 +38,7 @@ public class PacketContent {
 	 * 
 	 * @return the analyzed packet
 	 */
-	public @Nullable AbstractPacket getPacket() {
+	public @Nullable Packet getPacket() {
 		return packet;
 	}
 	
@@ -150,7 +150,6 @@ public class PacketContent {
 		private Object obj;
 		private HashMap<Field, T> content = new HashMap<>();
 
-		@SuppressWarnings("unchecked")
 		public ContentModifier(Object obj, @Nullable Class<?> clazz) {
 			this.obj = obj;
 			for(Field f : obj.getClass().getDeclaredFields()) {

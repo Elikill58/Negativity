@@ -7,9 +7,10 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge7.impl.packet.SpongePacketManager;
 import com.elikill58.negativity.sponge7.nms.SpongeVersionAdapter;
 
@@ -18,7 +19,6 @@ import eu.crushedpixel.sponge.packetgate.api.listener.PacketListener.ListenerPri
 import eu.crushedpixel.sponge.packetgate.api.listener.PacketListenerAdapter;
 import eu.crushedpixel.sponge.packetgate.api.registry.PacketConnection;
 import eu.crushedpixel.sponge.packetgate.api.registry.PacketGate;
-import net.minecraft.network.Packet;
 
 public class PacketGateManager extends SpongePacketManager {
 
@@ -29,14 +29,14 @@ public class PacketGateManager extends SpongePacketManager {
 		packetGate.registerListener(new PacketGateListener(this), ListenerPriority.DEFAULT);
 	}
 	
-	public AbstractPacket onPacketSent(NPacket packet, Player sender, Object nmsPacket, PacketEvent event) {
-		PacketGatePacket customPacket = new PacketGatePacket(packet, nmsPacket, sender, event);
+	public Packet onPacketSent(NPacket packet, Player sender, Object nmsPacket, PacketEvent event) {
+		Packet customPacket = new Packet(packet, nmsPacket, SpongeEntityManager.getPlayer(sender));
 		notifyHandlersSent(PacketSourceType.PACKETGATE, customPacket);
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(NPacket packet, Player sender, Object nmsPacket, PacketEvent event) {
-		PacketGatePacket customPacket = new PacketGatePacket(packet, nmsPacket, sender, event);
+	public Packet onPacketReceive(NPacket packet, Player sender, Object nmsPacket, PacketEvent event) {
+		Packet customPacket = new Packet(packet, nmsPacket, SpongeEntityManager.getPlayer(sender));
 		notifyHandlersReceive(PacketSourceType.PACKETGATE, customPacket);
 		return customPacket;
 	}
@@ -70,8 +70,8 @@ public class PacketGateManager extends SpongePacketManager {
 							+ newName + ". Please, report this to Elikill58.");
 			}*/
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
-			Packet<?> nmsPacket = e.getPacket();
-			AbstractPacket packet = packetManager.onPacketReceive(ada.getPacket(p, PacketDirection.CLIENT_TO_SERVER, nmsPacket), p, nmsPacket, e);
+			net.minecraft.network.Packet<?> nmsPacket = e.getPacket();
+			Packet packet = packetManager.onPacketReceive(ada.getPacket(p, PacketDirection.CLIENT_TO_SERVER, nmsPacket), p, nmsPacket, e);
 			e.setCancelled(packet.isCancelled());
 		}
 		
@@ -85,8 +85,8 @@ public class PacketGateManager extends SpongePacketManager {
 				return;
 			Player p = optionalPlayer.get();
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
-			Packet<?> nmsPacket = e.getPacket();
-			AbstractPacket packet = packetManager.onPacketSent(ada.getPacket(p, PacketDirection.SERVER_TO_CLIENT, nmsPacket), p, nmsPacket, e);
+			net.minecraft.network.Packet<?> nmsPacket = e.getPacket();
+			Packet packet = packetManager.onPacketSent(ada.getPacket(p, PacketDirection.SERVER_TO_CLIENT, nmsPacket), p, nmsPacket, e);
 			e.setCancelled(packet.isCancelled());
 		}
 	}

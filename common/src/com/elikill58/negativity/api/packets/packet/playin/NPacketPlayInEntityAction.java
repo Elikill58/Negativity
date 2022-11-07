@@ -1,8 +1,5 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
@@ -25,26 +22,17 @@ public class NPacketPlayInEntityAction implements NPacketPlayIn {
 	}
 	
 	public static enum EnumPlayerAction {
-		START_SNEAKING("a", "PRESS_SHIFT_KEY"),
-		STOP_SNEAKING("b", "RELEASE_SHIFT_KEY"),
-		STOP_SLEEPING("c"),
-		START_SPRINTING("d"),
-		STOP_SPRINTING("e"),
-		START_RIDING_JUMP("f", "RIDING_JUMP"),
-		STOP_RIDING_JUMP("g"),
-		OPEN_INVENTORY("h"),
-		START_FALL_FLYING("i"),
-		LEAVE_BED("j");
-		
-		private final List<String> alias;
-		
-		private EnumPlayerAction(String... alias) {
-			this.alias = Arrays.asList(alias);
-		}
-		
-		public List<String> getAlias() {
-			return alias;
-		}
+
+		START_SNEAKING,
+		STOP_SNEAKING,
+		STOP_SLEEPING,
+		START_SPRINTING,
+		STOP_SPRINTING,
+		START_RIDING_JUMP,
+		STOP_RIDING_JUMP,
+		OPEN_INVENTORY,
+		START_FALL_FLYING,
+		LEAVE_BED;
 		
 		/**
 		 * Get the action according to the given key
@@ -55,7 +43,7 @@ public class NPacketPlayInEntityAction implements NPacketPlayIn {
 		public static EnumPlayerAction getAction(String key) {
 			key = key.toUpperCase();
 			for(EnumPlayerAction action : values())
-				if(action.name().equalsIgnoreCase(key) || action.getAlias().contains(key))
+				if(action.name().equalsIgnoreCase(key))
 					return action;
 			return null;
 		}

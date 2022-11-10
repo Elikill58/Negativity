@@ -19,7 +19,6 @@ public class VerifData {
 	 * @param type the type of the data counter
 	 * @return the data counter
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> DataCounter<T> getData(DataType<T> type){
 		return (DataCounter<T>) data.computeIfAbsent(type, DataType::create);
 	}
@@ -50,7 +49,6 @@ public class VerifData {
 	 * 
 	 * @return all data in json
 	 */
-	@SuppressWarnings("unchecked")
 	public List<JSONObject> toJson() {
 		List<JSONObject> list = new ArrayList<>();
 		data.forEach((type, counter) -> {

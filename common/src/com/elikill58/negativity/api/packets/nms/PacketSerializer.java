@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
@@ -18,7 +17,6 @@ import com.elikill58.negativity.api.location.Vector;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 
 public class PacketSerializer {
@@ -112,14 +110,6 @@ public class PacketSerializer {
 
 	public ByteBufAllocator alloc() {
 		return this.buf.alloc();
-	}
-
-	public ByteOrder order() {
-		return this.buf.order();
-	}
-
-	public ByteBuf order(ByteOrder byteorder) {
-		return this.buf.order(byteorder);
 	}
 
 	public ByteBuf unwrap() {
@@ -340,10 +330,6 @@ public class PacketSerializer {
 
 	public int bytesBefore(int i, int j, byte b0) {
 		return this.buf.bytesBefore(i, j, b0);
-	}
-
-	public int forEachByte(ByteBufProcessor bytebufprocessor) {
-		return this.buf.forEachByte(bytebufprocessor);
 	}
 
 	public ByteBuf copy() {

@@ -25,8 +25,8 @@ public class NPacketPlayOutPing implements NPacketPlayOut {
 	public void read(PacketSerializer serializer, Version version) {
 		this.id = serializer.readUnsignedByte();
 		// 1.8 fields
-		serializer.readShort();
-		serializer.readBoolean();
+		// serializer.readShort();
+		// serializer.readBoolean();
 	}
 
 	@Override

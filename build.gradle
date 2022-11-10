@@ -60,7 +60,7 @@ subprojects {
         compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
         compileOnly 'org.checkerframework:checker-qual:3.7.0'
     
-    	compileOnly 'io.netty:netty-all:4.1.85.Final'
+        compileOnly 'io.netty:netty-all:4.1.85.Final'
     }
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)

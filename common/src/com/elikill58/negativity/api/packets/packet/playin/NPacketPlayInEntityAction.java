@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
+import java.util.Locale;
+
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
@@ -41,7 +43,7 @@ public class NPacketPlayInEntityAction implements NPacketPlayIn {
 		 * @return the enum or null
 		 */
 		public static EnumPlayerAction getAction(String key) {
-			key = key.toUpperCase();
+			key = key.toUpperCase(Locale.ROOT);
 			for(EnumPlayerAction action : values())
 				if(action.name().equalsIgnoreCase(key))
 					return action;

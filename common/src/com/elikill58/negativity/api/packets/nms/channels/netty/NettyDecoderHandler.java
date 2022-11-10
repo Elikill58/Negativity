@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets.nms.channels.netty;
 
 import java.nio.channels.ClosedChannelException;
 import java.util.List;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
@@ -33,8 +34,8 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if(cause.getMessage().toLowerCase().contains("connection reset by ")
-				|| cause.getLocalizedMessage().toLowerCase().contains("connection reset by "))
+		if(cause.getMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by ")
+				|| cause.getLocalizedMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by "))
 			return;
 		if(cause instanceof ClosedChannelException)
 			return;

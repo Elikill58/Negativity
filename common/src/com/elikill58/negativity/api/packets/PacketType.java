@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.packets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -30,11 +31,11 @@ public interface PacketType {
 	default String getPacketName() {
 		String name = "";
 		boolean upper = true;
-		for(String s : name().toLowerCase().split("")) {
+		for(String s : name().toLowerCase(Locale.ROOT).split("")) {
 			if(s.equalsIgnoreCase("_"))
 				upper = true;
 			else {
-				name += (upper ? s.toUpperCase() : s.toLowerCase());
+				name += (upper ? s.toUpperCase(Locale.ROOT) : s.toLowerCase(Locale.ROOT));
 				upper = false;
 			}
 		}

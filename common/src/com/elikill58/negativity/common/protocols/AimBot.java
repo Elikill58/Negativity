@@ -52,7 +52,7 @@ public class AimBot extends Cheat {
 			return;
 		PacketType type = e.getPacket().getPacketType();
 		if (type.isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket();
 			if (!flying.hasLook || !np.isAttacking)
 				return;
 			double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
@@ -82,7 +82,7 @@ public class AimBot extends Cheat {
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
 		if (type.isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket();
 			if (!flying.hasLook || !np.isAttacking)
 				return;
 

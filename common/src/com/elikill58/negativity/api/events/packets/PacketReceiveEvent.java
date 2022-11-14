@@ -2,21 +2,23 @@ package com.elikill58.negativity.api.events.packets;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.CancellableEvent;
-import com.elikill58.negativity.api.packets.Packet;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 
 public class PacketReceiveEvent extends PacketEvent implements CancellableEvent {
 
-	public PacketReceiveEvent(PacketSourceType source, Packet packet, Player p) {
-		super(source, packet, p);
+	private boolean cancelled = false;
+	
+	public PacketReceiveEvent(NPacket packet, Player p) {
+		super(packet, p);
 	}
 
 	@Override
 	public boolean isCancelled() {
-		return getPacket().isCancelled();
+		return cancelled;
 	}
 
 	@Override
 	public void setCancelled(boolean cancel) {
-		getPacket().setCancelled(cancel);
+		this.cancelled = cancel;
 	}
 }

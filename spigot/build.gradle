@@ -34,8 +34,6 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
     spigot 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
-    
-    compileOnly 'io.netty:netty-all:4.0.4.Final'
 }
 
 processResources {

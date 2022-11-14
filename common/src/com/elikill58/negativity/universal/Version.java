@@ -1,31 +1,49 @@
 package com.elikill58.negativity.universal;
 
 import java.util.Locale;
+import java.util.concurrent.Callable;
+
+import com.elikill58.negativity.api.packets.nms.NamedVersion;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_10;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_11;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_12;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_13;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_14;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_15;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_16;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_17;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_18;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_19;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_8;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_9;
+import com.elikill58.negativity.api.packets.nms.versions.VersionUnknown;
 
 public enum Version {
 	
-	LOWER("lower", 0, 0, 0, 5),
-	V1_8("1.8", 8, 500, 6, 47),
-	V1_9("1.9", 9, 400, 48, 110),
-	V1_10("1.10", 10, 400, 201, 210),
-	V1_11("1.11", 11, 300, 301, 316),
-	V1_12("1.12", 12, 150, 317, 340),
-	V1_13("1.13", 13, 150, 341, 404),
-	V1_14("1.14", 14, 100, 441, 500),
-	V1_15("1.15", 15, 100, 550, 578),
-	V1_16("1.16", 16, 100, 700, 754),
-	V1_17("1.17", 17, 100, 755, 756),
-	V1_18("1.18", 18, 100, 757, 758),
-	V1_19("1.19", 19, 100, 759, 1000),
-	HIGHER("higher", 42, 100, 1000, 1000);
+	LOWER("lower", 0, VersionUnknown::new, 0, 5),
+	V1_8("1.8", 8, Version1_8::new, 6, 47),
+	V1_9("1.9", 9, Version1_9::new, 48, 110),
+	V1_10("1.10", 10, Version1_10::new, 201, 210),
+	V1_11("1.11", 11, Version1_11::new, 301, 316),
+	V1_12("1.12", 12, Version1_12::new, 317, 340),
+	V1_13("1.13", 13, Version1_13::new, 341, 404),
+	V1_14("1.14", 14, Version1_14::new, 441, 500),
+	V1_15("1.15", 15, Version1_15::new, 550, 578),
+	V1_16("1.16", 16, Version1_16::new, 700, 754),
+	V1_17("1.17", 17, Version1_17::new, 755, 756),
+	V1_18("1.18", 18, Version1_18::new, 757, 758),
+	V1_19("1.19", 19, Version1_19::new, 759, 1000),
+	HIGHER("higher", 42, VersionUnknown::new, 1000, 1000);
 
-	private final int power, timeBetweenRegen, firstProtocolNumber, lastProtocolNumber;
+	private final int power, firstProtocolNumber, lastProtocolNumber;
 	private final String name;
+	private final Callable<NamedVersion> versionCreator;
+	private NamedVersion version;
 	
-	Version(String name, int power, int timeBetweenRegen, int firstProtocolNumber, int lastProtocolNumber) {
+	Version(String name, int power, Callable<NamedVersion> versionCreator, int firstProtocolNumber, int lastProtocolNumber) {
 		this.name = name;
 		this.power = power;
-		this.timeBetweenRegen = timeBetweenRegen;
+		this.versionCreator = versionCreator;
 		this.firstProtocolNumber = firstProtocolNumber;
 		this.lastProtocolNumber = lastProtocolNumber;
 	}
@@ -91,14 +109,15 @@ public enum Version {
 		return power;
 	}
 
-	/**
-	 * Get the time between 2 regeneration
-	 * This is not official values
-	 * 
-	 * @return the time between regen
-	 */
-	public int getTimeBetweenTwoRegenFromVersion(){
-		return timeBetweenRegen;
+	public NamedVersion getOrCreateNamedVersion() {
+		if(version != null)
+			return version;
+		try {
+			return version = versionCreator.call();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.packets.packet.NPacketUnset;
 public class NPacketPlayOutUnset implements NPacketPlayOut, NPacketUnset {
 
 	public String packetName;
-	public PacketType cible;
+	public PacketType cible = PacketType.Server.UNSET;
 	
 	public NPacketPlayOutUnset() {
 		this.packetName = null;
@@ -21,6 +21,7 @@ public class NPacketPlayOutUnset implements NPacketPlayOut, NPacketUnset {
 	@Override
 	public void setPacketTypeCible(PacketType type) {
 		this.cible = type;
+		this.packetName = type.getPacketName();
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class NPacketPlayOutUnset implements NPacketPlayOut, NPacketUnset {
 	
 	@Override
 	public String getPacketName() {
-		return packetName;
+		return "Unset:" + packetName;
 	}
 
 	@Override

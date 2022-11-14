@@ -44,7 +44,7 @@ public class AntiKnockback extends Cheat {
 	public void onPacket(PacketSendEvent e) {
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY) || checkActive("packet"))
 			return;
-		NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
+		NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket();
 		int entId = packet.entityId;
 		double velY = packet.vec.getY();
 

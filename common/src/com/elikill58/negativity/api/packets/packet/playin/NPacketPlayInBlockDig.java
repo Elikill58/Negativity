@@ -1,41 +1,46 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 
-	public int x = 0, y = 0, z = 0;
-	public BlockFace face;
 	public DigAction action;
+	public BlockPosition pos;
+	public BlockFace face;
 	
 	public NPacketPlayInBlockDig() {
 		
 	}
-
-	public NPacketPlayInBlockDig(int x, int y, int z, DigAction action, BlockFace face) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.face = face;
-		this.action = action;
+	
+	@Override
+	public void read(PacketSerializer serializer, Version version) {
+		this.action = DigAction.getById(serializer.readVarInt());
+		if(version.isNewerOrEquals(Version.V1_19))
+			this.pos = serializer.readBlockPositionNew();
+		else
+			this.pos = serializer.readBlockPosition();
+		this.face = BlockFace.getById(serializer.readUnsignedByte());
 	}
 
 	@Override
 	public double getX() {
-		return x;
+		return pos.getX();
 	}
 
 	@Override
 	public double getY() {
-		return y;
+		return pos.getY();
 	}
 
 	@Override
 	public double getZ() {
-		return z;
+		return pos.getZ();
 	}
 
 	@Override

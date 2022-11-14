@@ -13,7 +13,7 @@ public class PacketTypeTest {
 		for(PacketType types : PacketType.values()) {
 			NPacket npacket = types.createNewPacket();
 			if(!npacket.getPacketType().isUnset()) {
-				assertEquals(types, npacket.getPacketType(), "PacketType " + types.getFullName() + " create packet with wrong packet type " + npacket.getPacketType().getFullName());
+				assertEquals(types, npacket.getPacketType(), "PacketType " + types.getPacketName() + " create packet with wrong packet type " + npacket.getPacketType().getPacketName());
 			}
 		}
 	}

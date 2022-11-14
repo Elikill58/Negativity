@@ -11,8 +11,8 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
@@ -35,7 +35,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
 		PacketType type = packet.getPacketType();
 		long time = System.currentTimeMillis();
 		if (!type.equals(PacketType.Client.ENTITY_ACTION) && !type.equals(PacketType.Client.USE_ENTITY)) {
@@ -46,7 +46,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 			return;
 		}
 		if (type.equals(PacketType.Client.ENTITY_ACTION)) {
-			NPacketPlayInEntityAction entityAction = (NPacketPlayInEntityAction) packet.getPacket();
+			NPacketPlayInEntityAction entityAction = (NPacketPlayInEntityAction) packet;
 			if (!p.isSameId(String.valueOf(entityAction.entityId)))
 				return;
 
@@ -73,7 +73,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 				data.actionSneak = time;
 			}
 		} else {
-			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet.getPacket();
+			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet;
 			if (!useEntity.action.equals(EnumEntityUseAction.ATTACK)) {
 				data.waiting = PacketWaiting.USE_ENTITY;
 				return;

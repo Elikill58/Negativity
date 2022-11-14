@@ -5,7 +5,6 @@ import java.util.Locale;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
@@ -13,18 +12,16 @@ import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketManager;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 
 public abstract class FabricPacketManager extends PacketManager {
 
-	public void notifyHandlersReceive(PacketSourceType source, Packet packet) {
-		Player p = packet.getPlayer();
-		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, p);
-		if (packet.getPacket() instanceof NPacketPlayInChat) {
-			NPacketPlayInChat chat = (NPacketPlayInChat) packet.getPacket();
+	public void notifyHandlersReceive(NPacket packet, Player p) {
+		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+		if (packet instanceof NPacketPlayInChat chat) {
 			if (chat.message.startsWith("/")) {
 				String cmd = chat.message.substring(1).split(" ")[0];
 				String cmdArg = chat.message.substring(cmd.length() + 1); //+1 for the '/'
@@ -42,8 +39,7 @@ public abstract class FabricPacketManager extends PacketManager {
 				EventManager.callEvent(chatEvent);
 				event.setCancelled(chatEvent.isCancelled());
 			}
-		} else if(packet.getPacket() instanceof NPacketPlayInFlying) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+		} else if(packet instanceof NPacketPlayInFlying flying) {
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			Location to = flying.getLocation(p.getWorld());
 			PlayerMoveEvent move = new PlayerMoveEvent(p, p.getLocation(), to == null ? p.getLocation() : to);
@@ -64,8 +60,8 @@ public abstract class FabricPacketManager extends PacketManager {
 		EventManager.callEvent(event);
 	}
 
-	public void notifyHandlersSent(PacketSourceType source, Packet packet) {
-		PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
+	public void notifyHandlersSent(NPacket packet, Player p) {
+		PacketSendEvent event = new PacketSendEvent(packet, p);
 		EventManager.callEvent(event);
 	}
 }

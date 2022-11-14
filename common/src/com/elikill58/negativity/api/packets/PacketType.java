@@ -3,46 +3,16 @@ package com.elikill58.negativity.api.packets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnset;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
-import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
+import com.elikill58.negativity.api.packets.packet.handshake.*;
+import com.elikill58.negativity.api.packets.packet.login.*;
+import com.elikill58.negativity.api.packets.packet.playin.*;
+import com.elikill58.negativity.api.packets.packet.playout.*;
+import com.elikill58.negativity.api.packets.packet.status.*;
 
 public interface PacketType {
 
@@ -58,21 +28,19 @@ public interface PacketType {
 	 * 
 	 * @return the packet name
 	 */
-	String getPacketName();
-	
-	/**
-	 * Get the full packet name with prefix
-	 * 
-	 * @return the full packet name
-	 */
-	String getFullName();
-	
-	/**
-	 * Get all alias of the packet
-	 * 
-	 * @return all aliases
-	 */
-	List<String> getAlias();
+	default String getPacketName() {
+		String name = "";
+		boolean upper = true;
+		for(String s : name().toLowerCase(Locale.ROOT).split("")) {
+			if(s.equalsIgnoreCase("_"))
+				upper = true;
+			else {
+				name += (upper ? s.toUpperCase(Locale.ROOT) : s.toLowerCase(Locale.ROOT));
+				upper = false;
+			}
+		}
+		return name;
+	}
 	
 	/**
 	 * Check if it's flying packet
@@ -93,7 +61,20 @@ public interface PacketType {
 	 * 
 	 * @return a new instance of his packet
 	 */
-	NPacket createNewPacket();
+	default NPacket createNewPacket() {
+		try {
+			NPacket packet = getPacketCreatorFunction().call();
+			if(packet.getPacketType().isUnset()) {
+				((NPacketUnset) packet).setPacketTypeCible(this);
+			}
+			return packet;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	Callable<NPacket> getPacketCreatorFunction();
 	
 	/**
 	 * Get the packet direction
@@ -102,9 +83,6 @@ public interface PacketType {
 	 */
 	PacketDirection getDirection();
 	
-	@Deprecated
-	String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus", HANDSHAKE_PREFIX = "PacketHandshaking";
-
 	public static List<PacketType> values() {
 		List<PacketType> list = new ArrayList<>();
 		list.addAll(Arrays.asList(Client.values()));
@@ -117,7 +95,7 @@ public interface PacketType {
 	
 	public static NPacket createEmptyOrUnsetPacket(PacketDirection dir, String packetName) {
 		for(PacketType packet : dir.getTypes()) {
-			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName)) {
+			if(packet.getPacketName().equalsIgnoreCase(packetName)) {
 				NPacket p = packet.createNewPacket();
 				if(p != null && p instanceof NPacketUnset) {// change packename if can
 					NPacketUnset unset = (NPacketUnset) p;
@@ -137,6 +115,8 @@ public interface PacketType {
 	 * @return the packet type, or the UNSET value of the PacketType section or null
 	 */
 	public static PacketType getType(String packetName) {
+		if(packetName == null)
+			return null;
 		for(PacketDirection dir : PacketDirection.values()) {
 			if(packetName.startsWith(dir.getPrefix()))
 				return getPacketTypeFor(dir, packetName);
@@ -146,93 +126,81 @@ public interface PacketType {
 	
 	static PacketType getPacketTypeFor(String packetName, List<PacketType> types, PacketType unset) {
 		for(PacketType packet : types)
-			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
+			if(packet.getPacketName().equalsIgnoreCase(packetName))
 				return packet;
 		return unset;
 	}
 	
 	static PacketType getPacketTypeFor(PacketDirection dir, String packetName) {
 		for(PacketType packet : dir.getTypes())
-			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
+			if(packet.getPacketName().equalsIgnoreCase(packetName))
 				return packet;
 		return dir.getUnset();
 	}
 	
 	enum Client implements PacketType {
-		ABILITIES("Abilities", NPacketPlayInUnset::new),
-		ADVANCEMENTS("Advancements", NPacketPlayInUnset::new),
-		ARM_ANIMATION("ArmAnimation", NPacketPlayInArmAnimation::new),
-		AUTO_RECIPE("AutoRecipe", NPacketPlayInUnset::new),
-		BEACON("Beacon", NPacketPlayInUnset::new),
-		BEDIT("BEdit", NPacketPlayInUnset::new),
-		BOAT_MOVE("BoatMove", NPacketPlayInUnset::new),
-		BLOCK_DIG("BlockDig", NPacketPlayInBlockDig::new),
-		BLOCK_PLACE("BlockPlace", NPacketPlayInBlockPlace::new),
-		CHAT("Chat", NPacketPlayInChat::new),
-		CLIENT_COMMAND("ClientCommand", NPacketPlayInUnset::new),
-		CLOSE_WINDOW("CloseWindow", NPacketPlayInUnset::new),
-		CUSTOM_PAYLOAD("CustomPayload", NPacketPlayInUnset::new),
-		DIFFICULTY_CHANGE("DifficultyChange", NPacketPlayInUnset::new),
-		DIFFICULTY_LOCK("DifficultyLock", NPacketPlayInUnset::new),
-		ENCHANT_ITEM("EnchantItem", NPacketPlayInUnset::new),
-		ENTITY_ACTION("EntityAction", NPacketPlayInEntityAction::new),
-		ENTITY_NBT_QUERY("EntityNBTQuery", NPacketPlayInUnset::new),
-		FLYING("Flying", NPacketPlayInFlying::new),
-		GROUND("Ground", NPacketPlayInGround::new),
-		HELD_ITEM_SLOT("HeldItemSlot", NPacketPlayInHeldItemSlot::new),
-		ITEM_NAME("ItemName", NPacketPlayInUnset::new),
-		KEEP_ALIVE("KeepAlive", NPacketPlayInKeepAlive::new),
-		LOOK("Look", NPacketPlayInLook::new, "Rotation"),
-		PICK_ITEM("PickItem", NPacketPlayInUnset::new),
-		POSITION("Position", NPacketPlayInPosition::new),
-		POSITION_LOOK("PositionLook", NPacketPlayInPositionLook::new, "PositionRotation"),
-		RECIPE_DISPLAYED("RecipeDisplayed", NPacketPlayInUnset::new),
-		RESOURCE_PACK_STATUS("ResourcePackStatus", NPacketPlayInUnset::new),
-		SET_COMMAND_BLOCK("SetCommandBlock", NPacketPlayInUnset::new),
-		SET_COMMAND_MINECART("SetCommandMinecart", NPacketPlayInUnset::new),
-		SET_CREATIVE_SLOT("SetCreativeSlot", NPacketPlayInUnset::new),
-		SET_JIGSAW("SetJigsaw", NPacketPlayInUnset::new),
-		SETTINGS("Settings", NPacketPlayInUnset::new, "ClientSettings"),
-		SPECTATE("Spectate", NPacketPlayInUnset::new),
-		STEER_VEHICLE("SteerVehicle", NPacketPlayInSteerVehicle::new),
-		STRUCT("Struct", NPacketPlayInUnset::new),
-		TAB_COMPLETE("TabComplete", NPacketPlayInUnset::new),
-		TELEPORT_ACCEPT("TeleportAccept", NPacketPlayInTeleportAccept::new),
-		TILE_NBT_QUERY("TileNBTQuery", NPacketPlayInUnset::new),
-		TR_SEL("TrSel", NPacketPlayInUnset::new),
-		PONG("Transaction", NPacketPlayInPong::new, "Transaction"),
-		UPDATE_SIGN("UpdateSign", NPacketPlayInUnset::new),
-		USE_ENTITY("UseEntity", NPacketPlayInUseEntity::new),
-		USE_ITEM("UseItem", NPacketPlayInUseItem::new),
-		VEHICLE_MOVE("VehicleMove", NPacketPlayInUnset::new),
-		WINDOW_CLICK("WindowClick", NPacketPlayInUnset::new),
-		UNSET("Unset", NPacketPlayInUnset::new);
 		
-		private final String packetName, fullName;
-		private final List<String> alias = new ArrayList<>();
+		ABILITIES,
+		ADVANCEMENTS,
+		ARM_ANIMATION(NPacketPlayInArmAnimation::new),
+		AUTO_RECIPE,
+		BEACON,
+		BEDIT,
+		BOAT_MOVE,
+		BLOCK_DIG(NPacketPlayInBlockDig::new),
+		BLOCK_PLACE(NPacketPlayInBlockPlace::new),
+		CHAT(NPacketPlayInChat::new),
+		CHAT_COMMAND,
+		CHAT_PREVIEW,
+		CLIENT_COMMAND,
+		CLOSE_WINDOW,
+		CUSTOM_PAYLOAD,
+		DIFFICULTY_CHANGE,
+		DIFFICULTY_LOCK,
+		ENCHANT_ITEM,
+		ENTITY_ACTION(NPacketPlayInEntityAction::new),
+		ENTITY_NBT_QUERY,
+		FLYING(NPacketPlayInFlying::new),
+		GROUND(NPacketPlayInGround::new),
+		HELD_ITEM_SLOT(NPacketPlayInHeldItemSlot::new),
+		ITEM_NAME,
+		JIGSAW_GENERATE,
+		KEEP_ALIVE(NPacketPlayInKeepAlive::new),
+		LOOK(NPacketPlayInLook::new),
+		PICK_ITEM,
+		POSITION(NPacketPlayInPosition::new),
+		POSITION_LOOK(NPacketPlayInPositionLook::new),
+		RECIPE_SETTINGS,
+		RECIPE_DISPLAYED,
+		RESOURCE_PACK_STATUS,
+		SET_COMMAND_BLOCK,
+		SET_COMMAND_MINECART,
+		SET_CREATIVE_SLOT,
+		SET_JIGSAW,
+		SETTINGS(NPacketPlayInSettings::new),
+		SPECTATE,
+		STEER_VEHICLE(NPacketPlayInSteerVehicle::new),
+		STRUCT,
+		TAB_COMPLETE,
+		TELEPORT_ACCEPT(NPacketPlayInTeleportAccept::new),
+		TILE_NBT_QUERY,
+		TR_SEL,
+		PONG(NPacketPlayInPong::new),
+		UPDATE_SIGN,
+		USE_ENTITY(NPacketPlayInUseEntity::new),
+		USE_ITEM(NPacketPlayInUseItem::new),
+		VEHICLE_MOVE,
+		WINDOW_CLICK,
+		UNSET;
+		
 		private final Callable<NPacket> fun;
 		
-		Client(String packetName, Callable<NPacket> fun, String... alias) {
-			this.packetName = packetName;
-			for(String al : alias)
-				this.alias.add(CLIENT_PREFIX + al);
-			this.fullName = CLIENT_PREFIX + packetName;
+		Client() {
+			this(NPacketPlayInUnset::new);
+		}
+		
+		Client(Callable<NPacket> fun) {
 			this.fun = fun;
-		}
-		
-		@Override
-		public String getPacketName() {
-			return packetName;
-		}
-
-		@Override
-		public String getFullName() {
-			return fullName;
-		}
-		
-		@Override
-		public List<String> getAlias() {
-			return alias;
 		}
 		
 		@Override
@@ -246,13 +214,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -263,130 +226,137 @@ public interface PacketType {
 	
 	enum Server implements PacketType {
 
-		ABILITIES("Abilities", NPacketPlayOutUnset::new),
-		ADVANCEMENTS("Advancements", NPacketPlayOutUnset::new),
-		ANIMATION("Animation", NPacketPlayOutUnset::new),
-		ATTACH_ENTITY("AttachEntity", NPacketPlayOutUnset::new),
-		AUTO_RECIPE("AutoRecipe", NPacketPlayOutUnset::new),
-		BED("Bed", NPacketPlayOutUnset::new),
-		BLOCK_ACTION("BlockAction", NPacketPlayOutUnset::new),
-		BLOCK_BREAK("BlockBreak", NPacketPlayOutUnset::new),
-		BLOCK_BREAK_ANIMATION("BlockBreakAnimation", NPacketPlayOutBlockBreakAnimation::new),
-		BLOCK_CHANGE("BlockChange", NPacketPlayOutBlockChange::new),
-		BOSS("Boss", NPacketPlayOutUnset::new),
-		CAMERA("Camera", NPacketPlayOutUnset::new),
-		CHAT("Chat", NPacketPlayOutUnset::new),
-		CLOSE_WINDOW("CloseWindow", NPacketPlayOutUnset::new),
-		COLLECT("Collect", NPacketPlayOutUnset::new),
-		COMBAT_EVENT("CombatEvent", NPacketPlayOutUnset::new),
-		COMMANDS("Commands", NPacketPlayOutUnset::new),
-		CUSTOM_PAYLOAD("CustomPayload", NPacketPlayOutUnset::new),
-		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketPlayOutUnset::new),
-		ENTITY_DESTROY("EntityDestroy", NPacketPlayOutUnset::new),
-		ENTITY_EFFECT("EntityEffect", NPacketPlayOutEntityEffect::new),
-		ENTITY_EQUIPMENT("EntityEquipment", NPacketPlayOutUnset::new),
-		ENTITY_HEAD_ROTATION("EntityHeadRotation", NPacketPlayOutUnset::new),
-		ENTITY_LOOK("EntityLook", NPacketPlayOutUnset::new),
-		ENTITY_METADATA("EntityMetadata", NPacketPlayOutUnset::new),
-		ENTITY_STATUS("EntityStatus", NPacketPlayOutUnset::new),
-		ENTITY_SOUND("EntitySound", NPacketPlayOutUnset::new),
-		ENTITY_TELEPORT("EntityTeleport", NPacketPlayOutEntityTeleport::new),
-		ENTITY_VELOCITY("EntityVelocity", NPacketPlayOutEntityVelocity::new),
-		EXPERIENCE("Experience", NPacketPlayOutUnset::new),
-		EXPLOSION("Explosion", NPacketPlayOutExplosion::new),
-		GAME_STATE_CHANGE("GameStateChange", NPacketPlayOutUnset::new),
-		HELD_ITEM_SLOT("HeldItemSlot", NPacketPlayOutUnset::new),
-		KEEP_ALIVE("KeepAlive", NPacketPlayOutKeepAlive::new),
-		KICK_DISCONNECT("KickDisconnect", NPacketPlayOutUnset::new),
-		LIGHT_UPDATE("LightUpdate", NPacketPlayOutUnset::new),
-		LEVEL_CHUNK_LIGHT("LevelChunkWithLight", NPacketPlayOutUnset::new),
-		LOOK_AT("LookAt", NPacketPlayOutUnset::new),
-		LOGIN("Login", NPacketPlayOutUnset::new),
-		MAP("Map", NPacketPlayOutUnset::new),
-		MAP_CHUNK("MapChunk", NPacketPlayOutUnset::new),
-		MAP_CHUNK_BULK("MapChunkBulk", NPacketPlayOutUnset::new),
-		MOUNT("Mount", NPacketPlayOutUnset::new),
-		MULTI_BLOCK_CHANGE("MultiBlockChange", NPacketPlayOutMultiBlockChange::new),
-		NAMED_ENTITY_SPAWN("NamedEntitySpawn", NPacketPlayOutUnset::new),
-		NAMED_SOUND_EFFECT("NamedSoundEffect", NPacketPlayOutUnset::new),
-		NBT_QUERY("NBTQuery", NPacketPlayOutUnset::new),
-		OPEN_BOOK("OpenBook", NPacketPlayOutUnset::new),
-		OPEN_SIGN_EDITOR("OpenSignEditor", NPacketPlayOutUnset::new),
-		OPEN_WINDOW("OpenWindow", NPacketPlayOutUnset::new),
-		OPEN_WINDOW_MERCHANT("OpenWindowMerchant", NPacketPlayOutUnset::new),
-		OPEN_WINDOW_HORSE("OpenWindowHorse", NPacketPlayOutUnset::new),
-		PLAYER_INFO("PlayerInfo", NPacketPlayOutUnset::new),
-		PLAYER_LIST_HEADER_FOOTER("PlayerListHeaderFooter", NPacketPlayOutUnset::new),
-		POSITION("Position", NPacketPlayOutPosition::new),
-		RECIPES("Recipes", NPacketPlayOutUnset::new),
-		RECIPE_UPDATE("RecipeUpdate", NPacketPlayOutUnset::new),
-		REL_ENTITY_MOVE("RelEntityMove", NPacketPlayOutUnset::new),
-		REL_ENTITY_MOVE_LOOK("RelEntityMoveLook", NPacketPlayOutUnset::new),
-		REMOVE_ENTITY_EFFECT("RemoveEntityEffect", NPacketPlayOutUnset::new),
-		RESOURCE_PACK_SEND("ResourcePackSend", NPacketPlayOutUnset::new),
-		RESPAWN("Respawn", NPacketPlayOutUnset::new),
-		SCOREBOARD_DISPLAY_OBJECTIVE("ScoreboardDisplayObjective", NPacketPlayOutUnset::new),
-		SCOREBOARD_OBJECTIVE("ScoreboardObjective", NPacketPlayOutUnset::new),
-		SCOREBOARD_SCORE("ScoreboardScore", NPacketPlayOutUnset::new),
-		SCOREBOARD_TEAM("ScoreboardTeam", NPacketPlayOutUnset::new),
-		SERVER_DIFFICULTY("ServerDifficulty", NPacketPlayOutUnset::new),
-		SET_COMPRESSION("SetCompression", NPacketPlayOutUnset::new),
-		SET_COOLDOWN("SetCooldown", NPacketPlayOutUnset::new),
-		SET_SLOT("SetSlot", NPacketPlayOutUnset::new),
-		SPAWN_ENTITY("SpawnEntity", NPacketPlayOutSpawnEntity::new, "SpawnEntityLiving"),
-		SPAWN_ENTITY_EXPERIENCE_ORB("SpawnEntityExperienceOrb", NPacketPlayOutUnset::new),
-		SPAWN_ENTITY_PAINTING("SpawnEntityPainting", NPacketPlayOutUnset::new),
-		SPAWN_ENTITY_WEATHER("SpawnEntityWeather", NPacketPlayOutUnset::new),
-		SPAWN_PLAYER("SpawnPlayer", NPacketPlayOutSpawnPlayer::new),
-		SPAWN_POSITION("SpawnPosition", NPacketPlayOutUnset::new),
-		STATISTIC("Statistic", NPacketPlayOutUnset::new),
-		STOP_SOUND("StopSound", NPacketPlayOutUnset::new),
-		TAB_COMPLETE("TabComplete", NPacketPlayOutUnset::new),
-		TAGS("Tags", NPacketPlayOutUnset::new),
-		TILE_ENTITY_DATA("TileEntityData", NPacketPlayOutUnset::new),
-		TITLE("Title", NPacketPlayOutUnset::new),
-		PING("Ping", NPacketPlayOutPing::new, "Transaction", "ContainerAckPacket"),
-		UNLOAD_CHUNK("UnloadChunk", NPacketPlayOutUnset::new),
-		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketPlayOutUnset::new),
-		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketPlayOutUnset::new),
-		UPDATE_HEALTH("UpdateHealth", NPacketPlayOutUnset::new),
-		UPDATE_SIGN("UpdateSign", NPacketPlayOutUnset::new),
-		UPDATE_TIME("UpdateTime", NPacketPlayOutUnset::new),
-		VEHICLE_MOVE("VehicleMove", NPacketPlayOutUnset::new),
-		VIEW_DISTANCE("ViewDistance", NPacketPlayOutUnset::new),
-		VIEW_CENTRE("ViewCentre", NPacketPlayOutUnset::new),
-		WINDOW_DATA("WindowData", NPacketPlayOutUnset::new),
-		WINDOW_ITEMS("WindowItems", NPacketPlayOutUnset::new),
-		WORLD_BORDER("WorldBorder", NPacketPlayOutUnset::new),
-		WORLD_EVENT("WorldEvent", NPacketPlayOutUnset::new),
-		WORLD_PARTICLES("WorldParticles", NPacketPlayOutUnset::new),
-		UNSET("Unset", NPacketPlayOutUnset::new);
+		ABILITIES,
+		ACTION_BAR_TEXT,
+		ADVANCEMENTS,
+		ADD_VIBRATION_SIGNAL,
+		ANIMATION,
+		ATTACH_ENTITY,
+		AUTO_RECIPE,
+		BED,
+		BLOCK_ACTION,
+		BLOCK_BREAK,
+		BLOCK_BREAK_ANIMATION(NPacketPlayOutBlockBreakAnimation::new),
+		BLOCK_CHANGE(NPacketPlayOutBlockChange::new),
+		BLOCK_CHANGED_ACK,
+		BOSS,
+		CAMERA,
+		CHAT,
+		CHAT_PREVIEW,
+		CLEAR_TITLE,
+		CLOSE_WINDOW,
+		COLLECT,
+		COMBAT_EVENT,
+		COMBAT_END_EVENT,
+		COMBAT_ENTER_EVENT,
+		COMBAT_KILL_EVENT,
+		COMMANDS,
+		CUSTOM_PAYLOAD,
+		CUSTOM_SOUND_EFFECT,
+		ENTITY,
+		ENTITY_DESTROY,
+		ENTITY_EFFECT(NPacketPlayOutEntityEffect::new),
+		ENTITY_EQUIPMENT,
+		ENTITY_HEAD_ROTATION,
+		ENTITY_METADATA,
+		ENTITY_STATUS,
+		ENTITY_SOUND,
+		ENTITY_TELEPORT(NPacketPlayOutEntityTeleport::new),
+		ENTITY_VELOCITY(NPacketPlayOutEntityVelocity::new),
+		EXPERIENCE,
+		EXPLOSION(NPacketPlayOutExplosion::new),
+		GAME_STATE_CHANGE,
+		HELD_ITEM_SLOT,
+		INITIALIZE_BORDER,
+		KEEP_ALIVE(NPacketPlayOutKeepAlive::new),
+		KICK_DISCONNECT,
+		LIGHT_UPDATE,
+		LEVEL_CHUNK_LIGHT,
+		LOOK_AT,
+		LOGIN,
+		MAP,
+		MAP_CHUNK,
+		MAP_CHUNK_BULK,
+		MOUNT,
+		MULTI_BLOCK_CHANGE(NPacketPlayOutMultiBlockChange::new),
+		NAMED_SOUND_EFFECT,
+		NBT_QUERY,
+		OPEN_BOOK,
+		OPEN_SIGN_EDITOR,
+		OPEN_WINDOW,
+		OPEN_WINDOW_MERCHANT,
+		OPEN_WINDOW_HORSE,
+		PLAYER_INFO,
+		PLAYER_LIST_HEADER_FOOTER,
+		POSITION(NPacketPlayOutPosition::new),
+		RECIPES,
+		RECIPE_UPDATE,
+		REL_ENTITY_LOOK,
+		REL_ENTITY_MOVE,
+		REL_ENTITY_MOVE_LOOK,
+		REMOVE_ENTITY_EFFECT,
+		RESOURCE_PACK_SEND,
+		RESPAWN,
+		SCOREBOARD_DISPLAY_OBJECTIVE,
+		SCOREBOARD_OBJECTIVE,
+		SCOREBOARD_SCORE,
+		SCOREBOARD_TEAM,
+		SERVER_DATA,
+		SERVER_DIFFICULTY,
+		SELECT_ADVANCEMENT_TAB,
+		SET_DISPLAY_CHAT_PREVIEW,
+		SET_COMPRESSION,
+		SET_COOLDOWN,
+		SET_SLOT,
+		SET_ACTION_BAR,
+		SET_BORDER_CENTER,
+		SET_BORDER_LERP_SIZE,
+		SET_BORDER_SIZE,
+		SET_BORDER_WARNING_DELAY,
+		SET_BORDER_WARNING_DISTANCE,
+		SET_SUBTITLE_TEXT,
+		SET_TITLE_TEXT,
+		SET_TITLE_ANIMATION,
+		SIMULATION_DISTANCE,
+		SPAWN_ENTITY(NPacketPlayOutSpawnEntity::new),
+		SPAWN_ENTITY_LIVING,
+		SPAWN_ENTITY_EXPERIENCE_ORB,
+		SPAWN_ENTITY_PAINTING,
+		SPAWN_ENTITY_WEATHER,
+		SPAWN_PLAYER(NPacketPlayOutSpawnPlayer::new),
+		SPAWN_POSITION,
+		STATISTIC,
+		STOP_SOUND,
+		SYSTEM_CHAT,
+		TAB_COMPLETE,
+		TAGS,
+		TILE_ENTITY_DATA,
+		TITLE,
+		PING(NPacketPlayOutPing::new),
+		UNLOAD_CHUNK,
+		UPDATE_ATTRIBUTES,
+		UPDATE_ENTITY_NBT,
+		UPDATE_HEALTH,
+		UPDATE_SIGN,
+		UPDATE_TIME,
+		VEHICLE_MOVE,
+		VIEW_DISTANCE,
+		VIEW_CENTRE,
+		WINDOW_DATA,
+		WINDOW_ITEMS,
+		WORLD_BORDER,
+		WORLD_EVENT,
+		WORLD_PARTICLES,
+		UNSET;
 		
-		private final String packetName, fullName;
 		private final Callable<NPacket> fun;
-		private List<String> alias = new ArrayList<>();
+
+		Server() {
+			this(NPacketPlayOutUnset::new);
+		}
 		
-		Server(String packetName, Callable<NPacket> fun, String... alias) {
-			this.packetName = packetName;
-			this.fullName = SERVER_PREFIX + packetName;
+		Server(Callable<NPacket> fun) {
 			this.fun = fun;
-			for(String al : alias)
-				this.alias.add(SERVER_PREFIX + al);
-		}
-
-		@Override
-		public String getPacketName() {
-			return packetName;
-		}
-
-		@Override
-		public String getFullName() {
-			return fullName;
-		}
-		
-		@Override
-		public List<String> getAlias() {
-			return alias;
 		}
 		
 		@Override
@@ -400,13 +370,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -416,44 +381,27 @@ public interface PacketType {
 	}
 	
 	enum Login implements PacketType {
+
+		CUSTOM_PAYLOAD_OUT,
+		CUSTOM_PAYLOAD_IN,
+		DISCONNECT,
+		ENCRYPTION_BEGIN_OUT,
+		ENCRYPTION_BEGIN_IN,
+		LISTENER_OUT,
+		LISTENER_IN,
+		SET_COMPRESSION,
+		START,
+		SUCCESS,
+		UNSET;
 		
-		CUSTOM_PAYLOAD_OUT("OutCustomPayload", NPacketLoginUnset::new),
-		CUSTOM_PAYLOAD_IN("InCustomPayload", NPacketLoginUnset::new),
-		DISCONNECT("OutDisconnect", NPacketLoginUnset::new),
-		ENCRYPTION_BEGIN_OUT("OutEncryptionBegin", NPacketLoginUnset::new),
-		ENCRYPTION_BEGIN_IN("InEncryptionBegin", NPacketLoginUnset::new),
-		LISTENER_OUT("OutListener", NPacketLoginUnset::new),
-		LISTENER_IN("InListener", NPacketLoginUnset::new),
-		SET_COMPRESSION("OutSetCompression", NPacketLoginUnset::new),
-		START("InStart", NPacketLoginUnset::new),
-		SUCCESS("OutSuccess", NPacketLoginUnset::new),
-		UNSET("Unset", NPacketLoginUnset::new);
-		
-		private final String packetName, fullName;
 		private final Callable<NPacket> fun;
-		private List<String> alias = new ArrayList<>();
 		
-		Login(String packetName, Callable<NPacket> fun, String... alias) {
-			this.packetName = packetName;
+		Login() {
+			this(NPacketLoginUnset::new);
+		}
+		
+		Login(Callable<NPacket> fun) {
 			this.fun = fun;
-			for(String al : alias)
-				this.alias.add(LOGIN_PREFIX + al);
-			this.fullName = LOGIN_PREFIX + packetName;
-		}
-
-		@Override
-		public String getPacketName() {
-			return packetName;
-		}
-
-		@Override
-		public String getFullName() {
-			return fullName;
-		}
-		
-		@Override
-		public List<String> getAlias() {
-			return alias;
 		}
 		
 		@Override
@@ -467,13 +415,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -484,40 +427,23 @@ public interface PacketType {
 	
 	enum Status implements PacketType {
 
-		LISTENER("Listener", NPacketStatusUnset::new),
-		LISTENER_IN("InListener", NPacketStatusUnset::new),
-		LISTENER_OUT("OutListener", NPacketStatusUnset::new),
-		PING("InPing", NPacketStatusUnset::new),
-		START("InStart", NPacketStatusUnset::new),
-		PONG("OutPong", NPacketStatusUnset::new),
-		SERVER_INFO("OutServerInfo", NPacketStatusUnset::new),
-		UNSET("Unset", NPacketStatusUnset::new);
+		LISTENER,
+		LISTENER_IN,
+		LISTENER_OUT,
+		PING,
+		START,
+		PONG,
+		SERVER_INFO,
+		UNSET;
 		
-		private final String packetName, fullName;
 		private final Callable<NPacket> fun;
-		private List<String> alias = new ArrayList<>();
 		
-		Status(String packetName, Callable<NPacket> fun, String... alias) {
-			this.packetName = packetName;
+		Status() {
+			this(NPacketStatusUnset::new);
+		}
+		
+		Status(Callable<NPacket> fun) {
 			this.fun = fun;
-			for(String al : alias)
-				this.alias.add(STATUS_PREFIX + al);
-			this.fullName = STATUS_PREFIX + packetName;
-		}
-
-		@Override
-		public String getPacketName() {
-			return packetName;
-		}
-
-		@Override
-		public String getFullName() {
-			return fullName;
-		}
-		
-		@Override
-		public List<String> getAlias() {
-			return alias;
 		}
 		
 		@Override
@@ -531,13 +457,8 @@ public interface PacketType {
 		}
 		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override
@@ -548,35 +469,18 @@ public interface PacketType {
 
 	enum Handshake implements PacketType {
 		
-		IN_LISTENER("InListener", NPacketHandshakeInListener::new),
-		IS_SET_PROTOCOL("InSetProtocol", NPacketHandshakeInSetProtocol::new),
-		UNSET("Unset", NPacketHandshakeUnset::new);
+		IN_LISTENER(NPacketHandshakeInListener::new),
+		IS_SET_PROTOCOL(NPacketHandshakeInSetProtocol::new),
+		UNSET;
 		
-		private final String packetName, fullName;
 		private final Callable<NPacket> fun;
-		private List<String> alias = new ArrayList<>();
 		
-		Handshake(String packetName, Callable<NPacket> fun, String... alias) {
-			this.packetName = packetName;
+		Handshake() {
+			this(NPacketHandshakeUnset::new);
+		}
+		
+		Handshake(Callable<NPacket> fun) {
 			this.fun = fun;
-			for(String al : alias)
-				this.alias.add(HANDSHAKE_PREFIX + al);
-			this.fullName = HANDSHAKE_PREFIX + packetName;
-		}
-
-		@Override
-		public String getPacketName() {
-			return packetName;
-		}
-
-		@Override
-		public String getFullName() {
-			return fullName;
-		}
-		
-		@Override
-		public List<String> getAlias() {
-			return alias;
 		}
 
 		@Override
@@ -588,15 +492,10 @@ public interface PacketType {
 		public boolean isUnset() {
 			return this == UNSET;
 		}
-
+		
 		@Override
-		public NPacket createNewPacket() {
-			try {
-				return fun.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+		public Callable<NPacket> getPacketCreatorFunction() {
+			return fun;
 		}
 		
 		@Override

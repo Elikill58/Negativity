@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
 public class PacketUtils {
@@ -92,7 +91,7 @@ public class PacketUtils {
 	 * @param packet the packet to sent
 	 */
 	public static void sendPacket(Player p, Object packet) {
-		SpigotVersionAdapter.getVersionAdapter().sendPacket(p, packet);
+		//SpigotVersionAdapter.getVersionAdapter().sendPacket(p, packet);
 	}
 	
 	/**

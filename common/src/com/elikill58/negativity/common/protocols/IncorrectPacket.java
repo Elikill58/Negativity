@@ -37,7 +37,7 @@ public class IncorrectPacket extends Cheat {
 	public void onPacket(PacketReceiveEvent e) {
 		if (!e.hasPlayer())
 			return;
-		NPacket packet = e.getPacket().getPacket();
+		NPacket packet = e.getPacket();
 		if (packet instanceof LocatedPacket && checkingPackets.contains(packet.getPacketType())) {
 			LocatedPacket lp = (LocatedPacket) packet;
 			if (!lp.hasLocation())

@@ -17,8 +17,9 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.ray.RayResult;
@@ -125,15 +126,20 @@ public class Scaffold extends Cheat {
 
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
-		Packet pa = e.getPacket();
+		NPacket pa = e.getPacket();
 		if (pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Player p = e.getPlayer();
-			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {
-				if (value > 1.5) {
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(value * 10),
-							"packet", "Wrong value " + field.getName() + ": " + value + " for packet BlockPlace");
+			NPacketPlayInBlockPlace packet = (NPacketPlayInBlockPlace) pa;
+			int amount = 0;
+			for(float f : Arrays.asList(packet.f1, packet.f2, packet.f3)) {
+				if(f > 1.5) {
+					amount++;
 				}
-			});
+			}
+			if (amount > 0) {
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount * 80),
+						"packet", "Wrong value for packet BlockPlace: " + packet.f1 + ", " + packet.f2 + ", " + packet.f3, null, amount);
+			}
 		}
 	}
 

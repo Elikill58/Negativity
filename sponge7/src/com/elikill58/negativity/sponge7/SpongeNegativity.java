@@ -3,8 +3,6 @@ package com.elikill58.negativity.sponge7;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -52,8 +50,8 @@ import com.elikill58.negativity.sponge7.listeners.CommandsExecutorManager;
 import com.elikill58.negativity.sponge7.listeners.CommandsListeners;
 import com.elikill58.negativity.sponge7.listeners.EntityListeners;
 import com.elikill58.negativity.sponge7.listeners.InventoryListeners;
+import com.elikill58.negativity.sponge7.listeners.PacketListeners;
 import com.elikill58.negativity.sponge7.listeners.PlayersListeners;
-import com.elikill58.negativity.sponge7.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge7.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -62,7 +60,6 @@ import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
@@ -80,7 +77,6 @@ public class SpongeNegativity {
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
-	private NegativityPacketManager packetManager;
 	public static RawDataChannel channel = null, fmlChannel = null, bungeecordChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
@@ -88,8 +84,6 @@ public class SpongeNegativity {
 	public PluginContainer getContainer() {
 		return plugin;
 	}
-
-	public static boolean hasPacketGate = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -105,6 +99,7 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new EntityListeners());
 		eventManager.registerListeners(this, new InventoryListeners());
 		eventManager.registerListeners(this, new PlayersListeners());
+		eventManager.registerListeners(this, new PacketListeners());
 		eventManager.registerListeners(this, new CommandsListeners());
 
 		NegativityAccountStorage.setDefaultStorage("file");
@@ -119,7 +114,6 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
-		packetManager = new NegativityPacketManager(this);
 		try {
 			Class.forName("net.minecraftforge.fml.common.network.handshake.NetworkDispatcher");
 			SpongeForgeSupport.isOnSpongeForge = true;
@@ -195,24 +189,6 @@ public class SpongeNegativity {
 	}
 
 	@Listener
-	public void onJoin(ClientConnectionEvent.Join e, @First Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
-		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
-			if (!hasPacketGate) {
-				try {
-					p.sendMessage(Text.builder("[Negativity] Dependency not found. Please, download it here.")
-							.onHover(TextActions.showText(Text.of("Click here")))
-							.onClick(
-									TextActions.openUrl(new URL("https://github.com/CrushedPixel/PacketGate/releases")))
-							.color(TextColors.RED).build());
-				} catch (MalformedURLException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-	}
-
-	@Listener
 	public void onLeave(ClientConnectionEvent.Disconnect e, @First Player p) {
 		Task.builder().delayTicks(5).execute(() -> {
 			NegativityPlayer.removeFromCache(p.getUniqueId());
@@ -243,10 +219,6 @@ public class SpongeNegativity {
 
 	public Path getDataFolder() {
 		return configDir;
-	}
-
-	public NegativityPacketManager getPacketManager() {
-		return packetManager;
 	}
 
 	public Logger getLogger() {

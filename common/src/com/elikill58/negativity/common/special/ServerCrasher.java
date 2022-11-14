@@ -12,8 +12,8 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.SanctionnerType;
@@ -39,14 +39,14 @@ public class ServerCrasher extends Special implements Listeners {
 	public void onPacketClear(PacketReceiveEvent e) {
 		if(!isActive() || !e.hasPlayer())
 			return;
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
 		if(packet.getPacketType() != PacketType.Client.POSITION)
 			return;
 		Player p = e.getPlayer();
 		if(!inDisconnection.contains(p.getUniqueId())) {
 			if(NegativityPlayer.getNegativityPlayer(p).packets.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
 				tryingToCrash(p);
-				packet.setCancelled(true);
+				e.setCancelled(true);
 			}
 		}
 	}

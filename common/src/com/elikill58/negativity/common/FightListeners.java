@@ -46,7 +46,7 @@ public class FightListeners implements Listeners {
 	
 	@EventListener
 	public void onPlayerItemHeld(PacketReceiveEvent e) {
-		NPacket packet = e.getPacket().getPacket();
+		NPacket packet = e.getPacket();
 		if(!(packet instanceof NPacketPlayInHeldItemSlot))
 			return;
 		Player p = (Player) e.getPlayer();

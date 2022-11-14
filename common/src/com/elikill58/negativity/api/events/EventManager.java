@@ -84,7 +84,6 @@ public class EventManager {
 		EVENT_METHOD.remove(clazz);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static void checkClass(Listeners src) throws InstantiationException, IllegalAccessException {
 		Class<?> clazz = src.getClass();
 		for(Method m : clazz.getDeclaredMethods()) {
@@ -176,7 +175,6 @@ public class EventManager {
 		});
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static HashMap<ListenerCaller, EventListener> getEventForClass(Event ev, Class<?> clazz) {
 		return (HashMap<ListenerCaller, EventListener>) (Object) EVENT_METHOD.getOrDefault(clazz, new HashMap<>());
 	}

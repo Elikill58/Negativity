@@ -43,7 +43,7 @@ public class Reach extends Cheat {
 	@Check(name = "reach-event", description = "The reach", conditions = { CheckConditions.NO_THORNS,
 			CheckConditions.NO_INSIDE_VEHICLE })
 	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np, ReachData data) {
-		NPacket packet = e.getPacket().getPacket();
+		NPacket packet = e.getPacket();
 		Player p = e.getPlayer();
 		if (packet.getPacketType().isFlyingPacket()) {
 			if (data.cible != null) {

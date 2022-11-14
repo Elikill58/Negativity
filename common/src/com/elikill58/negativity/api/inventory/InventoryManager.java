@@ -73,7 +73,7 @@ public class InventoryManager implements Listeners {
 		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@EventListener
 	public void onInventoryClick(InventoryClickEvent e) {
 		PlatformHolder holder = e.getClickedInventory().getHolder();

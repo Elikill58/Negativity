@@ -2,7 +2,9 @@ package com.elikill58.negativity.api.packets.packet.playout;
 
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutEntityTeleport implements NPacketPlayOut, LocatedPacket {
 
@@ -16,14 +18,15 @@ public class NPacketPlayOutEntityTeleport implements NPacketPlayOut, LocatedPack
 		
 	}
 	
-	public NPacketPlayOutEntityTeleport(int entityId, double x, double y, double z, float yaw, float pitch, boolean onGround) {
-		this.entityId = entityId;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.yaw = yaw;
-		this.pitch = pitch;
-		this.onGround = onGround;
+	@Override
+	public void read(PacketSerializer serializer, Version version) {
+	    this.entityId = serializer.readVarInt();
+	    this.x = serializer.readInt();
+	    this.y = serializer.readInt();
+	    this.z = serializer.readInt();
+	    this.yaw = serializer.readByte();
+	    this.pitch = serializer.readByte();
+	    this.onGround = serializer.readBoolean();
 	}
 	
 	@Override

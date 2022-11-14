@@ -2,21 +2,30 @@ package com.elikill58.negativity.api.packets.packet.handshake;
 
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Handshake;
+import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
+import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
 
 public class NPacketHandshakeInSetProtocol implements NPacketHandshake {
 
-	public int procotol, port;
+	public int protocol, port, nextState;
 	public String hostname;
 	
 	public NPacketHandshakeInSetProtocol() {
 		
 	}
 	
-	public NPacketHandshakeInSetProtocol(int protocol, String hostname, int port) {
-		this.procotol = protocol;
-		this.hostname = hostname;
-		this.port = port;
+	@Override
+	public void read(PacketSerializer serializer, Version version) {
+		try {
+		    this.protocol = serializer.readVarInt();
+		    this.hostname = serializer.readString(32767);
+		    this.port = serializer.readUnsignedShort();
+		    this.nextState = serializer.readVarInt();
+		} catch (Exception e) {
+			Adapter.getAdapter().debug("Wrong handshake read: " + e.getMessage());
+		}
 	}
 	
 	@Override

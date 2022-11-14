@@ -4,13 +4,6 @@ public class Spigot_1_16_R3 extends NoRemapSpigotVersionAdapter {
 	
 	public Spigot_1_16_R3() {
 		super("v1_16_R3");
-
-		log();
-	}
-	
-	@Override
-	protected String getOnGroundFieldName() {
-		return "f";
 	}
 	
 	@Override

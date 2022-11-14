@@ -9,8 +9,8 @@ import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.minestom.listeners.BlockListeners;
 import com.elikill58.negativity.minestom.listeners.EntityListeners;
 import com.elikill58.negativity.minestom.listeners.InventoryListeners;
+import com.elikill58.negativity.minestom.listeners.PacketListeners;
 import com.elikill58.negativity.minestom.listeners.PlayersListeners;
-import com.elikill58.negativity.minestom.packets.NegativityPacketManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -25,8 +25,6 @@ public class MinestomNegativity extends Extension {
 
 	public static final List<String> ALL_COMMANDS = new ArrayList<>();
 	public static MinestomNegativity INSTANCE;
-
-	private NegativityPacketManager packetManager;
 
 	@Override
 	public void initialize() {
@@ -44,7 +42,7 @@ public class MinestomNegativity extends Extension {
 		new PlayersListeners(getEventNode());
 		new EntityListeners(getEventNode());
 		new InventoryListeners(getEventNode());
-		new NegativityPacketManager(getEventNode());
+		new PacketListeners(getEventNode());
 		
 		loadCommands();
 		getLogger().info("Negativity v" + getOrigin().getVersion() + " loaded.");
@@ -85,10 +83,6 @@ public class MinestomNegativity extends Extension {
 
 	public static MinestomNegativity getInstance() {
 		return INSTANCE;
-	}
-
-	public NegativityPacketManager getPacketManager() {
-		return packetManager;
 	}
 
 	public static List<Player> getOnlinePlayers() {

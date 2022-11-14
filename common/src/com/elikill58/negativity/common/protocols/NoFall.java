@@ -12,8 +12,8 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
@@ -166,11 +166,11 @@ public class NoFall extends Cheat {
 	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e, NegativityPlayer np, NoFallData data) {
 		Player p = e.getPlayer();
-		Packet packet = e.getPacket();
+		NPacket packet = e.getPacket();
 		PacketType type = packet.getPacketType();
 		if (!type.isFlyingPacket())
 			return;
-		NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 		if (flying.isGround) {
 			for (float f : Arrays.asList(2f, 3f)) {
 				if (data.lastFloat < f && p.getFallDistance() > f) { // just pass over specific amount of fall

@@ -21,6 +21,7 @@ public class NPacketStatusUnset implements NPacketStatus, NPacketUnset {
 	@Override
 	public void setPacketTypeCible(PacketType type) {
 		this.cible = type;
+		this.packetName = type.getPacketName();
 	}
 
 	@Override

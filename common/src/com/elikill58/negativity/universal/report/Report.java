@@ -87,7 +87,6 @@ public class Report {
 	 * 
 	 * @return the json string of report
 	 */
-	@SuppressWarnings("unchecked")
 	public String toJsonString() {
 		JSONObject json = new JSONObject();
 		json.put("reportedBy", reportedBy.toString());

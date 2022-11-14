@@ -24,8 +24,14 @@ public class Maths {
 	}
     
     public static double getGcd(double a, double b) {
+    	return getGcd(a, b, 5);
+    }
+    
+    public static double getGcd(double a, double b, int internalAmount) {
+    	if(internalAmount <= 0)
+    		return a;
     	if(a < b)
-    		return getGcd(b, a);
-    	return Math.abs(b) < 0.001 ? a : getGcd(b, a - Math.floor(a / b) * b);
+    		return getGcd(b, a, internalAmount - 1);
+    	return Math.abs(b) < 0.001 ? a : getGcd(b, a - Math.floor(a / b) * b, internalAmount - 1);
     }
 }

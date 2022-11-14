@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.packets.nms.versions.Version1_16;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_17;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_18;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_19;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_19_2;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_8;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_9;
 import com.elikill58.negativity.api.packets.nms.versions.VersionUnknown;
@@ -32,15 +33,21 @@ public enum Version {
 	V1_16("1.16", 16, Version1_16::new, 700, 754),
 	V1_17("1.17", 17, Version1_17::new, 755, 756),
 	V1_18("1.18", 18, Version1_18::new, 757, 758),
-	V1_19("1.19", 19, Version1_19::new, 759, 1000),
-	HIGHER("higher", 42, VersionUnknown::new, 1000, 1000);
+	V1_19("1.19", 19, Version1_19::new, 759),
+	V1_19_2("1.19.2", 19.2, Version1_19_2::new, 760, 1000),
+	HIGHER("higher", 42, VersionUnknown::new, 1000);
 
-	private final int power, firstProtocolNumber, lastProtocolNumber;
+	private final double power;
+	private final int firstProtocolNumber, lastProtocolNumber;
 	private final String name;
 	private final Callable<NamedVersion> versionCreator;
 	private NamedVersion version;
+
+	Version(String name, double power, Callable<NamedVersion> versionCreator, int protocolNumber) {
+		this(name, power, versionCreator, protocolNumber, protocolNumber);
+	}
 	
-	Version(String name, int power, Callable<NamedVersion> versionCreator, int firstProtocolNumber, int lastProtocolNumber) {
+	Version(String name, double power, Callable<NamedVersion> versionCreator, int firstProtocolNumber, int lastProtocolNumber) {
 		this.name = name;
 		this.power = power;
 		this.versionCreator = versionCreator;
@@ -105,7 +112,7 @@ public enum Version {
 	 * 
 	 * @return the power version
 	 */
-	public int getPower() {
+	public double getPower() {
 		return power;
 	}
 

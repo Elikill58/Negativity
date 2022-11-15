@@ -131,14 +131,14 @@ public class Scaffold extends Cheat {
 			Player p = e.getPlayer();
 			NPacketPlayInBlockPlace packet = (NPacketPlayInBlockPlace) pa;
 			int amount = 0;
-			for(float f : Arrays.asList(packet.f1, packet.f2, packet.f3)) {
+			for(float f : Arrays.asList(packet.cursorX, packet.cursorY, packet.cursorZ)) {
 				if(f > 1.5) {
 					amount++;
 				}
 			}
 			if (amount > 0) {
 				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount * 80),
-						"packet", "Wrong value for packet BlockPlace: " + packet.f1 + ", " + packet.f2 + ", " + packet.f3, null, amount);
+						"packet", "Wrong value for packet BlockPlace: " + packet.cursorX + ", " + packet.cursorY + ", " + packet.cursorZ, null, amount);
 			}
 		}
 	}

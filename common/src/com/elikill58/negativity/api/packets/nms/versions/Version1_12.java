@@ -16,7 +16,7 @@ public class Version1_12 extends NamedVersion {
 				Client.POSITION, Client.POSITION_LOOK, Client.LOOK, Client.VEHICLE_MOVE, Client.BOAT_MOVE,
 				Client.ABILITIES, Client.BLOCK_DIG, Client.ENTITY_ACTION, Client.STEER_VEHICLE, Client.RECIPE_DISPLAYED,
 				Client.RESOURCE_PACK_STATUS, Client.ADVANCEMENTS, Client.HELD_ITEM_SLOT, Client.SET_CREATIVE_SLOT,
-				Client.UPDATE_SIGN, Client.ARM_ANIMATION, Client.SPECTATE, Client.USE_ITEM, Client.BLOCK_PLACE)) {
+				Client.UPDATE_SIGN, Client.ARM_ANIMATION, Client.SPECTATE, Client.BLOCK_PLACE, Client.USE_ITEM)) {
 			playIn.put(i++, type);
 		}
 		i = 0;

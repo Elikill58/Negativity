@@ -19,7 +19,7 @@ public class Version1_15 extends NamedVersion {
 				Client.STEER_VEHICLE, Client.RECIPE_DISPLAYED, Client.ITEM_NAME, Client.RESOURCE_PACK_STATUS,
 				Client.ADVANCEMENTS, Client.TR_SEL, Client.BEACON, Client.HELD_ITEM_SLOT, Client.SET_COMMAND_BLOCK,
 				Client.SET_COMMAND_MINECART, Client.SET_CREATIVE_SLOT, Client.SET_JIGSAW, Client.STRUCT,
-				Client.UPDATE_SIGN, Client.ARM_ANIMATION, Client.SPECTATE, Client.USE_ITEM, Client.BLOCK_PLACE)) {
+				Client.UPDATE_SIGN, Client.ARM_ANIMATION, Client.SPECTATE, Client.BLOCK_PLACE, Client.USE_ITEM)) {
 			playIn.put(i++, type);
 		}
 		i = 0;

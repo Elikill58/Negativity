@@ -13,35 +13,36 @@ import com.elikill58.negativity.universal.Version;
  * Block place packet. Sometimes named "UseItemOn".<br>
  * Some field are not present, such as:<br>
  * - sequence (int) : no use, no description<br>
- * - insideBlock (boolean) : no use, present in few versions<br>
  * 
- * @author Elikill58
- *
  */
 public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 	public Hand hand;
 	public BlockFace face;
 	public BlockPosition pos;
-	/**
-	 * This field are not known yet.
-	 * TODO find what are those field (present at least for 1.8)
-	 */
-	public float f1, f2, f3;
-	
+	public boolean insideBlock;
+	public float cursorX, cursorY, cursorZ;
+
 	public NPacketPlayInBlockPlace() {
-		
+
 	}
-	
+
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-	    this.pos = serializer.readBlockPosition();
-	    this.face = BlockFace.getById(serializer.readUnsignedByte());
-	    this.hand = Hand.MAIN;
-	    serializer.readItemStack();
-	    this.f1 = serializer.readUnsignedByte() / 16.0F;
-	    this.f2 = serializer.readUnsignedByte() / 16.0F;
-	    this.f3 = serializer.readUnsignedByte() / 16.0F;
+		if (version.equals(Version.V1_8))
+			this.hand = Hand.MAIN;
+		else
+			this.hand = serializer.getEnum(Hand.class);
+
+		this.pos = serializer.readBlockPosition();
+		this.face = BlockFace.getById(serializer.readUnsignedByte());
+		if (version.equals(Version.V1_8))
+			serializer.readItemStack(); // skip item index
+		this.cursorX = serializer.readUnsignedByte() / 16.0F;
+		this.cursorY = serializer.readUnsignedByte() / 16.0F;
+		this.cursorZ = serializer.readUnsignedByte() / 16.0F;
+		if (version.isNewerOrEquals(Version.V1_13))
+			this.insideBlock = serializer.readBoolean();
 	}
 
 	@Override

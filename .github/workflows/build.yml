@@ -28,10 +28,15 @@ jobs:
       run: chmod +x gradlew setup_spigot.sh
     - name: Run setup spigot script
       run: bash setup_spigot.sh
-    - name: Build with Gradle
+    - id: build-gradle
+      name: Build with Gradle
       run: ./gradlew build
+      # continue even if there is an issue to save all cache
+      continue-on-error: true
     - name: Send file to discord channel
       uses: sinshutu/upload-to-discord@master
+      # if last action is fine
+      if: steps.build-gradle.outcome == 'success'
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:

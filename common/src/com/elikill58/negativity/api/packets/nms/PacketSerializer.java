@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.location.Vector;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.DecoderException;
 
 public class PacketSerializer {
@@ -435,7 +436,7 @@ public class PacketSerializer {
 					+ " > " + (size * 4) + ")");
 		if (j < 0)
 			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
-		String s = new String(readBytes(j).array(), StandardCharsets.UTF_8);
+		String s = new String(ByteBufUtil.getBytes(buf), StandardCharsets.UTF_8);
 		if (s.length() > size)
 			throw new DecoderException(
 					"Received string length is longer than maximum allowed (" + j + " > " + size + ")");

@@ -228,7 +228,6 @@ public interface PacketType {
 	enum Server implements PacketType {
 
 		ABILITIES,
-		ACTION_BAR_TEXT,
 		ADVANCEMENTS,
 		ADD_VIBRATION_SIGNAL,
 		ANIMATION,
@@ -312,7 +311,7 @@ public interface PacketType {
 		SET_COMPRESSION,
 		SET_COOLDOWN,
 		SET_SLOT,
-		SET_ACTION_BAR,
+		SET_ACTION_BAR_TEXT,
 		SET_BORDER_CENTER,
 		SET_BORDER_LERP_SIZE,
 		SET_BORDER_SIZE,

@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.common.protocols.data.FastPlaceData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -26,7 +27,7 @@ public class FastPlace extends Cheat implements Listeners {
 		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, FastPlaceData::new, CheatDescription.BLOCKS);
 	}
 
-	@Check(name = "time", description = "Time between 2 place")
+	@Check(name = "time", description = "Time between 2 place", conditions = CheckConditions.NO_ON_BEDROCK)
 	public void onBlockPlace(PacketReceiveEvent e, FastPlaceData data) {
 		if (e.getPacket().getPacketType().isFlyingPacket()) {
 			data.timeFlying++;

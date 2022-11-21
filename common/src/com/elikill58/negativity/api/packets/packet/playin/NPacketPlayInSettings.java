@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayInSettings implements NPacketPlayIn {
@@ -23,7 +24,7 @@ public class NPacketPlayInSettings implements NPacketPlayIn {
 		this.displayedSkinParts = serializer.readUnsignedByte();
 		if (v.isNewerOrEquals(Version.V1_9))
 			this.mainHand = serializer.readVarInt() == 0 ? Hand.OFF : Hand.MAIN;
-
+		Adapter.getAdapter().getLogger().warn("Readed : " + locale + ", view: " + viewDistance + ", chat: " + chatMode + ", skin: " + displayedSkinParts + ", main: " + mainHand);
 	}
 
 	@Override

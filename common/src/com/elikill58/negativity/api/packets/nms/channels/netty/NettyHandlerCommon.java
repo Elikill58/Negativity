@@ -36,9 +36,8 @@ public class NettyHandlerCommon {
 		ByteBuf buf = msg.copy();
 		int packetId = new PacketSerializer(buf).readVarInt();
 		NPacket packet = version.getOrCreateNamedVersion().getPacket(direction, packetId);
-		if (packet == null) {
+		if (packet == null)
 			return null;
-		}
 		try {
 			packet.read(new PacketSerializer(buf), version);
 		} catch (IndexOutOfBoundsException e) {

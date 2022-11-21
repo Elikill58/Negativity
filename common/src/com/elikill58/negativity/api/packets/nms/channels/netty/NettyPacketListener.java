@@ -14,7 +14,7 @@ public abstract class NettyPacketListener {
 
 	private ExecutorService channelExecutor = Executors.newSingleThreadExecutor();
 
-	public ExecutorService getOrCreatChannelExecutor() {
+	public ExecutorService getChannelExecutor() {
 		return channelExecutor;
 	}
 
@@ -29,7 +29,7 @@ public abstract class NettyPacketListener {
 	}
 
 	private void addChannel(Player p) {
-		getOrCreatChannelExecutor().execute(() -> {
+		getChannelExecutor().execute(() -> {
 			Channel channel = getChannel(p);
 			try {
 				// Managing incoming packet (from player)
@@ -38,7 +38,7 @@ public abstract class NettyPacketListener {
 
 				// Managing outgoing packet (to the player)
 				channel.pipeline().addBefore("encoder", "negativity_encoder",
-						new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));
+						new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));				
 			} catch (NoSuchElementException exc) {
 				// appear when the player's channel isn't accessible because of reload.
 				Adapter.getAdapter().getLogger()

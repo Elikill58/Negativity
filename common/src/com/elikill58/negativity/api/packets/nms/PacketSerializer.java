@@ -17,14 +17,12 @@ import com.elikill58.negativity.api.location.Vector;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.DecoderException;
 
 public class PacketSerializer {
 
 	private static final int CONTINUE_BIT = 0x80;
 	private static final int VALUE_BITS = 0x7F;
-	private static final int MAX_BYTES = 5;
 
 	private final ByteBuf buf;
 
@@ -37,18 +35,14 @@ public class PacketSerializer {
 	}
 
 	public int readVarInt() {
-		int value = 0;
-		int bytes = 0;
-		byte in;
-		do {
-			in = buf.readByte();
-			value |= (in & VALUE_BITS) << (bytes++ * 7);
-			if (bytes > MAX_BYTES) {
-				throw new RuntimeException("VarInt too big");
-			}
-
-		} while ((in & CONTINUE_BIT) == CONTINUE_BIT);
-		return value;
+        int result = 0;
+        for (int shift = 0; ; shift += 7) {
+            byte b = buf.readByte();
+            result |= (b & VALUE_BITS) << shift;
+            if (b >= 0) {
+                return result;
+            }
+        }
 	}
 
 	public <T extends Enum<T>> T getEnum(Class<T> oclass) {
@@ -60,16 +54,15 @@ public class PacketSerializer {
 	}
 
 	public long readVarLong() {
-		byte b0;
-		long i = 0L;
-		int j = 0;
-		do {
-			b0 = readByte();
-			i |= (b0 & Byte.MAX_VALUE) << j++ * 7;
-			if (j > 10)
-				throw new RuntimeException("VarLong too big");
-		} while ((b0 & 0x80) == 128);
-		return i;
+        long result = 0;
+        for (int shift = 0; shift < 56; shift += 7) {
+            byte b = buf.readByte();
+            result |= (b & VALUE_BITS) << shift;
+            if (b >= 0) {
+                return result;
+            }
+        }
+        return result | (buf.readByte() & 0xffL) << 56;
 	}
 
 	public void write(UUID uuid) {
@@ -436,7 +429,10 @@ public class PacketSerializer {
 					+ " > " + (size * 4) + ")");
 		if (j < 0)
 			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
-		String s = new String(ByteBufUtil.getBytes(buf), StandardCharsets.UTF_8);
+		byte[] bytes = new byte[j];
+		for(int i = 0; i < j; i++)
+			bytes[i] = buf.readByte();
+		String s = new String(bytes, StandardCharsets.UTF_8);
 		if (s.length() > size)
 			throw new DecoderException(
 					"Received string length is longer than maximum allowed (" + j + " > " + size + ")");

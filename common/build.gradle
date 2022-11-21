@@ -40,7 +40,8 @@ shadowJar {
             project('integrations:advancedban').jar.outputs.files,
             project('integrations:litebans').jar.outputs.files,
             project('integrations:viaversion').jar.outputs.files,
-            project('integrations:floodgate').jar.outputs.files
+            project('integrations:floodgate').jar.outputs.files,
+            project('integrations:geysermc').jar.outputs.files
     )
 }
 

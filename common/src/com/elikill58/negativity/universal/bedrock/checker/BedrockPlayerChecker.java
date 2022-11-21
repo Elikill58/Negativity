@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.bedrock;
+package com.elikill58.negativity.universal.bedrock.checker;
 
 import java.util.UUID;
 

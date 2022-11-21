@@ -2,21 +2,26 @@ package com.elikill58.negativity.universal;
 
 public enum Platform {
 
-	BUNGEE("bungee", true),
-	FABRIC("fabric", false),
-	MINESTOM("minestom", false),
-	SPIGOT("spigot", false),
-	SPONGE("sponge", false),
-	SPONGE8("sponge8", false),
-	SPONGE9("sponge9", false),
-	VELOCITY("velocity", true);
+	BUNGEE("bungee", "BungeeCord", true),
+	FABRIC("fabric", "Fabric", false),
+	MINESTOM("minestom", "Minestom", false),
+	SPIGOT("spigot", "Spigot", false),
+	SPONGE("sponge", "Sponge", false),
+	SPONGE8("sponge8", "Sponge8", false),
+	SPONGE9("sponge9", "Sponge9", false),
+	VELOCITY("velocity", "Velocity", true);
 	
-	private final String name;
+	private final String name, completeName;
 	private final boolean proxy;
 	
-	Platform(String name, boolean proxy) {
+	Platform(String name, String completeName, boolean proxy) {
 		this.name = name;
+		this.completeName = completeName;
 		this.proxy = proxy;
+	}
+	
+	public String getCompleteName() {
+		return completeName;
 	}
 	
 	public String getName() {

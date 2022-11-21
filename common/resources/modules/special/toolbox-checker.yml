@@ -1,0 +1,16 @@
+# Special detection
+
+# Check for toolbox app
+active: true
+
+# The display name
+name: "ToolboxChecker"
+
+# Kick player if using toolbox
+kick: true
+
+# WARN:
+# It's not because a brand is named that all user of those phones will not be able to join.
+# This take in count the cAsE, that's why Xiaomi's player (as default config said) will be able to join.
+forbidden-name:
+- Xiaomi

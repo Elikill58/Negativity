@@ -59,6 +59,7 @@ public class InvalidName extends Special implements Listeners {
 			e.setKickMessage(
 					Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 			e.setLoginResult(Result.KICK_OTHER);
-		}
+		} else
+			Adapter.getAdapter().getLogger().info("Player " + e.getName() + " has an invalid name.");
 	}
 }

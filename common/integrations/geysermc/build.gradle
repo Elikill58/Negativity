@@ -1,0 +1,25 @@
+evaluationDependsOn(':common')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        name 'geyser'
+        url 'https://repo.opencollab.dev/maven-snapshots/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.geysermc:GeyserMC:2.1.0-SNAPSHOT'
+    compileOnly 'org.geysermc.floodgate:api:2.2.0-SNAPSHOT'
+    api(project(':common'))
+}
+
+compileJava.javaCompiler.set(
+        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+)

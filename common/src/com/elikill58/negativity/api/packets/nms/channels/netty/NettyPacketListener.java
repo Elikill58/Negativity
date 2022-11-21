@@ -40,6 +40,8 @@ public abstract class NettyPacketListener {
 				channel.pipeline().addBefore("encoder", "negativity_encoder",
 						new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));				
 			} catch (NoSuchElementException exc) {
+				if(!p.isOnline())
+					return; // ignore, just left
 				// appear when the player's channel isn't accessible because of reload.
 				Adapter.getAdapter().getLogger()
 						.warn("Please, don't use reload, this can produce some problem. Currently, " + p.getName()

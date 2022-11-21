@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.integration.floodgate;
+package com.elikill58.negativity.common.integration.geysermc.floodgate;
 
 import java.util.UUID;
 
@@ -6,8 +6,8 @@ import org.geysermc.floodgate.api.FloodgateApi;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
-import com.elikill58.negativity.universal.bedrock.BedrockPlayerChecker;
-import com.elikill58.negativity.universal.bedrock.BedrockPlayerCheckerProvider;
+import com.elikill58.negativity.universal.bedrock.checker.BedrockPlayerChecker;
+import com.elikill58.negativity.universal.bedrock.checker.BedrockPlayerCheckerProvider;
 
 public class FloodGateBedrockPlayerChecker implements BedrockPlayerChecker {
 	

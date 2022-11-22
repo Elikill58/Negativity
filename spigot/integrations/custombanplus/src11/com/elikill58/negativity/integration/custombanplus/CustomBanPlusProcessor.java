@@ -12,19 +12,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
-import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
+import me.coralise.API.CBPAPI;
 import me.coralise.CustomBansPlus;
 import me.coralise.Utils;
-import me.coralise.API.CBPAPI;
 import me.coralise.bans.BanManager;
 import me.coralise.bans.BanPreset;
 import me.coralise.enums.BanType;
@@ -33,6 +30,8 @@ import me.coralise.enums.Punishment;
 import me.coralise.objects.HistoryRecord;
 import me.coralise.players.CBPlayer;
 
+// Used via reflection in com.elikill58.negativity.integration.custombanplus.CustomBanPlusProcessorProvider
+@SuppressWarnings("unused")
 public class CustomBanPlusProcessor implements BanProcessor {
 
 	@Override
@@ -114,23 +113,5 @@ public class CustomBanPlusProcessor implements BanProcessor {
 	@Override
 	public List<String> getDescription() {
 		return Arrays.asList(ChatColor.YELLOW + "Processor from Custom Bans Plus plugin.");
-	}
-
-	public static class Provider implements BanProcessorProvider, PluginDependentExtension {
-
-		@Override
-		public String getId() {
-			return "custombanplus";
-		}
-
-		@Override
-		public BanProcessor create(Adapter adapter) {
-			return new CustomBanPlusProcessor();
-		}
-
-		@Override
-		public String getPluginId() {
-			return "CustomBansPlus";
-		}
 	}
 }

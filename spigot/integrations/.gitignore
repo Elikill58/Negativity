@@ -13,5 +13,7 @@
 
 # Keep src, resources and build.gradle in all dirs included above
 !/*/src/
+!/*/src8/
+!/*/src11/
 !/*/resources/
 !/*/build.gradle

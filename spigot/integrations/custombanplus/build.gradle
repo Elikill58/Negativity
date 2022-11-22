@@ -2,17 +2,40 @@ evaluationDependsOn(':spigot')
 
 sourceSets {
     main {
-        java.srcDirs = ['src']
+        java.srcDirs = ['src8']
         resources.srcDirs = ['resources']
+    }
+    java11 {
+        java.srcDirs = ['src11']
     }
 }
 
-dependencies {
-    compileOnly 'me.coralise:custombansplus:3.4.1'
-    api(project(':spigot'))
-    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+configurations {
+    java11CompileClasspath.extendsFrom compileClasspath
 }
 
-compileJava.javaCompiler.set(
-        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(11) }
-)
+dependencies {
+    api(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+
+    java11CompileOnly 'me.coralise:custombansplus:3.4.1'
+
+}
+
+compileJava {
+    javaCompiler.set(
+            javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(8) }
+    )
+}
+
+compileJava11Java {
+    javaCompiler.set(
+            javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(11) }
+    )
+}
+
+tasks.jar {
+    from(tasks.compileJava11Java) {
+        exclude "previous-compilation-data.bin"
+    }
+}

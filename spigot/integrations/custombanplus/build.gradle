@@ -1,0 +1,18 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+dependencies {
+    compileOnly 'me.coralise:custombansplus:3.4.1'
+    api(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}
+
+compileJava.javaCompiler.set(
+        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(11) }
+)

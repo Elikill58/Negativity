@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.common.protocols.data.PingSpoofData;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -30,7 +31,7 @@ public class PingSpoof extends Cheat implements Listeners {
 		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, PingSpoofData::new, CheatDescription.VERIF);
 	}
 
-	@Check(name = "packet", description = "Check for packet order")
+	@Check(name = "packet", description = "Check for packet order", conditions = CheckConditions.NO_ON_BEDROCK)
 	public void onPacket(PacketEvent e, NegativityPlayer np) {}
 	
 	@EventListener

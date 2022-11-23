@@ -36,11 +36,16 @@ public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 		this.pos = serializer.readBlockPosition();
 		this.face = BlockFace.getById(serializer.readUnsignedByte());
-		if (version.equals(Version.V1_8))
+		if (version.equals(Version.V1_8)) {
 			serializer.readItemStack(); // skip item index
-		this.cursorX = serializer.readFloat();
-		this.cursorY = serializer.readFloat();
-		this.cursorZ = serializer.readFloat();
+			this.cursorX = serializer.readUnsignedByte() / 16.0F;
+			this.cursorY = serializer.readUnsignedByte() / 16.0F;
+			this.cursorZ = serializer.readUnsignedByte() / 16.0F;
+		} else {
+			this.cursorX = serializer.readFloat();
+			this.cursorY = serializer.readFloat();
+			this.cursorZ = serializer.readFloat();
+		}
 		if (version.isNewerOrEquals(Version.V1_13))
 			this.insideBlock = serializer.readBoolean();
 	}

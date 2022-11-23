@@ -90,55 +90,46 @@ public class Speed extends Cheat implements Listeners {
 		blockLoc.setY(p.getBoundingBox().getMinY() - 1);
 		Block block = blockLoc.getBlock();
 
-		/*
-		 * Air resistance is automatically being calculated; We don't need to exempt AIR
-		 * blocks since they have a friction of 0.6 and not 0.98 (default drag)
-		 *
-		 * if (block.getType() == Material.AIR) break friction;
-		 */
+		double friction = 0.91f, moveFactor = 0.026f;
+		if (p.isOnGround()) {
+			friction *= block.getFriction();
 
-		double friction = block.getFriction() * 0.91f;
+			moveFactor = p.getWalkSpeed();
+			if (p.hasPotionEffect(PotionEffectType.SPEED))
+				moveFactor += data.getSpeedModifier() - 1;
+			moveFactor += (moveFactor * 0.3F);
+			moveFactor *= (0.16277136F / (friction * friction * friction));
+
+			if (!flying.isGround && (np.delta.getY() > 0 || np.blockAbove > 0)) {
+				moveFactor += 0.2;
+				friction = 1F;
+			}
+		} else {
+			if (p.hasPotionEffect(PotionEffectType.SPEED))
+				moveFactor *= data.getSpeedModifier();
+			return;
+		}
 
 		double predicted = data.deltaXZ * friction;
 
-		double difference = predicted - data.deltaXZ;
+		double difference = data.deltaXZ - predicted - moveFactor;
 
-		double minSpeed;
-		if (p.isFlying())
-			minSpeed = (p.getFlySpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864) * (p.isSprinting() ? 2 : 1);
-		else
-			minSpeed = (p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864) * (p.isSprinting() ? 1.32 : 1);
-
-		double speedEffect = data.getSpeedModifier();
-		if (p.isOnGround()) {
-			minSpeed *= speedEffect;
-		} else {
-			minSpeed += 0.08;
-			if (speedEffect != 1)
-				minSpeed *= speedEffect * 0.28;
-		}
-		double minDifference = np.blockAbove == 0 ? minSpeed : minSpeed + 0.5;
-
-		if (deltaXZ > minSpeed && predicted > minSpeed && Math.abs(difference) > minDifference) {
+		if (difference > 1.0E-6) {
 			if (++data.walkSpeedBuffer > getConfig().getInt("checks.walk-speed.buffer", 3)) {
 				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
-						String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " && "
-								+ String.format("%.4f", predicted) + " > " + String.format("%.3f", minSpeed) + " && "
-								+ String.format("%.4f", Math.abs(difference)) + " > "
-								+ String.format("%.4f", minDifference) + ", buffer: " + data.walkSpeedBuffer + ", ws: "
-								+ String.format("%.2f", p.getWalkSpeed()),
+						String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted) + ", factor: "
+								+ String.format("%.4f", moveFactor) + ", final diff: "
+								+ String.format("%.6f", Math.abs(difference)) + " > buffer: " + data.walkSpeedBuffer
+								+ ", ws: " + String.format("%.2f", p.getWalkSpeed()),
 						null, (long) (data.walkSpeedBuffer - 1.8));
 
 				data.walkSpeedBuffer *= 0.7;
 			}
 		} else {
-			// p.sendMessage((deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f",
-			// deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted >
-			// multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " +
-			// String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) >
-			// minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) +
-			// " > " + String.format("%.4f", minDifference));
 			data.reduceWalkSpeedBuffer(p.isOnGround() ? 0.5 : 0.8);
+			p.sendMessage(String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted)
+					+ ", factor: " + String.format("%.4f", moveFactor) + ", diff: "
+					+ String.format("%.6f", Math.abs(difference)) + ", buffer: " + data.walkSpeedBuffer);
 		}
 		data.deltaXZ = deltaXZ;
 	}

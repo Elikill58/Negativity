@@ -144,8 +144,9 @@ public enum Version {
 	 * @return the founded version or {@link #HIGHER}
 	 */
 	public static Version getVersionByName(String name) {
+		name = name.toLowerCase(Locale.ROOT).replace("R", "");
 		for (Version v : Version.values())
-			if (name.startsWith(v.getName()))
+			if (name.startsWith(v.getName().toLowerCase(Locale.ROOT)) || name.startsWith(v.name().toLowerCase(Locale.ROOT)))
 				return v;
 		return HIGHER;
 	}
@@ -170,18 +171,5 @@ public enum Version {
 	 */
 	public static Version getVersion() {
 		return Adapter.getAdapter().getServerVersion();
-	}
-	
-	/**
-	 * Get the version thanks to it's name
-	 * 
-	 * @param version the name of the version
-	 * @return the founded version or {@link #HIGHER}
-	 */
-	public static Version getVersion(String version) {
-		for (Version v : Version.values())
-			if (version.toLowerCase(Locale.ROOT).startsWith(v.name().toLowerCase(Locale.ROOT)))
-				return v;
-		return HIGHER;
 	}
 }

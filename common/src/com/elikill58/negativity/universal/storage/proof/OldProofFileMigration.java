@@ -31,7 +31,7 @@ public class OldProofFileMigration {
 		int reliability = Integer.parseInt(getContent(s, "\\) (.*?)\\% "));
 		Timestamp date = Timestamp.valueOf(getContent(s, "(.*?): "));
 		String checkInfo = getContent(s, " > (.*?). Player version");
-		Version version = Version.getVersion(getContent(s, "Player version: (.*?)\\."));
+		Version version = Version.getVersionByName(getContent(s, "Player version: (.*?)\\."));
 		double[] tps = getTps(getContent(s, "TPS: \\[(.*?)\\]").split(", "));
 		return new Proof(-1, uuid, ReportType.WARNING, cheatKey, null, ping, 1, reliability, date, checkInfo, version, 0, tps);
 	}
@@ -44,7 +44,7 @@ public class OldProofFileMigration {
 		int amount = Integer.parseInt(getContent(s, " x(.*?) - "));
 		Timestamp date = Timestamp.valueOf(getContent(s, "(.*?): "));
 		String checkInfo = getContent(s, " > (.*?) \\|");
-		Version version = Version.getVersion(getContent(s, ", Version: (.*?)\\."));
+		Version version = Version.getVersionByName(getContent(s, ", Version: (.*?)\\."));
 		long warn = Long.parseLong(getContent(s, "\\| Warn: (.*?), "));
 		double[] tps = getTps(s.split("TPS: ")[1].replace(',', '.').split(" / "));
 		if(checkInfo.equalsIgnoreCase("omega-craft")) { // was with bugged key

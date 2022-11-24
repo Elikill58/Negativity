@@ -5,9 +5,9 @@ import org.bukkit.OfflinePlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 public class Spigot_1_10_R1 extends NoRemapSpigotVersionAdapter {
-
+	
 	public Spigot_1_10_R1() {
-		super("v1_10_R1");
+		super(210);
 	}
 	
 	@Override

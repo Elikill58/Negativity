@@ -3,6 +3,7 @@ package com.elikill58.negativity.minestom.nms;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.java.JavaChannel;
+import com.elikill58.negativity.universal.Version;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
@@ -11,7 +12,7 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 public class MinestomVersionAdapter extends VersionAdapter<Player> {
 	
 	public MinestomVersionAdapter() {
-		super("1_19_2");
+		super(Version.V1_19_2);
 	}
 
 	@Override

@@ -24,28 +24,30 @@ import com.elikill58.negativity.universal.storage.proof.OldProofFileMigration;
 public class FileNegativityProofStorage extends NegativityProofStorage {
 
 	private final File proofDir;
-	
+
 	public FileNegativityProofStorage(File proofDir) {
 		this.proofDir = proofDir;
 	}
-	
+
 	@Override
 	public void enable() {
 		try {
 			proofDir.mkdirs();
 			int migrated = 0;
-			for(File file : proofDir.listFiles()) {
-				if(!file.isFile())
+			for (File file : proofDir.listFiles()) {
+				if (!file.isFile())
 					continue;
-				if(file.getName().endsWith(".txt")) {
+				if (file.getName().endsWith(".txt")) {
 					UUID uuid = UUID.fromString(file.getName().split("\\.")[0]);
-					saveProof(Files.readAllLines(file.toPath()).stream().map(line -> OldProofFileMigration.getProof(uuid, line)).collect(Collectors.toList()));
+					saveProof(Files.readAllLines(file.toPath()).stream()
+							.map(line -> OldProofFileMigration.getProof(uuid, line)).collect(Collectors.toList()));
 					file.delete(); // remove old files
 					migrated++;
 				}
 			}
-			if(migrated > 0)
-				Adapter.getAdapter().getLogger().info("Migrated " + migrated + " files from old (txt) to new system (yml).");
+			if (migrated > 0)
+				Adapter.getAdapter().getLogger()
+						.info("Migrated " + migrated + " files from old (txt) to new system (yml).");
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().printError("Failed to migrate old proof file to new one.", e);
 		}
@@ -59,7 +61,8 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 				return null;
 			Configuration proofConfig = YamlConfiguration.load(file);
 			List<Proof> proof = new ArrayList<>();
-			proofConfig.getKeys().forEach(key -> proof.addAll(getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
+			proofConfig.getKeys().forEach(key -> proof.addAll(
+					getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
 			return proof;
 		});
 	}
@@ -71,31 +74,35 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			if (!file.exists())
 				return null;
 			Configuration proofConfig = YamlConfiguration.load(file);
-			if(proofConfig.contains(key.getLowerKey()))
+			if (proofConfig.contains(key.getLowerKey()))
 				return getProofInCheatKeySection(playerId, proofConfig.getSection(key.getLowerKey()), key);
 			return new ArrayList<>();
 		});
 	}
-	
+
 	private List<Proof> getProofInCheatKeySection(UUID uuid, Configuration config, CheatKeys cheatKey) {
 		List<Proof> proof = new ArrayList<>();
 		config.getKeys().forEach(key -> {
 			Configuration c = config.getSection(key);
-			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")), cheatKey, c.getString("check.name"), c.getInt("ping"), c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersion(c.getString("version")), c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
+			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")),
+					cheatKey, c.getString("check.name"), c.getInt("ping"), c.getInt("amount"), c.getInt("reliability"),
+					new Timestamp(c.getLong("time")), c.getString("check.informations"),
+					Version.getVersionByName(c.getString("version")), c.getLong("warn"),
+					fileToTps(c.getDoubleList("tps"))));
 		});
 		return proof;
 	}
-	
+
 	private List<Double> tpsToFile(double[] tps) {
 		List<Double> list = new ArrayList<>();
-		for(double d : tps)
+		for (double d : tps)
 			list.add(d);
 		return list;
 	}
-	
+
 	private double[] fileToTps(List<Double> list) {
 		double[] tps = new double[list.size()];
-		for(int i = 0; i < list.size(); i++)
+		for (int i = 0; i < list.size(); i++)
 			tps[i] = list.get(i);
 		return tps;
 	}
@@ -104,7 +111,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	public void saveProof(Proof proof) {
 		CompletableFuture.runAsync(() -> {
 			File file = new File(proofDir, proof.getUUID().toString() + ".yml");
-			if(!file.exists()) {
+			if (!file.exists()) {
 				try {
 					proofDir.mkdirs();
 					file.createNewFile();
@@ -114,10 +121,10 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			}
 			Configuration accountConfig = YamlConfiguration.load(file);
 			Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
-			if(cheatSection == null)
+			if (cheatSection == null)
 				cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
 			int key = 0;
-			while(cheatSection.contains(String.valueOf(key)))
+			while (cheatSection.contains(String.valueOf(key)))
 				key++;
 			Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
 			proofConfig.set("report_type", proof.getReportType().name());
@@ -133,16 +140,17 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			accountConfig.directSave();
 		});
 	}
-	
+
 	@Override
 	public void saveProof(List<Proof> allProofs) {
 		CompletableFuture.runAsync(() -> {
 			HashMap<UUID, HashMap<CheatKeys, List<Proof>>> proofsPerUUID = new HashMap<>();
-			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>()).computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
-			
+			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>())
+					.computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
+
 			proofsPerUUID.forEach((uuid, proofPerKey) -> {
 				File file = new File(proofDir, uuid.toString() + ".yml");
-				if(!file.exists()) {
+				if (!file.exists()) {
 					try {
 						proofDir.mkdirs();
 						file.createNewFile();
@@ -153,12 +161,12 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 				Configuration accountConfig = YamlConfiguration.load(file);
 				proofPerKey.forEach((cheatKey, proofs) -> {
 					Configuration cheatSection = accountConfig.getSection(cheatKey.getLowerKey());
-					if(cheatSection == null)
+					if (cheatSection == null)
 						cheatSection = accountConfig.createSection(cheatKey.getLowerKey());
 					int key = 0;
-					while(cheatSection.contains(String.valueOf(key)))
+					while (cheatSection.contains(String.valueOf(key)))
 						key++;
-					for(Proof proof : proofs) {
+					for (Proof proof : proofs) {
 						Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
 						proofConfig.set("report_type", proof.getReportType().name());
 						proofConfig.set("check.name", proof.getCheckName());

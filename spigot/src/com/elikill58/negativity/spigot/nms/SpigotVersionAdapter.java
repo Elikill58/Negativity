@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.nms;
 import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,6 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
@@ -29,8 +29,23 @@ import io.netty.channel.ChannelFuture;
 
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	public SpigotVersionAdapter(String version) {
-		super(version);
+	protected Method getPlayerHandle;
+	protected Field recentTpsField, pingField;
+	public Object dedicatedServer;
+	
+	public SpigotVersionAdapter(int protocolVersion) {
+		this.version = Version.getVersionByProtocolID(protocolVersion);
+		try {
+			dedicatedServer = PacketUtils.getDedicatedServer();
+			
+			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
+			recentTpsField = mcServer.getDeclaredField("recentTps");
+
+			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
+			pingField = PacketUtils.getNmsClass("EntityPlayer", "server.level.").getDeclaredField(version.isNewerOrEquals(Version.V1_17) ? "e" : "ping");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public abstract double getAverageTps();
@@ -39,15 +54,19 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		return new ArrayList<>(Bukkit.getOnlinePlayers());
 	}
 
-	public abstract int getPlayerPing(Player player);
+	public int getPlayerPing(Player player) {
+		try {
+			return pingField.getInt(getPlayerHandle.invoke(player));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
 	public double[] getTps() {
 		try {
-			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
-			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			return (double[]) server.getClass().getField("recentTps").get(server);
+			return (double[]) recentTpsField.get(dedicatedServer);
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().warn("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
 			e.printStackTrace();
 			return new double[] { 20, 20, 20 };
 		}
@@ -90,10 +109,14 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		try {
 			Object mcServer = PacketUtils.getDedicatedServer();
 			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
-			try {
-				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "g");
-			} catch (NoSuchFieldException e) {
-				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "listeningChannels");
+			if(Version.getVersion().isNewerOrEquals(Version.V1_17)) {
+				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "f");
+			} else {
+				try {
+					return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "g");
+				} catch (NoSuchFieldException e) {
+					return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "listeningChannels");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

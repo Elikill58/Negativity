@@ -14,10 +14,10 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	}
 	
 	public Spigot_UnknowVersion(String version) {
-		super(version);
+		super(0);
 		SpigotNegativity.getInstance().getLogger().warning("Failed to find version adapter for " + version + ".");
 	}
-
+	
 	@Override
 	public double getAverageTps() {
 		return 0;

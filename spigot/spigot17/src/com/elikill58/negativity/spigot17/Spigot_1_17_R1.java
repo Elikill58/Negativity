@@ -12,14 +12,10 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
-import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerConnectionListener;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -28,22 +24,12 @@ import net.minecraft.world.phys.AABB;
 public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_17_R1() {
-		super("v1_17_R1");
+		super(PacketUtils.getProtocolVersion());
 	}
-
+	
 	@Override
 	public double getAverageTps() {
 		return Mth.average(getServer().tickTimes);
-	}
-
-	@Override
-	public int getPlayerPing(Player player) {
-		return ((ServerPlayer) PacketUtils.getEntityPlayer(player)).latency;
-	}
-
-	@Override
-	public double[] getTps() {
-		return getServer().recentTps;
 	}
 
 	@Override
@@ -62,8 +48,8 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
 			if (mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
-				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())
-					entities.add((Entity) craftEntity);
+				if (craftEntity != null && craftEntity.isValid())
+					entities.add(craftEntity);
 			}
 		});
 		return entities;
@@ -71,18 +57,6 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 	private DedicatedServer getServer() {
 		return (DedicatedServer) PacketUtils.getDedicatedServer();
-	}
-
-	@Override
-	public List<ChannelFuture> getFuturChannel() {
-		try {
-			DedicatedServer mcServer = (DedicatedServer) PacketUtils.getDedicatedServer();
-			Object co = ReflectionUtils.getFirstWith(mcServer, MinecraftServer.class, ServerConnectionListener.class);
-			return ((List<ChannelFuture>) ReflectionUtils.getField(co, "f"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
 	}
 
 	@Override

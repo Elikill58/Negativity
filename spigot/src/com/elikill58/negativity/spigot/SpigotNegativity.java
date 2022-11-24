@@ -46,7 +46,7 @@ public class SpigotNegativity extends JavaPlugin {
 		return platform;
 	}
 	public static String CHANNEL_NAME_FML = "";
-		
+	
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
@@ -65,13 +65,13 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
-		
-		Version v = Version.getVersion(Utils.VERSION);
-		if (v.equals(Version.HIGHER))
+
+		SpigotVersionAdapter versionAdapter = SpigotVersionAdapter.getVersionAdapter();
+		Version v = versionAdapter.getVersion();
+		if (v.equals(Version.HIGHER) || v.equals(Version.LOWER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else {
-			SpigotVersionAdapter.getVersionAdapter();
-			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
+			getLogger().info("Detected server version: " + v.getName().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
 		}
 		getLogger().info("Running with Java " + System.getProperty("java.version"));
 
@@ -99,7 +99,7 @@ public class SpigotNegativity extends JavaPlugin {
 		ChannelListeners channelListeners = new ChannelListeners();
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML = v.isNewerOrEquals(Version.V1_13) ? "fml:hs" : "FML|HS", channelListeners);
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		messenger.registerOutgoingPluginChannel(this, "BungeeCord");
 		
 		loadCommand();
 		
@@ -108,7 +108,7 @@ public class SpigotNegativity extends JavaPlugin {
 		NegativityAccountStorage.setDefaultStorage("file");
 		
 		getServer().getScheduler().runTaskTimer(this, () -> {
-			new ArrayList<>(World.getWorlds().values()).forEach(w -> ((SpigotWorld) w).clearEntities());
+			new ArrayList<>(World.getWorlds().values()).forEach(w -> ((SpigotWorld) w).refreshEntities());
 		}, 20 * 30, 20 * 30);
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {

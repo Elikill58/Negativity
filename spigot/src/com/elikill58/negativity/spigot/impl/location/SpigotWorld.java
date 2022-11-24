@@ -40,7 +40,7 @@ public class SpigotWorld extends World {
 
 	public void add(Entity e) {
 		if(entities == null)
-			clearEntities();
+			refreshEntities();
 		else {
 			synchronized (entities) {
 				entities.add(e);
@@ -50,7 +50,7 @@ public class SpigotWorld extends World {
 
 	public void remove(Entity e) {
 		if(entities == null) {
-			clearEntities();
+			refreshEntities();
 			return;
 		}
 		synchronized (entities) {
@@ -58,13 +58,13 @@ public class SpigotWorld extends World {
 		}
 	}
 
-	public void clearEntities() {
+	public void refreshEntities() {
 		this.entities = SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 	}
 	
 	private void checkEntities() {
 		if(entities == null || entities.isEmpty())
-			clearEntities();
+			refreshEntities();
 	}
 	
 	@Override

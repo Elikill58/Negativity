@@ -108,7 +108,9 @@ public abstract class Adapter {
 	 * 
 	 * @return the version of the server
 	 */
-	public abstract Version getServerVersion();
+	public Version getServerVersion() {
+		return getVersionAdapter().getVersion();
+	}
 	
 	/**
 	 * Get the version of the Negativity plugin

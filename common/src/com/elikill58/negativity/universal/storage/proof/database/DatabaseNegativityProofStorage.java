@@ -107,7 +107,7 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 		return new Proof(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), ReportType.valueOf(rs.getString("report_type")), CheatKeys.fromLowerKey(rs.getString("check_key")),
 				rs.getString("check_name"), rs.getInt("ping"), rs.getLong("amount"), rs.getInt("reliability"),
 				rs.getTimestamp("time"), rs.getString("check_informations"),
-				Version.getVersion(rs.getString("version")), rs.getLong("warn"), sqlToSql(rs.getString("tps")));
+				Version.valueOf(rs.getString("version")), rs.getLong("warn"), sqlToSql(rs.getString("tps")));
 	}
 
 	private String tpsToSql(double[] tps) {

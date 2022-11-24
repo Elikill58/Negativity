@@ -114,7 +114,7 @@ public class Speed extends Cheat implements Listeners {
 
 		double difference = data.deltaXZ - predicted - moveFactor;
 
-		if (difference > 1.0E-6) {
+		if (difference > 1.0E-6 && p.isOnGround()) { // actually seems to false when on air
 			if (++data.walkSpeedBuffer > getConfig().getInt("checks.walk-speed.buffer", 3)) {
 				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
 						String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted) + ", factor: "
@@ -127,9 +127,9 @@ public class Speed extends Cheat implements Listeners {
 			}
 		} else {
 			data.reduceWalkSpeedBuffer(p.isOnGround() ? 0.5 : 0.8);
-			p.sendMessage(String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted)
+			/*p.sendMessage(String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted)
 					+ ", factor: " + String.format("%.4f", moveFactor) + ", diff: "
-					+ String.format("%.6f", Math.abs(difference)) + ", buffer: " + data.walkSpeedBuffer);
+					+ String.format("%.6f", Math.abs(difference)) + ", buffer: " + data.walkSpeedBuffer);*/
 		}
 		data.deltaXZ = deltaXZ;
 	}

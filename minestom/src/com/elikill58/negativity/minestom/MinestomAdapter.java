@@ -65,7 +65,7 @@ public class MinestomAdapter extends Adapter {
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataDirectory().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new MinestomItemRegistrar();
-		this.serverVersion = Version.getVersionByName(getVersion());
+		this.serverVersion = Version.getVersionByProtocolID(MinecraftServer.PROTOCOL_VERSION);
 		this.scheduler = new MinestomScheduler();
 	}
 	

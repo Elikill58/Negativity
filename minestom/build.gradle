@@ -18,7 +18,7 @@ dependencies {
 
     compileOnly 'com.github.Minestom:Minestom:master-SNAPSHOT'
     
-    implementation 'io.netty:netty-all:4.1.85.Final'
+    compileOnly 'io.netty:netty-all:4.1.85.Final'
 }
 
 compileJava.javaCompiler.set(

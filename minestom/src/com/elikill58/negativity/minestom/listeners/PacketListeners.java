@@ -4,8 +4,8 @@ import java.nio.ByteBuffer;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
@@ -71,7 +71,7 @@ public class PacketListeners {
 		if(packet == null) {
 			return;
 		}
-		PrePacketReceiveEvent event = new PrePacketReceiveEvent(packet, p);
+		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
 		EventManager.callEvent(event);
 		if(event.isCancelled())
 			e.setCancelled(true);

@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -33,22 +32,6 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.Maths;
 
 public class PacketListener implements Listeners {
-
-	@EventListener
-	public void onPrePacketReceive(PrePacketReceiveEvent e) {
-		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
-			return;
-		Player p = e.getPlayer();
-		NPacket packet = e.getPacket();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(packet instanceof NPacketPlayInFlying) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
-			if (np.isFreeze && !flying.getLocation(p.getWorld()).clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
-				e.setCancelled(true);
-				return;
-			}
-		}
-	}
 
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
@@ -90,6 +73,11 @@ public class PacketListener implements Listeners {
 			}
 			if(flying.hasPos) {
 				World w = p.getWorld();
+				if (np.isFreeze && !flying.getLocation(w).clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
+					e.setCancelled(true);
+					return;
+				}
+				
 				Location oldLoc = p.getLocation();
 				np.lastDelta = np.delta;
 				if(flying.hasLook)

@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
-import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
@@ -22,43 +21,15 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
-import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketListener implements Listeners {
-
-	@EventListener
-	public void onPrePacketReceive(PrePacketReceiveEvent e) {
-		if (!e.hasPlayer() || e.getPacket().getPacketType() == null)
-			return;
-		Player p = e.getPlayer();
-		NPacket packet = e.getPacket();
-		if (packet instanceof NPacketPlayInChat) {
-			NPacketPlayInChat chat = (NPacketPlayInChat) packet;
-			if (chat.message.startsWith("/")) {
-				String cmd = chat.message.substring(1).split(" ")[0];
-				String cmdArg = chat.message.substring(cmd.length() + 1); // +1 for the '/'
-				if (cmdArg.startsWith(" "))
-					cmdArg = cmdArg.substring(1);
-				String[] arg = cmdArg.replace(" ", "").isEmpty() ? new String[0] : cmdArg.split(" ");
-				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
-				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg, prefix, false);
-				EventManager.callEvent(preProcess);
-				if (preProcess.isCancelled())
-					e.setCancelled(true);
-			} else {
-				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message);// default MC format
-				EventManager.callEvent(chatEvent);
-				e.setCancelled(chatEvent.isCancelled());
-			}
-		}
-	}
-
+	
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
 		if (!e.hasPlayer() || e.getPacket().getPacketType() == null)
@@ -117,34 +88,24 @@ public class NegativityPacketListener implements Listeners {
 			
 			if(toggle != null)
 				EventManager.callEvent(new PlayerToggleActionEvent(p, toggle, false));
+		} else if (packet instanceof NPacketPlayInChat) {
+			NPacketPlayInChat chat = (NPacketPlayInChat) packet;
+			if (chat.message.startsWith("/")) {
+				String cmd = chat.message.substring(1).split(" ")[0];
+				String cmdArg = chat.message.substring(cmd.length() + 1); // +1 for the '/'
+				if (cmdArg.startsWith(" "))
+					cmdArg = cmdArg.substring(1);
+				String[] arg = cmdArg.replace(" ", "").isEmpty() ? new String[0] : cmdArg.split(" ");
+				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
+				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg, prefix, false);
+				EventManager.callEvent(preProcess);
+				if (preProcess.isCancelled())
+					e.setCancelled(true);
+			} else {
+				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message);// default MC format
+				EventManager.callEvent(chatEvent);
+				e.setCancelled(chatEvent.isCancelled());
+			}
 		}
 	}
-	
-	/**
-	 * 
-	
-	public void onStartFly(PlayerStartFlyingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.FLY, false));
-	}
-	
-	public void onStopFly(PlayerStopFlyingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.FLY, false));
-	}
-	
-	public void onStartSneak(PlayerStartSneakingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SNEAK, false));
-	}
-	
-	public void onStopSneak(PlayerStopSneakingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SNEAK, false));
-	}
-	
-	public void onStartSprint(PlayerStartSprintingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SPRINT, false));
-	}
-	
-	public void onStopSprint(PlayerStopSprintingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SPRINT, false));
-	}
-	 */
 }

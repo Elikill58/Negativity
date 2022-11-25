@@ -3,7 +3,7 @@ package com.elikill58.negativity.api.packets.nms.channels.netty;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Version;
@@ -48,11 +48,11 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 				super.channelRead(ctx, msg);
 				return;
 			}
-			PrePacketReceiveEvent event = new PrePacketReceiveEvent(packet, p);
+			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
 			EventManager.callEvent(event);
 			if (!event.isCancelled()) {
 				super.channelRead(ctx, msg);
-				getNegativityPlayer().getTimingPacket().add(packet); // prepare for beeing done after ping things
+				//getNegativityPlayer().getTimingPacket().add(packet); // prepare for beeing done after ping things
 			}
 		}
 	}

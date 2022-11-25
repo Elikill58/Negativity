@@ -34,7 +34,10 @@ public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 		else
 			this.hand = serializer.getEnum(Hand.class);
 
-		this.pos = serializer.readBlockPosition();
+		if(version.isNewerOrEquals(Version.V1_19))
+			this.pos = serializer.readBlockPositionNew();
+		else
+			this.pos = serializer.readBlockPosition();
 		this.face = BlockFace.getById(serializer.readUnsignedByte());
 		if (version.equals(Version.V1_8)) {
 			serializer.readItemStack(); // skip item index

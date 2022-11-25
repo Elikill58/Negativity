@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets.nms.versions;
 
 import java.util.Arrays;
 
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType.Client;
 import com.elikill58.negativity.api.packets.PacketType.Server;
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
@@ -41,5 +42,10 @@ public class Version1_12 extends NamedVersion {
 				Server.ENTITY_TELEPORT, Server.ADVANCEMENTS, Server.UPDATE_ATTRIBUTES, Server.ENTITY_EFFECT)) {
 			playOut.put(i++, type);
 		}
+	}
+	
+	@Override
+	public Material getMaterial(int id) {
+		return PreFlattening.get(id);
 	}
 }

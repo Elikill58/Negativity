@@ -46,7 +46,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		this.entity = p;
-		this.location = SpigotLocation.toCommon(p.getLocation());
+		this.location = SpigotLocation.toCommon(p.getLocation(), this);
 		init();
 	}
 

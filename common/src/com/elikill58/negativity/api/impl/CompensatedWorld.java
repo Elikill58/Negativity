@@ -16,10 +16,10 @@ import com.elikill58.negativity.api.location.World;
 
 public class CompensatedWorld extends World {
 
-	private final Player p;
-	private List<Entity> entities = new ArrayList<>();
-	private BlockHashMap blocks;
-	private String name;
+	protected final Player p;
+	protected List<Entity> entities = new ArrayList<>();
+	protected BlockHashMap blocks;
+	protected String name;
 	
 	public CompensatedWorld(Player p) {
 		this.p = p;
@@ -34,6 +34,10 @@ public class CompensatedWorld extends World {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

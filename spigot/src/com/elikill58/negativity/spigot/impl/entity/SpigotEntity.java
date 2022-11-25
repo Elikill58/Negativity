@@ -12,7 +12,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 public class SpigotEntity<E extends Entity> extends AbstractEntity {
@@ -45,7 +44,7 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public World getWorld() {
-		return World.getWorld(entity.getWorld().getName(), a -> new SpigotWorld(entity.getWorld()));
+		return World.getWorld(entity.getWorld().getName());
 	}
 
 	@Override

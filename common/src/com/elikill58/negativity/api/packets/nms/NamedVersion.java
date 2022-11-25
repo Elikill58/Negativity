@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.api.entity.EntityType;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -18,6 +19,7 @@ public abstract class NamedVersion {
 	protected final HashMap<Integer, PacketType.Login> login = new HashMap<>();
 	protected final HashMap<Integer, PacketType.Status> status = new HashMap<>();
 	protected final HashMap<Integer, EntityType> entityTypes = new HashMap<>();
+	protected final HashMap<Integer, Material> materials = new HashMap<>();
 	
 	public NPacket getPacket(PacketDirection dir, int packetId) {
 		switch (dir) {
@@ -47,5 +49,9 @@ public abstract class NamedVersion {
 		if(!entityTypes.containsKey(id))
 			Adapter.getAdapter().debug("Can't find entity type " + id);
 		return entityTypes.getOrDefault(id, EntityType.UNKNOWN);
+	}
+	
+	public Material getMaterial(int id) {
+		return materials.get(id);
 	}
 }

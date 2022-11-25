@@ -4,10 +4,13 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.impl.entity.CompensatedEntity;
 import com.elikill58.negativity.api.impl.entity.CompensatedPlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.universal.Adapter;
@@ -19,14 +22,15 @@ public class NegativityPacketOutListener implements Listeners {
 		if(!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
-		PacketType type = e.getPacket().getPacketType();
+		NPacket packet = (NPacket) e.getPacket();
+		PacketType type = packet.getPacketType();
 		if(type.equals(PacketType.Server.SPAWN_ENTITY)) {
-			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) e.getPacket();
+			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) packet;
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
 		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
-			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) e.getPacket();
+			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) packet;
 			Player cible = Adapter.getAdapter().getPlayer(spawn.uuid);
 			if(cible == null) {
 				Adapter.getAdapter().debug("Can't find player for UUID " + spawn.uuid);
@@ -35,6 +39,14 @@ public class NegativityPacketOutListener implements Listeners {
 				p.getWorld().addEntity(et);
 			} else
 				p.getWorld().addEntity(cible);
+		} else if(type.equals(PacketType.Server.RESPAWN)) {
+			NPacketPlayOutRespawn respawn = (NPacketPlayOutRespawn) packet;
+			if(p instanceof CompensatedPlayer) {
+				CompensatedPlayer cp = (CompensatedPlayer) p;
+				CompensatedWorld world = new CompensatedWorld(p);
+				world.setName(respawn.worldName);
+				cp.setWorld(world);
+			}
 		}
 	}
 }

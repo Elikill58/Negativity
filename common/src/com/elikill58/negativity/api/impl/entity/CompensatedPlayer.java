@@ -24,8 +24,8 @@ public class CompensatedPlayer extends AbstractPlayer {
 
 	private final int entityId;
 	private final UUID uuid;
-	private final CompensatedWorld world;
 	private float eyeHeight = 1.8F * 0.85f;
+	private CompensatedWorld world;
 	private boolean sleeping = false, swimming = false, sneaking = false, flying = false, sprinting = false;
 
 	public CompensatedPlayer(int entityId, UUID uuid, CompensatedWorld world) {
@@ -42,6 +42,10 @@ public class CompensatedPlayer extends AbstractPlayer {
 	@Override
 	public CompensatedWorld getWorld() {
 		return world;
+	}
+	
+	public void setWorld(CompensatedWorld world) {
+		this.world = world;
 	}
 
 	@Override

@@ -94,7 +94,8 @@ public class PlayersListeners implements Listener {
 	public void onTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
 		if(e.getPlayer().hasMetadata("NPC"))
 			return;
-		EventManager.callEvent(new PlayerTeleportEvent(SpigotEntityManager.getPlayer(e.getPlayer()), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo())));
+		com.elikill58.negativity.api.entity.Player p = SpigotEntityManager.getPlayer(e.getPlayer());
+		EventManager.callEvent(new PlayerTeleportEvent(p, SpigotLocation.toCommon(e.getFrom(), p), SpigotLocation.toCommon(e.getTo(), p)));
 	}
 	
 	@EventHandler

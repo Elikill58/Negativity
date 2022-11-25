@@ -5,8 +5,8 @@ import com.elikill58.negativity.universal.Adapter;
 public enum GameMode {
 	
 	SURVIVAL("Survival"),
-	ADVENTURE("Adventure"),
 	CREATIVE("Creative"),
+	ADVENTURE("Adventure"),
 	SPECTATOR("Spectator"),
 	/**
 	 * Use specifically for modded server

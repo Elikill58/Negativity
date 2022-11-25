@@ -422,6 +422,16 @@ public class PacketSerializer {
 		return Instant.ofEpochMilli(readLong());
 	}
 
+	public String readString() {
+		int j = readVarInt();
+		if (j < 0)
+			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
+		byte[] bytes = new byte[j];
+		for(int i = 0; i < j; i++)
+			bytes[i] = buf.readByte();
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
+
 	public String readString(int size) {
 		int j = readVarInt();
 		if (j > size * 4)

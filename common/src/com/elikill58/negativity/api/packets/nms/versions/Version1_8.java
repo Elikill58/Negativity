@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets.nms.versions;
 
 import java.util.Arrays;
 
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType.*;
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
 
@@ -40,5 +41,10 @@ public class Version1_8 extends NamedVersion {
 			playOut.put(i++, type);
 		}
 		handshake.put(0, Handshake.IS_SET_PROTOCOL);
+	}
+	
+	@Override
+	public Material getMaterial(int id) {
+		return PreFlattening.get(id);
 	}
 }

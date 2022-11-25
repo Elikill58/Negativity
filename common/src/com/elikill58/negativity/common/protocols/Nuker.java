@@ -45,7 +45,7 @@ public class Nuker extends Cheat {
 				Block bestBlock = null;
 				double bestDistance = Double.MAX_VALUE;
 				for(Block targetBlock : target) {
-					if(!targetBlock.getLocation().getWorld().getName().equals(blockLoc.getWorld().getName())) {
+					if(!targetBlock.getLocation().getWorld().equals(blockLoc.getWorld())) {
 						Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
 						break;
 					}

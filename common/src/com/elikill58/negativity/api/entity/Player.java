@@ -9,13 +9,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -47,6 +47,10 @@ public interface Player extends OfflinePlayer {
 	 * @return true is the player is sleeping
 	 */
 	boolean isSleeping();
+	default void setSleeping(boolean b) {
+		
+	}
+	
 	/**
 	 * Know if the player is swimming
 	 * (compatible with 1.8 and lower)
@@ -221,7 +225,7 @@ public interface Player extends OfflinePlayer {
 	 * 
 	 * @return the world where the player is
 	 */
-	World getWorld();
+	CompensatedWorld getWorld();
 	
 	/**
 	 * Get player version

@@ -24,8 +24,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -161,12 +159,6 @@ public class PacketListener implements Listeners {
 			if(randomNb == -1)
 				randomNb = -26;
 			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
-		} else if(type.equals(PacketType.Server.SPAWN_ENTITY)) {
-			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) e.getPacket();
-			Adapter.getAdapter().debug(e.getPlayer().getName() + " will know entity " + spawn.type + ", id: " + spawn.entityId + " (" + spawn.x + "/" + spawn.y + "/" + spawn.z + ") is spawned.");
-		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
-			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) e.getPacket();
-			Adapter.getAdapter().debug(e.getPlayer().getName() + " will know player " + spawn.uuid + " (" + spawn.x + "/" + spawn.y + "/" + spawn.z + ") is spawned.");
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 	}

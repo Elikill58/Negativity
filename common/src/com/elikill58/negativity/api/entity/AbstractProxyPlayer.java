@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
@@ -140,7 +140,7 @@ public abstract class AbstractProxyPlayer extends AbstractPlayer {
 	public void setSprinting(boolean b) {}
 	
 	@Override
-	public World getWorld() {
+	public CompensatedWorld getWorld() {
 		return null;
 	}
 	

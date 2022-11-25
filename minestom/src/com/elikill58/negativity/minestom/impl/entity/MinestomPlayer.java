@@ -19,14 +19,12 @@ import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomPlayerInventory;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
-import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 import com.elikill58.negativity.universal.Version;
 
 import net.minestom.server.MinecraftServer;
@@ -131,11 +129,6 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 	@Override
 	public int getPing() {
 		return entity.getLatency();
-	}
-
-	@Override
-	public World getWorld() {
-		return World.getWorld(entity.getInstance().getUniqueId().toString(), a -> new MinestomWorld(entity.getInstance()));
 	}
 
 	@Override

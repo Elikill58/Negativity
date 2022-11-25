@@ -46,7 +46,7 @@ public class WorldBypass implements BypassChecker {
 	@Override
 	public boolean hasBypass(Player p, Cheat c) {
 		Location loc = p.getLocation();
-		return getWorlds().contains(loc.getWorld().getName().toLowerCase(Locale.ROOT));
+		return loc.getWorld().getName() != null && getWorlds().contains(loc.getWorld().getName().toLowerCase(Locale.ROOT));
 	}
 	
 	public static class Provider implements BypassCheckerProvider {

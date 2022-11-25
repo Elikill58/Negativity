@@ -23,12 +23,11 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 
-public class NegativityPacketListener implements Listeners {
+public class NegativityPacketInListener implements Listeners {
 
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
@@ -76,14 +75,37 @@ public class NegativityPacketListener implements Listeners {
 			}
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;
-			ToggleAction toggle = null;
-			if (action.action == EnumPlayerAction.START_SNEAKING)
-				toggle = ToggleAction.SNEAK;
-			else if (action.action == EnumPlayerAction.START_SPRINTING)
-				toggle = ToggleAction.SPRINT;
 
-			if (toggle != null)
-				EventManager.callEvent(new PlayerToggleActionEvent(p, toggle, false));
+			switch (action.action) {
+			case LEAVE_BED:
+				p.setSleeping(false);
+				break;
+			case OPEN_INVENTORY:
+				break;
+			case START_FALL_FLYING:
+				break;
+			case START_RIDING_JUMP:
+				break;
+			case STOP_RIDING_JUMP:
+				break;
+			case STOP_SLEEPING:
+				p.setSleeping(false);
+				break;
+			case START_SNEAKING:
+				EventManager.callEvent(new PlayerToggleActionEvent(p, ToggleAction.SNEAK, false));
+				p.setSneaking(true);
+				break;
+			case STOP_SNEAKING:
+				p.setSneaking(false);
+				break;
+			case START_SPRINTING:
+				EventManager.callEvent(new PlayerToggleActionEvent(p, ToggleAction.SPRINT, false));
+				p.setSprinting(true);
+				break;
+			case STOP_SPRINTING:
+				p.setSprinting(false);
+				break;
+			}
 		} else if (packet instanceof NPacketPlayInChat) {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet;
 			if (chat.message.startsWith("/")) {
@@ -98,7 +120,7 @@ public class NegativityPacketListener implements Listeners {
 				if (preProcess.isCancelled())
 					e.setCancelled(true);
 			} else {
-				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message);// default MC format
+				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message);
 				EventManager.callEvent(chatEvent);
 				e.setCancelled(chatEvent.isCancelled());
 			}

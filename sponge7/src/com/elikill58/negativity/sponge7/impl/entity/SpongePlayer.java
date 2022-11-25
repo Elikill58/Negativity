@@ -27,7 +27,6 @@ import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.sponge7.SpongeNegativity;
@@ -36,7 +35,6 @@ import com.elikill58.negativity.sponge7.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge7.impl.inventory.SpongePlayerInventory;
 import com.elikill58.negativity.sponge7.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
-import com.elikill58.negativity.sponge7.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge7.utils.LocationUtils;
 import com.elikill58.negativity.sponge7.utils.Utils;
 import com.flowpowered.math.vector.Vector3d;
@@ -133,11 +131,6 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	@Override
 	public int getPing() {
 		return entity.getConnection().getLatency();
-	}
-
-	@Override
-	public World getWorld() {
-		return World.getWorld(entity.getWorld().getName(), a -> new SpongeWorld(entity.getWorld()));
 	}
 
 	@Override

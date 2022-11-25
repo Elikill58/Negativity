@@ -9,7 +9,7 @@ import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 
-	public int id, itemId;
+	public int entityId, itemId;
 	public UUID uuid;
 	public double x, y, z;
 	public float yaw, pitch;
@@ -20,7 +20,7 @@ public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-	    this.id = serializer.readVarInt();
+	    this.entityId = serializer.readVarInt();
 	    this.uuid = serializer.readUUID();
 	    this.x = serializer.readInt();
 	    this.y = serializer.readInt();

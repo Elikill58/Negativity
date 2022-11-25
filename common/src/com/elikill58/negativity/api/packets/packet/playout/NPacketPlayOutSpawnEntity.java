@@ -24,14 +24,26 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		this.entityId = serializer.readVarInt();
-		this.entityUUID = UUID.randomUUID(); // no UUID
-		serializer.readByte();
-		this.x = serializer.readInt();
-		this.y = serializer.readInt();
-		this.z = serializer.readInt();
-		this.yaw = serializer.readByte();
-		this.pitch = serializer.readByte();
-		int k = serializer.readInt();
+		int k;
+		if(version.isNewerOrEquals(Version.V1_19)) {
+			this.entityUUID = serializer.readUUID();
+			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+			this.x = serializer.readDouble();
+			this.y = serializer.readDouble();
+			this.z = serializer.readDouble();
+			this.yaw = serializer.readByte() * 256.0F / 360.0F;
+			this.pitch = serializer.readByte() * 256.0F / 360.0F;
+			k = serializer.readVarInt();
+		} else {
+			this.entityUUID = UUID.randomUUID(); // no UUID
+			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+			this.x = serializer.readInt();
+			this.y = serializer.readInt();
+			this.z = serializer.readInt();
+			this.yaw = serializer.readByte() * 256.0F / 360.0F;
+			this.pitch = serializer.readByte() * 256.0F / 360.0F;
+			k = serializer.readInt();
+		}
 		if (k > 0) {
 			this.modX = serializer.readShort();
 			this.modY = serializer.readShort();

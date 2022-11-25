@@ -13,7 +13,7 @@ import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 
-	public double x, y, z;
+	public double x, y, z, strength;
 	public Vector vec;
 	public List<BlockPosition> positions;
 	
@@ -26,8 +26,8 @@ public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 	    this.x = serializer.readFloat();
 	    this.y = serializer.readFloat();
 	    this.z = serializer.readFloat();
-	    serializer.readFloat(); // idk what is it
-	    int i = serializer.readInt();
+	    this.strength = serializer.readFloat();
+	    int i = serializer.readVarInt();
 	    this.positions = new ArrayList<>(i);
 	    for (byte b = 0; b < i; b++) {
 	      int posX = (int) (serializer.readByte() + x);

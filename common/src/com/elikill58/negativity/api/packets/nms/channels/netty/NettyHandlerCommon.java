@@ -31,7 +31,7 @@ public class NettyHandlerCommon {
 			return;
 		if (cause instanceof ClosedChannelException)
 			return;
-		Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet, msg: " + causeName);
+		Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet");
 		cause.printStackTrace();
 	}
 

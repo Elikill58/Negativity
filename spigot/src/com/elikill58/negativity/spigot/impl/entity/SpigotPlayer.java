@@ -22,7 +22,6 @@ import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -32,7 +31,6 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
@@ -49,6 +47,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		this.entity = p;
 		this.location = SpigotLocation.toCommon(p.getLocation());
+		init();
 	}
 
 	@Override
@@ -423,11 +422,6 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	@Override
 	public Object getDefault() {
 		return entity;
-	}
-
-	@Override
-	public World getWorld() {
-		return World.getWorld(entity.getWorld().getName(), a -> new SpigotWorld(entity.getWorld()));
 	}
 
 	@Override

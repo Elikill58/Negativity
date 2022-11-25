@@ -3,7 +3,6 @@ package com.elikill58.negativity.api.entity;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 
 public interface OfflinePlayer extends Entity {
@@ -37,16 +36,6 @@ public interface OfflinePlayer extends Entity {
 	@Override
 	default EntityType getType() {
 		return EntityType.PLAYER;
-	}
-
-	@Override
-	default Location getEyeLocation() {
-		return null;
-	}
-
-	@Override
-	default Vector getRotation() {
-		return null;
 	}
 	
 	@Override

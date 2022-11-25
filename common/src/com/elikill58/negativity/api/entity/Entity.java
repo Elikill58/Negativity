@@ -37,14 +37,23 @@ public interface Entity extends CommandSender {
 	
 	double getEyeHeight();
 	
-	Location getEyeLocation();
+	default Location getEyeLocation() {
+	    Location loc = getLocation().clone();
+	    loc.setY(loc.getY() + getEyeHeight());
+	    return loc;
+	}
 	
 	/**
 	 * Get the rotation (also called "direction") of the entity
 	 * 
 	 * @return vector of entity's direction
 	 */
-	Vector getRotation();
+	default Vector getRotation() {
+	    double rotX = getLocation().getYaw();
+	    double rotY = getLocation().getPitch();
+	    double xz = Math.cos(Math.toRadians(rotY));
+	    return new Vector(-xz * Math.sin(Math.toRadians(rotX)), -Math.sin(Math.toRadians(rotY)), xz * Math.cos(Math.toRadians(rotX)));
+	}
 	
 	/**
 	 * Get the type of the entity

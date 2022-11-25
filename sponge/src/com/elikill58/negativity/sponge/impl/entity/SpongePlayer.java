@@ -137,11 +137,6 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	}
 	
 	@Override
-	public World getWorld() {
-		return World.getWorld(entity.world().key().asString(), a -> new SpongeWorld(entity.world()));
-	}
-	
-	@Override
 	public String getName() {
 		return entity.name();
 	}

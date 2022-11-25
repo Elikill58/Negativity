@@ -177,6 +177,6 @@ public abstract class World implements NegativityObject {
 		if(!(obj instanceof World))
 			return false;
 		World w = (World) obj;
-		return getName().equals(w.getName()) || getDefault().equals(w.getDefault());
+		return (getName() != null && w.getName() != null && getName().equals(w.getName())) || getDefault().equals(w.getDefault());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.block.BlockRay;
@@ -12,27 +13,32 @@ import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 public abstract class AbstractPlayer implements Player {
 
-	private int protocolVersion = 0;
-	private Version playerVersion;
+	protected int protocolVersion = 0;
+	protected Version playerVersion;
 	protected Location location;
 	protected Vector velocity = null;
+	protected CompensatedWorld world;
+	
+	protected void init() {
+		this.world = new CompensatedWorld(this);
+		
+		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
+		this.playerVersion = Version.getVersionByProtocolID(getProtocolVersion());
+	}
 
 	@Override
 	public Version getPlayerVersion() {
-		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
+		return playerVersion;
 	}
 	
 	@Override
 	public void setPlayerVersion(Version version) {
 		playerVersion = version;
 		protocolVersion = version.getFirstProtocolNumber();
-	}
-
-	private boolean isVersionSet() {
-		return playerVersion != null && !playerVersion.equals(Version.HIGHER) && !playerVersion.equals(Version.LOWER);
 	}
 
 	@Override
@@ -42,14 +48,7 @@ public abstract class AbstractPlayer implements Player {
 
 	@Override
 	public void setProtocolVersion(int protocolVersion) {
-		if (this.protocolVersion == 0 || !isVersionSet()) { // if his using default values
-			this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
-			Adapter.getAdapter().debug("Setting ProtocolVersion: " + protocolVersion + ", founded: "
-					+ playerVersion.name() + " (previous: " + this.protocolVersion + ")");
-			if (protocolVersion == 0 && this.protocolVersion != 0)
-				return;// prevent losing good value
-			this.protocolVersion = protocolVersion;
-		}
+		this.protocolVersion = protocolVersion;
 	}
 	
 	@Override
@@ -81,6 +80,11 @@ public abstract class AbstractPlayer implements Player {
 	@Override
 	public Vector getVelocity() {
 		return velocity == null ? getTheoricVelocity() : velocity;
+	}
+	
+	@Override
+	public CompensatedWorld getWorld() {
+		return world;
 	}
 	
 	@Override

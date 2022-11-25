@@ -26,6 +26,7 @@ import org.spongepowered.api.util.Ticks;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.entity.AbstractPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -46,31 +47,16 @@ import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
+public class SpongePlayer extends AbstractPlayer implements Player {
 
-	private int protocolVersion = 0;
-	private Version playerVersion;
+	private ServerPlayer entity;
 	
 	public SpongePlayer(ServerPlayer p) {
-		super(p);
-		this.playerVersion = loadVersion();
-		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
-	}
-	
-	private Version loadVersion() {
-		return PlayerVersionManager.getPlayerVersion(this);
-	}
-	
-	@Override
-	public void setPlayerVersion(Version version) {
-		playerVersion = version;
-		protocolVersion = version.getFirstProtocolNumber();
+		this.entity = p;
 	}
 	
 	@Override
@@ -146,11 +132,6 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	@Override
-	public Location getLocation() {
-		return LocationUtils.toNegativity(entity.serverLocation());
-	}
-	
-	@Override
 	public int getPing() {
 		return entity.connection().latency();
 	}
@@ -168,11 +149,6 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public boolean hasPermission(String perm) {
 		return entity.hasPermission(perm);
-	}
-	
-	@Override
-	public Version getPlayerVersion() {
-		return playerVersion == Version.HIGHER ? (playerVersion = loadVersion()) : playerVersion;
 	}
 	
 	@Override
@@ -467,14 +443,6 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	public InetSocketAddress getAddress() {
 		return entity.connection().virtualHost();
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return Player.isSamePlayer(this, (Player) obj);
-	}
 
 	@Override
 	public double getMaxHealth() {
@@ -492,16 +460,6 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 
 	@Override
-	public int getProtocolVersion() {
-		return protocolVersion;
-	}
-
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		this.protocolVersion = protocolVersion;
-	}
-
-	@Override
 	public void sendToServer(String serverName) {
 		SpongeNegativity.getInstance().getBungeecordChannel().play().sendTo(entity, (buf) -> {
 			buf.writeUTF("Connect");
@@ -512,5 +470,16 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public String getServerName() {
 		return null;
+	}
+
+	@Override
+	public Object getDefault() {
+		return entity;
+	}
+
+	@Override
+	public Vector getTheoricVelocity() {
+		Vector3d vec = entity.getOrElse(Keys.VELOCITY, new Vector3d(0, 0, 0));
+		return new Vector(vec.x(), vec.y(), vec.z());
 	}
 }

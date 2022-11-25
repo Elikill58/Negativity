@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.entity.AbstractPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -17,6 +18,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -24,21 +26,23 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomPlayerInventory;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
-import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 import com.elikill58.negativity.universal.Version;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.TimedPotion;
 
-public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Player> implements Player {
+public class MinestomPlayer extends AbstractPlayer implements Player {
 
+	private net.minestom.server.entity.Player entity;
+	
 	public MinestomPlayer(net.minestom.server.entity.Player p) {
-		super(p);
+		this.entity = p;
 	}
 
 	@Override
@@ -122,11 +126,6 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	@Override
 	public void damage(double amount) {
 		entity.damage(DamageType.VOID, (float) amount);
-	}
-
-	@Override
-	public Location getLocation() {
-		return MinestomLocation.toCommon(entity.getInstance(), entity.getPosition());
 	}
 
 	@Override
@@ -389,12 +388,20 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	public String getServerName() {
 		return MinecraftServer.getBrandName();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return Player.isSamePlayer(this, (Player) obj);
+	public Object getDefault() {
+		return entity;
+	}
+
+	@Override
+	public Vector getTheoricVelocity() {
+		Vec vel = entity.getVelocity();
+		return new Vector(vel.x(), vel.y(), vel.z());
+	}
+
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.setVelocity(new Vec(vel.getX(), vel.getY(), vel.getZ()));
 	}
 }

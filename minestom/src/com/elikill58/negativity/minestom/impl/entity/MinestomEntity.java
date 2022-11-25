@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 
 public class MinestomEntity<E extends Entity> extends AbstractEntity {
@@ -75,17 +74,6 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Vector getRotation() {
 		return new Vector(0, 0, 0);
-	}
-
-	@Override
-	public Vector getTheoricVelocity() {
-		Vec vel = entity.getVelocity();
-		return new Vector(vel.x(), vel.y(), vel.z());
-	}
-
-	@Override
-	public void setVelocity(Vector vel) {
-		entity.setVelocity(new Vec(vel.getX(), vel.getY(), vel.getZ()));
 	}
 	
 	@Override

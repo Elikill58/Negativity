@@ -18,6 +18,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.entity.AbstractPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -25,6 +26,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -37,42 +39,14 @@ import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge7.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge7.utils.LocationUtils;
 import com.elikill58.negativity.sponge7.utils.Utils;
-import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
+import com.flowpowered.math.vector.Vector3d;
 
-public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.living.player.Player> implements Player {
+public class SpongePlayer extends AbstractPlayer implements Player {
 
-	private int protocolVersion = 0;
-	private Version playerVersion;
-
+	private org.spongepowered.api.entity.living.player.Player entity;
+	
 	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
-		super(p);
-		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
-	}
-	
-	@Override
-	public void setPlayerVersion(Version version) {
-		playerVersion = version;
-		protocolVersion = version.getFirstProtocolNumber();
-	}
-	
-	private boolean isVersionSet() {
-		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
-	}
-	
-	@Override
-	public int getProtocolVersion() {
-		return protocolVersion;
-	}
-	
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		this.protocolVersion = protocolVersion;
+		this.entity = p;
 	}
 
 	@Override
@@ -154,11 +128,6 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	@Override
 	public void damage(double amount) {
 		entity.damage(amount, DamageSource.builder().type(DamageTypes.CUSTOM).build());
-	}
-
-	@Override
-	public Location getLocation() {
-		return SpongeLocation.toCommon(entity.getLocation());
 	}
 
 	@Override
@@ -454,12 +423,20 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	public String getServerName() {
 		return "SpongeServer";
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return Player.isSamePlayer(this, (Player) obj);
+	public org.spongepowered.api.entity.living.player.Player getDefault() {
+		return entity;
+	}
+
+	@Override
+	public Vector getTheoricVelocity() {
+		Vector3d vel = entity.getVelocity();
+		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+	}
+
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.setVelocity(new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
 	}
 }

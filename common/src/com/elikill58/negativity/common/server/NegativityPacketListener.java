@@ -38,7 +38,6 @@ public class NegativityPacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
-		Adapter.getAdapter().debug(System.currentTimeMillis() + " (ping:" + p.getPing() + "): Receiving pre-packet " + packet.getPacketName());
 		if (packet instanceof NPacketPlayInChat) {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet;
 			if (chat.message.startsWith("/")) {
@@ -66,7 +65,6 @@ public class NegativityPacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
-		Adapter.getAdapter().debug(System.currentTimeMillis() + " (ping:" + p.getPing() + "): Receiving FINAL-packet " + packet.getPacketName());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		PacketType type = packet.getPacketType();
 		if (type == PacketType.Client.BLOCK_DIG && packet instanceof NPacketPlayInBlockDig) {
@@ -99,10 +97,15 @@ public class NegativityPacketListener implements Listeners {
 		} else if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if (flying.hasLocation()) {
+				if(p.getLocation() == null) {
+					p.setLocation(flying.getLocation(p.getWorld()));
+				}
 				PlayerMoveEvent moveEvent = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
 				EventManager.callEvent(moveEvent);
 				if(moveEvent.isCancelled())
 					p.teleport(moveEvent.getFrom()); // shitty way to cancel action already done by server
+				else
+					p.setLocation(flying.getLocation(p.getWorld()));
 			}
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;

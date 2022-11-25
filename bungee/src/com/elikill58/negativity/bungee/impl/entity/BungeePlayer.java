@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.entity.AbstractProxyPlayer;
-import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -100,13 +99,5 @@ public class BungeePlayer extends AbstractProxyPlayer {
 	@Override
 	public String getServerName() {
 		return pp.getServer() == null ? "none" : pp.getServer().getInfo().getName();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return Player.isSamePlayer(this, (Player) obj);
 	}
 }

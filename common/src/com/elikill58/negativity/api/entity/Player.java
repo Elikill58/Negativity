@@ -8,11 +8,13 @@ import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.potion.PotionEffect;
@@ -235,6 +237,31 @@ public interface Player extends OfflinePlayer {
 	
 	void setProtocolVersion(int protocolVersion);
 	
+	void applyTheoricVelocity();
+	
+	/**
+	 * Get the velocity that the entity SHOULD be take
+	 *
+	 * @return the theoric (and platform) velocity
+	 */
+	Vector getTheoricVelocity();
+	
+	/**
+	 * Get current entity velocity
+	 * 
+	 * @return the entity velocity
+	 */
+	Vector getVelocity();
+	
+	/**
+	 * Edit the entity velocity
+	 * 
+	 * @param vel the new velocity
+	 */
+	void setVelocity(Vector vel);
+	
+	List<Block> getTargetBlock(int maxDistance);
+	
 	/**
 	 * Get the entity which is used as vehicle.
 	 * It can be a wagon or a zombie.
@@ -321,6 +348,8 @@ public interface Player extends OfflinePlayer {
 	 * @param vanished true is the player should NOT be visible
 	 */
 	void setVanished(boolean vanished);
+	
+	void setLocation(Location loc);
 
 	/**
 	 * Get the player address

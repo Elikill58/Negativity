@@ -12,6 +12,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.messaging.ChannelNotRegisteredException;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.entity.AbstractPlayer;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -19,6 +21,8 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -28,61 +32,23 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
 @SuppressWarnings("deprecation")
-public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
+public class SpigotPlayer extends AbstractPlayer implements Player {
 
-	private int protocolVersion = 0;
-	private Version playerVersion;
-
-	public SpigotPlayer(org.bukkit.entity.Player p) {
-		super(p);
-		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
-		this.playerVersion = Version.getVersionByProtocolID(getProtocolVersion());
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
-	}
+	private org.bukkit.entity.Player entity;
 	
-	@Override
-	public void setPlayerVersion(Version version) {
-		playerVersion = version;
-		protocolVersion = version.getFirstProtocolNumber();
-	}
-
-	private boolean isVersionSet() {
-		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
-	}
-
-	@Override
-	public int getProtocolVersion() {
-		if(protocolVersion <= 0)
-			this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
-		return protocolVersion;
-	}
-
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		if (this.protocolVersion == 0
-				|| Version.getVersion().getFirstProtocolNumber() == PlayerVersionManager.getPlayerProtocolVersion(this)
-				|| !isVersionSet()) { // if his using default values
-			this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
-			Adapter.getAdapter().debug("Setting ProtocolVersion: " + protocolVersion + ", founded: "
-					+ playerVersion.name() + " (previous: " + this.protocolVersion + ")");
-			if (protocolVersion == 0 && this.protocolVersion != 0)
-				return;// prevent losing good value
-			this.protocolVersion = protocolVersion;
-		}
+	public SpigotPlayer(org.bukkit.entity.Player p) {
+		this.entity = p;
+		this.location = SpigotLocation.toCommon(p.getLocation());
 	}
 
 	@Override
@@ -149,11 +115,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	@Override
 	public void damage(double amount) {
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.damage(amount));
-	}
-
-	@Override
-	public Location getLocation() {
-		return SpigotLocation.toCommon(entity.getLocation().clone());
 	}
 
 	@Override
@@ -435,7 +396,12 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public InetSocketAddress getAddress() {
 		return entity.getAddress();
 	}
-
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		return SpigotVersionAdapter.getVersionAdapter().getBoundingBox(entity);
+	}
+	
 	@Override
 	public void sendToServer(String serverName) {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -450,10 +416,28 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return Player.isSamePlayer(this, (Player) obj);
+	public String getName() {
+		return entity.getName();
+	}
+
+	@Override
+	public Object getDefault() {
+		return entity;
+	}
+
+	@Override
+	public World getWorld() {
+		return World.getWorld(entity.getWorld().getName(), a -> new SpigotWorld(entity.getWorld()));
+	}
+
+	@Override
+	public Vector getTheoricVelocity() {
+		org.bukkit.util.Vector vel = entity.getVelocity();
+		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+	}
+
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
 	}
 }

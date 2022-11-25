@@ -15,7 +15,7 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
 
-public abstract class AbstractProxyPlayer extends AbstractEntity implements Player {
+public abstract class AbstractProxyPlayer extends AbstractPlayer {
 	
 	@Override
 	public boolean isDead() {

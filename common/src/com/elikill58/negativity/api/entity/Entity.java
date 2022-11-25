@@ -1,8 +1,5 @@
 package com.elikill58.negativity.api.entity;
 
-import java.util.List;
-
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -23,8 +20,6 @@ public interface Entity extends CommandSender {
 	 * @return true if entity OP
 	 */
 	boolean isOp();
-	
-	List<Block> getTargetBlock(int maxDistance);
 	
 	/**
 	 * Get the entity location
@@ -98,27 +93,4 @@ public interface Entity extends CommandSender {
 	 * @return the bounding box
 	 */
 	BoundingBox getBoundingBox();
-	
-	/**
-	 * Get current entity velocity
-	 * 
-	 * @return the entity velocity
-	 */
-	Vector getVelocity();
-	
-	void applyTheoricVelocity();
-	
-	/**
-	 * Get the velocity that the entity SHOULD be take
-	 *
-	 * @return the theoric (and platform) velocity
-	 */
-	Vector getTheoricVelocity();
-	
-	/**
-	 * Edit the entity velocity
-	 * 
-	 * @param vel the new velocity
-	 */
-	void setVelocity(Vector vel);
 }

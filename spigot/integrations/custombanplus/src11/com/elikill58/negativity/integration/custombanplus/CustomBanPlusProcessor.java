@@ -31,7 +31,6 @@ import me.coralise.objects.HistoryRecord;
 import me.coralise.players.CBPlayer;
 
 // Used via reflection in com.elikill58.negativity.integration.custombanplus.CustomBanPlusProcessorProvider
-@SuppressWarnings("unused")
 public class CustomBanPlusProcessor implements BanProcessor {
 
 	@Override

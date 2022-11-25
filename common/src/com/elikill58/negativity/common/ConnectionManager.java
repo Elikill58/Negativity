@@ -40,7 +40,7 @@ public class ConnectionManager implements Listeners {
 		if(!Adapter.getAdapter().getPlatformID().isProxy())
 			np.delta = np.lastDelta = p.getLocation().clone();
 		np.timeInvincibility = System.currentTimeMillis() + 8000;
-		
+		Adapter.getAdapter().debug("Player " + p.getName() + " just connect using protocol " + p.getProtocolVersion() + " (version: " + p.getPlayerVersion().getName() + ")");
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		

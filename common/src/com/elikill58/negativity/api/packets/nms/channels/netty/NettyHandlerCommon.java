@@ -19,15 +19,19 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class NettyHandlerCommon {
 
-	private static final List<String> sentMessages = new ArrayList<>(); 
-	
-	public static void manageError(ChannelHandlerContext ctx, Throwable cause) {
+	private static final List<String> sentMessages = new ArrayList<>();
+
+	public static void manageError(ChannelHandlerContext ctx, Throwable cause, String source) {
 		if (cause.getMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by ")
 				|| cause.getLocalizedMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by "))
 			return;
+		String causeName = cause.getClass().getName();
+		if (causeName.contains("com.viaversion.viaversion.exception.CancelEncoderException")
+				|| causeName.contains("com.viaversion.viaversion.exception.CancelDecoderException"))
+			return;
 		if (cause instanceof ClosedChannelException)
 			return;
-		Adapter.getAdapter().getLogger().error("Exception caught when sending packet");
+		Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet, msg: " + causeName);
 		cause.printStackTrace();
 	}
 
@@ -45,9 +49,10 @@ public class NettyHandlerCommon {
 			ada.warn("Failed to read packet with ID " + packetId + " ("
 					+ (packet instanceof NPacketUnset ? ((NPacketUnset) packet).getPacketTypeCible()
 							: packet.getPacketType())
-					+ ") to " + p.getName() + " (" + direction.name() + " - " + comment + " - " + version.getName() + ")");
+					+ ") to " + p.getName() + " (" + direction.name() + " - " + comment + " - " + version.getName()
+					+ ")");
 			String key = packetId + "_" + packet.getPacketType() + "_" + e.getMessage();
-			if(sentMessages.contains(key))
+			if (sentMessages.contains(key))
 				return packet;
 			sentMessages.add(key);
 			ada.warn(e.getMessage());

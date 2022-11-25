@@ -33,12 +33,10 @@ public abstract class NettyPacketListener {
 			Channel channel = getChannel(p);
 			try {
 				// Managing incoming packet (from player)
-				channel.pipeline().addBefore("decoder", "negativity_decoder",
-						new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER));
+				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER));
 
 				// Managing outgoing packet (to the player)
-				channel.pipeline().addBefore("encoder", "negativity_encoder",
-						new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));				
+				channel.pipeline().addBefore("encoder", "negativity_encoder", new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));				
 			} catch (NoSuchElementException exc) {
 				if(!p.isOnline())
 					return; // ignore, just left

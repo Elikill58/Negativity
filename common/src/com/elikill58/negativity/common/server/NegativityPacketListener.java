@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketListener implements Listeners {
 
@@ -37,6 +38,7 @@ public class NegativityPacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
+		Adapter.getAdapter().debug(System.currentTimeMillis() + " (ping:" + p.getPing() + "): Receiving pre-packet " + packet.getPacketName());
 		if (packet instanceof NPacketPlayInChat) {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet;
 			if (chat.message.startsWith("/")) {
@@ -64,6 +66,7 @@ public class NegativityPacketListener implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
+		Adapter.getAdapter().debug(System.currentTimeMillis() + " (ping:" + p.getPing() + "): Receiving FINAL-packet " + packet.getPacketName());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		PacketType type = packet.getPacketType();
 		if (type == PacketType.Client.BLOCK_DIG && packet instanceof NPacketPlayInBlockDig) {
@@ -98,7 +101,8 @@ public class NegativityPacketListener implements Listeners {
 			if (flying.hasLocation()) {
 				PlayerMoveEvent moveEvent = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
 				EventManager.callEvent(moveEvent);
-				p.teleport(moveEvent.getFrom()); // shitty way to cancel action already done by server
+				if(moveEvent.isCancelled())
+					p.teleport(moveEvent.getFrom()); // shitty way to cancel action already done by server
 			}
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;

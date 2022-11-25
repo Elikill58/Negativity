@@ -42,7 +42,9 @@ public class IncorrectPacket extends Cheat {
 			LocatedPacket lp = (LocatedPacket) packet;
 			if (!lp.hasLocation())
 				return;
-			if(packet instanceof NPacketPlayInBlockDig && !((NPacketPlayInBlockDig) packet).action.equals(DigAction.START_DIGGING)) // block dig but not good action
+			if (packet instanceof NPacketPlayInBlockDig
+					&& !((NPacketPlayInBlockDig) packet).action.equals(DigAction.START_DIGGING)) // block dig but not
+																									// good action
 				return;
 			Player p = e.getPlayer();
 			Location loc = p.getLocation();
@@ -57,13 +59,14 @@ public class IncorrectPacket extends Cheat {
 				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) / 10;
 				if (amount <= 10) // can be a plugin
 					return;
-				Negativity.alertMod(
+				if (Negativity.alertMod(
 						distance > 10000 && distanceSpawn > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						relia, "distance",
 						"Packet " + e.getPacket().getPacketName() + ", player loc: " + loc.toString() + ", packet loc: "
 								+ lp.getLocation(p.getWorld()).toString() + ", distance: " + distance
 								+ ", spawn distance: " + distanceSpawn + ", hand: " + p.getItemInHand(),
-						null, amount);
+						null, amount) && isSetBack())
+					e.setCancelled(true);
 			}
 		}
 	}

@@ -85,9 +85,10 @@ public class SuperKnockback extends Cheat implements Listeners {
 					if (totalTimeDiff > 10)
 						return;
 					int amount = (int) ((10 - diff) * (10 - data.diffAction) * (10 - totalTimeDiff));
-					Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(100 - (diff * totalTimeDiff)),
+					if(Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(100 - (diff * totalTimeDiff)),
 							"diff", "diff: " + diff + ", totalTime: " + totalTimeDiff + ", action: " + data.diffAction,
-							null, amount);
+							null, amount) && isSetBack())
+						e.setCancelled(true);
 				}
 			}
 			data.waiting = PacketWaiting.USE_ENTITY;

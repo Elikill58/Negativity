@@ -21,29 +21,36 @@ public class Motion extends Cheat {
 		super(CheatKeys.MOTION, CheatCategory.MOVEMENT, Materials.ANDESITE, MotionData::new);
 	}
 
-	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = { CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_TRIDENT })
-    public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np, MotionData data) {
+	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = { CheckConditions.NO_FLY,
+			CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_ELEVATOR,
+			CheckConditions.NO_USE_TRIDENT })
+	public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np, MotionData data) {
 		NPacket pa = e.getPacket();
 		PacketType type = pa.getPacketType();
-        if (!type.isFlyingPacket())
-        	return;
-        NPacketPlayInFlying flying = (NPacketPlayInFlying) pa;
-        if(!flying.hasPos)
-        	return;
+		if (!type.isFlyingPacket())
+			return;
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) pa;
+		if (!flying.hasPos)
+			return;
 
-        double lastDeltaY = np.lastDelta.getY();
-        double deltaY = np.delta.getY();
-        
-        if (deltaY == 0) return;
+		double lastDeltaY = np.lastDelta.getY();
+		double deltaY = np.delta.getY();
 
-        double offset = Math.abs(deltaY) / Math.abs(lastDeltaY);
+		if (deltaY == 0)
+			return;
 
-        if (offset == 1) {
-            if (++data.buffer > 5) {
-            	Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(90 + data.buffer), "y-motion", "Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null, data.buffer - 4);
-            }
-        } else {
-        	data.buffer = 0;
-        }
-    }
+		double offset = Math.abs(deltaY) / Math.abs(lastDeltaY);
+
+		if (offset == 1) {
+			if (++data.buffer > 5) {
+				if (Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this,
+						UniversalUtils.parseInPorcent(90 + data.buffer), "y-motion",
+						"Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null,
+						data.buffer - 4) && isSetBack())
+					e.setCancelled(true);
+			}
+		} else {
+			data.buffer = 0;
+		}
+	}
 }

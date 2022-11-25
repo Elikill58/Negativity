@@ -137,8 +137,9 @@ public class Scaffold extends Cheat {
 				}
 			}
 			if (amount > 0) {
-				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount * 80),
-						"packet", "Wrong value for packet BlockPlace: " + packet.cursorX + ", " + packet.cursorY + ", " + packet.cursorZ, null, amount);
+				if(Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount * 80),
+						"packet", "Wrong value for packet BlockPlace: " + packet.cursorX + ", " + packet.cursorY + ", " + packet.cursorZ, null, amount) && isSetBack())
+					e.setCancelled(true);
 			}
 		}
 	}

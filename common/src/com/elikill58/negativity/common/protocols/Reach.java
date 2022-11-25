@@ -47,7 +47,8 @@ public class Reach extends Cheat {
 		Player p = e.getPlayer();
 		if (packet.getPacketType().isFlyingPacket()) {
 			if (data.cible != null) {
-				if(np.isTeleporting || (data.cible instanceof Player && NegativityPlayer.getNegativityPlayer((Player) data.cible).isTeleporting)) {
+				if (np.isTeleporting || (data.cible instanceof Player
+						&& NegativityPlayer.getNegativityPlayer((Player) data.cible).isTeleporting)) {
 					data.reset();
 					return; // just beeing tp
 				}
@@ -60,10 +61,13 @@ public class Reach extends Cheat {
 				double max = getConfig().getDouble("checks.reach-event.value", 3.2)
 						+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
 				if (dis > max) {
-					Negativity.alertMod(ReportType.WARNING, p, this,
-							parseInPorcent((dis - max) * 90), "reach-event",
+					if (Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dis - max) * 90),
+							"reach-event",
 							"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + data.cibleLocation,
-							hoverMsg("distance", "%name%", data.cible.getName(), "%distance%", String.format("%.2f", dis)));
+							hoverMsg("distance", "%name%", data.cible.getName(), "%distance%",
+									String.format("%.2f", dis)))
+							&& isSetBack())
+						e.setCancelled(true);
 				}
 				data.reset();
 			}

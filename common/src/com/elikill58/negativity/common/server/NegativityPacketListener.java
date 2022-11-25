@@ -29,7 +29,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 
 public class NegativityPacketListener implements Listeners {
-	
+
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
 		if (!e.hasPlayer() || e.getPacket().getPacketType() == null)
@@ -46,10 +46,8 @@ public class NegativityPacketListener implements Listeners {
 			Block b = blockDig.getBlock(p.getWorld());
 			BlockBreakEvent event = new BlockBreakEvent(p, b);
 			EventManager.callEvent(event);
-			// TODO check for cancelling block break
-			/*
-			 * if(event.isCancelled()) e.setCancelled(event.isCancelled());
-			 */
+			if (event.isCancelled())
+				e.setCancelled(event.isCancelled());
 		} else if (type == PacketType.Client.USE_ENTITY) {
 			np.isAttacking = true;
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
@@ -58,35 +56,33 @@ public class NegativityPacketListener implements Listeners {
 					if (entity.isSameId(String.valueOf(useEntityPacket.entityId))) {
 						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
 						EventManager.callEvent(event);
-						// TODO check for cancelling entity damage
-						/*
-						 * if(event.isCancelled()) e.setCancelled(event.isCancelled());
-						 */
+						if (event.isCancelled())
+							e.setCancelled(event.isCancelled());
 					}
 				}
 			}
 		} else if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if (flying.hasLocation()) {
-				if(p.getLocation() == null) {
+				if (p.getLocation() == null) {
 					p.setLocation(flying.getLocation(p.getWorld()));
 				}
 				PlayerMoveEvent moveEvent = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
 				EventManager.callEvent(moveEvent);
-				if(moveEvent.isCancelled())
-					p.teleport(moveEvent.getFrom()); // shitty way to cancel action already done by server
+				if (moveEvent.isCancelled())
+					e.setCancelled(true);
 				else
 					p.setLocation(flying.getLocation(p.getWorld()));
 			}
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;
 			ToggleAction toggle = null;
-			if(action.action == EnumPlayerAction.START_SNEAKING)
+			if (action.action == EnumPlayerAction.START_SNEAKING)
 				toggle = ToggleAction.SNEAK;
-			else if(action.action == EnumPlayerAction.START_SPRINTING)
+			else if (action.action == EnumPlayerAction.START_SPRINTING)
 				toggle = ToggleAction.SPRINT;
-			
-			if(toggle != null)
+
+			if (toggle != null)
 				EventManager.callEvent(new PlayerToggleActionEvent(p, toggle, false));
 		} else if (packet instanceof NPacketPlayInChat) {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet;

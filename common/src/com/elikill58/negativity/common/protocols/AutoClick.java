@@ -26,7 +26,8 @@ public class AutoClick extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AutoClick() {
-		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, EmptyData::new, CheatDescription.VERIF);
+		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, EmptyData::new,
+				CheatDescription.VERIF);
 	}
 
 	@Check(name = "count", description = "Count click 1 by 1")
@@ -51,12 +52,13 @@ public class AutoClick extends Cheat {
 		int click = np.getClick();
 		int ping = p.getPing(), clickPinged = click - (ping / 9);
 		if (clickPinged > getConfig().getInt("click_alert", 20)) {
-			Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(click * 2.5), "count",
-					"Clicks: " + click + ", pinged: " + clickPinged + ". Detailed: entity: " + np.entityClick + ", block start/cancel/finish: " + np.leftBlockClick + "/" + np.leftCancelled + "/" + np.leftFinished + ", place: " + np.rightBlockClick + " Last: " + np.lastClick
+			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(click * 2.5), "count",
+					"Clicks: " + click + ", pinged: " + clickPinged + ". Detailed: entity: " + np.entityClick
+							+ ", block start/cancel/finish: " + np.leftBlockClick + "/" + np.leftCancelled + "/"
+							+ np.leftFinished + ", place: " + np.rightBlockClick + " Last: " + np.lastClick
 							+ "; Record: " + np.getAccount().getMostClicksPerSecond(),
-					hoverMsg("main", "%click%", click));
-			// TODO add cancel back
+					hoverMsg("main", "%click%", click)) && isSetBack())
+				e.setCancelled(true);
 		}
 	}
 
@@ -67,7 +69,7 @@ public class AutoClick extends Cheat {
 		counter.add(currentClick);
 		if (counter.getMax() == 0)
 			return null;
-		return ChatColor.color("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c"
-				+ counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
+		return ChatColor.color("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c" + counter.getMax()
+				+ "&7/&6" + counter.getAverage() + " &7clicks");
 	}
 }

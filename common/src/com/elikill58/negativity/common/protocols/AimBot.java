@@ -46,7 +46,8 @@ public class AimBot extends Cheat {
 
 	// many killauras use a constant pitch in order to bypass the GDC check
 	// this check will fight against that and fail these killauras
-	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
+	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL,
+			CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
 	public void ratio(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
@@ -61,10 +62,11 @@ public class AimBot extends Cheat {
 				// increment streak
 
 				if (data.ratioStreak++ > 7) {
-					Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
-							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: "
-							+ String.format("%.3f", difference));
-					
+					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio",
+							"absYaw: " + String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak
+									+ ", difference: " + String.format("%.3f", difference)) && isSetBack())
+						e.setCancelled(true);
+
 					data.ratioStreak -= 3;
 				}
 			} else {
@@ -115,10 +117,12 @@ public class AimBot extends Cheat {
 					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
 				String allPitchStr = data.allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
-				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
+				if (Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
 						+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: "
 						+ invalidChange + ", allChanges: " + data.allInvalidChanges + ", avInvalid: " + averageInvalid
-						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess));
+						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess))
+						&& isSetBack())
+					e.setCancelled(true);
 			}
 			recordData(p.getUniqueId(), GCD, gcd);
 			recordData(p.getUniqueId(), PITCHS, pitch);
@@ -132,18 +136,20 @@ public class AimBot extends Cheat {
 	private long getGcdForLong(final long current, final long previous) {
 		return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
 	}
-	
+
 	@Check(name = "direction", description = "Check for the direction between player look and cible position", conditions = CheckConditions.NO_THORNS)
 	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
-		Location loc = np.getPingedLocation(), cloc = cible instanceof Player ? NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation() : cible.getLocation();
-		if(!p.getWorld().equals(cloc.getWorld())) // entity just beeing tp
+		Location loc = np.getPingedLocation(), cloc = cible instanceof Player
+				? NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation()
+				: cible.getLocation();
+		if (!p.getWorld().equals(cloc.getWorld())) // entity just beeing tp
 			return;
 		double xzDistance = loc.distanceXZ(cloc);
-		if(xzDistance < 0.5)
+		if (xzDistance < 0.5)
 			return;
 		boolean notSure = xzDistance < 1; // if X/Z distance too low
 		Direction direction = LocationUtils.getDirection(p, cloc);
@@ -163,7 +169,7 @@ public class AimBot extends Cheat {
 			return; // here it's fine
 		case FRONT_LEFT:
 		case FRONT_RIGHT:
-			if(BedrockPlayerManager.isBedrockPlayer(p.getUniqueId())) {
+			if (BedrockPlayerManager.isBedrockPlayer(p.getUniqueId())) {
 				return; // allowed for bedrock
 			}
 			amount = 1;
@@ -171,16 +177,20 @@ public class AimBot extends Cheat {
 			break;
 		case LEFT:
 		case RIGHT:
-			if(notSure)
+			if (notSure)
 				return;
 			amount = 1;
 			reliability = 75;
 			break;
 		}
-		if(amount > 0)
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + ", xzDis: " + xzDistance, null, amount);
+		if (amount > 0)
+			Negativity.alertMod(ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction",
+					"Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + ", xzDis: "
+							+ xzDistance,
+					null, amount);
 	}
-	
+
 	@Override
 	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> gcdCounter = data.getData(GCD);

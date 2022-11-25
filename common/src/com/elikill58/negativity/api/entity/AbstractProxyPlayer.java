@@ -58,6 +58,11 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	}
 	
 	@Override
+	public void setFlying(boolean b) {
+		
+	}
+	
+	@Override
 	public void setAllowFlight(boolean b) {}
 	
 	@Override

@@ -61,10 +61,9 @@ public class AimBot extends Cheat {
 				// increment streak
 
 				if (data.ratioStreak++ > 7) {
-					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
+					Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
 							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: "
-							+ String.format("%.3f", difference)) && isSetBack())
-						e.setCancelled(true);
+							+ String.format("%.3f", difference));
 					
 					data.ratioStreak -= 3;
 				}

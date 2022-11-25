@@ -32,13 +32,11 @@ public class UnexpectedPacket extends Cheat {
 				if (timeLeftVehicle < 50)
 					return; // just left, strange packet but prevent issue
 				long amount = timeLeftVehicle / 50;
-				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this,
+				Negativity.alertMod(ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(amount < 100 ? 50 + amount : 100), "vehicle-steer",
 						"Actual vehicle: " + p.getVehicle() + ", timeLeft: " + timeLeftVehicle,
 						new CheatHover.Literal("Say he's moving with vehicle when not in vehicle"),
 						amount <= 0 ? 1 : (amount > 10000 ? 10000 : amount));
-				if (cancel && isSetBack())
-					e.setCancelled(true);
 			}
 		} else if (e.getPacket().getPacketType().equals(Client.ENTITY_ACTION)) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) e.getPacket();
@@ -52,11 +50,9 @@ public class UnexpectedPacket extends Cheat {
 	public void onSpectate(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.SPECTATE) && p.getGameMode().equals(GameMode.CREATIVE)) {
-			boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "spectator",
+			Negativity.alertMod(ReportType.WARNING, p, this, 100, "spectator",
 					"Spectate when using gamemode: " + p.getGameMode().name(),
 					new CheatHover.Literal("Spectate someone when using " + p.getGameMode().getName()));
-			if (cancel && isSetBack())
-				e.setCancelled(true);
 		}
 	}
 
@@ -66,11 +62,9 @@ public class UnexpectedPacket extends Cheat {
 		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && data.alreadySend) {
 			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket();
 			if (p.getInventory().getHeldItemSlot() == slot.slot) {
-				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
+				Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
 						"Change held slot to the same: " + slot.slot,
 						new CheatHover.Literal("Change held slot to the same"), slot.slot);
-				if (cancel && isSetBack())
-					e.setCancelled(true);
 			}
 		}
 		data.alreadySend = true;

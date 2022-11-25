@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Version;
@@ -38,7 +38,7 @@ public class NettyDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
 			out.add(msg.retain());
 			return;
 		}
-		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+		PrePacketReceiveEvent event = new PrePacketReceiveEvent(packet, p);
 		EventManager.callEvent(event);
 		if(!event.isCancelled())
 			out.add(msg.retain());

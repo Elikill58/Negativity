@@ -6,13 +6,12 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 
 public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 	
-	private String message, format;
+	private String message;
 	private boolean cancel;
 	
-	public PlayerChatEvent(Player p, String message, String format) {
+	public PlayerChatEvent(Player p, String message) {
 		super(p);
 		this.message = message;
-		this.format = format;
 	}
 
 	public String getMessage() {
@@ -21,14 +20,6 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getFormat() {
-		return format;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
 	}
 
 	@Override

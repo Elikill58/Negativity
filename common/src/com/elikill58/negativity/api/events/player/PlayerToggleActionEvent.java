@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.events.player;
 
+import java.util.function.BiConsumer;
+
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
@@ -20,9 +22,23 @@ public class PlayerToggleActionEvent extends PlayerEvent implements CancellableE
 	}
 	
 	public static enum ToggleAction {
-		FLY,
-		SNEAK,
-		SPRINT;
+		
+		SNEAK(Player::setSneaking),
+		SPRINT(Player::setSprinting);
+		
+		private BiConsumer<Player, Boolean> canceller;
+		
+		private ToggleAction(BiConsumer<Player, Boolean> canceller) {
+			this.canceller = canceller;
+		}
+		
+		public BiConsumer<Player, Boolean> getCanceller() {
+			return canceller;
+		}
+		
+		public void cancel(Player p) {
+			canceller.accept(p, false);
+		}
 	}
 
 	@Override

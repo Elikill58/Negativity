@@ -211,6 +211,11 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	@Override
+	public void setFlying(boolean b) {
+		entity.offer(Keys.IS_FLYING, b);
+	}
+	
+	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
 		Channel channel = Sponge.channelManager().get(ResourceKey.resolve(channelId)).orElse(null);
 		if (channel == null) {

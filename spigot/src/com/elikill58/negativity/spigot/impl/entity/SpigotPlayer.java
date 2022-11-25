@@ -209,6 +209,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public boolean isFlying() {
 		return entity.isFlying();
 	}
+	
+	@Override
+	public void setFlying(boolean b) {
+		entity.setFlying(b);
+	}
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {

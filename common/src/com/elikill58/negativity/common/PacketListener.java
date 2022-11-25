@@ -5,29 +5,23 @@ import java.util.Random;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
-import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
+import com.elikill58.negativity.api.events.packets.PrePacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
@@ -41,12 +35,27 @@ import com.elikill58.negativity.universal.utils.Maths;
 public class PacketListener implements Listeners {
 
 	@EventListener
+	public void onPrePacketReceive(PrePacketReceiveEvent e) {
+		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
+			return;
+		Player p = e.getPlayer();
+		NPacket packet = e.getPacket();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		if(packet instanceof NPacketPlayInFlying) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
+			if (np.isFreeze && !flying.getLocation(p.getWorld()).clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
+				e.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
 		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
-		Adapter.getAdapter().debug("Packet from " + packet.getPacketName() + ", type: " + packet.getPacketType());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();
@@ -107,31 +116,7 @@ public class PacketListener implements Listeners {
 				np.isTeleporting = false;
 		} else
 			np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
-		if(type == PacketType.Client.BLOCK_DIG && packet instanceof NPacketPlayInBlockDig) {
-			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet;
-			if(blockDig.action != DigAction.FINISHED_DIGGING)
-				return;
-			
-			Block b = blockDig.getBlock(p.getWorld());
-			BlockBreakEvent event = new BlockBreakEvent(p, b);
-			EventManager.callEvent(event);
-			if(event.isCancelled())
-				e.setCancelled(event.isCancelled());
-		}
-		if (type == PacketType.Client.USE_ENTITY) {
-			np.isAttacking = true;
-			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
-			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-				for(Entity entity : p.getWorld().getEntities()) {
-					if(entity.isSameId(String.valueOf(useEntityPacket.entityId))) {
-						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
-						EventManager.callEvent(event);
-						if(event.isCancelled())
-							e.setCancelled(event.isCancelled());
-					}
-				}
-			}
-		} else if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
+		if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
 		} else if (type == PacketType.Client.STEER_VEHICLE) {

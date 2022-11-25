@@ -220,6 +220,11 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	public boolean isFlying() {
 		return entity.require(Keys.IS_FLYING);
 	}
+	
+	@Override
+	public void setFlying(boolean b) {
+		entity.offer(Keys.IS_FLYING, b);
+	}
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {

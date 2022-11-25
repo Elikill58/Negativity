@@ -51,13 +51,12 @@ public class AutoClick extends Cheat {
 		int click = np.getClick();
 		int ping = p.getPing(), clickPinged = click - (ping / 9);
 		if (clickPinged > getConfig().getInt("click_alert", 20)) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
+			Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(click * 2.5), "count",
 					"Clicks: " + click + ", pinged: " + clickPinged + ". Detailed: entity: " + np.entityClick + ", block start/cancel/finish: " + np.leftBlockClick + "/" + np.leftCancelled + "/" + np.leftFinished + ", place: " + np.rightBlockClick + " Last: " + np.lastClick
 							+ "; Record: " + np.getAccount().getMostClicksPerSecond(),
 					hoverMsg("main", "%click%", click));
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
+			// TODO add cancel back
 		}
 	}
 

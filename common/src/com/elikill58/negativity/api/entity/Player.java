@@ -87,6 +87,7 @@ public interface Player extends OfflinePlayer {
 	 * @return true is the player fly
 	 */
 	boolean isFlying();
+	void setFlying(boolean b);
 	/**
 	 * Check if the player is authorized to fly
 	 * 

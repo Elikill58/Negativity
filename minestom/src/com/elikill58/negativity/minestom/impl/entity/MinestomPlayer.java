@@ -188,6 +188,11 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	public boolean isFlying() {
 		return entity.isFlying();
 	}
+	
+	@Override
+	public void setFlying(boolean b) {
+		entity.setFlying(b);
+	}
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {

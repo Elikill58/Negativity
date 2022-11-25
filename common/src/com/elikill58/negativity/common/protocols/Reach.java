@@ -60,12 +60,10 @@ public class Reach extends Cheat {
 				double max = getConfig().getDouble("checks.reach-event.value", 3.2)
 						+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
 				if (dis > max) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
+					Negativity.alertMod(ReportType.WARNING, p, this,
 							parseInPorcent((dis - max) * 90), "reach-event",
 							"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + data.cibleLocation,
 							hoverMsg("distance", "%name%", data.cible.getName(), "%distance%", String.format("%.2f", dis)));
-					if (isSetBack() && mayCancel)
-						e.setCancelled(true);
 				}
 				data.reset();
 			}

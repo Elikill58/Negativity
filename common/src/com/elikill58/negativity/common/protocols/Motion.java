@@ -40,9 +40,7 @@ public class Motion extends Cheat {
 
         if (offset == 1) {
             if (++data.buffer > 5) {
-            	boolean mayCancel = Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(90 + data.buffer), "y-motion", "Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null, data.buffer - 4);
-            	if(mayCancel && isSetBack())
-            		e.setCancelled(true);
+            	Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(90 + data.buffer), "y-motion", "Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null, data.buffer - 4);
             }
         } else {
         	data.buffer = 0;

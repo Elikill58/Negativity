@@ -4,8 +4,6 @@ import java.net.InetAddress;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.EventContextKeys;
@@ -25,14 +23,12 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
-import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
-import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
@@ -77,21 +73,6 @@ public class PlayersListeners {
 	}
 	
 	@Listener
-	public void onPlayerMove(MoveEntityEvent e, @First ServerPlayer p) {
-		NegativityPlayer np = NegativityPlayer.getCached(p.uniqueId());
-		PlayerMoveEvent event = new PlayerMoveEvent(np.getPlayer(),
-			LocationUtils.toNegativity(p.world(), e.originalPosition()), LocationUtils.toNegativity(p.world(), e.destinationPosition()));
-		EventManager.callEvent(event);
-		if (event.hasToSet()) {
-			e.setDestinationPosition(LocationUtils.toSpongePosition(event.getTo()));
-		}
-		
-		BlockType blockTypeBelowPlayer = p.location().sub(0, 1, 0).blockType();
-		if (np.isFreeze && !blockTypeBelowPlayer.equals(BlockTypes.AIR.get()))
-			e.setCancelled(true);
-	}
-	
-	@Listener
 	public void onTeleport(MoveEntityEvent e, @First ServerPlayer p) {
 		Optional<MovementType> optMoveType = e.context().get(EventContextKeys.MOVEMENT_TYPE);
 		if(!optMoveType.isPresent())
@@ -110,14 +91,6 @@ public class PlayersListeners {
 			to = LocationUtils.toNegativity(world, e.destinationPosition());
 		}
 		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), from, to));
-	}
-	
-	@Listener
-	public void onChat(org.spongepowered.api.event.message.PlayerChatEvent e, @First ServerPlayer p) {
-		String message = PlainTextComponentSerializer.plainText().serialize(e.message());
-		PlayerChatEvent event = new PlayerChatEvent(SpongeEntityManager.getPlayer(p), message, message);
-		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
 	}
 	
 	@Listener

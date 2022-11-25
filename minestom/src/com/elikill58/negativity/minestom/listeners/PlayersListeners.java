@@ -6,19 +6,14 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
-import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
-import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
-import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
-import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
 import com.elikill58.negativity.minestom.impl.entity.MinestomPlayer;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
-import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
@@ -30,32 +25,17 @@ import net.minestom.server.event.player.PlayerDeathEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.event.player.PlayerStartFlyingEvent;
 import net.minestom.server.event.player.PlayerStartFlyingWithElytraEvent;
-import net.minestom.server.event.player.PlayerStartSneakingEvent;
-import net.minestom.server.event.player.PlayerStartSprintingEvent;
-import net.minestom.server.event.player.PlayerStopFlyingEvent;
-import net.minestom.server.event.player.PlayerStopSneakingEvent;
-import net.minestom.server.event.player.PlayerStopSprintingEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
-import net.minestom.server.instance.block.Block;
 
 public class PlayersListeners {
 
 	public PlayersListeners(EventNode<Event> e) {
 		e.addListener(PlayerDisconnectEvent.class, this::onQuit);
-		e.addListener(net.minestom.server.event.player.PlayerMoveEvent.class, this::onMove);
-		e.addListener(net.minestom.server.event.player.PlayerChatEvent.class, this::onChat);
 		e.addListener(PlayerDeathEvent.class, this::onDeath);
 		e.addListener(PlayerBlockInteractEvent.class, this::onInteract);
 		e.addListener(PlayerEntityInteractEvent.class, this::onInteract);
 		e.addListener(PlayerUseItemEvent.class, this::onItemConsume);
-		e.addListener(PlayerStartFlyingEvent.class, this::onStartFly);
-		e.addListener(PlayerStopFlyingEvent.class, this::onStopFly);
-		e.addListener(PlayerStartSneakingEvent.class, this::onStartSneak);
-		e.addListener(PlayerStopSneakingEvent.class, this::onStopSneak);
-		e.addListener(PlayerStartSprintingEvent.class, this::onStartSprint);
-		e.addListener(PlayerStopSprintingEvent.class, this::onStopSprint);
 		e.addListener(PlayerSpawnEvent.class, this::onLogin);
 		e.addListener(AsyncPlayerPreLoginEvent.class, this::onPreLogin);
 		e.addListener(PlayerCommandEvent.class, this::onCommand);
@@ -66,34 +46,6 @@ public class PlayersListeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUuid(), () -> new MinestomPlayer(p));
 		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, null);
 		EventManager.callEvent(event);
-	}
-	
-	public void onMove(net.minestom.server.event.player.PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		if(e.isCancelled())
-			return;
-		Block below = e.getInstance().getBlock(p.getPosition().sub(0, 1, 0));
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUuid(), () -> new MinestomPlayer(p));
-		if(np.isFreeze && !below.equals(Block.AIR)) {
-			e.setCancelled(true);
-			return;
-		}
-		PlayerMoveEvent event = new PlayerMoveEvent(np.getPlayer(), MinestomLocation.toCommon(e.getInstance(), e.getPlayer().getPosition()), MinestomLocation.toCommon(e.getInstance(), e.getNewPosition()));
-		EventManager.callEvent(event);
-		if(event.hasToSet()) {
-			e.setNewPosition(MinestomLocation.fromCommon(event.getTo()));
-		}
-		if(event.isCancelled()) {
-			e.setCancelled(true);
-			return;
-		}
-	}
-	
-	public void onChat(net.minestom.server.event.player.PlayerChatEvent e) {
-		PlayerChatEvent event = new PlayerChatEvent(MinestomEntityManager.getPlayer(e.getPlayer()), e.getMessage(), null);
-		EventManager.callEvent(event);
-		if(event.isCancelled())
-			e.setCancelled(event.isCancelled());
 	}
 	
 	// TODO fix player damaged by entity event
@@ -153,30 +105,6 @@ public class PlayersListeners {
 
 	public void onGlide(PlayerStartFlyingWithElytraEvent e) {
 		NegativityPlayer.getCached(e.getPlayer().getUuid()).timeInvincibility = System.currentTimeMillis() + 800;
-	}
-	
-	public void onStartFly(PlayerStartFlyingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.FLY, false));
-	}
-	
-	public void onStopFly(PlayerStopFlyingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.FLY, false));
-	}
-	
-	public void onStartSneak(PlayerStartSneakingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SNEAK, false));
-	}
-	
-	public void onStopSneak(PlayerStopSneakingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SNEAK, false));
-	}
-	
-	public void onStartSprint(PlayerStartSprintingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SPRINT, false));
-	}
-	
-	public void onStopSprint(PlayerStopSprintingEvent e) {
-		EventManager.callEvent(new PlayerToggleActionEvent(MinestomEntityManager.getPlayer(e.getPlayer()), ToggleAction.SPRINT, false));
 	}
 	
 	public void onCommand(PlayerCommandEvent e) {

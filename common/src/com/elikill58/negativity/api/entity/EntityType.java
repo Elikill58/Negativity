@@ -55,7 +55,7 @@ public enum EntityType {
 	IRON_GOLEM("IronGolem"),
 	ITEM_FRAME("ItemFrame"),
 	LLAMA,
-	LLAMA_SPLIT,
+	LLAMA_SPIT,
 	LLAMA_TRADER,
 	LEASH_KNOT("LeashKnot"),
 	LIGHTNING("Lightning"),
@@ -123,6 +123,7 @@ public enum EntityType {
 	WEATHER("Weather"),
 	ZOGLIN("Zoglin"),
 	ZOMBIE("Zombie"),
+	ZOMBIE_HORSE,
 	ZOMBIE_VILLAGER("ZombieVillager");
 
 	private final String name;

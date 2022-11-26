@@ -64,7 +64,7 @@ public class AntiKnockback extends Cheat {
 		for (Player p : ada.getOnlinePlayers()) {
 
 			// found player
-			if (p.isSameId(String.valueOf(entId))) {
+			if (p.isSameId(entId)) {
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 				if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 					return;

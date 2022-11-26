@@ -45,8 +45,8 @@ public class SpigotOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	}
 	
 	@Override
-	public String getEntityId() {
-		return op.getUniqueId().toString();
+	public int getEntityId() {
+		return op.getUniqueId().hashCode();
 	}
 	
 	@Override

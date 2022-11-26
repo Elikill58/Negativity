@@ -70,8 +70,8 @@ public class CompensatedEntity extends AbstractEntity {
 	}
 
 	@Override
-	public String getEntityId() {
-		return String.valueOf(entityId);
+	public int getEntityId() {
+		return entityId;
 	}
 
 	@Override

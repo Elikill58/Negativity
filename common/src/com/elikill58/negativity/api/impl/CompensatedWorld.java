@@ -60,7 +60,7 @@ public class CompensatedWorld extends World {
 	}
 	
 	public Optional<Entity> getEntityById(int id) {
-		return entities.stream().filter(e -> e.isSameId(String.valueOf(id))).findFirst();
+		return entities.stream().filter(e -> e.isSameId(id)).findFirst();
 	}
 	
 	public void addEntity(Entity e) {
@@ -68,7 +68,7 @@ public class CompensatedWorld extends World {
 	}
 	
 	public void removeEntity(int id) {
-		entities.removeIf(et -> et.isSameId(String.valueOf(id)));
+		entities.removeIf(et -> et.isSameId(id));
 	}
 
 	@Override

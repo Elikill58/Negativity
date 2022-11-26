@@ -47,8 +47,8 @@ public interface OfflinePlayer extends Entity {
 	}
 	
 	@Override
-	default String getEntityId() {
-		return null;
+	default int getEntityId() {
+		return 0;
 	}
 	
 	@Override

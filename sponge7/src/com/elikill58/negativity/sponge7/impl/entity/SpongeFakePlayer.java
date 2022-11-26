@@ -94,8 +94,8 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	}
 
 	@Override
-	public String getEntityId() {
-		return fakePlayer.getUniqueId().toString();
+	public int getEntityId() {
+		return fakePlayer.getUniqueId().hashCode();
 	}
 	
 	@Override

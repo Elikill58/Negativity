@@ -77,8 +77,8 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 	}
 	
 	@Override
-	public String getEntityId() {
-		return entity.getUuid().toString();
+	public int getEntityId() {
+		return entity.getEntityId();
 	}
 	
 	@Override

@@ -153,7 +153,7 @@ public class PacketListener implements Listeners {
 			np.isTeleporting = true;
 		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
 			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket();
-			if(!p.isSameId(String.valueOf(packet.entityId))) // not giving velocity to itself - not useful to send packet
+			if(!p.isSameId(packet.entityId)) // not giving velocity to itself - not useful to send packet
 				return;
 			int randomNb = new Random().nextInt();
 			if(randomNb == -1)

@@ -49,8 +49,8 @@ public class CompensatedPlayer extends AbstractPlayer {
 	}
 
 	@Override
-	public String getEntityId() {
-		return String.valueOf(entityId);
+	public int getEntityId() {
+		return entityId;
 	}
 
 	@Override

@@ -149,7 +149,7 @@ public abstract class World implements NegativityObject {
 	 */
 	public @Nullable Entity getEntityWithID(int entityId) {
 		for(Entity et : getEntities())
-			if(et.isSameId(String.valueOf(entityId)))
+			if(et.isSameId(entityId))
 				return et;
 		return null;
 	}

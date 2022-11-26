@@ -239,8 +239,8 @@ public abstract class AbstractProxyPlayer extends AbstractPlayer {
 	}
 
 	@Override
-	public String getEntityId() {
-		return null;
+	public int getEntityId() {
+		return 0;
 	}
 	
 	@Override

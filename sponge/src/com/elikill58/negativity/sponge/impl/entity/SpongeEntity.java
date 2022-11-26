@@ -103,8 +103,8 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	}
 	
 	@Override
-	public String getEntityId() {
-		return entity.uniqueId().toString();
+	public int getEntityId() {
+		return entity.uniqueId().hashCode();
 	}
 	
 	@Override

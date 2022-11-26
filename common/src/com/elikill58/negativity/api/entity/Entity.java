@@ -74,7 +74,7 @@ public interface Entity extends CommandSender {
 	 * 
 	 * @return the ID of the entity
 	 */
-	String getEntityId();
+	int getEntityId();
 	
 	/**
 	 * Check if this entity can be applied to this id
@@ -82,8 +82,13 @@ public interface Entity extends CommandSender {
 	 * @param id the id to check
 	 * @return true if the same id
 	 */
+	@Deprecated
 	default boolean isSameId(String id) {
-		return id.equalsIgnoreCase(getEntityId());
+		return id.equalsIgnoreCase(String.valueOf(getEntityId()));
+	}
+	
+	default boolean isSameId(int id) {
+		return id == getEntityId();
 	}
 	
 	/**
@@ -93,7 +98,7 @@ public interface Entity extends CommandSender {
 	 * @return true if the same id
 	 */
 	default boolean isSameId(Entity other) {
-		return getEntityId().equalsIgnoreCase(other.getEntityId());
+		return getEntityId() == other.getEntityId();
 	}
 	
 	/**

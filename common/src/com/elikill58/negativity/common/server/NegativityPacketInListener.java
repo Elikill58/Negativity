@@ -52,7 +52,7 @@ public class NegativityPacketInListener implements Listeners {
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
 			if (useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
 				for (Entity entity : p.getWorld().getEntities()) {
-					if (entity.isSameId(String.valueOf(useEntityPacket.entityId))) {
+					if (entity.isSameId(useEntityPacket.entityId)) {
 						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
 						EventManager.callEvent(event);
 						if (event.isCancelled())

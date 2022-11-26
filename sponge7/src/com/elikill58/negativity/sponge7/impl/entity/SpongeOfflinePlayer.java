@@ -47,8 +47,8 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	}
 	
 	@Override
-	public String getEntityId() {
-		return u.getIdentifier();
+	public int getEntityId() {
+		return u.getUniqueId().hashCode();
 	}
 	
 	@Override

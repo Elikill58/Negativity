@@ -34,14 +34,9 @@ public class NegativityPacketOutListener implements Listeners {
 			p.getWorld().addEntity(et);
 		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
 			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) packet;
-			Player cible = Adapter.getAdapter().getPlayer(spawn.uuid);
-			if(cible == null) {
-				Adapter.getAdapter().debug("Can't find player for UUID " + spawn.uuid);
-				CompensatedPlayer et = new CompensatedPlayer(spawn.entityId, spawn.uuid, p.getWorld());
-				et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
-				p.getWorld().addEntity(et);
-			} else
-				p.getWorld().addEntity(cible);
+			CompensatedPlayer et = new CompensatedPlayer(spawn.entityId, spawn.uuid, p.getWorld());
+			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
+			p.getWorld().addEntity(et);
 		} else if(type.equals(PacketType.Server.RESPAWN)) {
 			NPacketPlayOutRespawn respawn = (NPacketPlayOutRespawn) packet;
 			if(p instanceof CompensatedPlayer) {

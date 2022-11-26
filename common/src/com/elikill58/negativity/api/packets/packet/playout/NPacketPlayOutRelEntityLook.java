@@ -10,8 +10,8 @@ public class NPacketPlayOutRelEntityLook extends NPacketPlayOutEntity {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		super.read(serializer, version);
-		this.yaw = serializer.readShort();
-		this.pitch = serializer.readShort();
+		this.yaw = serializer.readByte();
+		this.pitch = serializer.readByte();
 		this.isGround = serializer.readUnsignedByte() != 0;
 	}
 

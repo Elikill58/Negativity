@@ -13,8 +13,8 @@ public class NPacketPlayOutRelEntityMoveLook extends NPacketPlayOutEntity {
 		this.deltaX = serializer.readShort();
 		this.deltaY = serializer.readShort();
 		this.deltaZ = serializer.readShort();
-		this.yaw = serializer.readShort();
-		this.pitch = serializer.readShort();
+		this.yaw = serializer.readByte();
+		this.pitch = serializer.readByte();
 		this.isGround = serializer.readUnsignedByte() != 0;
 	}
 

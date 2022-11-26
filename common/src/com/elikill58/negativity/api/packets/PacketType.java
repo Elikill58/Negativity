@@ -8,11 +8,48 @@ import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnset;
-import com.elikill58.negativity.api.packets.packet.handshake.*;
-import com.elikill58.negativity.api.packets.packet.login.*;
-import com.elikill58.negativity.api.packets.packet.playin.*;
-import com.elikill58.negativity.api.packets.packet.playout.*;
-import com.elikill58.negativity.api.packets.packet.status.*;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
+import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSettings;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityLook;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMove;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMoveLook;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
+import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 
 public interface PacketType {
 
@@ -257,7 +294,7 @@ public interface PacketType {
 		CUSTOM_PAYLOAD,
 		CUSTOM_SOUND_EFFECT,
 		ENTITY,
-		ENTITY_DESTROY,
+		ENTITY_DESTROY(NPacketPlayOutEntityDestroy::new),
 		ENTITY_EFFECT(NPacketPlayOutEntityEffect::new),
 		ENTITY_EQUIPMENT,
 		ENTITY_HEAD_ROTATION,
@@ -294,9 +331,9 @@ public interface PacketType {
 		POSITION(NPacketPlayOutPosition::new),
 		RECIPES,
 		RECIPE_UPDATE,
-		REL_ENTITY_LOOK,
-		REL_ENTITY_MOVE,
-		REL_ENTITY_MOVE_LOOK,
+		REL_ENTITY_LOOK(NPacketPlayOutRelEntityLook::new),
+		REL_ENTITY_MOVE(NPacketPlayOutRelEntityMove::new),
+		REL_ENTITY_MOVE_LOOK(NPacketPlayOutRelEntityMoveLook::new),
 		REMOVE_ENTITY_EFFECT,
 		RESOURCE_PACK_SEND,
 		RESPAWN(NPacketPlayOutRespawn::new),
@@ -364,7 +401,7 @@ public interface PacketType {
 		
 		@Override
 		public boolean isFlyingPacket() {
-			return this == LOOK_AT || this == POSITION || this == REL_ENTITY_MOVE || this == REL_ENTITY_MOVE_LOOK;
+			return this == ENTITY || this == Server.REL_ENTITY_LOOK || this == REL_ENTITY_MOVE || this == REL_ENTITY_MOVE_LOOK;
 		}
 		
 		@Override

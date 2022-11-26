@@ -3,7 +3,6 @@ package com.elikill58.negativity.api.packets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -47,9 +46,11 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEnti
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMoveLook;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntityLiving;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
+import com.elikill58.negativity.universal.utils.ChatUtils;
 
 public interface PacketType {
 
@@ -66,17 +67,7 @@ public interface PacketType {
 	 * @return the packet name
 	 */
 	default String getPacketName() {
-		String name = "";
-		boolean upper = true;
-		for(String s : name().toLowerCase(Locale.ROOT).split("")) {
-			if(s.equalsIgnoreCase("_"))
-				upper = true;
-			else {
-				name += (upper ? s.toUpperCase(Locale.ROOT) : s.toLowerCase(Locale.ROOT));
-				upper = false;
-			}
-		}
-		return name;
+		return ChatUtils.capitalize(name());
 	}
 	
 	/**
@@ -359,7 +350,7 @@ public interface PacketType {
 		SET_TITLE_ANIMATION,
 		SIMULATION_DISTANCE,
 		SPAWN_ENTITY(NPacketPlayOutSpawnEntity::new),
-		SPAWN_ENTITY_LIVING,
+		SPAWN_ENTITY_LIVING(NPacketPlayOutSpawnEntityLiving::new),
 		SPAWN_ENTITY_EXPERIENCE_ORB,
 		SPAWN_ENTITY_PAINTING,
 		SPAWN_ENTITY_WEATHER,

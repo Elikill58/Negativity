@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -170,5 +171,19 @@ public class ChatUtils {
 		if(time <= 0)
 			return null;
 		return GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()));
+	}
+	
+	public static String capitalize(String original) {
+		String name = "";
+		boolean upper = true;
+		for(String s : original.toLowerCase(Locale.ROOT).split("")) {
+			if(s.equalsIgnoreCase("_"))
+				upper = true;
+			else {
+				name += (upper ? s.toUpperCase(Locale.ROOT) : s.toLowerCase(Locale.ROOT));
+				upper = false;
+			}
+		}
+		return name;
 	}
 }

@@ -45,34 +45,8 @@ public class Reach extends Cheat {
 	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np, ReachData data) {
 		NPacket packet = e.getPacket();
 		Player p = e.getPlayer();
-		if (packet.getPacketType().isFlyingPacket()) {
-			if (data.cible != null) {
-				if (np.isTeleporting || (data.cible instanceof Player
-						&& NegativityPlayer.getNegativityPlayer((Player) data.cible).isTeleporting)) {
-					Adapter.getAdapter().debug("Beeing TP " + data.cible);
-					data.reset();
-					return; // just beeing tp
-				}
-				Location loc = p.getLocation();
-				Adapter.getAdapter().debug("Positions: " + data.cibleLocation + ", locs: " + loc);
-				double dis = getDistance(loc, data.cibleLocation);
-				recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-				Adapter.getAdapter()
-						.debug("Distance between " + p.getName() + " and " + data.cible.getName() + ": " + dis);
-				double max = getConfig().getDouble("checks.reach-event.value", 3.2)
-						+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
-				if (dis > max) {
-					if (Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dis - max) * 90),
-							"reach-event",
-							"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + data.cibleLocation,
-							hoverMsg("distance", "%name%", data.cible.getName(), "%distance%",
-									String.format("%.2f", dis)))
-							&& isSetBack())
-						e.setCancelled(true);
-				}
-				data.reset();
-			}
-		} else if (packet instanceof NPacketPlayInUseEntity) {
+		
+		if (packet instanceof NPacketPlayInUseEntity) {
 			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet;
 			if (!useEntity.action.equals(NPacketPlayInUseEntity.EnumEntityUseAction.ATTACK) || p.hasElytra())
 				return;
@@ -84,9 +58,25 @@ public class Reach extends Cheat {
 				Adapter.getAdapter().debug("Failed to find entity with ID " + useEntity.entityId + ", all: " + p.getWorld().getEntities());
 				return;
 			}
+			Location cibleLocation = cible.getLocation();
 			Adapter.getAdapter().debug("Select entity with ID " + useEntity.entityId + ", type: " + cible.getType());
-			data.cible = cible;
-			data.cibleLocation = cible.getLocation();
+			Location loc = p.getLocation();
+			Adapter.getAdapter().debug("Positions: " + cibleLocation + ", locs: " + loc);
+			double dis = getDistance(loc, cibleLocation);
+			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
+			Adapter.getAdapter()
+					.debug("Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
+			double max = getConfig().getDouble("checks.reach-event.value", 3.2)
+					+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
+			if (dis > max) {
+				if (Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dis - max) * 90),
+						"reach-event",
+						"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + cibleLocation,
+						hoverMsg("distance", "%name%", cible.getName(), "%distance%",
+								String.format("%.2f", dis)))
+						&& isSetBack())
+					e.setCancelled(true);
+			}
 		}
 	}
 

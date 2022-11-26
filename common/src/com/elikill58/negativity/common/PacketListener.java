@@ -149,7 +149,7 @@ public class PacketListener implements Listeners {
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(type.equals(PacketType.Server.POSITION) || type.equals(PacketType.Server.ENTITY_TELEPORT))
+		if(type.equals(PacketType.Server.ENTITY_TELEPORT))
 			np.isTeleporting = true;
 		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
 			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket();

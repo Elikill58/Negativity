@@ -15,6 +15,7 @@ import com.elikill58.negativity.common.GameEventsManager;
 import com.elikill58.negativity.common.PacketListener;
 import com.elikill58.negativity.common.ProxyEventsManager;
 import com.elikill58.negativity.common.server.NegativityPacketInListener;
+import com.elikill58.negativity.common.server.NegativityPacketOutListener;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.monitor.MonitorType;
 import com.elikill58.negativity.universal.monitor.cpu.function.EventCpuMeasure;
@@ -29,13 +30,16 @@ public class EventManager {
 		registerEvent(new CommandManager());
 		registerEvent(new InventoryManager());
 		registerEvent(new ConnectionManager());
-		registerEvent(new PacketListener());
-		registerEvent(new NegativityPacketInListener());
-		registerEvent(new FightListeners());
 		if(Adapter.getAdapter().getPlatformID().isProxy())
 			registerEvent(new ProxyEventsManager());
-		else
+		else {
+			registerEvent(new PacketListener());
+			registerEvent(new FightListeners());
 			registerEvent(new GameEventsManager());
+
+			registerEvent(new NegativityPacketInListener());
+			registerEvent(new NegativityPacketOutListener());
+		}
 	}
 	
 	/**

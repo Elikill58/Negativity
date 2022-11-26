@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -122,10 +121,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			e.printStackTrace();
 			return new ArrayList<>();
 		}
-	}
-	
-	public List<Entity> getEntities(World w){
-		return w.getEntities();
 	}
 	
 	public BoundingBox getBoundingBox(Entity et) {

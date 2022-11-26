@@ -1,10 +1,5 @@
 package com.elikill58.negativity.spigot17;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -40,19 +35,6 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	@Override
 	public Channel getChannel(Player p) {
 		return getPlayerConnection(p).connection.channel;
-	}
-
-	@Override
-	public List<Entity> getEntities(World w) {
-		List<Entity> entities = new ArrayList<>();
-		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
-			if (mcEnt != null) {
-				CraftEntity craftEntity = mcEnt.getBukkitEntity();
-				if (craftEntity != null && craftEntity.isValid())
-					entities.add(craftEntity);
-			}
-		});
-		return entities;
 	}
 
 	private DedicatedServer getServer() {

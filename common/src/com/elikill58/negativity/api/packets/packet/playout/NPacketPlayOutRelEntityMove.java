@@ -10,9 +10,9 @@ public class NPacketPlayOutRelEntityMove extends NPacketPlayOutEntity {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		super.read(serializer, version);
-		this.deltaX = serializer.readShort();
-		this.deltaY = serializer.readShort();
-		this.deltaZ = serializer.readShort();
+		this.deltaX = ((double) serializer.readShort()) / 4096;
+		this.deltaY = ((double) serializer.readShort()) / 4096;
+		this.deltaZ = ((double) serializer.readShort()) / 4096;
 		this.isGround = serializer.readUnsignedByte() != 0;
 	}
 

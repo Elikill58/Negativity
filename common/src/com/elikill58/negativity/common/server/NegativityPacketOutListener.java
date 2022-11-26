@@ -28,6 +28,7 @@ public class NegativityPacketOutListener implements Listeners {
 		PacketType type = packet.getPacketType();
 		if(type.equals(PacketType.Server.SPAWN_ENTITY)) {
 			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) packet;
+			Adapter.getAdapter().debug("Spawning entity " + spawn.entityId + ", type: " + spawn.type);
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
@@ -54,8 +55,10 @@ public class NegativityPacketOutListener implements Listeners {
 			}
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {
 			NPacketPlayOutEntityDestroy destroy = (NPacketPlayOutEntityDestroy) packet;
-			for(int ids : destroy.entityIds)
+			for(int ids : destroy.entityIds) {
+				Adapter.getAdapter().debug("Removing entity " + ids);
 				p.getWorld().removeEntity(ids);
+			}
 		} else if(type.isFlyingPacket()) {
 			NPacketPlayOutEntity flying = (NPacketPlayOutEntity) packet;
 			p.getWorld().getEntityById(flying.entityId).ifPresent(entity -> {

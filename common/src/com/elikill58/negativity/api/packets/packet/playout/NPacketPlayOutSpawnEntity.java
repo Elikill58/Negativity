@@ -37,9 +37,9 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 		} else {
 			this.entityUUID = UUID.randomUUID(); // no UUID
 			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
-			this.x = serializer.readInt();
-			this.y = serializer.readInt();
-			this.z = serializer.readInt();
+			this.x = ((double) serializer.readInt()) / 32;
+			this.y = ((double) serializer.readInt()) / 32;
+			this.z = ((double) serializer.readInt()) / 32;
 			this.yaw = serializer.readByte() * 256.0F / 360.0F;
 			this.pitch = serializer.readByte() * 256.0F / 360.0F;
 			k = serializer.readInt();

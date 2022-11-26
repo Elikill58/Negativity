@@ -41,11 +41,11 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			StringJoiner sj = new StringJoiner(", ", " : ", "");
 			for(String alias : parsedAliases) {
 				if(alias.equals(Materials.IGNORE_KEY))
-					return null; // ignore not found item
+					return createDefault(id); // ignore not found item
 				sj.add(alias + " (" + parse(alias) + ")");
 			}
 			SpongeNegativity.getInstance().getLogger().info("[SpongeItemRegistrar] Cannot find material " + id + sj);
-			return null;
+			return createDefault(id);
 		});
 	}
 	

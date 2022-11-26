@@ -83,11 +83,6 @@ public class CompensatedEntity extends AbstractEntity {
 	public void sendMessage(String msg) {}
 
 	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
 	public Object getDefault() {
 		return this;
 	}

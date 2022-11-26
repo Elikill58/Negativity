@@ -10,9 +10,15 @@ public class NPacketPlayOutRelEntityMoveLook extends NPacketPlayOutEntity {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		super.read(serializer, version);
-		this.deltaX = ((double) serializer.readShort()) / 4096;
-		this.deltaY = ((double) serializer.readShort()) / 4096;
-		this.deltaZ = ((double) serializer.readShort()) / 4096;
+		if(version.isNewerOrEquals(Version.V1_13)) {
+			this.deltaX = ((double) serializer.readShort()) / 4096;
+			this.deltaY = ((double) serializer.readShort()) / 4096;
+			this.deltaZ = ((double) serializer.readShort()) / 4096;
+		} else {
+			this.deltaX = ((double) serializer.readByte()) / 32;
+			this.deltaY = ((double) serializer.readByte()) / 32;
+			this.deltaZ = ((double) serializer.readByte()) / 32;
+		}
 		this.yaw = serializer.readByte();
 		this.pitch = serializer.readByte();
 		this.isGround = serializer.readUnsignedByte() != 0;

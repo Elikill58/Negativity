@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.block;
 
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 
 public class BlockPosition {
 
@@ -31,5 +32,9 @@ public class BlockPosition {
 	
 	public int getZ() {
 		return z;
+	}
+	
+	public Location toLocation(World w) {
+		return new Location(w, x, y, z);
 	}
 }

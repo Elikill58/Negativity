@@ -47,7 +47,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			
 			for (String alias : aliases) {
 				if(alias.equals(Materials.IGNORE_KEY))
-					return null; // ignore not found item
+					return createDefault(id); // ignore not found item
 				ResourceKey aliasKey = parse(alias);
 				@Nullable BlockType aliasedBlockType = blockTypeRegistry.findValue(aliasKey).orElse(null);
 				if (aliasedBlockType != null && !returnedDefaultValue(aliasKey, aliasedBlockType)) {
@@ -60,7 +60,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			}
 			
 			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + ", " + String.join(", ", aliases));
-			return null;
+			return createDefault(id);
 		});
 	}
 	

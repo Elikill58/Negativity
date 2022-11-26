@@ -62,7 +62,7 @@ public enum EntityType {
 	MARKER,
 	MAGMA_CUBE("LavaSlime"),
 	MINECART("MinecartRideable"),
-	MINECART_COMMAND("MinecartCommandBlock"),
+	MINECART_COMMAND_BLOCK("MinecartCommandBlock"),
 	MINECART_CHEST("MinecartChest"),
 	MINECART_FURNACE("MinecartFurnace"),
 	MINECART_HOPPER("MinecartHopper"),

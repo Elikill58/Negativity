@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets.nms.versions;
 
 import java.util.Arrays;
 
+import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType.*;
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
@@ -40,7 +41,69 @@ public class Version1_8 extends NamedVersion {
 				Server.RESOURCE_PACK_SEND, Server.UPDATE_ENTITY_NBT)) {
 			playOut.put(i++, type);
 		}
-		handshake.put(0, Handshake.IS_SET_PROTOCOL);
+		
+		entityTypes.put(1, EntityType.DROPPED_ITEM);
+		entityTypes.put(2, EntityType.EXPERIENCE_ORB);
+		entityTypes.put(7, EntityType.EGG);
+		entityTypes.put(8, EntityType.LEASH_KNOT);
+		entityTypes.put(9, EntityType.PAINTING);
+		entityTypes.put(10, EntityType.ARROW);
+		entityTypes.put(11, EntityType.SNOW_BALL);
+		entityTypes.put(12, EntityType.FIREBALL);
+		entityTypes.put(13, EntityType.SMALL_FIREBALL);
+		entityTypes.put(14, EntityType.ENDER_PEARL);
+		entityTypes.put(15, EntityType.ENDER_SIGNAL);
+		entityTypes.put(16, EntityType.SPLASH_POTION);
+		entityTypes.put(17, EntityType.EXP_BOTTLE);
+		entityTypes.put(18, EntityType.ITEM_FRAME);
+		entityTypes.put(19, EntityType.WITHER_SKULL);
+		entityTypes.put(20, EntityType.PRIMED_TNT);
+		entityTypes.put(21, EntityType.FALLING_BLOCK);
+		entityTypes.put(22, EntityType.FIREWORK);
+		entityTypes.put(30, EntityType.ARMOR_STAND);
+		entityTypes.put(40, EntityType.MINECART_COMMAND_BLOCK);
+		entityTypes.put(41, EntityType.BOAT);
+		entityTypes.put(42, EntityType.MINECART);
+		entityTypes.put(43, EntityType.MINECART_CHEST);
+		entityTypes.put(44, EntityType.MINECART_FURNACE);
+		entityTypes.put(45, EntityType.MINECART_TNT);
+		entityTypes.put(46, EntityType.MINECART_HOPPER);
+		entityTypes.put(47, EntityType.MINECART_MOB_SPAWNER);
+		entityTypes.put(48, EntityType.UNKNOWN); // "mob" as spigot said
+		entityTypes.put(49, EntityType.UNKNOWN); // "monster" as spigot said
+		entityTypes.put(50, EntityType.CREEPER);
+		entityTypes.put(51, EntityType.SKELETON);
+		entityTypes.put(52, EntityType.SPIDER);
+		entityTypes.put(53, EntityType.GIANT);
+		entityTypes.put(54, EntityType.ZOMBIE);
+		entityTypes.put(55, EntityType.SLIME);
+		entityTypes.put(56, EntityType.GHAST);
+		entityTypes.put(57, EntityType.PIG_ZOMBIE);
+		entityTypes.put(58, EntityType.ENDERMAN);
+		entityTypes.put(59, EntityType.CAVE_SPIDER);
+		entityTypes.put(60, EntityType.SILVERFISH);
+		entityTypes.put(61, EntityType.BLAZE);
+		entityTypes.put(62, EntityType.MAGMA_CUBE);
+		entityTypes.put(63, EntityType.ENDER_DRAGON);
+		entityTypes.put(64, EntityType.WITHER);
+		entityTypes.put(65, EntityType.BAT);
+		entityTypes.put(66, EntityType.WITCH);
+		entityTypes.put(67, EntityType.ENDERMITE);
+		entityTypes.put(68, EntityType.GUARDIAN);
+		entityTypes.put(90, EntityType.PIG);
+		entityTypes.put(91, EntityType.SHEEP);
+		entityTypes.put(92, EntityType.COW);
+		entityTypes.put(93, EntityType.CHICKEN);
+		entityTypes.put(94, EntityType.SQUID);
+		entityTypes.put(95, EntityType.WOLF);
+		entityTypes.put(96, EntityType.MUSHROOM_COW);
+		entityTypes.put(97, EntityType.SNOW_GOLEM);
+		entityTypes.put(98, EntityType.OCELOT);
+		entityTypes.put(99, EntityType.IRON_GOLEM);
+		entityTypes.put(100, EntityType.HORSE);
+		entityTypes.put(101, EntityType.RABBIT);
+		entityTypes.put(120, EntityType.VILLAGER);
+		entityTypes.put(200, EntityType.ENDER_CRYSTAL);
 	}
 	
 	@Override

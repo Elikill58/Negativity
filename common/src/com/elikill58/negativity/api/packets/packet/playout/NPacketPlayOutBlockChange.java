@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
 import com.elikill58.negativity.api.block.BlockPosition;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
@@ -10,6 +11,7 @@ public class NPacketPlayOutBlockChange implements NPacketPlayOut {
 
 	public BlockPosition pos;
 	public long stateId;
+	public Material type;
 	
 	public NPacketPlayOutBlockChange(BlockPosition pos, long state) {
 		this.pos = pos;
@@ -24,6 +26,7 @@ public class NPacketPlayOutBlockChange implements NPacketPlayOut {
 	public void read(PacketSerializer serializer, Version version) {
 		this.pos = serializer.readBlockPosition();
 		this.stateId = serializer.readVarInt();
+		this.type = version.getOrCreateNamedVersion().getMaterial((int) stateId);
 	}
 	
 	@Override

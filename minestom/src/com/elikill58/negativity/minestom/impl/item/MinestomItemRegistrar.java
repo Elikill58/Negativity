@@ -33,11 +33,11 @@ public class MinestomItemRegistrar extends ItemRegistrar {
 			StringJoiner sj = new StringJoiner(", ", " : ", "");
 			for(String alias : aliases) {
 				if(alias.equals(Materials.IGNORE_KEY))
-					return null; // ignore not found item
+					return createDefault(id); // ignore not found item
 				sj.add(alias);
 			}
 			Adapter.getAdapter().getLogger().info("[MinestomItemRegistrar] Cannot find material " + id + sj);
-			return null;
+			return createDefault(id);
 		});
 	}
 	

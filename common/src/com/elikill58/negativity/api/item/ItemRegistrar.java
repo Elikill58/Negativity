@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.item;
 
+import com.elikill58.negativity.api.impl.block.CompensatedMaterial;
 import com.elikill58.negativity.universal.Adapter;
 
 public abstract class ItemRegistrar {
@@ -10,9 +11,13 @@ public abstract class ItemRegistrar {
 	 * 
 	 * @param id the main ID of the material
 	 * @param alias All others names that the material can have, according to version
-	 * @return the material
+	 * @return the material or {@link #createDefault(String)} result (with given id)
 	 */
 	public abstract Material get(String id, String... alias);
+	
+	public Material createDefault(String id) {
+		return new CompensatedMaterial(id);
+	}
 	
 	/**
 	 * Get item registry instance

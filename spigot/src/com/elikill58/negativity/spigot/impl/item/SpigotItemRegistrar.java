@@ -23,11 +23,10 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 				StringJoiner sj = new StringJoiner(", ", " : ", "");
 				for(String tempAlias : alias) {
 					if(tempAlias.equals(Materials.IGNORE_KEY))
-						return null; // ignore not found item
+						return createDefault(id); // ignore not found item
 					sj.add(tempAlias);
 				}
-				SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + ", alias: " + sj);
-				return null;
+				return createDefault(id);
 			}
 			return new SpigotMaterial(m, id);
 		});

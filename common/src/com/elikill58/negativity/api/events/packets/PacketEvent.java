@@ -13,10 +13,6 @@ public abstract class PacketEvent extends PlayerEvent {
 		this.packet = packet;
 	}
 	
-	public boolean hasPlayer() {
-		return getPlayer() != null;
-	}
-	
 	public NPacket getPacket() {
 		return packet;
 	}

@@ -49,6 +49,7 @@ public class Reach extends Cheat {
 			if (data.cible != null) {
 				if (np.isTeleporting || (data.cible instanceof Player
 						&& NegativityPlayer.getNegativityPlayer((Player) data.cible).isTeleporting)) {
+					Adapter.getAdapter().debug("Beeing TP " + data.cible);
 					data.reset();
 					return; // just beeing tp
 				}
@@ -78,15 +79,14 @@ public class Reach extends Cheat {
 			ItemStack inHand = p.getItemInHand();
 			if (inHand != null && IGNORED_TYPE.contains(inHand.getType()))
 				return;
-			Entity cible = p.getWorld().getEntityWithID(useEntity.entityId);
-			if (cible == null)
+			Entity cible = p.getWorld().getEntityById(useEntity.entityId).orElse(null);
+			if (cible == null) {
+				Adapter.getAdapter().debug("Failed to find entity with ID " + useEntity.entityId + ", all: " + p.getWorld().getEntities());
 				return;
-			Location cibleLoc = cible.getLocation();
-			if (cible instanceof Player) {
-				cibleLoc = NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation();
 			}
+			Adapter.getAdapter().debug("Select entity with ID " + useEntity.entityId + ", type: " + cible.getType());
 			data.cible = cible;
-			data.cibleLocation = cibleLoc;
+			data.cibleLocation = cible.getLocation();
 		}
 	}
 

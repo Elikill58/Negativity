@@ -209,9 +209,6 @@ public final class Location implements Cloneable {
 		if ((o.getWorld() == null) || (getWorld() == null)) {
 			return 0;
 		}
-		if (!o.getWorld().getName().equals(getWorld().getName())) {
-			return 0;
-		}
 		return Maths.square(this.x - o.x) + Maths.square(this.z - o.z);
 	}
 

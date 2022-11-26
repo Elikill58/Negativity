@@ -2,7 +2,6 @@ package com.elikill58.negativity.api.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockHashMap;
@@ -57,10 +56,6 @@ public class CompensatedWorld extends World {
 	
 	public void setBlock(Material type, int x, int y, int z) {
 		blocks.set(x, y, z, new CompensatedBlock(new Location(this, x, y, z), type));
-	}
-	
-	public Optional<Entity> getEntityById(int id) {
-		return entities.stream().filter(e -> e.isSameId(id)).findFirst();
 	}
 	
 	public void addEntity(Entity e) {

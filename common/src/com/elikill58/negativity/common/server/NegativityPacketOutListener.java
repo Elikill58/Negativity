@@ -44,7 +44,10 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.RESPAWN)) {
 			NPacketPlayOutRespawn respawn = (NPacketPlayOutRespawn) packet;
 			if(p instanceof CompensatedPlayer) {
+				if(p.getWorld() != null && p.getWorld().getName() == respawn.worldName)
+					return; // don't change world
 				CompensatedPlayer cp = (CompensatedPlayer) p;
+				Adapter.getAdapter().debug("Changing world " + p.getWorld().getEntities().size() + " to " + respawn.worldName);
 				CompensatedWorld world = new CompensatedWorld(p);
 				world.setName(respawn.worldName);
 				cp.setWorld(world);

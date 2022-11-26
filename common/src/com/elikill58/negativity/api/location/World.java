@@ -1,10 +1,9 @@
 package com.elikill58.negativity.api.location;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-
-import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
@@ -147,11 +146,8 @@ public abstract class World implements NegativityObject {
 	 * @param entityId the ID of the entity
 	 * @return the founded entity or null if not is this world/no longer existing
 	 */
-	public @Nullable Entity getEntityWithID(int entityId) {
-		for(Entity et : getEntities())
-			if(et.isSameId(entityId))
-				return et;
-		return null;
+	public Optional<Entity> getEntityById(int id) {
+		return getEntities().stream().filter(e -> e.isSameId(id)).findFirst();
 	}
 	
 	/**
@@ -187,6 +183,6 @@ public abstract class World implements NegativityObject {
 		if(!(obj instanceof World))
 			return false;
 		World w = (World) obj;
-		return (getName() != null && w.getName() != null && getName().equals(w.getName())) || getDefault().equals(w.getDefault());
+		return (getName() != null && w.getName() != null && getName().equals(w.getName())) || super.equals(obj);
 	}
 }

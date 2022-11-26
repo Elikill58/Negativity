@@ -13,4 +13,8 @@ public abstract class PlayerEvent implements Event {
 	public Player getPlayer() {
 		return p;
 	}
+	
+	public boolean hasPlayer() {
+		return p != null;
+	}
 }

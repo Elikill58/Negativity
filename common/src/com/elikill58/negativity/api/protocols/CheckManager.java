@@ -57,7 +57,7 @@ public class CheckManager implements Listeners {
 	
 	@EventListener
 	public void onPlayerEvent(PlayerEvent e) {
-		if(e.getPlayer() == null)
+		if(!e.hasPlayer())
 			return;
 		HashMap<CheckConditions, Boolean> conditionResult = new HashMap<>();
 		new ArrayList<>(allChecks).forEach((check) -> {
@@ -71,7 +71,7 @@ public class CheckManager implements Listeners {
 				if(!check.getCheck().ignoreCancel()) {
 					for(CheckConditions condition : check.getCheck().conditions()) {
 						if(condition.shouldBeCached()) { // should be cached, cache it and check it
-							if(conditionResult.computeIfAbsent(condition, (c) -> condition.check(p)))
+							if(conditionResult.computeIfAbsent(condition, (c) -> !condition.check(p)))
 								return;
 						} else if(!condition.check(p))// no cache, always check it
 							return;

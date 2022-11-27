@@ -7,6 +7,7 @@ import com.elikill58.negativity.universal.Version;
 public class VersionUnknown extends NamedVersion {
 
 	public VersionUnknown() {
+		super("?.??");
 		Adapter.getAdapter().getLogger().error("The version " + Version.getVersion() + " isn't supported yet. Please report the issue.");
 	}
 }

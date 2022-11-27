@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_8 extends NamedVersion {
 
 	public Version1_8() {
+		super("1.8");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.KEEP_ALIVE, Client.CHAT, Client.USE_ENTITY, Client.FLYING, Client.POSITION, Client.LOOK, Client.POSITION_LOOK, Client.BLOCK_DIG,
 				Client.BLOCK_PLACE, Client.HELD_ITEM_SLOT, Client.ARM_ANIMATION, Client.ENTITY_ACTION, Client.STEER_VEHICLE, Client.CLOSE_WINDOW, Client.WINDOW_CLICK, Client.PONG,
@@ -94,6 +95,8 @@ public class Version1_8 extends NamedVersion {
 		entityTypes.put(101, EntityType.RABBIT);
 		entityTypes.put(120, EntityType.VILLAGER);
 		entityTypes.put(200, EntityType.ENDER_CRYSTAL);
+		
+		log();
 	}
 
 	@Override

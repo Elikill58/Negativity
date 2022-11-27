@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_14 extends NamedVersion {
 
 	public Version1_14() {
+		super("1.14");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.DIFFICULTY_CHANGE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.TAB_COMPLETE,
 				Client.PONG, Client.ENCHANT_ITEM, Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.BEDIT, Client.ENTITY_NBT_QUERY, Client.USE_ENTITY,
@@ -131,5 +132,7 @@ public class Version1_14 extends NamedVersion {
 				"sweet_berry_bush", "structure_block", "jigsaw", "composter")) {
 			materials.put(i++, type);
 		}
+		
+		log();
 	}
 }

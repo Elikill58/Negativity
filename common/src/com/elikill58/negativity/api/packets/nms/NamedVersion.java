@@ -22,9 +22,19 @@ public abstract class NamedVersion {
 	protected final HashMap<Integer, PacketType.Status> status = new HashMap<>();
 	protected final HashMap<Integer, EntityType> entityTypes = new HashMap<>();
 	protected final HashMap<Integer, String> materials = new HashMap<>();
+	protected final String name;
 	
-	public NamedVersion() {
+	public NamedVersion(String name) {
+		this.name = name;
 		handshake.put(0, Handshake.IS_SET_PROTOCOL);
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void log() {
+		Adapter.getAdapter().getLogger().info("Loaded version " + getName() + ". Packets playIn/playOut: " + playIn.size() + "/" + playOut.size() + ", entityTypes: " + entityTypes.size() + ", materials: " + materials.size());
 	}
 	
 	/**

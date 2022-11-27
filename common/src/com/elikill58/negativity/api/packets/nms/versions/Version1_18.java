@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_18 extends NamedVersion {
 
 	public Version1_18() {
+		super("1.18");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.DIFFICULTY_CHANGE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.TAB_COMPLETE,
 				Client.ENCHANT_ITEM, Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.BEDIT, Client.ENTITY_NBT_QUERY, Client.USE_ENTITY, Client.JIGSAW_GENERATE,
@@ -153,5 +154,7 @@ public class Version1_18 extends NamedVersion {
 				"sculk_sensor")) {
 			materials.put(i++, type);
 		}
+		
+		log();
 	}
 }

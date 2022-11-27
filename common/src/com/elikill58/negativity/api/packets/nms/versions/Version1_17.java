@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_17 extends NamedVersion {
 
 	public Version1_17() {
+		super("1.17");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.DIFFICULTY_CHANGE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.TAB_COMPLETE,
 				Client.ENCHANT_ITEM, Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.BEDIT, Client.ENTITY_NBT_QUERY, Client.USE_ENTITY, Client.JIGSAW_GENERATE,
@@ -164,5 +165,7 @@ public class Version1_17 extends NamedVersion {
 				"smooth_basalt", "raw_iron_block", "raw_copper_block", "raw_gold_block", "potted_azalea_bush", "potted_flowering_azalea_bush")) {
 			materials.put(i++, type);
 		}
+		
+		log();
 	}
 }

@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_19_2 extends NamedVersion {
 
 	public Version1_19_2() {
+		super("1.19.2");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.DIFFICULTY_CHANGE, Client.CHAT_ACK, Client.CHAT_COMMAND, Client.CHAT, Client.CHAT_PREVIEW,
 				Client.CLIENT_COMMAND, Client.SETTINGS, Client.TAB_COMPLETE, Client.ENCHANT_ITEM, Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.BEDIT,
@@ -167,5 +168,7 @@ public class Version1_19_2 extends NamedVersion {
 				"cracked_deepslate_bricks", "cracked_deepslate_tiles", "infested_deepslate", "smooth_basalt", "raw_iron_block", "raw_copper_block", "raw_gold_block", "potted_azalea_bush",
 				"potted_flowering_azalea_bush", "ochre_froglight", "verdant_froglight", "pearlescent_froglight"))
 			materials.put(i++, types);
+		
+		log();
 	}
 }

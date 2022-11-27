@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_13 extends NamedVersion {
 
 	public Version1_13() {
+		super("1.13");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.TAB_COMPLETE, Client.PONG,
 				Client.ENCHANT_ITEM, Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.BEDIT, Client.ENTITY_NBT_QUERY, Client.USE_ENTITY, Client.KEEP_ALIVE,
@@ -120,5 +121,7 @@ public class Version1_13 extends NamedVersion {
 				"dead_bubble_coral_fan", "dead_fire_coral_fan", "dead_horn_coral_fan", "structure_block")) {
 			materials.put(i++, type);
 		}
+		
+		log();
 	}
 }

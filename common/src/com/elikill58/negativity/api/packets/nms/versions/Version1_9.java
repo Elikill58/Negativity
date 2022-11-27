@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_9 extends NamedVersion {
 
 	public Version1_9() {
+		super("1.9");
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TAB_COMPLETE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.PONG, Client.ENCHANT_ITEM,
 				Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.USE_ENTITY, Client.KEEP_ALIVE, Client.POSITION, Client.POSITION_LOOK, Client.LOOK, Client.FLYING,
@@ -99,6 +100,8 @@ public class Version1_9 extends NamedVersion {
 		entityTypes.put(101, EntityType.RABBIT);
 		entityTypes.put(120, EntityType.VILLAGER);
 		entityTypes.put(200, EntityType.ENDER_CRYSTAL);
+
+		log();
 	}
 
 	@Override

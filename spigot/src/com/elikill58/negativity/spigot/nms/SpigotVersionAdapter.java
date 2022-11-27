@@ -38,7 +38,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		try {
 			dedicatedServer = PacketUtils.getDedicatedServer();
 			
-			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper");
+			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper", "util.");
 			mathTps = mathHelperClass.getDeclaredMethod("a", long[].class);
 			
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
@@ -57,7 +57,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 			Class<?> bbClass = PacketUtils.getNmsClass("AxisAlignedBB", "world.phys.");
 
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
+			if(version.isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
 				minX = bbClass.getDeclaredField("minX");
 				minY = bbClass.getDeclaredField("minY");
 				minZ = bbClass.getDeclaredField("minZ");

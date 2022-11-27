@@ -450,6 +450,12 @@ public class PacketSerializer {
 		return s;
 	}
 
+	/**
+	 * Read NBT tag.<br>
+	 * This method pass just over all bytes, but ALWAYS return null
+	 * 
+	 * @return null
+	 */
 	public Object readNBTTag() {
 		int i = readerIndex();
 		byte b0 = readByte();
@@ -510,5 +516,23 @@ public class PacketSerializer {
 
 	public Vector readShortVector() {
 		return new Vector(readShort(), readShort(), readShort());
+	}
+	
+	public long[] readLongArray() {
+        int length = readVarInt();
+        long[] longs = new long[length];
+        for (int i = 0; i < length; i++) {
+            longs[i] = readLong();
+        }
+        return longs;
+	}
+	
+	public byte[] readByteArray() {
+        int length = readVarInt();
+        byte[] bytes = new byte[length];
+        for (int i = 0; i < length; i++) {
+            bytes[i] = readByte();
+        }
+        return bytes;
 	}
 }

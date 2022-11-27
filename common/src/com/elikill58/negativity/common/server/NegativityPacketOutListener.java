@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.impl.entity.CompensatedEntity;
 import com.elikill58.negativity.api.impl.entity.CompensatedPlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.PacketType.Server;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
@@ -18,6 +19,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBl
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketOutListener implements Listeners {
@@ -74,6 +76,7 @@ public class NegativityPacketOutListener implements Listeners {
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
 			change.blockStates.forEach((pos, m) -> Adapter.getAdapter().debug("[Multi] Set " + m + " to " + pos));
-		}
+		} else if(!type.isFlyingPacket() && !type.equals(Server.LIGHT_UPDATE))
+			Adapter.getAdapter().debug("Sending packet " + type.getPacketName() + " " + (packet instanceof NPacketPlayOutUnset ? ((NPacketPlayOutUnset) packet).getPacketTypeCible().getPacketName() : ""));
 	}
 }

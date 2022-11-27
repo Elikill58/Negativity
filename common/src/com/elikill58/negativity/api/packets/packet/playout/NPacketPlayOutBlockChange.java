@@ -24,9 +24,9 @@ public class NPacketPlayOutBlockChange implements NPacketPlayOut {
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		this.pos = serializer.readBlockPosition();
+		this.pos = serializer.readBlockPosition(version);
 		this.stateId = serializer.readVarInt();
-		this.type = version.getOrCreateNamedVersion().getMaterial((int) stateId);
+		this.type = version.getOrCreateNamedVersion().getMaterial((int) (stateId >> 4));
 	}
 	
 	@Override

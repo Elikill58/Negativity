@@ -20,7 +20,7 @@ public class NPacketPlayOutBlockBreakAnimation implements NPacketPlayOut, Locate
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 	    this.entityId = serializer.readVarInt();
-	    this.pos = serializer.readBlockPosition();
+	    this.pos = serializer.readBlockPosition(version);
 	    this.destroyStage = serializer.readUnsignedByte();
 	}
 

@@ -14,6 +14,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.universal.Version;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -475,19 +476,23 @@ public class PacketSerializer {
 		return itemstack;
 	}
 
-	public BlockPosition readBlockPosition() {
-		long value = readLong();
-		int x = (int) (value >> 38);
-		int y = (int) (value << 26 >> 52);
-		int z = (int) (value << 38 >> 38);
-		return new BlockPosition(x, y, z);
+	public BlockPosition readBlockPosition(Version version) {
+		return version.isNewerOrEquals(Version.V1_18) ? readBlockPositionNew() : readBlockPositionOld();
 	}
 
-	public BlockPosition readBlockPositionNew() {
+	private BlockPosition readBlockPositionNew() {
 		long value = readLong();
 		int x = (int) (value >> 38);
 		int y = (int) (value << 52 >> 52);
 		int z = (int) (value << 26 >> 38);
+		return new BlockPosition(x, y, z);
+	}
+
+	private BlockPosition readBlockPositionOld() {
+		long value = readLong();
+		int x = (int) (value >> 38);
+		int y = (int) (value << 26 >> 52);
+		int z = (int) (value << 38 >> 38);
 		return new BlockPosition(x, y, z);
 	}
 

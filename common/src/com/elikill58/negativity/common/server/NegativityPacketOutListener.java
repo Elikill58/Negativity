@@ -54,29 +54,26 @@ public class NegativityPacketOutListener implements Listeners {
 			}
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {
 			NPacketPlayOutEntityDestroy destroy = (NPacketPlayOutEntityDestroy) packet;
-			for(int ids : destroy.entityIds) {
-				Adapter.getAdapter().debug("Removing entity " + ids);
+			for(int ids : destroy.entityIds)
 				p.getWorld().removeEntity(ids);
-			}
 		} else if(type.isFlyingPacket()) {
 			NPacketPlayOutEntity flying = (NPacketPlayOutEntity) packet;
 			p.getWorld().getEntityById(flying.entityId).ifPresent(entity -> {
 				if(entity instanceof CompensatedEntity) {
 					CompensatedEntity et = (CompensatedEntity) entity;
-					Location loc = et.getLocation();
-					if(entity.getType().equals(EntityType.PIG))
-						Adapter.getAdapter().debug("Change : " + flying.entityId + ", delta: " + flying.deltaX + ", " + flying.deltaY + ", " + flying.deltaZ + ", loc: " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
 					et.setLocation(et.getLocation().add(flying.deltaX, flying.deltaY, flying.deltaZ));
 				}
 			});
 		} else if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
+			Adapter.getAdapter().debug("Set " + change.type + " to " + change.pos);
 			w.setBlock(change.type, change.pos.toLocation(w));
 		} else if(type.equals(PacketType.Server.MULTI_BLOCK_CHANGE)) {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			change.blockStates.forEach((pos, m) -> Adapter.getAdapter().debug("[Multi] Set " + m + " to " + pos));
 		}
 	}
 }

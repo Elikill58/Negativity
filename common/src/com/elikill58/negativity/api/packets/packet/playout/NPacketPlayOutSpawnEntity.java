@@ -11,6 +11,11 @@ import com.elikill58.negativity.universal.Version;
 public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 
 	public int entityId;
+	/**
+	 * This field appear in 1.9
+	 * <br>
+	 * For 1.8, a random one is generated to prevent NPE
+	 */
 	public UUID entityUUID;
 	public EntityType type;
 	public double x, y, z;
@@ -25,7 +30,7 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 	public void read(PacketSerializer serializer, Version version) {
 		this.entityId = serializer.readVarInt();
 		int k;
-		if(version.isNewerOrEquals(Version.V1_19)) {
+		if(version.isNewerOrEquals(Version.V1_9)) {
 			this.entityUUID = serializer.readUUID();
 			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
 			this.x = serializer.readDouble();

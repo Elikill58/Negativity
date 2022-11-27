@@ -26,6 +26,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketInListener implements Listeners {
 
@@ -65,6 +66,9 @@ public class NegativityPacketInListener implements Listeners {
 			if (flying.hasLocation()) {
 				if (p.getLocation() == null) {
 					p.setLocation(flying.getLocation(p.getWorld()));
+				}
+				if(p.isSneaking()) {
+					Adapter.getAdapter().debug("Below: " + p.getLocation().getBlock().getType());
 				}
 				PlayerMoveEvent moveEvent = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
 				EventManager.callEvent(moveEvent);

@@ -116,6 +116,12 @@ public enum Version {
 		return power;
 	}
 
+	/**
+	 * Get if exist or create a {@link NamedVersion}.<br>
+	 * If it create it, it will load all values required for the version
+	 * 
+	 * @return the named version or null if something gone wrong
+	 */
 	public NamedVersion getOrCreateNamedVersion() {
 		if(version != null)
 			return version;

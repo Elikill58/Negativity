@@ -37,4 +37,9 @@ public class BlockPosition {
 	public Location toLocation(World w) {
 		return new Location(w, x, y, z);
 	}
+	
+	@Override
+	public String toString() {
+		return "BlockPosition{x=" + x + ",y=" + y + ",z=" + z + "}";
+	}
 }

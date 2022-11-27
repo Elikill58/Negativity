@@ -21,10 +21,7 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		this.action = DigAction.getById(serializer.readVarInt());
-		if(version.isNewerOrEquals(Version.V1_19))
-			this.pos = serializer.readBlockPositionNew();
-		else
-			this.pos = serializer.readBlockPosition();
+		this.pos = serializer.readBlockPosition(version);
 		this.face = BlockFace.getById(serializer.readUnsignedByte());
 	}
 

@@ -84,6 +84,25 @@ public abstract class NamedVersion {
 		return entityTypes.getOrDefault(id, EntityType.UNKNOWN);
 	}
 	
+	/**
+	 * Get material according to block ID.
+	 * <br>
+	 * If having block state, use:<br><br>
+	 * <code>
+	 * blockStateId = ...
+	 * type = blockStateId >> 4
+	 * <br>
+	 * meta = blockStateId & 15
+	 * </code>
+	 * <br><br>
+	 * For encoding, use: <br><br>
+	 * <code>
+	 * id = type << 4 | (meta & 15)
+	 * </code>
+	 * 
+	 * @param id the ID of the material
+	 * @return the material of the given id
+	 */
 	public Material getMaterial(int id) {
 		if(!materials.containsKey(id))
 			Adapter.getAdapter().debug("Can't find material with id " + id);

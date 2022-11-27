@@ -48,6 +48,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntityLiving;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnloadChunk;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.utils.ChatUtils;
@@ -364,7 +365,7 @@ public interface PacketType {
 		TILE_ENTITY_DATA,
 		TITLE,
 		PING(NPacketPlayOutPing::new),
-		UNLOAD_CHUNK,
+		UNLOAD_CHUNK(NPacketPlayOutUnloadChunk::new),
 		UPDATE_ATTRIBUTES,
 		UPDATE_ENTITY_NBT,
 		UPDATE_HEALTH,

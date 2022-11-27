@@ -25,7 +25,7 @@ rootProject.name = 'Negativity'
 
 // All global projects
 include 'common', 'bungee', 'velocity', 'minestom'
-include 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'spigot:spigot19'
+include 'spigot'
 include 'sponge', 'sponge7'
 //include 'fabric'
 

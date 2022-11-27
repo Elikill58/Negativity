@@ -99,18 +99,6 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 2. Change branch to v2 using `git checkout v2`
 
-3. There is 2 ways (warn: first setup take some times to complete) :
-
-#### Use installation script
-
-On Windows, you must use [Git bash](https://gitforwindows.org/). On Linux and MacOS use the regular terminal.
-
-Run `./setup_spigot.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
-
-#### Manually install spigot jars
-
-You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
-
-4. Build the plugin: `./gradlew build`
+3. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

@@ -28,26 +28,74 @@ import io.netty.channel.ChannelFuture;
 
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	protected Method getPlayerHandle;
-	protected Field recentTpsField, pingField;
-	public Object dedicatedServer;
+	protected Method getPlayerHandle, mathTps;
+	protected Field recentTpsField, pingField, tpsField, playerConnectionField;
+	protected Field minX, minY, minZ, maxX, maxY, maxZ;
+	protected Object dedicatedServer;
 	
 	public SpigotVersionAdapter(int protocolVersion) {
 		this.version = Version.getVersionByProtocolID(protocolVersion);
 		try {
 			dedicatedServer = PacketUtils.getDedicatedServer();
 			
+			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper");
+			mathTps = mathHelperClass.getDeclaredMethod("a", long[].class);
+			
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
+			tpsField = mcServer.getDeclaredField(getTpsFieldName());
 
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
-			pingField = PacketUtils.getNmsClass("EntityPlayer", "server.level.").getDeclaredField(version.isNewerOrEquals(Version.V1_17) ? "e" : "ping");
+			
+			Class<?> entityPlayerClass = PacketUtils.getNmsClass("EntityPlayer", "server.level.");
+			if(version.isNewerOrEquals(Version.V1_17)) {
+				pingField = entityPlayerClass.getDeclaredField("e");
+				playerConnectionField = entityPlayerClass.getDeclaredField("b");
+			} else {
+				pingField = entityPlayerClass.getDeclaredField("ping");
+				playerConnectionField = entityPlayerClass.getDeclaredField("playerConnection");
+			}
+			Class<?> bbClass = PacketUtils.getNmsClass("AxisAlignedBB", "world.phys.");
+
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
+				minX = bbClass.getDeclaredField("minX");
+				minY = bbClass.getDeclaredField("minY");
+				minZ = bbClass.getDeclaredField("minZ");
+				
+				maxX = bbClass.getDeclaredField("maxX");
+				maxY = bbClass.getDeclaredField("maxY");
+				maxZ = bbClass.getDeclaredField("maxZ");
+			} else {
+				minX = bbClass.getDeclaredField("a");
+				minY = bbClass.getDeclaredField("b");
+				minZ = bbClass.getDeclaredField("c");
+				
+				maxX = bbClass.getDeclaredField("d");
+				maxY = bbClass.getDeclaredField("e");
+				maxZ = bbClass.getDeclaredField("f");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private boolean hasMinField(Class<?> bbClass) {
+		for(Field f : bbClass.getDeclaredFields())
+			if(f.getName().equalsIgnoreCase("minX"))
+				return true;
+		return false;
+	}
 
-	public abstract double getAverageTps();
+	public double getAverageTps() {
+		try {
+			return (double) mathTps.invoke(null, tpsField.get(dedicatedServer));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public abstract String getTpsFieldName();
 
 	public List<Player> getOnlinePlayers() {
 		return new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -73,8 +121,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public Object getPlayerConnection(Player p) {
 		try {
-			Object entityPlayer = PacketUtils.getEntityPlayer(p);
-			return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+			return playerConnectionField.get(PacketUtils.getEntityPlayer(p));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -125,35 +172,18 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	
 	public BoundingBox getBoundingBox(Entity et) {
 		try {
-			Class<?> craftEntityClass = PacketUtils.getObcClass("entity.CraftEntity");
-			Object ep = craftEntityClass.getDeclaredMethod("getHandle").invoke(craftEntityClass.cast(et));
+			Object ep = PacketUtils.getNMSEntity(et);
 			Object bb = ReflectionUtils.getFirstWith(ep, PacketUtils.getNmsClass("Entity", "world.entity."), PacketUtils.getNmsClass("AxisAlignedBB", "world.phys."));
-			Class<?> clss = bb.getClass();
-			boolean hasMinField = false;
-			for(Field f : clss.getFields())
-				if(f.getName().equalsIgnoreCase("minX"))
-					hasMinField = true;
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField) {
-				double minX = clss.getField("minX").getDouble(bb);
-				double minY = clss.getField("minY").getDouble(bb);
-				double minZ = clss.getField("minZ").getDouble(bb);
-				
-				double maxX = clss.getField("maxX").getDouble(bb);
-				double maxY = clss.getField("maxY").getDouble(bb);
-				double maxZ = clss.getField("maxZ").getDouble(bb);
-				
-				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-			} else {
-				double minX = clss.getField("a").getDouble(bb);
-				double minY = clss.getField("b").getDouble(bb);
-				double minZ = clss.getField("c").getDouble(bb);
-				
-				double maxX = clss.getField("d").getDouble(bb);
-				double maxY = clss.getField("e").getDouble(bb);
-				double maxZ = clss.getField("f").getDouble(bb);
-				
-				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-			}
+			
+			double minX = this.minX.getDouble(bb);
+			double minY = this.minY.getDouble(bb);
+			double minZ = this.minZ.getDouble(bb);
+			
+			double maxX = this.maxX.getDouble(bb);
+			double maxY = this.maxY.getDouble(bb);
+			double maxZ = this.maxZ.getDouble(bb);
+			
+			return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

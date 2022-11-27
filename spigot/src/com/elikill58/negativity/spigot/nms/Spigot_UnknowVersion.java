@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.nms;
 
-import org.bukkit.entity.Player;
-
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public class Spigot_UnknowVersion extends SpigotVersionAdapter {
@@ -17,14 +15,9 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 		super(0);
 		SpigotNegativity.getInstance().getLogger().warning("Failed to find version adapter for " + version + ".");
 	}
-	
-	@Override
-	public double getAverageTps() {
-		return 0;
-	}
 
 	@Override
-	public int getPlayerPing(Player player) {
-		return 0;
+	public String getTpsFieldName() {
+		return "f";
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -103,6 +104,15 @@ public class PacketUtils {
 			return getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle").invoke(p);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Object getNMSEntity(Entity e) {
+		try {
+			return getObcClass("entity.CraftEntity").getDeclaredMethod("getHandle").invoke(e);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 			return null;
 		}
 	}

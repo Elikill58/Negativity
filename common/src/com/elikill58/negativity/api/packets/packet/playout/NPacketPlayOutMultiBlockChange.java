@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
@@ -37,15 +38,15 @@ public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 				int x = (int) (chunkX << 4 + (val >>> 8 & 0xF));
 				int z = (int) (chunkY << 4 + (val >>> 0 & 0xF));
 				int y = (int) (chunkZ << 4 + (val >>> 4 & 0xF));
-
-				blockStates.put(new BlockPosition(x, y, z), version.getOrCreateNamedVersion().getMaterial((int) blockStateId >> 4));
+				Adapter.getAdapter().debug("Loc: " + x + "/" + y + "/" + z + ", chunk: " + pos);
+				blockStates.put(new BlockPosition(x, y, z), version.getOrCreateNamedVersion().getMaterial((int) blockStateId));
 			}
 		} else {
 			this.chunkX = serializer.readInt();
 			this.chunkZ = serializer.readInt();
 			int amount = serializer.readVarInt();
 			for (int i = 0; i < amount; i++) {
-				blockStates.put(serializer.readBlockPositionShort(), version.getOrCreateNamedVersion().getMaterial(serializer.readVarInt() >> 4));
+				blockStates.put(serializer.readBlockPositionShort(), version.getOrCreateNamedVersion().getMaterial(serializer.readVarInt()));
 			}
 		}
 	}

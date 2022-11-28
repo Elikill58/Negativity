@@ -1,17 +1,27 @@
 package com.elikill58.negativity.api.packets.nms;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.api.entity.EntityType;
-import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.impl.block.JsonMaterial;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.json.JSONArray;
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Handshake;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class NamedVersion {
 
@@ -21,7 +31,7 @@ public abstract class NamedVersion {
 	protected final HashMap<Integer, PacketType.Login> login = new HashMap<>();
 	protected final HashMap<Integer, PacketType.Status> status = new HashMap<>();
 	protected final HashMap<Integer, EntityType> entityTypes = new HashMap<>();
-	protected final HashMap<Integer, String> materials = new HashMap<>();
+	protected final HashMap<Integer, Material> materials = new HashMap<>();
 	protected final String name;
 	
 	public NamedVersion(String name) {
@@ -35,6 +45,38 @@ public abstract class NamedVersion {
 	
 	public void log() {
 		Adapter.getAdapter().getLogger().info("Loaded version " + getName() + ". Packets playIn/playOut: " + playIn.size() + "/" + playOut.size() + ", entityTypes: " + entityTypes.size() + ", materials: " + materials.size());
+	}
+	
+	public void loadPostFlattening(String dir) {
+		Adapter ada = Adapter.getAdapter();
+		try (InputStream input = UniversalUtils.openBundledFile(dir + "blocks.json")) {
+			if (input == null) {
+				ada.getLogger().error("Blocks.json file doesn't exist for directory " + dir + ".");
+				return;
+			}
+
+			StringBuilder blocks = new StringBuilder();
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					blocks.append(line);
+				}
+			}
+			
+			loadBlocks(blocks.toString());
+		} catch (Exception e) {
+			ada.getLogger().error("Failed to read blocks.json file.");
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadBlocks(String rawJson) throws ParseException {
+		JSONArray json = (JSONArray) new JSONParser().parse(rawJson);
+		for(Object obj : json) {
+			JSONObject jsonBlock = (JSONObject) obj;
+			for(int i = Integer.parseInt(jsonBlock.get("minStateId").toString()); i <= Integer.parseInt(jsonBlock.get("maxStateId").toString()); i++)
+				materials.put(i, new JsonMaterial(jsonBlock));
+		}
 	}
 	
 	/**
@@ -106,6 +148,6 @@ public abstract class NamedVersion {
 	public Material getMaterial(int id) {
 		if(!materials.containsKey(id))
 			Adapter.getAdapter().debug("Can't find material with id " + id);
-		return ItemRegistrar.getInstance().get(materials.getOrDefault(id, "stone"));
+		return materials.getOrDefault(id, Materials.AIR);
 	}
 }

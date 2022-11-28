@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.server;
 
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -8,6 +9,7 @@ import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.impl.entity.CompensatedEntity;
 import com.elikill58.negativity.api.impl.entity.CompensatedPlayer;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Server;
@@ -70,18 +72,25 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
-			Adapter.getAdapter().debug("Set " + change.type + " to " + change.pos);
+			checkLoc(p, change.type, change.pos.toLocation(w));
 			w.setBlock(change.type, change.pos.toLocation(w));
 		} else if(type.equals(PacketType.Server.MULTI_BLOCK_CHANGE)) {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
-			change.blockStates.forEach((pos, m) -> Adapter.getAdapter().debug("[Multi] Set " + m + " to " + pos));
+			//change.blockStates.forEach((pos, m) -> checkLoc(p, m, pos.toLocation(w)));
 		} else if(packet instanceof NPacketPlayOutChunkDataUpdateLight) {
 			NPacketPlayOutChunkDataUpdateLight light = (NPacketPlayOutChunkDataUpdateLight) packet;
 			CompensatedWorld w = p.getWorld();
 			light.chunk.blockEntites.forEach((id, pos) -> w.setBlock(id, pos.toLocation(w)));
 		} else if(!type.isFlyingPacket() && !type.equals(Server.LIGHT_UPDATE) && !type.equals(Server.ENTITY_HEAD_ROTATION) && !type.equals(Server.ENTITY_VELOCITY) && !type.equals(Server.ENTITY_TELEPORT))
 			Adapter.getAdapter().debug("Sending packet " + type.getPacketName() + " " + (packet instanceof NPacketPlayOutUnset ? ((NPacketPlayOutUnset) packet).getPacketTypeCible().getPacketName() : ""));
+	}
+	
+	public void checkLoc(Player p, Material type, Location loc) {
+		Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+		if(!real.getType().equals(type)) {
+			Adapter.getAdapter().debug("Wrong type for loc " + loc + ", given: " + type + ", real: " + real.getType());
+		}
 	}
 }

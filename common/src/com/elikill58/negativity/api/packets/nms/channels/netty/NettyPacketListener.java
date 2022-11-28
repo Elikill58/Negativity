@@ -29,7 +29,7 @@ public abstract class NettyPacketListener {
 	}
 
 	private void addChannel(Player p) {
-		//getChannelExecutor().execute(() -> {
+		getChannelExecutor().execute(() -> {
 			Channel channel = getChannel(p);
 			try {
 				// Managing incoming packet (from player)
@@ -56,7 +56,7 @@ public abstract class NettyPacketListener {
 			} catch (Exception exc) {
 				exc.printStackTrace();
 			}
-		//});
+		});
 	}
 
 	public abstract Channel getChannel(Player p);

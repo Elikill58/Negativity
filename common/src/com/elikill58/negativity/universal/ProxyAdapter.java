@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -97,5 +98,15 @@ public abstract class ProxyAdapter extends Adapter {
 	@Override
 	public VersionAdapter<?> getVersionAdapter() {
 		throw new UnsupportedOperationException("VersionAdapter is unsupported on proxies");
+	}
+	
+	@Override
+	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
+		throw new UnsupportedOperationException("OriginalBlockAt is unsupported on proxies");
+	}
+	
+	@Override
+	public String getWorldName(Player p) {
+		throw new UnsupportedOperationException("WorldName is unsupported on proxies");
 	}
 }

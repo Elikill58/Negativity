@@ -15,6 +15,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.metadata.PluginMetadata;
 
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -27,6 +28,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.sponge.impl.block.SpongeBlock;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongeFakePlayer;
 import com.elikill58.negativity.sponge.impl.entity.SpongeOfflinePlayer;
@@ -290,5 +292,15 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public List<String> getAllPlugins() {
 		return Sponge.pluginManager().plugins().stream().map(PluginContainer::metadata).map(PluginMetadata::id).collect(Collectors.toList());
+	}
+
+	@Override
+	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
+		return new SpongeBlock(Sponge.server().player(p.getUniqueId()).get().world().createSnapshot(x, y, z));
+	}
+
+	@Override
+	public String getWorldName(Player p) {
+		return Sponge.server().player(p.getUniqueId()).get().world().key().asString();
 	}
 }

@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -361,4 +362,8 @@ public abstract class Adapter {
 	 * @return the version adapter
 	 */
 	public abstract VersionAdapter<?> getVersionAdapter();
+	
+	public abstract Block getOriginalBlockAt(Player p, int x, int y, int z);
+	
+	public abstract String getWorldName(Player p);
 }

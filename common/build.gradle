@@ -22,15 +22,6 @@ dependencies {
     implementation "com.viaversion:opennbt:2.1"
 }
 
-processResources {
-    def props = [version: version]
-    inputs.properties(props)
-    // Do not try to expand service files, they may contain a dollar sign to mark inner classes
-    filesNotMatching(['META-INF/services/*', 'assets/negativity/*.properties']) {
-        expand(props)
-    }
-}
-
 shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('common')

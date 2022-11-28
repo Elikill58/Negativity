@@ -10,24 +10,22 @@ public class LightData {
 	
 	public boolean trustEdge;
 	public long[] skyMask, blockMask, emptySkyMask, emptyBlockMask;
-    public List<byte[]> skyLight, blockLight;
+    public List<byte[]> skyLight = new ArrayList<>(), blockLight = new ArrayList<>();
 	
 	public LightData(PacketSerializer serializer, Version version) {
 		this.trustEdge = serializer.readBoolean();
-		this.skyMask = serializer.readLongArray();
-		this.blockMask = serializer.readLongArray();
-		this.emptySkyMask = serializer.readLongArray();
-		this.emptyBlockMask = serializer.readLongArray();
+		this.skyMask = serializer.readLongArray(2048);
+		this.blockMask = serializer.readLongArray(2048);
+		this.emptySkyMask = serializer.readLongArray(2048);
+		this.emptyBlockMask = serializer.readLongArray(2048);
 
-		this.skyLight = new ArrayList<>();
 		int skyLength = serializer.readVarInt();
 		for(int i = 0; i < skyLength; i++)
-			skyLight.add(serializer.readByteArray());
+			skyLight.add(serializer.readByteArray(2048));
 		
-		this.blockLight = new ArrayList<>();
 		int blockLength = serializer.readVarInt();
 		for(int i = 0; i < blockLength; i++)
-			blockLight.add(serializer.readByteArray());
+			blockLight.add(serializer.readByteArray(2048));
 	}
 
 }

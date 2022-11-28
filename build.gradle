@@ -54,6 +54,10 @@ subprojects {
             name 'eliapp'
             url 'https://repo.eliapp.fr:8081/repository/internal/'
         }
+        maven {
+            name = "ViaVersion"
+            url = "https://repo.viaversion.com"
+        }
     }
 
     dependencies {

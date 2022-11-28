@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.packets.nms;
 
+import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,9 +16,12 @@ import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.universal.Version;
+import com.github.steveice10.opennbt.NBTIO;
+import com.github.steveice10.opennbt.tag.limiter.TagLimiter;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufInputStream;
 import io.netty.handler.codec.DecoderException;
 
 public class PacketSerializer {
@@ -36,14 +40,14 @@ public class PacketSerializer {
 	}
 
 	public int readVarInt() {
-        int result = 0;
-        for (int shift = 0; ; shift += 7) {
-            byte b = buf.readByte();
-            result |= (b & VALUE_BITS) << shift;
-            if (b >= 0) {
-                return result;
-            }
-        }
+		int result = 0;
+		for (int shift = 0;; shift += 7) {
+			byte b = buf.readByte();
+			result |= (b & VALUE_BITS) << shift;
+			if (b >= 0) {
+				return result;
+			}
+		}
 	}
 
 	public <T extends Enum<T>> T getEnum(Class<T> oclass) {
@@ -55,15 +59,15 @@ public class PacketSerializer {
 	}
 
 	public long readVarLong() {
-        long result = 0;
-        for (int shift = 0; shift < 56; shift += 7) {
-            byte b = buf.readByte();
-            result |= (b & VALUE_BITS) << shift;
-            if (b >= 0) {
-                return result;
-            }
-        }
-        return result | (buf.readByte() & 0xffL) << 56;
+		long result = 0;
+		for (int shift = 0; shift < 56; shift += 7) {
+			byte b = buf.readByte();
+			result |= (b & VALUE_BITS) << shift;
+			if (b >= 0) {
+				return result;
+			}
+		}
+		return result | (buf.readByte() & 0xffL) << 56;
 	}
 
 	public void write(UUID uuid) {
@@ -119,6 +123,12 @@ public class PacketSerializer {
 		return this.buf.readerIndex();
 	}
 
+	/**
+	 * Sets the readerIndex of this buffer.
+	 * 
+	 * @param i new reader index
+	 * @return this buffer with new index
+	 */
 	public ByteBuf readerIndex(int i) {
 		return this.buf.readerIndex(i);
 	}
@@ -151,7 +161,7 @@ public class PacketSerializer {
 		return this.buf.readByte();
 	}
 
-	public short readUnsignedByte() {
+	public int readUnsignedByte() {
 		return this.buf.readUnsignedByte();
 	}
 
@@ -428,7 +438,7 @@ public class PacketSerializer {
 		if (j < 0)
 			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
 		byte[] bytes = new byte[j];
-		for(int i = 0; i < j; i++)
+		for (int i = 0; i < j; i++)
 			bytes[i] = buf.readByte();
 		return new String(bytes, StandardCharsets.UTF_8);
 	}
@@ -436,17 +446,15 @@ public class PacketSerializer {
 	public String readString(int size) {
 		int j = readVarInt();
 		if (j > size * 4)
-			throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j
-					+ " > " + (size * 4) + ")");
+			throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + (size * 4) + ")");
 		if (j < 0)
 			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
 		byte[] bytes = new byte[j];
-		for(int i = 0; i < j; i++)
+		for (int i = 0; i < j; i++)
 			bytes[i] = buf.readByte();
 		String s = new String(bytes, StandardCharsets.UTF_8);
 		if (s.length() > size)
-			throw new DecoderException(
-					"Received string length is longer than maximum allowed (" + j + " > " + size + ")");
+			throw new DecoderException("Received string length is longer than maximum allowed (" + j + " > " + size + ")");
 		return s;
 	}
 
@@ -457,11 +465,18 @@ public class PacketSerializer {
 	 * @return null
 	 */
 	public Object readNBTTag() {
-		int i = readerIndex();
-		byte b0 = readByte();
-		if (b0 == 0)
-			return null;
-		readerIndex(i);
+		try {
+	        int readerIndex = readerIndex();
+	        byte b = readByte();
+	        if (b == 0) {
+	            return null;
+	        } else {
+	            readerIndex(readerIndex);
+	            return NBTIO.readTag((DataInput) new ByteBufInputStream(buf), TagLimiter.create(2097152, 512));
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -480,6 +495,14 @@ public class PacketSerializer {
 			 */
 		}
 		return itemstack;
+	}
+
+	public BlockPosition readChunkSectionPosition() {
+		long l = readLong();
+		long sectionX = l >> 42;
+		long sectionY = l << 44 >> 44;
+		long sectionZ = l << 22 >> 42;
+		return new BlockPosition((int) sectionX, (int) sectionY, (int) sectionZ);
 	}
 
 	public BlockPosition readBlockPosition(Version version) {
@@ -517,22 +540,36 @@ public class PacketSerializer {
 	public Vector readShortVector() {
 		return new Vector(readShort(), readShort(), readShort());
 	}
-	
+
 	public long[] readLongArray() {
-        int length = readVarInt();
-        long[] longs = new long[length];
-        for (int i = 0; i < length; i++) {
-            longs[i] = readLong();
-        }
-        return longs;
+		return readLongArray(Integer.MAX_VALUE);
 	}
-	
+
+	public long[] readLongArray(int maxSize) {
+		int length = readVarInt();
+		if(length <= 0)
+			return new long[0];
+		if(length > maxSize)
+			throw new RuntimeException("VarInt too high for long array reading.");
+		long[] longs = new long[length];
+		for (int i = 0; i < length; i++) {
+			longs[i] = readLong();
+		}
+		return longs;
+	}
+
 	public byte[] readByteArray() {
-        int length = readVarInt();
-        byte[] bytes = new byte[length];
-        for (int i = 0; i < length; i++) {
-            bytes[i] = readByte();
-        }
-        return bytes;
+		return readByteArray(Integer.MAX_VALUE);
+	}
+
+	public byte[] readByteArray(int maxSize) {
+		int length = readVarInt();
+		if(length <= 0)
+			return new byte[0];
+		if(length > maxSize)
+			throw new RuntimeException("VarInt too high for byte array reading.");
+		byte[] bytes = new byte[length];
+		readBytes(bytes);
+		return bytes;
 	}
 }

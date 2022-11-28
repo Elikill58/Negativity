@@ -35,6 +35,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockCh
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityHeadRotation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
@@ -291,7 +292,7 @@ public interface PacketType {
 		ENTITY_DESTROY(NPacketPlayOutEntityDestroy::new),
 		ENTITY_EFFECT(NPacketPlayOutEntityEffect::new),
 		ENTITY_EQUIPMENT,
-		ENTITY_HEAD_ROTATION,
+		ENTITY_HEAD_ROTATION(NPacketPlayOutEntityHeadRotation::new),
 		ENTITY_METADATA,
 		ENTITY_STATUS,
 		ENTITY_SOUND,

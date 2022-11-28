@@ -19,6 +19,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     implementation "org.yaml:snakeyaml:1.32"
+    implementation "com.viaversion:opennbt:2.1"
 }
 
 processResources {

@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Server;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
@@ -76,7 +77,11 @@ public class NegativityPacketOutListener implements Listeners {
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
 			change.blockStates.forEach((pos, m) -> Adapter.getAdapter().debug("[Multi] Set " + m + " to " + pos));
-		} else if(!type.isFlyingPacket() && !type.equals(Server.LIGHT_UPDATE))
+		} else if(packet instanceof NPacketPlayOutChunkDataUpdateLight) {
+			NPacketPlayOutChunkDataUpdateLight light = (NPacketPlayOutChunkDataUpdateLight) packet;
+			CompensatedWorld w = p.getWorld();
+			light.chunk.blockEntites.forEach((id, pos) -> w.setBlock(id, pos.toLocation(w)));
+		} else if(!type.isFlyingPacket() && !type.equals(Server.LIGHT_UPDATE) && !type.equals(Server.ENTITY_HEAD_ROTATION) && !type.equals(Server.ENTITY_VELOCITY) && !type.equals(Server.ENTITY_TELEPORT))
 			Adapter.getAdapter().debug("Sending packet " + type.getPacketName() + " " + (packet instanceof NPacketPlayOutUnset ? ((NPacketPlayOutUnset) packet).getPacketTypeCible().getPacketName() : ""));
 	}
 }

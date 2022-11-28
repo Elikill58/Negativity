@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
@@ -35,10 +34,9 @@ public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 			for (int i = 0; i < amount; i++) {
 				long val = serializer.readVarLong();
 				long blockStateId = val >> 12;
-				int x = (int) (chunkX << 4 + (val >>> 8 & 0xF));
-				int z = (int) (chunkY << 4 + (val >>> 0 & 0xF));
-				int y = (int) (chunkZ << 4 + (val >>> 4 & 0xF));
-				Adapter.getAdapter().debug("Loc: " + x + "/" + y + "/" + z + ", chunk: " + pos);
+				int x = (int) ((chunkX << 4) + (val >>> 8 & 0xF));
+				int y = (int) ((chunkY << 4) + (val >>> 0 & 0xF));
+				int z = (int) ((chunkZ << 4) + (val >>> 4 & 0xF));
 				blockStates.put(new BlockPosition(x, y, z), version.getOrCreateNamedVersion().getMaterial((int) blockStateId));
 			}
 		} else {

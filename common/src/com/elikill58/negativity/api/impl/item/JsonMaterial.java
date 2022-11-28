@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.impl.block;
+package com.elikill58.negativity.api.impl.item;
 
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.json.JSONObject;

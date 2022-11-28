@@ -41,6 +41,6 @@ public class NPacketPlayOutUnset implements NPacketPlayOut, NPacketUnset {
 
 	@Override
 	public PacketType getPacketType() {
-		return PacketType.Server.UNSET;
+		return cible == null ? PacketType.Server.UNSET : cible;
 	}
 }

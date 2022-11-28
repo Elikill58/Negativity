@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.packets.packet.NPacketUnset;
 public class NPacketPlayInUnset implements NPacketPlayIn, NPacketUnset {
 
 	public String packetName;
-	public PacketType cible;
+	public PacketType cible = PacketType.Client.UNSET;
 	
 	public NPacketPlayInUnset() {
 		this.packetName = null;

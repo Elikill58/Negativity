@@ -48,8 +48,7 @@ public abstract class Material implements NegativityObject {
 		if (obj == null || !(obj instanceof Material))
 			return false;
 		Material to = (Material) obj;
-		return this.getId().equals(to.getId()) && this.isSolid() == to.isSolid()
-			&& this.isTransparent() == to.isTransparent();
+		return this.getId().equalsIgnoreCase(to.getId());
 	}
 
 	@Override

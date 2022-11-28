@@ -10,14 +10,11 @@ import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutChunkDataUpdateLight implements NPacketPlayOut {
 
-	public int x, z;
 	public ChunkData chunk;
 	public LightData light;
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		this.x = serializer.readInt();
-		this.z = serializer.readInt();
 		this.chunk = new ChunkData(serializer, version);
 		this.light = new LightData(serializer, version);
 	}

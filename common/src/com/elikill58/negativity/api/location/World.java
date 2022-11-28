@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.block.BlockHashMap;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.universal.Adapter;
 
 public abstract class World implements NegativityObject {
 
@@ -43,12 +44,12 @@ public abstract class World implements NegativityObject {
 	public static World getWorld(String name, Player p) {
 		return worlds.computeIfAbsent(name, (a) -> {
 			CompensatedWorld w = new CompensatedWorld(p);
-			w.setName(name);
+			w.setName(name == null ? Adapter.getAdapter().getWorldName(p) : name);
 			return w;
 		});
 	}
 	
-	private final BlockHashMap content = new BlockHashMap(this);
+	protected final BlockHashMap content = new BlockHashMap(this);
 	
 	/**
 	 * Get the world name

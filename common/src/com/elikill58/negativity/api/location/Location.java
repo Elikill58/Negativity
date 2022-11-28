@@ -284,7 +284,7 @@ public final class Location implements Cloneable {
 	
 	@Override
 	public String toString() {
-		return "Location{w=" + (w == null ? null : w.getName()) + ",x=" + x + ",y=" + y + ",z=" + z + ",yaw=" + yaw + ",pitch=" + pitch + '}';
+		return "Location{w=" + (w == null ? "?" : (w.getName() == null ? w.getClass().getSimpleName() : w.getName())) + ",x=" + x + ",y=" + y + ",z=" + z + ",yaw=" + yaw + ",pitch=" + pitch + '}';
 	}
 	
 	@Override

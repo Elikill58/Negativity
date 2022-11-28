@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.server;
 
+import java.util.Arrays;
+
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -22,7 +24,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBl
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketOutListener implements Listeners {
@@ -49,12 +50,13 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.RESPAWN)) {
 			NPacketPlayOutRespawn respawn = (NPacketPlayOutRespawn) packet;
 			if(p instanceof CompensatedPlayer) {
+				//p.setGameMode(respawn.gamemode);
 				if(p.getWorld() != null && p.getWorld().getName() == respawn.worldName)
 					return; // don't change world
 				CompensatedPlayer cp = (CompensatedPlayer) p;
 				Adapter.getAdapter().debug("Changing world " + p.getWorld().getEntities().size() + " to " + respawn.worldName);
 				CompensatedWorld world = new CompensatedWorld(p);
-				world.setName(respawn.worldName);
+				world.setName(respawn.worldName == null ? Adapter.getAdapter().getWorldName(p) : respawn.worldName);
 				cp.setWorld(world);
 			}
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {
@@ -72,25 +74,26 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
-			checkLoc(p, change.type, change.pos.toLocation(w));
+			checkLoc("BlockChange", p, change.type, change.pos.toLocation(w));
 			w.setBlock(change.type, change.pos.toLocation(w));
 		} else if(type.equals(PacketType.Server.MULTI_BLOCK_CHANGE)) {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
-			//change.blockStates.forEach((pos, m) -> checkLoc(p, m, pos.toLocation(w)));
+			change.blockStates.forEach((pos, m) -> checkLoc("MultiBlockChange", p, m, pos.toLocation(w)));
 		} else if(packet instanceof NPacketPlayOutChunkDataUpdateLight) {
 			NPacketPlayOutChunkDataUpdateLight light = (NPacketPlayOutChunkDataUpdateLight) packet;
 			CompensatedWorld w = p.getWorld();
-			light.chunk.blockEntites.forEach((id, pos) -> w.setBlock(id, pos.toLocation(w)));
-		} else if(!type.isFlyingPacket() && !type.equals(Server.LIGHT_UPDATE) && !type.equals(Server.ENTITY_HEAD_ROTATION) && !type.equals(Server.ENTITY_VELOCITY) && !type.equals(Server.ENTITY_TELEPORT))
-			Adapter.getAdapter().debug("Sending packet " + type.getPacketName() + " " + (packet instanceof NPacketPlayOutUnset ? ((NPacketPlayOutUnset) packet).getPacketTypeCible().getPacketName() : ""));
+			light.chunk.blockEntites.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			light.chunk.blockEntites.forEach((pos, m) -> checkLoc("ChunkLightData", p, m, pos.toLocation(w)));
+		} else if(!type.isFlyingPacket() && !Arrays.asList(Server.LIGHT_UPDATE, Server.ENTITY_HEAD_ROTATION, Server.ENTITY_VELOCITY, Server.ENTITY_TELEPORT, Server.UPDATE_TIME, Server.ENTITY_METADATA).contains(type))
+			Adapter.getAdapter().debug("Sending packet " + packet.getPacketName());
 	}
 	
-	public void checkLoc(Player p, Material type, Location loc) {
+	public void checkLoc(String from, Player p, Material type, Location loc) {
 		Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		if(!real.getType().equals(type)) {
-			Adapter.getAdapter().debug("Wrong type for loc " + loc + ", given: " + type + ", real: " + real.getType());
+			Adapter.getAdapter().debug("Wrong type from " + from + " for loc " + loc + ", given: " + type.getId() + ", real: " + real.getType().getId());
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.item;
 
-import com.elikill58.negativity.api.impl.block.CompensatedMaterial;
+import com.elikill58.negativity.api.impl.item.CompensatedMaterial;
 import com.elikill58.negativity.universal.Adapter;
 
 public abstract class ItemRegistrar {

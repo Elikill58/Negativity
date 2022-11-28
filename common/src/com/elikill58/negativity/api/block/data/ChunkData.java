@@ -9,14 +9,17 @@ import com.elikill58.negativity.universal.Version;
 
 public class ChunkData {
 
+	public int chunkX, chunkZ;
 	/**
 	 * Will be always null until NBT are not done in {@link PacketSerializer#readNBTTag()}
 	 */
 	public Object heightmaps;
 	public byte[] data;
-	public HashMap<Material, BlockPosition> blockEntites = new HashMap<>();
+	public HashMap<BlockPosition, Material> blockEntites = new HashMap<>();
 	
 	public ChunkData(PacketSerializer serializer, Version version) {
+		this.chunkX = serializer.readInt();
+		this.chunkZ = serializer.readInt();
 		this.heightmaps = serializer.readNBTTag();
 		this.data = serializer.readByteArray();
 		int amountEntites = serializer.readVarInt();
@@ -25,7 +28,7 @@ public class ChunkData {
             short y = serializer.readShort();
             int blockType = serializer.readVarInt();
             /*Object nbt = */serializer.readNBTTag();
-            blockEntites.put(version.getOrCreateNamedVersion().getMaterial(blockType), new BlockPosition(xz >> 4, y, xz & 15));
+            blockEntites.put(new BlockPosition((chunkX * 16) + ((xz >> 4) & 0xF), y, (chunkZ * 16) + (xz & 0xF)), version.getOrCreateNamedVersion().getMaterialForEntityBlock(blockType));
 		}
 	}
 }

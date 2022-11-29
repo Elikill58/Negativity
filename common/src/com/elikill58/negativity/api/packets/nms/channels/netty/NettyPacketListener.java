@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.packets.nms.channels.netty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,9 +15,14 @@ import io.netty.channel.Channel;
 public abstract class NettyPacketListener {
 
 	private ExecutorService channelExecutor = Executors.newSingleThreadExecutor();
+	public List<Channel> checked = new ArrayList<>();
 
 	public ExecutorService getChannelExecutor() {
 		return channelExecutor;
+	}
+	
+	public NettyPacketListener() {
+		
 	}
 
 	public void join(Player p) {
@@ -31,6 +38,7 @@ public abstract class NettyPacketListener {
 	private void addChannel(Player p) {
 		getChannelExecutor().execute(() -> {
 			Channel channel = getChannel(p);
+			checked.add(channel);
 			try {
 				// Managing incoming packet (from player)
 				channel.pipeline().addBefore("decoder", "negativity_decoder", new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER));

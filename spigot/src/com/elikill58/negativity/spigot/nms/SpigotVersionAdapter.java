@@ -153,8 +153,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public List<ChannelFuture> getFuturChannel() {
 		try {
-			Object mcServer = PacketUtils.getDedicatedServer();
-			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
+			Object co = ReflectionUtils.getFirstWith(dedicatedServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
 			if(Version.getVersion().isNewerOrEquals(Version.V1_17)) {
 				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "f");
 			} else {

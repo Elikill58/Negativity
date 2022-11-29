@@ -84,8 +84,11 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(packet instanceof NPacketPlayOutChunkDataUpdateLight) {
 			NPacketPlayOutChunkDataUpdateLight light = (NPacketPlayOutChunkDataUpdateLight) packet;
 			CompensatedWorld w = p.getWorld();
+			if(light.chunk == null)
+				return;
 			light.chunk.blockEntites.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
-			light.chunk.blockEntites.forEach((pos, m) -> checkLoc("ChunkLightData", p, m, pos.toLocation(w)));
+			light.chunk.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			light.chunk.blocks.forEach((pos, m) -> checkLoc("DataLightUpdate", p, m, pos.toLocation(w)));
 		} else if(!type.isFlyingPacket() && !Arrays.asList(Server.LIGHT_UPDATE, Server.ENTITY_HEAD_ROTATION, Server.ENTITY_VELOCITY, Server.ENTITY_TELEPORT, Server.UPDATE_TIME, Server.ENTITY_METADATA).contains(type))
 			Adapter.getAdapter().debug("Sending packet " + packet.getPacketName());
 	}

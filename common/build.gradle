@@ -20,6 +20,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     implementation "org.yaml:snakeyaml:1.32"
     implementation "com.viaversion:opennbt:2.1"
+    implementation "it.unimi.dsi:fastutil:8.5.6"
 }
 
 shadowJar {
@@ -33,7 +34,7 @@ shadowJar {
             project('integrations:litebans').jar.outputs.files,
             project('integrations:viaversion').jar.outputs.files,
             project('integrations:floodgate').jar.outputs.files,
-            project('integrations:geysermc').jar.outputs.files
+            //project('integrations:geysermc').jar.outputs.files
     )
 }
 

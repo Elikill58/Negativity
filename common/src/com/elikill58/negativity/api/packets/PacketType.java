@@ -396,7 +396,7 @@ public interface PacketType {
 		
 		@Override
 		public boolean isFlyingPacket() {
-			return this == ENTITY || this == Server.REL_ENTITY_LOOK || this == REL_ENTITY_MOVE || this == REL_ENTITY_MOVE_LOOK;
+			return this == ENTITY || this == REL_ENTITY_LOOK || this == REL_ENTITY_MOVE || this == REL_ENTITY_MOVE_LOOK;
 		}
 		
 		@Override

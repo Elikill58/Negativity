@@ -3,9 +3,7 @@ package com.elikill58.negativity.api.packets.nms;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -48,6 +46,14 @@ public class PacketSerializer {
 				return result;
 			}
 		}
+	}
+
+	public int readInt(int byteAmount) {
+		int result = 0;
+		for(int i = 0; i < byteAmount; i++) {
+			result |= (buf.readByte() & VALUE_BITS) << i;
+		}
+		return result;
 	}
 
 	public <T extends Enum<T>> T getEnum(Class<T> oclass) {
@@ -235,14 +241,6 @@ public class PacketSerializer {
 
 	public ByteBuf readBytes(ByteBuffer bytebuffer) {
 		return this.buf.readBytes(bytebuffer);
-	}
-
-	public ByteBuf readBytes(OutputStream outputstream, int i) throws IOException {
-		return this.buf.readBytes(outputstream, i);
-	}
-
-	public int readBytes(GatheringByteChannel gatheringbytechannel, int i) throws IOException {
-		return this.buf.readBytes(gatheringbytechannel, i);
 	}
 
 	public ByteBuf skipBytes(int i) {

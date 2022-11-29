@@ -14,18 +14,19 @@ public class LightData {
 	
 	public LightData(PacketSerializer serializer, Version version) {
 		this.trustEdge = serializer.readBoolean();
-		this.skyMask = serializer.readLongArray(2048);
-		this.blockMask = serializer.readLongArray(2048);
-		this.emptySkyMask = serializer.readLongArray(2048);
-		this.emptyBlockMask = serializer.readLongArray(2048);
+		int maxSize = Integer.MAX_VALUE; // should be 2048 but idk from which version
+		this.skyMask = serializer.readLongArray(maxSize);
+		this.blockMask = serializer.readLongArray(maxSize);
+		this.emptySkyMask = serializer.readLongArray(maxSize);
+		this.emptyBlockMask = serializer.readLongArray(maxSize);
 
 		int skyLength = serializer.readVarInt();
 		for(int i = 0; i < skyLength; i++)
-			skyLight.add(serializer.readByteArray(2048));
+			skyLight.add(serializer.readByteArray(maxSize));
 		
 		int blockLength = serializer.readVarInt();
 		for(int i = 0; i < blockLength; i++)
-			blockLight.add(serializer.readByteArray(2048));
+			blockLight.add(serializer.readByteArray(maxSize));
 	}
 
 }

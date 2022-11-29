@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Server;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkData;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
@@ -83,6 +84,14 @@ public class NegativityPacketOutListener implements Listeners {
 			change.blockStates.forEach((pos, m) -> checkLoc("MultiBlockChange", p, m, pos.toLocation(w)));
 		} else if(packet instanceof NPacketPlayOutChunkDataUpdateLight) {
 			NPacketPlayOutChunkDataUpdateLight light = (NPacketPlayOutChunkDataUpdateLight) packet;
+			CompensatedWorld w = p.getWorld();
+			if(light.chunk == null)
+				return;
+			light.chunk.blockEntites.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			light.chunk.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			light.chunk.blocks.forEach((pos, m) -> checkLoc("DataLightUpdate", p, m, pos.toLocation(w)));
+		} else if(packet instanceof NPacketPlayOutChunkData) {
+			NPacketPlayOutChunkData light = (NPacketPlayOutChunkData) packet;
 			CompensatedWorld w = p.getWorld();
 			if(light.chunk == null)
 				return;

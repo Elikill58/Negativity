@@ -21,8 +21,7 @@ public class ChunkData {
 
 	public int chunkX, chunkZ;
 	/**
-	 * Will be always null until NBT are not done in
-	 * {@link PacketSerializer#readNBTTag()}
+	 * Appear with chunk remap (since 1.16)
 	 */
 	public Object heightmaps;
 	public HashMap<BlockPosition, Material> blocks = new HashMap<>();
@@ -31,12 +30,19 @@ public class ChunkData {
 	public ChunkData(PacketSerializer serializer, Version version) {
 		this.chunkX = serializer.readInt();
 		this.chunkZ = serializer.readInt();
-		this.heightmaps = serializer.readNBTTag();
+		int mask;
+		if(version.isNewerOrEquals(Version.V1_16)) {
+			this.heightmaps = serializer.readNBTTag();
+			mask = 0;
+		} else {
+			serializer.readBoolean(); // is full
+			mask = serializer.readVarInt();
+		}
 		byte[] data = serializer.readByteArray();
 		serializer.readBytes(data);
 		Adapter.getAdapter().debug("Data: " + data.length);
 		if(data.length > 0)
-			readChunkColumn(0, new PacketSerializer(Unpooled.copiedBuffer(data)), version);
+			readChunkColumn(mask, new PacketSerializer(Unpooled.copiedBuffer(data)), version);
 
 		int amountEntites = serializer.readVarInt();
 		for (int i = 0; i < amountEntites; i++) {

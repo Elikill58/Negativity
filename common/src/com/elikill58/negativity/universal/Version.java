@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.nms.versions.Version1_11;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_12;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_13;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_14;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_14_4;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_15;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_16;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_17;
@@ -28,7 +29,8 @@ public enum Version {
 	V1_11("1.11", 11, Version1_11::new, 301, 316),
 	V1_12("1.12", 12, Version1_12::new, 317, 340),
 	V1_13("1.13", 13, Version1_13::new, 341, 404),
-	V1_14("1.14", 14, Version1_14::new, 441, 500),
+	V1_14("1.14", 14, Version1_14::new, 441, 489),
+	V1_14_4("1.14.4", 14.4, Version1_14_4::new, 490, 500),
 	V1_15("1.15", 15, Version1_15::new, 550, 578),
 	V1_16("1.16", 16, Version1_16::new, 700, 754),
 	V1_17("1.17", 17, Version1_17::new, 755, 756),

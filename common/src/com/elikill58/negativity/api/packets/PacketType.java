@@ -32,6 +32,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkData;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
@@ -310,7 +311,7 @@ public interface PacketType {
 		LOOK_AT,
 		LOGIN,
 		MAP,
-		MAP_CHUNK,
+		MAP_CHUNK(NPacketPlayOutChunkData::new),
 		MAP_CHUNK_BULK,
 		MOUNT,
 		MULTI_BLOCK_CHANGE(NPacketPlayOutMultiBlockChange::new),

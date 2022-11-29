@@ -18,7 +18,7 @@ import com.elikill58.negativity.api.location.World;
 
 public class CompensatedWorld extends World {
 
-	public static final EmptyBlock EMPTY = new EmptyBlock();
+	protected final EmptyBlock EMPTY = new EmptyBlock(this);
 	protected final Player p;
 	protected List<Entity> entities = new ArrayList<>();
 	protected HashMap<String, Block> blocks = new HashMap<>();

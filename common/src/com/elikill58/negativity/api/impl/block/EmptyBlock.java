@@ -5,9 +5,16 @@ import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.impl.item.CompensatedMaterial;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 
 public class EmptyBlock extends Block {
 
+	private final World w;
+	
+	public EmptyBlock(World w) {
+		this.w = w;
+	}
+	
 	@Override
 	public Object getDefault() {
 		return this;
@@ -15,7 +22,7 @@ public class EmptyBlock extends Block {
 
 	@Override
 	public Location getLocation() {
-		return new Location(null, 0, 0, 0);
+		return new Location(w, 0, 0, 0);
 	}
 
 	@Override
@@ -40,7 +47,7 @@ public class EmptyBlock extends Block {
 
 	@Override
 	public Block getRelative(BlockFace blockFace) {
-		return new EmptyBlock();
+		return new EmptyBlock(w);
 	}
 
 	@Override

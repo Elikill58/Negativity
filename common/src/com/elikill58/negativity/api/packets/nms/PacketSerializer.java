@@ -464,12 +464,12 @@ public class PacketSerializer {
 	 */
 	public Object readNBTTag() {
 		try {
-	        int readerIndex = readerIndex();
+			int readerIndex = buf.readerIndex();
 	        byte b = readByte();
 	        if (b == 0) {
 	            return null;
 	        } else {
-	            readerIndex(readerIndex);
+	            buf.readerIndex(readerIndex);
 	            return NBTIO.readTag((DataInput) new ByteBufInputStream(buf), TagLimiter.create(2097152, 512));
 	        }
 		} catch (Exception e) {

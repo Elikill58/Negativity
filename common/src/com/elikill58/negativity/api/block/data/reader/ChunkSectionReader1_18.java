@@ -33,12 +33,11 @@ import com.elikill58.negativity.universal.Version;
 /**
  * Source: https://github.com/ViaVersion/ViaVersion/blob/master/api/src/main/java/com/viaversion/viaversion/api/type/types/version/ChunkSectionType1_18.java
  */
-public class ChunkSectionReader1_18 implements ChunkSectionReader {
+public class ChunkSectionReader1_18 {
 
 	private static final int GLOBAL_PALETTE_BITS = 15;
 	
-	@Override
-	public ChunkSection read(PacketSerializer serializer, Version version) {
+	public static ChunkSection read(PacketSerializer serializer, Version version) {
         final ChunkSection chunkSection = new ChunkSectionImpl();
         chunkSection.setNonAirBlocksCount(serializer.readShort());
         chunkSection.setPalette(PaletteType.BLOCKS, readPalette(PaletteType.BLOCKS, serializer, version));
@@ -46,7 +45,7 @@ public class ChunkSectionReader1_18 implements ChunkSectionReader {
         return chunkSection;
 	}
 
-    public Palette readPalette(PaletteType type, PacketSerializer serializer, Version version) {
+    private static Palette readPalette(PaletteType type, PacketSerializer serializer, Version version) {
     	final int originalBitsPerValue = serializer.readByte();
         int bitsPerValue = originalBitsPerValue;
 
@@ -82,7 +81,7 @@ public class ChunkSectionReader1_18 implements ChunkSectionReader {
             final int valuesPerLong = (char) (64 / bitsPerValue);
             final int expectedLength = (type.size() + valuesPerLong - 1) / valuesPerLong;
             if (values.length == expectedLength) { // Thanks, Hypixel
-            	ChunkSectionReader.iterateCompactArrayWithPadding(bitsPerValue, type.size(), values,
+            	ChunkSectionReaderUtils.iterateCompactArrayWithPadding(bitsPerValue, type.size(), values,
                         bitsPerValue == GLOBAL_PALETTE_BITS ? palette::setIdAt : palette::setPaletteIndexAt);
             }
         }

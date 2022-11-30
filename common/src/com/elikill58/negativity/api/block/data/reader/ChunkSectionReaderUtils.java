@@ -2,11 +2,7 @@ package com.elikill58.negativity.api.block.data.reader;
 
 import java.util.function.BiConsumer;
 
-import com.elikill58.negativity.api.block.chunks.ChunkSection;
-import com.elikill58.negativity.api.packets.nms.PacketSerializer;
-import com.elikill58.negativity.universal.Version;
-
-public interface ChunkSectionReader {
+public class ChunkSectionReaderUtils {
 	
     // Oh no, but thanks ViaVersion: com/viaversion/viaversion/util/CompactArrayUtil.java#L29
     static final int[] MAGIC = {
@@ -30,8 +26,6 @@ public interface ChunkSectionReader {
             0, 74051160, 74051160, 0, 72796055, 72796055, 0, 71582788, 71582788, 0,
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
-
-	ChunkSection read(PacketSerializer serializer, Version version);
 
     static void iterateCompactArrayWithPadding(int bitsPerEntry, int entries, long[] data, BiConsumer<Integer, Integer> consumer) {
         long maxEntryValue = (1L << bitsPerEntry) - 1;

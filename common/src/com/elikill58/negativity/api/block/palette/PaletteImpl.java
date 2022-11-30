@@ -61,7 +61,7 @@ public class PaletteImpl implements Palette {
 
     @Override
     public void setIdAt(final int sectionCoordinate, final int id) {
-        int index = inversePalette.get(id);
+        int index = inversePalette.getOrDefault(id, -1);
         if (index == -1) {
             index = palette.size();
             palette.add(id);

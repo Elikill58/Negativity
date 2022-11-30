@@ -7,7 +7,9 @@ import com.elikill58.negativity.api.block.chunks.ChunkSection;
 import com.elikill58.negativity.api.block.data.reader.ChunkSectionReader;
 import com.elikill58.negativity.api.block.data.reader.ChunkSectionReader1_16;
 import com.elikill58.negativity.api.block.data.reader.ChunkSectionReader1_18;
+import com.elikill58.negativity.api.block.palette.PaletteType;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
@@ -25,17 +27,21 @@ public class ChunkData {
 	public ChunkData(PacketSerializer serializer, Version version) {
 		this.chunkX = serializer.readInt();
 		this.chunkZ = serializer.readInt();
+		NamedVersion nv = version.getOrCreateNamedVersion();
 		if(version.isNewerOrEquals(Version.V1_18)) {
 			this.heightmaps = serializer.readNBTTag();
 			ChunkSectionReader reader = new ChunkSectionReader1_18();
 			PacketSerializer sectionsBuf = new PacketSerializer(serializer.readBytes(serializer.readVarInt()));
             for (int i = 0; i < 16; i++) {
-            	/*ChunkSection section =*/ reader.read(sectionsBuf, version);
-            	/*int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
-            	for(int x = 0; x < values.length; x++) {
-            		int z = x; // How to calculate this ??
-            		blocks.put(new BlockPosition(x + (chunkX * 16), i, z + (chunkZ * 16)), version.getOrCreateNamedVersion().getMaterial(values[x]));
-            	}*/
+            	ChunkSection section = reader.read(sectionsBuf, version);
+            	int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
+            	for(int j = 0; j < values.length; j++) {
+            		int x = j % 16,
+            		    y = j / 256 + (i * 16),
+            		    z = j / 16 % 16;
+            		
+            		blocks.put(new BlockPosition(x + (chunkX * 16), y, z + (chunkZ * 16)), nv.getMaterial(values[j]));
+            	}
             }
 		} else { // for 1.16 & 1.17
 			// NOT TESTED - IN WIP
@@ -61,7 +67,7 @@ public class ChunkData {
 	            short nonAirBlocksCount = serializer.readShort();
 	            ChunkSection section = reader.read(serializer, version);
 	            section.setNonAirBlocksCount(nonAirBlocksCount);
-	            //section.forBlocks(chunkX, i, chunkZ, (pos, id) -> blocks.put(pos, version.getOrCreateNamedVersion().getMaterial(id)));
+	            //section.forBlocks(chunkX, i, chunkZ, (pos, id) -> blocks.put(pos, nv.getMaterial(id)));
 	        }
 		}
 		

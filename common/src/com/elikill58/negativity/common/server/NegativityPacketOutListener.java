@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.server;
 
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockPosition;
@@ -89,18 +90,22 @@ public class NegativityPacketOutListener implements Listeners {
 				return;
 			light.chunk.blockEntites.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
 			light.chunk.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
-			int good = 0, wrong = 0;
-			for(Entry<BlockPosition, Material> entries : light.chunk.blocks.entrySet()) {
-				BlockPosition loc = entries.getKey();
-				Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getX(), loc.getY(), loc.getZ());
-				if(real.getType().equals(entries.getValue())) {
-					good++;
-				} else
-					wrong++;
+			if(!runned) {
+				runned = true;
+				CompletableFuture.runAsync(() -> {
+					for(Entry<BlockPosition, Material> entries : light.chunk.blocks.entrySet()) {
+						BlockPosition loc = entries.getKey();
+						Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getX(), loc.getY(), loc.getZ());
+						if(real.getType().equals(entries.getValue())) {
+							this.g++;
+						} else {
+							this.w++;
+							Adapter.getAdapter().debug("Wrong type from ChunkDataAndLight for loc " + loc + ", given: " + entries.getValue().getId() + ", real: " + real.getType().getId());
+						}
+					}
+					Adapter.getAdapter().debug("ChunkDataAndLight, values: " + this.g + "/" + this.w + " : " + String.format("%.2f", (g / (this.g + this.w)) * 100) + "%)");
+				});
 			}
-			this.g += good;
-			this.w += wrong;
-			Adapter.getAdapter().debug("ChunkDataAndLight, values: " + good + " / " + wrong + " (" + this.g + "/" + this.w + " : " + String.format("%.2f", (g / (this.w == 0 ? 1 : this.w)) * 100) + "%)");
 		} else if(packet instanceof NPacketPlayOutChunkData) {
 			NPacketPlayOutChunkData light = (NPacketPlayOutChunkData) packet;
 			CompensatedWorld w = p.getWorld();
@@ -113,6 +118,7 @@ public class NegativityPacketOutListener implements Listeners {
 			Adapter.getAdapter().debug("Sending packet " + packet.getPacketName());*/
 	}
 	
+	public boolean runned = false;
 	public double g = 0, w = 0;
 	
 	public void checkLoc(String from, Player p, Material type, Location loc) {

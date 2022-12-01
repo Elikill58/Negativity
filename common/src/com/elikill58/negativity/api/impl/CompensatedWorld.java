@@ -13,12 +13,25 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.universal.Version;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 
 public class CompensatedWorld extends World {
 
+	private static final int MIN_HEIGHT, MAX_HEIGHT;
+	
+	static {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_17)) {
+			MIN_HEIGHT = -64;
+			MAX_HEIGHT = 320;
+		} else {
+			MIN_HEIGHT = 0;
+			MAX_HEIGHT = 256;
+		}
+	}
+	
 	protected final EmptyBlock EMPTY = new EmptyBlock(this);
 	protected final Player p;
 	protected List<Entity> entities = new ArrayList<>();
@@ -76,6 +89,15 @@ public class CompensatedWorld extends World {
 		entities.removeIf(et -> et.isSameId(id));
 	}
 	
+	public void setChunk(Chunk c) {
+		long key = getKey(c.getX(), c.getZ());
+		Chunk actual = chunks.get(key);
+		if(actual == null)
+			chunks.put(key, c);
+		else
+			actual.addChunk(c);
+	}
+	
 	public Long2ObjectMap<Chunk> getChunks() {
 		return chunks;
 	}
@@ -92,17 +114,17 @@ public class CompensatedWorld extends World {
 
 	@Override
 	public int getMaxHeight() {
-		return 64;
+		return MAX_HEIGHT;
 	}
 
 	@Override
 	public int getMinHeight() {
-		return 0;
+		return MIN_HEIGHT;
 	}
 
 	@Override
 	public boolean isPVP() {
-		return false;
+		return true;
 	}
 	
 	@Override

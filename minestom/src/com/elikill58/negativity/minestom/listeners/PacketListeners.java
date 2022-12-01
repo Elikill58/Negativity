@@ -32,13 +32,13 @@ public class PacketListeners {
 	private NamedVersion serverVersion;
 
 	public PacketListeners(EventNode<Event> e) {
-		this.serverVersion = Version.getVersion().getOrCreateNamedVersion();
+		this.serverVersion = Version.getVersion().getNamedVersion();
 		e.addListener(PlayerPacketEvent.class, this::onPacket);
 		e.addListener(PlayerPacketOutEvent.class, this::onPacket);
 	}
 	
 	private NamedVersion getNamedVersion(Player p) {
-		return p.getPlayerVersion().equals(Version.getVersion()) ? serverVersion : PlayerVersionManager.getPlayerVersion(p).getOrCreateNamedVersion(); // get server if it's same
+		return p.getPlayerVersion().equals(Version.getVersion()) ? serverVersion : PlayerVersionManager.getPlayerVersion(p).getNamedVersion(); // get server if it's same
 	}
 	
 	private NPacket getPacketFromWriter(Player p, NetworkBuffer.Writer writer, int packetId, PacketDirection dir) {

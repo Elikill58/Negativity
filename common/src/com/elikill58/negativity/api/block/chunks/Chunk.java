@@ -36,4 +36,8 @@ public class Chunk {
 	public Material get(int x, int y, int z) {
 		return types.get(getKey(x, y, z));
 	}
+
+	public void addChunk(Chunk other) {
+		types.putAll(other.types);
+	}
 }

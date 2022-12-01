@@ -1,13 +1,14 @@
 package com.elikill58.negativity.api.packets.nms.versions;
 
-import java.util.HashMap;
-
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+
 public class PreFlattening {
 
-	private static final HashMap<Integer, String> nameById = new HashMap<>();
+	private static final Int2ObjectMap<String> nameById = new Int2ObjectArrayMap<>();
 
 	static {
 		nameById.put(0, "air");
@@ -273,7 +274,7 @@ public class PreFlattening {
 		// should we check for all blocks as described here:
 		// https://minecraft.fandom.com/wiki/Java_Edition_data_values/Pre-flattening#Block_IDs
 		// ?
-		return ItemRegistrar.getInstance().get(nameById.getOrDefault(nameById, "air"), "stone"); // be sure there is
+		return ItemRegistrar.getInstance().get(nameById.getOrDefault(id, "air"), "stone"); // be sure there is
 																									// block
 	}
 }

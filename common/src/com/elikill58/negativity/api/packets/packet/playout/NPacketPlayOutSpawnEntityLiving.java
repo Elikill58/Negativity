@@ -35,7 +35,7 @@ public class NPacketPlayOutSpawnEntityLiving implements NPacketPlayOut {
 		this.entityId = serializer.readVarInt();
 		if(version.isNewerOrEquals(Version.V1_9)) {
 			this.entityUUID = serializer.readUUID();
-			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+			this.type = version.getNamedVersion().getEntityType(serializer.readByte());
 			this.x = serializer.readDouble();
 			this.y = serializer.readDouble();
 			this.z = serializer.readDouble();
@@ -46,7 +46,7 @@ public class NPacketPlayOutSpawnEntityLiving implements NPacketPlayOut {
 		    this.modY = serializer.readShort();
 		    this.modZ = serializer.readShort();
 		} else {
-		    this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+		    this.type = version.getNamedVersion().getEntityType(serializer.readByte());
 		    this.x = serializer.readInt();
 		    this.y = serializer.readInt();
 		    this.z = serializer.readInt();

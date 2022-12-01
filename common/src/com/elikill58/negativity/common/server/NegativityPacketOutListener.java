@@ -1,12 +1,10 @@
 package com.elikill58.negativity.common.server;
 
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockPosition;
-import com.elikill58.negativity.api.block.data.ChunkData;
-import com.elikill58.negativity.api.entity.EntityType;
+import com.elikill58.negativity.api.block.chunks.Chunk;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -41,8 +39,6 @@ public class NegativityPacketOutListener implements Listeners {
 		PacketType type = packet.getPacketType();
 		if(type.equals(PacketType.Server.SPAWN_ENTITY)) {
 			NPacketPlayOutSpawnEntity spawn = (NPacketPlayOutSpawnEntity) packet;
-			if(spawn.type.equals(EntityType.PIG))
-				Adapter.getAdapter().debug("Spawning entity " + spawn.entityId + ", type: " + spawn.type);
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
@@ -94,28 +90,28 @@ public class NegativityPacketOutListener implements Listeners {
 			light.chunk.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
 			if(!runned) {
 				runned = true;
-				CompletableFuture.runAsync(() -> {
-					for(Entry<BlockPosition, Material> entries : light.chunk.blocks.entrySet()) {
-						BlockPosition loc = entries.getKey();
-						Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getX(), loc.getY(), loc.getZ());
-						if(real.getType().equals(entries.getValue())) {
-							this.g++;
-						} else {
-							this.w++;
-							Adapter.getAdapter().debug("Wrong type from ChunkDataAndLight for loc " + loc + ", given: " + entries.getValue().getId() + ", real: " + real.getType().getId());
-						}
+				for(Entry<BlockPosition, Material> entries : light.chunk.blocks.entrySet()) {
+					BlockPosition loc = entries.getKey();
+					Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getX(), loc.getY(), loc.getZ());
+					if(real.getType().equals(entries.getValue())) {
+						this.g++;
+					} else {
+						this.w++;
+						Adapter.getAdapter().debug("Wrong type from ChunkDataAndLight for loc " + loc + ", given: " + entries.getValue().getId() + ", real: " + real.getType().getId());
 					}
-					Adapter.getAdapter().debug("ChunkDataAndLight, values: " + this.g + "/" + this.w + " : " + String.format("%.2f", (g / (this.g + this.w)) * 100) + "%)");
-				});
+				}
+				Adapter.getAdapter().debug("ChunkDataAndLight, values: " + this.g + "/" + this.w + " : " + String.format("%.2f", (g / (this.g + this.w)) * 100) + "%)");
 			}
 		} else if(packet instanceof NPacketPlayOutChunkDataMultiple) {
 			NPacketPlayOutChunkDataMultiple data = (NPacketPlayOutChunkDataMultiple) packet;
 			CompensatedWorld w = p.getWorld();
 			if(data.chunks == null)
 				return;
-			for(ChunkData cd : data.chunks)
-				if(cd != null)
-					cd.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
+			for(Chunk chunk : data.chunks) {
+				if(chunk == null)
+					continue;
+				w.setChunk(chunk);
+			}
 		} else if(packet instanceof NPacketPlayOutChunkData) {
 			NPacketPlayOutChunkData light = (NPacketPlayOutChunkData) packet;
 			CompensatedWorld w = p.getWorld();
@@ -132,9 +128,11 @@ public class NegativityPacketOutListener implements Listeners {
 	public double g = 0, w = 0;
 	
 	public void checkLoc(String from, Player p, Material type, Location loc) {
+		if(type.getId().equalsIgnoreCase("air"))
+			return;
 		Block real = Adapter.getAdapter().getOriginalBlockAt(p, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		if(!real.getType().equals(type)) {
-			Adapter.getAdapter().debug("Wrong type from " + from + " for loc " + loc + ", given: " + type.getId() + ", real: " + real.getType().getId());
+			Adapter.getAdapter().debug("Wrong type from " + from + " for " + loc.getBlockX() + " / " + loc.getBlockY() + " / " + loc.getBlockZ() + ", given: " + type.getId() + ", real: " + real.getType().getId());
 		} /*else
 			Adapter.getAdapter().debug("GOOD type from " + from + " for loc " + loc + ": " + type.getId());*/
 	}

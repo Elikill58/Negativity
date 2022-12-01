@@ -22,6 +22,8 @@
  */
 package com.elikill58.negativity.api.block.data.reader;
 
+import java.nio.ByteOrder;
+
 import com.elikill58.negativity.api.block.chunks.ChunkSection;
 import com.elikill58.negativity.api.block.chunks.ChunkSectionImpl;
 import com.elikill58.negativity.api.block.palette.Palette;
@@ -29,20 +31,24 @@ import com.elikill58.negativity.api.block.palette.PaletteType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Version;
 
+import io.netty.buffer.ByteBuf;
+
 /**
  * Source: https://github.com/ViaVersion/ViaVersion/blob/master/api/src/main/java/com/viaversion/viaversion/api/type/types/version/ChunkSectionType1_8.java
  */
 public class ChunkSectionReader1_8 {
 
+	@SuppressWarnings("deprecation")
 	public static ChunkSection read(PacketSerializer serializer, Version version) {
         ChunkSection chunkSection = new ChunkSectionImpl(true);
         Palette blocks = chunkSection.getPalette(PaletteType.BLOCKS);
 
         // 0 index needs to be air in 1.9
         blocks.addId(0);
-        
+
+        ByteBuf littleEndianView = serializer.getBuf().order(ByteOrder.LITTLE_ENDIAN);
         for (int idx = 0; idx < ChunkSection.SIZE; idx++) {
-            blocks.setIdAt(idx, serializer.readShort() & 0xFFFF);
+        	blocks.setIdAt(idx, littleEndianView.readShort());
         }
 
         return chunkSection;

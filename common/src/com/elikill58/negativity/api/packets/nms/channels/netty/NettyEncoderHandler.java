@@ -36,9 +36,8 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object obj, ChannelPromise promise) throws Exception {
-		super.write(ctx, obj, promise); // let server manage it
-		if(obj instanceof ByteBuf) {
-			ByteBuf msg = ((ByteBuf) obj).copy();
+		if(obj instanceof ByteBuf) { // firstly start running everything for us
+			ByteBuf msg = ((ByteBuf) obj).copy().copy(); // be sure it's fully copied
 			NettyHandlerCommon.runAsync(() -> {
 				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, ctx, msg, "encode");
 				if(packet == null)
@@ -46,5 +45,6 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 				EventManager.callEvent(new PacketSendEvent(packet, p));
 			});
 		}
+		super.write(ctx, obj, promise); // let server manage it
 	}
 }

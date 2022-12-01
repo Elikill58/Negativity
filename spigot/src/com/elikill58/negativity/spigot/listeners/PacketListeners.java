@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.listeners;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,10 +18,8 @@ import com.elikill58.negativity.universal.Version;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
@@ -33,7 +29,7 @@ public class PacketListeners extends NettyPacketListener implements Listener {
 			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
 	
 	public PacketListeners() {
-		SpigotVersionAdapter.getVersionAdapter().getFuturChannel().forEach((channelFuture) -> {
+		/*SpigotVersionAdapter.getVersionAdapter().getFuturChannel().forEach((channelFuture) -> {
 			channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
 				@Override
 				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -63,7 +59,7 @@ public class PacketListeners extends NettyPacketListener implements Listener {
 					});
 				}
 			});
-		});
+		});*/
 	}
 	
 	@EventHandler
@@ -87,7 +83,7 @@ public class PacketListeners extends NettyPacketListener implements Listener {
 		return SpigotVersionAdapter.getVersionAdapter().getChannel((Player) p.getDefault());
 	}
 
-	private class ChannelHandlerHandshakeReceive extends ChannelInboundHandlerAdapter {
+	public class ChannelHandlerHandshakeReceive extends ChannelInboundHandlerAdapter {
 
 		private Channel channel;
 		
@@ -115,7 +111,7 @@ public class PacketListeners extends NettyPacketListener implements Listener {
 							if(obj instanceof ByteBuf) {
 								ByteBuf buf = ((ByteBuf) obj).copy();
 								int packetId = new PacketSerializer(buf).readVarInt();
-								ada.debug("PacketId: " + packetId + " (type: " + Version.V1_19_2.getOrCreateNamedVersion().getPacket(PacketDirection.CLIENT_TO_SERVER, packetId).getPacketName() + ")");
+								ada.debug("PacketId: " + packetId + " (type: " + Version.V1_19_2.getNamedVersion().getPacket(PacketDirection.CLIENT_TO_SERVER, packetId).getPacketName() + ")");
 							} else
 								ada.debug("Obj: " + obj.getClass().getSimpleName());
 							super.write(ctx, obj, promise);

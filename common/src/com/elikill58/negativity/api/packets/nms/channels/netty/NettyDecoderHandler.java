@@ -55,9 +55,10 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
 			EventManager.callEvent(event);
 			if (!event.isCancelled()) {
-				super.channelRead(ctx, msg);
+				super.channelRead(ctx, obj);
 				//getNegativityPlayer().getTimingPacket().add(packet); // prepare for beeing done after ping things
 			}
-		}
+		} else
+			super.channelRead(ctx, obj);
 	}
 }

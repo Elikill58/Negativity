@@ -58,9 +58,11 @@ public class NettyHandlerCommon {
 	 */
 	public static NPacket readPacketFromByteBuf(Player p, Version version, PacketDirection direction,
 			ChannelHandlerContext ctx, ByteBuf buf, String comment) {
+		if(!buf.isReadable())
+			return null;
 		PacketSerializer serializer = new PacketSerializer(p, buf);
 		int packetId = serializer.readVarInt();
-		NPacket packet = version.getOrCreateNamedVersion().getPacket(direction, packetId);
+		NPacket packet = version.getNamedVersion().getPacket(direction, packetId);
 		if (packet == null)
 			return null;
 		try {

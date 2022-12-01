@@ -32,7 +32,7 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 		int k;
 		if(version.isNewerOrEquals(Version.V1_9)) {
 			this.entityUUID = serializer.readUUID();
-			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+			this.type = version.getNamedVersion().getEntityType(serializer.readByte());
 			this.x = serializer.readDouble();
 			this.y = serializer.readDouble();
 			this.z = serializer.readDouble();
@@ -41,7 +41,7 @@ public class NPacketPlayOutSpawnEntity implements NPacketPlayOut {
 			k = serializer.readVarInt();
 		} else {
 			this.entityUUID = UUID.randomUUID(); // no UUID
-			this.type = version.getOrCreateNamedVersion().getEntityType(serializer.readByte());
+			this.type = version.getNamedVersion().getEntityType(serializer.readByte());
 			this.x = ((double) serializer.readInt()) / 32;
 			this.y = ((double) serializer.readInt()) / 32;
 			this.z = ((double) serializer.readInt()) / 32;

@@ -35,11 +35,11 @@ public class ChunkData {
 	public ChunkData(PacketSerializer serializer, Version version) {
 		this.serializer = serializer;
 		this.version = version;
-		this.chunkX = serializer.readInt();
-		this.chunkZ = serializer.readInt();
 	}
 
 	public void read() {
+		this.chunkX = serializer.readInt();
+		this.chunkZ = serializer.readInt();
 		if (version.isNewerOrEquals(Version.V1_18)) {
 			read1_18();
 		} else if (version.isNewerOrEquals(Version.V1_16)) { // for 1.16 & 1.17
@@ -65,12 +65,12 @@ public class ChunkData {
 				Adapter.getAdapter().debug("Failed to read NBT: " + e.getMessage());
 				return;
 			}
-			blockEntites.put(new BlockPosition((chunkX * 16) + ((xz >> 4) & 0xF), y, (chunkZ * 16) + (xz & 0xF)), version.getOrCreateNamedVersion().getMaterialForEntityBlock(blockType));
+			blockEntites.put(new BlockPosition((chunkX * 16) + ((xz >> 4) & 0xF), y, (chunkZ * 16) + (xz & 0xF)), version.getNamedVersion().getMaterialForEntityBlock(blockType));
 		}
 	}
 
 	private void read1_18() {
-		NamedVersion nv = version.getOrCreateNamedVersion();
+		NamedVersion nv = version.getNamedVersion();
 		this.heightmaps = serializer.readNBTTag();
 		PacketSerializer sectionsBuf = new PacketSerializer(serializer.getPlayer(), serializer.readBytes(serializer.readVarInt()));
 		for (int i = 0; i < 16; i++) {
@@ -134,19 +134,17 @@ public class ChunkData {
 	public void deserializer1_8(boolean skyLight, byte[] data, int bitmask, boolean fullChunk) {
 		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), Unpooled.wrappedBuffer(data));
 
-		ChunkSection[] sections = new ChunkSection[16];
-		NamedVersion nv = version.getOrCreateNamedVersion();
+		NamedVersion nv = version.getNamedVersion();
 		// Read blocks
-		for (int i = 0; i < sections.length; i++) {
+		for (int i = 0; i < 16; i++) {
 			if ((bitmask & 1 << i) == 0)
 				continue;
 			ChunkSection section = ChunkSectionReader1_8.read(input, version);
 			int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
 			for (int j = 0; j < values.length; j++) {
-				int x = j % 16, y = j, z = j / 16 % 16;
+				int x = j % 16, y = j / 256, z = j / 16 % 16;
 				blocks.put(new BlockPosition(x + (chunkX * 16), y + (i * 16), z + (chunkZ * 16)), nv.getMaterial(values[j]));
 			}
-			sections[i] = section;
 		}
 
 		// Read block light

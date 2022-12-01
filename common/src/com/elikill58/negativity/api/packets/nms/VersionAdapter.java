@@ -34,7 +34,7 @@ public abstract class VersionAdapter<R> {
 	
 	public NamedVersion getNamedVersion() {
 		if(namedVersion == null && version != null) {
-			this.namedVersion = version.getOrCreateNamedVersion();
+			this.namedVersion = version.getNamedVersion();
 		}
 		return namedVersion;
 	}

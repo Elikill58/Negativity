@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.impl.block;
 
+import java.util.Locale;
+
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.Material;
@@ -49,7 +51,8 @@ public class CompensatedBlock extends Block {
 
 	@Override
 	public boolean isLiquid() {
-		return false;
+		String name = getType().getId().toLowerCase(Locale.ROOT);
+		return name.contains("water") || name.contains("lava");
 	}
 
 	@Override

@@ -84,9 +84,6 @@ public class PacketListeners {
 		if(packet == null) {
 			return;
 		}
-		PacketSendEvent event = new PacketSendEvent(packet, p);
-		EventManager.callEvent(event);
-		if(event.isCancelled())
-			e.setCancelled(true);
+		EventManager.callEvent(new PacketSendEvent(packet, p));
 	}
 }

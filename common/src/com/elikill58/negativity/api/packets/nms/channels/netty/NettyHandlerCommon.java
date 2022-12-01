@@ -5,6 +5,8 @@ import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketDirection;
@@ -20,8 +22,13 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class NettyHandlerCommon {
 
+	private static final ExecutorService channelExecutor = Executors.newCachedThreadPool();
 	private static final List<String> sentMessages = new ArrayList<>();
 
+	public static void runAsync(Runnable r) {
+		channelExecutor.execute(r);
+	}
+	
 	public static void manageError(ChannelHandlerContext ctx, Throwable cause, String source) {
 		if (cause.getMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by ")
 				|| cause.getLocalizedMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by "))
@@ -38,15 +45,26 @@ public class NettyHandlerCommon {
 		cause.printStackTrace();
 	}
 
+	/**
+	 * Read packet from given byte buf
+	 * 
+	 * @param p the concerned player
+	 * @param version the version of player
+	 * @param direction the direction of the received buffer
+	 * @param ctx context of channel
+	 * @param buf used buffer
+	 * @param comment the comment like the name of the channel
+	 * @return a new packet (read) or null if can't find something
+	 */
 	public static NPacket readPacketFromByteBuf(Player p, Version version, PacketDirection direction,
-			ChannelHandlerContext ctx, ByteBuf msg, String comment) throws Exception {
-		ByteBuf buf = msg.copy();
-		int packetId = new PacketSerializer(buf).readVarInt();
+			ChannelHandlerContext ctx, ByteBuf buf, String comment) {
+		PacketSerializer serializer = new PacketSerializer(p, buf);
+		int packetId = serializer.readVarInt();
 		NPacket packet = version.getOrCreateNamedVersion().getPacket(direction, packetId);
 		if (packet == null)
 			return null;
 		try {
-			packet.read(new PacketSerializer(buf), version);
+			packet.read(serializer, version);
 		} catch (IndexOutOfBoundsException e) {
 			LoggerAdapter ada = Adapter.getAdapter().getLogger();
 			ada.warn("Failed to read packet with ID " + packetId + " ("

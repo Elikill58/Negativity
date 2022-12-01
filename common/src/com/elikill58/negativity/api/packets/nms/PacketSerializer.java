@@ -10,7 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.block.BlockPosition;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.universal.Version;
@@ -28,13 +31,29 @@ public class PacketSerializer {
 	private static final int VALUE_BITS = 0x7F;
 
 	private final ByteBuf buf;
+	private final Player player;
 
 	public PacketSerializer(ByteBuf buf) {
+		this(null, buf);
+	}
+
+	/**
+	 * Create new packet serializer for the given player
+	 * 
+	 * @param p the concerned player
+	 * @param buf the used buffer
+	 */
+	public PacketSerializer(@Nullable Player p, ByteBuf buf) {
 		this.buf = buf;
+		this.player = p;
 	}
 
 	public ByteBuf getBuf() {
 		return buf;
+	}
+	
+	public @Nullable Player getPlayer() {
+		return player;
 	}
 
 	public int readVarInt() {

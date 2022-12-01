@@ -72,7 +72,7 @@ public class ChunkData {
 	private void read1_18() {
 		NamedVersion nv = version.getOrCreateNamedVersion();
 		this.heightmaps = serializer.readNBTTag();
-		PacketSerializer sectionsBuf = new PacketSerializer(serializer.readBytes(serializer.readVarInt()));
+		PacketSerializer sectionsBuf = new PacketSerializer(serializer.getPlayer(), serializer.readBytes(serializer.readVarInt()));
 		for (int i = 0; i < 16; i++) {
 			ChunkSection section = ChunkSectionReader1_18.read(sectionsBuf, version);
 			int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
@@ -132,7 +132,7 @@ public class ChunkData {
 	}
 	
 	public void deserializer1_8(boolean skyLight, byte[] data, int bitmask, boolean fullChunk) {
-		PacketSerializer input = new PacketSerializer(Unpooled.wrappedBuffer(data));
+		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), Unpooled.wrappedBuffer(data));
 
 		ChunkSection[] sections = new ChunkSection[16];
 		NamedVersion nv = version.getOrCreateNamedVersion();

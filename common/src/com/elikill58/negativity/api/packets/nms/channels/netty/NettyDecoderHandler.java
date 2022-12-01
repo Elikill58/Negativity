@@ -36,6 +36,10 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if(!p.isOnline()) {
+			NettyPacketListener.getInstance().left(p);
+			return;
+		}
 		NettyHandlerCommon.manageError(ctx, cause, "receiving");
 	}
 

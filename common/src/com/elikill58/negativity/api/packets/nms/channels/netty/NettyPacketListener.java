@@ -14,6 +14,10 @@ import io.netty.channel.Channel;
 
 public abstract class NettyPacketListener {
 
+	private static NettyPacketListener instance;
+	public static NettyPacketListener getInstance() {
+		return instance;
+	}
 	private ExecutorService channelExecutor = Executors.newSingleThreadExecutor();
 	public List<Channel> checked = new ArrayList<>();
 
@@ -22,7 +26,7 @@ public abstract class NettyPacketListener {
 	}
 	
 	public NettyPacketListener() {
-		
+		instance = this;
 	}
 
 	public void join(Player p) {

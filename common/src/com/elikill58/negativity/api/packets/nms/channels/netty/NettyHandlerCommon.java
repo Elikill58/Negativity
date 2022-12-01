@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.packets.nms.channels.netty;
 
+import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class NettyHandlerCommon {
 			return;
 		if (cause instanceof ClosedChannelException)
 			return;
+		if(cause instanceof IOException) // TODO handle better the io things
+			return; // closing channel
 		Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet");
 		cause.printStackTrace();
 	}

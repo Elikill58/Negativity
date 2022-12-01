@@ -14,6 +14,7 @@ public class NPacketPlayOutChunkData implements NPacketPlayOut {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		this.chunk = new ChunkData(serializer, version);
+		this.chunk.read();
 	}
 	
 	@Override

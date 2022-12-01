@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockPosition;
+import com.elikill58.negativity.api.block.data.ChunkData;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -19,6 +20,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkData;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataMultiple;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
@@ -106,6 +108,14 @@ public class NegativityPacketOutListener implements Listeners {
 					Adapter.getAdapter().debug("ChunkDataAndLight, values: " + this.g + "/" + this.w + " : " + String.format("%.2f", (g / (this.g + this.w)) * 100) + "%)");
 				});
 			}
+		} else if(packet instanceof NPacketPlayOutChunkDataMultiple) {
+			NPacketPlayOutChunkDataMultiple data = (NPacketPlayOutChunkDataMultiple) packet;
+			CompensatedWorld w = p.getWorld();
+			if(data.chunks == null)
+				return;
+			for(ChunkData cd : data.chunks)
+				if(cd != null)
+					cd.blocks.forEach((pos, m) -> w.setBlock(m, pos.toLocation(w)));
 		} else if(packet instanceof NPacketPlayOutChunkData) {
 			NPacketPlayOutChunkData light = (NPacketPlayOutChunkData) packet;
 			CompensatedWorld w = p.getWorld();

@@ -33,6 +33,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkData;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataMultiple;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
@@ -312,7 +313,7 @@ public interface PacketType {
 		LOGIN,
 		MAP,
 		MAP_CHUNK(NPacketPlayOutChunkData::new),
-		MAP_CHUNK_BULK,
+		MAP_CHUNK_BULK(NPacketPlayOutChunkDataMultiple::new),
 		MOUNT,
 		MULTI_BLOCK_CHANGE(NPacketPlayOutMultiBlockChange::new),
 		NAMED_SOUND_EFFECT,

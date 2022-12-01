@@ -28,24 +28,32 @@ public class ChunkData {
 	 * This field seems to don't be present for 1.8
 	 */
 	public HashMap<BlockPosition, Material> blockEntites = new HashMap<>();
-
+	
+	private PacketSerializer serializer;
+	private Version version;
+	
 	public ChunkData(PacketSerializer serializer, Version version) {
+		this.serializer = serializer;
+		this.version = version;
 		this.chunkX = serializer.readInt();
 		this.chunkZ = serializer.readInt();
+	}
+
+	public void read() {
 		if (version.isNewerOrEquals(Version.V1_18)) {
-			read1_18(serializer, version);
+			read1_18();
 		} else if (version.isNewerOrEquals(Version.V1_16)) { // for 1.16 & 1.17
-			read1_16(serializer, version);
+			read1_16();
 		} else if (version.isNewerOrEquals(Version.V1_13)) {
-			read1_13(serializer, version);
+			read1_13();
 		} else if (version.isNewerOrEquals(Version.V1_9)) {
-			read1_9(serializer, version);
+			read1_9();
 		} else { // for older versions
-			read1_8(serializer, version);
+			read1_8(); // should check for world environment
 		}
 	}
 
-	private void readBlockEntities(PacketSerializer serializer, Version version) {
+	private void readBlockEntities() {
 		int amountEntites = serializer.readVarInt();
 		for (int i = 0; i < amountEntites; i++) {
 			byte xz = serializer.readByte();
@@ -61,7 +69,7 @@ public class ChunkData {
 		}
 	}
 
-	private void read1_18(PacketSerializer serializer, Version version) {
+	private void read1_18() {
 		NamedVersion nv = version.getOrCreateNamedVersion();
 		this.heightmaps = serializer.readNBTTag();
 		PacketSerializer sectionsBuf = new PacketSerializer(serializer.readBytes(serializer.readVarInt()));
@@ -74,10 +82,10 @@ public class ChunkData {
 				blocks.put(new BlockPosition(x + (chunkX * 16), y, z + (chunkZ * 16)), nv.getMaterial(values[j]));
 			}
 		}
-		readBlockEntities(serializer, version);
+		readBlockEntities();
 	}
 
-	private void read1_16(PacketSerializer serializer, Version version) {
+	private void read1_16() {
 		boolean fullChunk = serializer.readBoolean();
 		serializer.readBoolean(); // ignore old light
 		int primaryBitmask = serializer.readVarInt();
@@ -101,18 +109,18 @@ public class ChunkData {
 			// section.forBlocks(chunkX, i, chunkZ, (pos, id) -> blocks.put(pos,
 			// nv.getMaterial(id)));
 		}
-		readBlockEntities(serializer, version);
+		readBlockEntities();
 	}
 
-	private void read1_13(PacketSerializer serializer, Version version) {
-
-	}
-
-	private void read1_9(PacketSerializer serializer, Version version) {
+	private void read1_13() {
 
 	}
 
-	private void read1_8(PacketSerializer serializer, Version version) {
+	private void read1_9() {
+
+	}
+
+	public void read1_8() {
 		boolean fullChunk = serializer.readBoolean();
 		int bitmask = serializer.readUnsignedShort();
 		int dataLength = serializer.readVarInt();
@@ -120,35 +128,51 @@ public class ChunkData {
 		serializer.readBytes(data);
 		if (fullChunk && bitmask == 0)
 			return;
+		deserializer1_8(true, data, bitmask, fullChunk);
+	}
+	
+	public void deserializer1_8(boolean skyLight, byte[] data, int bitmask, boolean fullChunk) {
 		PacketSerializer input = new PacketSerializer(Unpooled.wrappedBuffer(data));
-		
+
+		ChunkSection[] sections = new ChunkSection[16];
 		NamedVersion nv = version.getOrCreateNamedVersion();
 		// Read blocks
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < sections.length; i++) {
 			if ((bitmask & 1 << i) == 0)
 				continue;
 			ChunkSection section = ChunkSectionReader1_8.read(input, version);
 			int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
-			Adapter.getAdapter().debug("Set " + values.length + " values for " + i);
 			for (int j = 0; j < values.length; j++) {
 				int x = j % 16, y = j, z = j / 16 % 16;
-				if(i == 0)
-					Adapter.getAdapter().debug("Set " + values[j] + " at " + (x + (chunkX * 16)) + "/" + (y / 256 + (i * 16)) + "/" + (z + (chunkZ * 16)));
 				blocks.put(new BlockPosition(x + (chunkX * 16), y + (i * 16), z + (chunkZ * 16)), nv.getMaterial(values[j]));
 			}
+			sections[i] = section;
 		}
 
 		// Read block light
-		/*
-		 * for (int i = 0; i < sections.length; i++) { if ((bitmask & 1 << i) == 0)
-		 * continue; sections[i].getLight().readBlockLight(input.getBuf()); }
-		 * 
-		 * // Read sky light if (skyLight) { // should check for world environment for
-		 * (int i = 0; i < sections.length; i++) { if ((bitmask & 1 << i) == 0)
-		 * continue; sections[i].getLight().readSkyLight(input.getBuf()); } }
-		 * 
-		 * // Read biome data if (fullChunk) { biomeData = new int[256]; for (int i = 0;
-		 * i < 256; i++) { biomeData[i] = input.readUnsignedByte(); } } input.release();
-		 */
+
+		/*for (int i = 0; i < sections.length; i++) {
+			if ((bitmask & 1 << i) == 0)
+				continue;
+			sections[i].getLight().readBlockLight(input.getBuf());
+		}
+
+		// Read sky light
+		if (skyLight) {
+			for (int i = 0; i < sections.length; i++) {
+				if ((bitmask & 1 << i) == 0)
+					continue;
+				sections[i].getLight().readSkyLight(input.getBuf());
+			}
+		}
+
+		// Read biome data
+		if (fullChunk) {
+			for (int i = 0; i < 256; i++) {
+				input.readUnsignedByte();
+			}
+		}
+		input.release();*/
+
 	}
 }

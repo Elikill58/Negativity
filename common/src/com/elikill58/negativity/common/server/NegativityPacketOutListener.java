@@ -57,6 +57,8 @@ public class NegativityPacketOutListener implements Listeners {
 				Adapter.getAdapter().debug("Changing world " + p.getWorld().getEntities().size() + " to " + respawn.worldName);
 				CompensatedWorld world = new CompensatedWorld(p);
 				world.setName(respawn.worldName == null ? Adapter.getAdapter().getWorldName(p) : respawn.worldName);
+				if(respawn.difficulty != null)
+					world.setDifficulty(respawn.difficulty);
 				cp.setWorld(world);
 			}
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {

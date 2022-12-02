@@ -28,7 +28,7 @@ public class Chunk {
 	public int getZ() {
 		return z;
 	}
-	
+
 	public void set(int x, int y, int z, Material type) {
 		types.put(getKey(x, y, z), type);
 	}

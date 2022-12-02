@@ -36,6 +36,7 @@ public class CompensatedWorld extends World {
 	protected final Player p;
 	protected List<Entity> entities = new ArrayList<>();
 	protected Long2ObjectMap<Chunk> chunks = new Long2ObjectArrayMap<>();
+	protected Difficulty difficulty = Difficulty.PEACEFUL;
 	protected String name;
 	
 	public CompensatedWorld(Player p) {
@@ -90,6 +91,8 @@ public class CompensatedWorld extends World {
 	}
 	
 	public void setChunk(Chunk c) {
+		if(c == null)
+			return;
 		long key = getKey(c.getX(), c.getZ());
 		Chunk actual = chunks.get(key);
 		if(actual == null)
@@ -109,7 +112,11 @@ public class CompensatedWorld extends World {
 
 	@Override
 	public Difficulty getDifficulty() {
-		return Difficulty.PEACEFUL;
+		return difficulty;
+	}
+	
+	public void setDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
 	}
 
 	@Override

@@ -274,7 +274,11 @@ public class PreFlattening {
 		// should we check for all blocks as described here:
 		// https://minecraft.fandom.com/wiki/Java_Edition_data_values/Pre-flattening#Block_IDs
 		// ?
-		return ItemRegistrar.getInstance().get(nameById.getOrDefault(id, "air"), "stone"); // be sure there is
-																									// block
+		// be sure there is block
+		return ItemRegistrar.getInstance().get(nameById.getOrDefault(id, "air"), "stone");
+	}
+	
+	public static int size() {
+		return nameById.size();
 	}
 }

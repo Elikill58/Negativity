@@ -54,8 +54,8 @@ public class NPacketPlayOutChunkDataMultiple implements NPacketPlayOut {
 			ChunkSection section = ChunkSectionReader1_8.read(input, version);
 			int[] values = section.getPalette(PaletteType.BLOCKS).getValues();
 			for (int j = 0; j < values.length; j++) {
-				int x = j % 16, y = j / 256, z = j / 16 % 16;
-				c.set(x + (c.getX() * 16), y + (i * 16), z + (c.getZ() * 16), nv.getMaterial(values[j]));
+				int x = j % 16, y = j / 16, z = j / 16 % 16;
+				c.set(x, y + (i * 16), z, nv.getMaterial(values[j]));
 			}
 		}
 	}

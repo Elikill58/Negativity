@@ -81,6 +81,7 @@ public class Version1_8 extends NamedVersion {
 		entityTypes.put(66, EntityType.WITCH);
 		entityTypes.put(67, EntityType.ENDERMITE);
 		entityTypes.put(68, EntityType.GUARDIAN);
+		entityTypes.put(70, EntityType.FALLING_BLOCK);
 		entityTypes.put(90, EntityType.PIG);
 		entityTypes.put(91, EntityType.SHEEP);
 		entityTypes.put(92, EntityType.COW);

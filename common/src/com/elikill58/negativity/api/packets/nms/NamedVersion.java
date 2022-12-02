@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Handshake;
+import com.elikill58.negativity.api.packets.nms.versions.PreFlattening;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -55,7 +56,7 @@ public abstract class NamedVersion {
 
 	public void log() {
 		Adapter.getAdapter().getLogger().info("Loaded version " + getName() + ". Packets playIn/playOut: " + playIn.size() + "/" + playOut.size() + ", entityTypes: " + entityTypes.size()
-				+ ", materials: " + materials.size());
+				+ ", materials: " + (materials.isEmpty() ? PreFlattening.size() : materials.size()));
 	}
 
 	public void loadPostFlattening(String dir) {
@@ -85,8 +86,9 @@ public abstract class NamedVersion {
 		JSONArray json = (JSONArray) new JSONParser().parse(rawJson);
 		for (Object obj : json) {
 			JSONObject jsonBlock = (JSONObject) obj;
+			JsonMaterial material = new JsonMaterial(jsonBlock);
 			for (int i = Integer.parseInt(jsonBlock.get("minStateId").toString()); i <= Integer.parseInt(jsonBlock.get("maxStateId").toString()); i++)
-				materials.put(i, new JsonMaterial(jsonBlock));
+				materials.put(i, material);
 		}
 	}
 

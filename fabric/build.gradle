@@ -5,6 +5,8 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
+evaluationDependsOn(':common')
+
 sourceSets {
     main {
         java.srcDirs = ['src']

@@ -32,9 +32,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkData;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataMultiple;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutChunkDataUpdateLight;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityHeadRotation;
@@ -54,7 +51,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEn
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnloadChunk;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUpdateLight;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.utils.ChatUtils;
 
@@ -307,13 +303,13 @@ public interface PacketType {
 		INITIALIZE_BORDER,
 		KEEP_ALIVE(NPacketPlayOutKeepAlive::new),
 		KICK_DISCONNECT,
-		LIGHT_UPDATE(NPacketPlayOutUpdateLight::new),
-		LEVEL_CHUNK_LIGHT(NPacketPlayOutChunkDataUpdateLight::new),
+		LIGHT_UPDATE,
+		LEVEL_CHUNK_LIGHT,
 		LOOK_AT,
 		LOGIN,
 		MAP,
-		MAP_CHUNK(NPacketPlayOutChunkData::new),
-		MAP_CHUNK_BULK(NPacketPlayOutChunkDataMultiple::new),
+		MAP_CHUNK,
+		MAP_CHUNK_BULK,
 		MOUNT,
 		MULTI_BLOCK_CHANGE(NPacketPlayOutMultiBlockChange::new),
 		NAMED_SOUND_EFFECT,

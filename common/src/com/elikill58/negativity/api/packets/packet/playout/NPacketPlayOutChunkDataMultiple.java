@@ -13,6 +13,10 @@ import com.elikill58.negativity.universal.Version;
 
 import io.netty.buffer.Unpooled;
 
+/**
+ * This packet should not well read informations. You should not use it.
+ */
+@Deprecated
 public class NPacketPlayOutChunkDataMultiple implements NPacketPlayOut {
 
     private static final int BLOCKS_PER_SECTION = 16 * 16 * 16;

@@ -7,6 +7,10 @@ import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.universal.Version;
 
+/**
+ * This packet should not well read informations. You should not use it.
+ */
+@Deprecated
 public class NPacketPlayOutChunkData implements NPacketPlayOut {
 
 	public ChunkData chunk;

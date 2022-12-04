@@ -27,6 +27,11 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('common')
     archiveClassifier.set(null)
+
+    relocate("it.unimi.dsi.fastutil", "com.elikill58.deps.fastutil")
+    minimize {
+        include(dependency("it.unimi.dsi:fastutil:.*"))
+    }
     
     mergeServiceFiles()
     from(

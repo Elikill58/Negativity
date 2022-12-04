@@ -54,7 +54,7 @@ public class Scaffold extends Cheat {
 			if(BYPASS_TYPES.contains(placed))
 				return;
 			
-			if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()) {
+			if ((!m.isSolid() && !m.equals(placed)) && slot != p.getInventory().getHeldItemSlot()) {
 				int localPing = ping;
 				if (localPing == 0)
 					localPing = 1;

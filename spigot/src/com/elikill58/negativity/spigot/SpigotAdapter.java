@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -26,16 +25,17 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -286,14 +286,10 @@ public class SpigotAdapter extends Adapter {
 	public List<String> getAllPlugins() {
 		return Arrays.asList(pl.getServer().getPluginManager().getPlugins()).stream().map(Plugin::getName).collect(Collectors.toList());
 	}
-
+	
 	@Override
-	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
-		return new SpigotBlock(Bukkit.getPlayer(p.getUniqueId()).getWorld().getBlockAt(x, y, z));
-	}
-
-	@Override
-	public String getWorldName(Player p) {
-		return Bukkit.getPlayer(p.getUniqueId()).getWorld().getName();
+	public World getServerWorld(Player p) {
+		org.bukkit.World w = Bukkit.getPlayer(p.getUniqueId()).getWorld();
+		return World.getWorld(w.getName(), (a) -> new SpigotWorld(w));
 	}
 }

@@ -1,16 +1,11 @@
 package com.elikill58.negativity.sponge7.impl.location;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge7.impl.block.SpongeBlock;
-import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 
 public class SpongeWorld extends World {
 
@@ -31,18 +26,6 @@ public class SpongeWorld extends World {
 	}
 
 	@Override
-	public Block getBlockAt0(Location loc) {
-		return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-	}
-
-	@Override
-	public List<Entity> getEntities() {
-		List<Entity> list = new ArrayList<>();
-		w.getEntities().forEach((e) -> list.add(SpongeEntityManager.getEntity(e)));
-		return list;
-	}
-
-	@Override
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(w.getDifficulty().getId().toUpperCase(Locale.ROOT));
 	}
@@ -55,11 +38,6 @@ public class SpongeWorld extends World {
 	@Override
 	public int getMinHeight() {
 		return 0;
-	}
-	
-	@Override
-	public boolean isPVP() {
-		return w.getProperties().isPVPEnabled();
 	}
 
 	@Override

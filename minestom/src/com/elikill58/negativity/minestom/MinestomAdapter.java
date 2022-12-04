@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -21,14 +20,15 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.minestom.impl.block.MinestomBlock;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemBuilder;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemRegistrar;
+import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 import com.elikill58.negativity.minestom.impl.plugin.MinestomExternalPlugin;
 import com.elikill58.negativity.minestom.nms.MinestomVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
@@ -46,9 +46,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.extensions.DiscoveredExtension;
 import net.minestom.server.extensions.Extension;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.timer.TaskSchedule;
 
 public class MinestomAdapter extends Adapter {
@@ -272,13 +272,8 @@ public class MinestomAdapter extends Adapter {
 	}
 
 	@Override
-	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
-		net.minestom.server.entity.Player mp = MinecraftServer.getConnectionManager().getPlayer(p.getUniqueId());
-		return new MinestomBlock(mp.getInstance().getBlock(x, y, z), mp.getInstance(), new Pos(x, y, z));
-	}
-
-	@Override
-	public String getWorldName(Player p) {
-		return MinecraftServer.getConnectionManager().getPlayer(p.getUniqueId()).getInstance().getUniqueId().toString();
+	public World getServerWorld(Player p) {
+		Instance i = MinecraftServer.getConnectionManager().getPlayer(p.getUniqueId()).getInstance();
+		return World.getWorld(i.getUniqueId().toString(), (a) -> new MinestomWorld(i));
 	}
 }

@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -15,6 +14,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 
 public abstract class ProxyAdapter extends Adapter {
@@ -101,12 +101,7 @@ public abstract class ProxyAdapter extends Adapter {
 	}
 	
 	@Override
-	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
-		throw new UnsupportedOperationException("OriginalBlockAt is unsupported on proxies");
-	}
-	
-	@Override
-	public String getWorldName(Player p) {
-		throw new UnsupportedOperationException("WorldName is unsupported on proxies");
+	public World getServerWorld(Player p) {
+		throw new UnsupportedOperationException("ServerWorld is unsupported on proxies");
 	}
 }

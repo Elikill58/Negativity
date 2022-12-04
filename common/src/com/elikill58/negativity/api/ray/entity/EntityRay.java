@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -29,7 +30,7 @@ public class EntityRay extends AbstractRay<EntityRayResult> {
 	protected EntityRay(World w, Location position, Vector vector, int maxDistance, boolean onlyPlayers, List<Entity> bypassEntities, Entity searched) {
 		super(w, position, vector, maxDistance);
 		if(searched == null) {
-			this.entities = new ArrayList<>(w.getEntities());
+			this.entities = new ArrayList<>(((CompensatedWorld) w).getEntities());
 			this.entities.removeAll(bypassEntities);
 			if(onlyPlayers)
 				this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));

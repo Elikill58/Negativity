@@ -55,7 +55,7 @@ public class Nuker extends Cheat {
 						bestDistance = distance;
 					}
 				}
-				if (bestDistance != Double.MAX_VALUE && (bestBlock.getType() != type) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR) {
+				if (bestBlock != null && (bestBlock.getType() != type) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(bestDistance * 15 - ping), "distance",
 							"BlockDig " + b.toString() + ", player see " + bestBlock.toString() + ". Distance between blocks " + bestDistance + " block.");
 					if(isSetBack() && mayCancel)

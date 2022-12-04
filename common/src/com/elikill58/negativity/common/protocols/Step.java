@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.common.protocols.data.StepData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -59,7 +58,7 @@ public class Step extends Cheat implements Listeners {
 			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY,
 			CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME,
 			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_BLOCK_MID_AROUND,
-			CheckConditions.NO_USE_JUMP_BOOST })
+			CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_BOAT_AROUND })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -79,7 +78,7 @@ public class Step extends Cheat implements Listeners {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if ((diffBoost > 0.5) && !(diffBoost <= 0.6 && diffBoost >= 0.56) // 0.56-0.6 is to bypass carpet and other
 																				// no-full blocks
-					&& !(amplifier > 0 && diffBoost < 0.55) && !LocationUtils.hasBoatAroundHim(p.getLocation())) {
+					&& !(amplifier > 0 && diffBoost < 0.55)) {
 				Negativity.alertMod(ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 120), "dif-boost",
 						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (amplifier " + amplifier + ") Dir Y: "

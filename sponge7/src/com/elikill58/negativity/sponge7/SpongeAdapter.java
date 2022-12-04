@@ -22,7 +22,6 @@ import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -33,16 +32,17 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.sponge7.impl.block.SpongeBlock;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeFakePlayer;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge7.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge7.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge7.impl.item.SpongeItemRegistrar;
+import com.elikill58.negativity.sponge7.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge7.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.sponge7.nms.SpongeVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
@@ -323,14 +323,10 @@ public class SpongeAdapter extends Adapter {
 	public List<String> getAllPlugins() {
 		return Sponge.getPluginManager().getPlugins().stream().map(PluginContainer::getId).collect(Collectors.toList());
 	}
-
+	
 	@Override
-	public Block getOriginalBlockAt(Player p, int x, int y, int z) {
-		return new SpongeBlock(Sponge.getServer().getPlayer(p.getUniqueId()).get().getWorld().createSnapshot(x, y, z));
-	}
-
-	@Override
-	public String getWorldName(Player p) {
-		return Sponge.getServer().getPlayer(p.getUniqueId()).get().getWorld().getName();
+	public World getServerWorld(Player p) {
+		org.spongepowered.api.world.World sw = Sponge.getServer().getPlayer(p.getUniqueId()).get().getWorld();
+		return World.getWorld(sw.getName(), (a) -> new SpongeWorld(sw));
 	}
 }

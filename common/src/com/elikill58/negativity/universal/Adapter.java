@@ -7,7 +7,6 @@ import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -18,6 +17,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -363,7 +363,11 @@ public abstract class Adapter {
 	 */
 	public abstract VersionAdapter<?> getVersionAdapter();
 	
-	public abstract Block getOriginalBlockAt(Player p, int x, int y, int z);
-	
-	public abstract String getWorldName(Player p);
+	/**
+	 * Get the world from the server side according to the platform world of the player
+	 * 
+	 * @param p player
+	 * @return world server
+	 */
+	public abstract World getServerWorld(Player p);
 }

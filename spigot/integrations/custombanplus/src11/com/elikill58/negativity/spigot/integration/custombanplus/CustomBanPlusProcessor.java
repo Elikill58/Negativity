@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.custombanplus;
+package com.elikill58.negativity.spigot.integration.custombanplus;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -30,7 +30,7 @@ import me.coralise.enums.Punishment;
 import me.coralise.objects.HistoryRecord;
 import me.coralise.players.CBPlayer;
 
-// Used via reflection in com.elikill58.negativity.integration.custombanplus.CustomBanPlusProcessorProvider
+// Used via reflection in com.elikill58.negativity.spigot.integration.custombanplus.CustomBanPlusProcessorProvider
 public class CustomBanPlusProcessor implements BanProcessor {
 
 	@Override

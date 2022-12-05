@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.custombanplus;
+package com.elikill58.negativity.spigot.integration.custombanplus;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
@@ -16,7 +16,7 @@ public class CustomBanPlusProcessorProvider implements BanProcessorProvider, Plu
 	public BanProcessor create(Adapter adapter) {
 		try {
 			Class<?> processorClass = getClass().getClassLoader()
-					.loadClass("com.elikill58.negativity.integration.custombanplus.CustomBanPlusProcessor");
+					.loadClass("com.elikill58.negativity.spigot.integration.custombanplus.CustomBanPlusProcessor");
 			return (BanProcessor) processorClass.getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

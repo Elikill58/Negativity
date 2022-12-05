@@ -26,6 +26,11 @@ public class CompensatedWorld extends World {
 		this.p = p;
 	}
 	
+	public CompensatedWorld(Player p, World w) {
+		this.p = p;
+		this.serverWorld = w;
+	}
+	
 	public Player getPlayer() {
 		return p;
 	}

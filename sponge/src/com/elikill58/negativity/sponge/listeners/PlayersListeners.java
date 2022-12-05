@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerChangeWorldEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
@@ -31,9 +32,11 @@ import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
+import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -83,8 +86,10 @@ public class PlayersListeners {
 		Location from;
 		Location to;
 		if (e instanceof ChangeEntityWorldEvent) {
-			from = LocationUtils.toNegativity(((ChangeEntityWorldEvent) e).originalWorld(), e.originalPosition());
-			to = LocationUtils.toNegativity(((ChangeEntityWorldEvent) e).destinationWorld(), e.destinationPosition());
+			ChangeEntityWorldEvent change = (ChangeEntityWorldEvent) e;
+			from = LocationUtils.toNegativity(change.originalWorld(), e.originalPosition());
+			to = LocationUtils.toNegativity(change.destinationWorld(), e.destinationPosition());
+			EventManager.callEvent(new PlayerChangeWorldEvent(SpongeEntityManager.getPlayer(p), World.getWorld(change.destinationWorld().key().asString(), (a) -> new SpongeWorld(change.destinationWorld()))));
 		} else {
 			ServerWorld world = (ServerWorld) e.entity().world();
 			from = LocationUtils.toNegativity(world, e.originalPosition());

@@ -88,6 +88,11 @@ public abstract class AbstractPlayer implements Player {
 	}
 	
 	@Override
+	public void setInternalWorld(CompensatedWorld world) {
+		this.world = world;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

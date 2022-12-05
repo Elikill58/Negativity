@@ -228,6 +228,13 @@ public interface Player extends OfflinePlayer {
 	CompensatedWorld getWorld();
 	
 	/**
+	 * This does NOT change the platform world (aka teleport)
+	 * 
+	 * @param w the new world
+	 */
+	void setInternalWorld(CompensatedWorld w);
+	
+	/**
 	 * Get player version
 	 * (Compatible with ViaVersion and ProtocolSupport for multiple client version)
 	 * 

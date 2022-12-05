@@ -7,9 +7,11 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
+import com.elikill58.negativity.api.events.player.PlayerChangeWorldEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
+import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -58,7 +60,7 @@ public class GameEventsManager implements Listeners {
 			}
 		} else if(message instanceof PlayerVersionMessage) {
 			p.setPlayerVersion(((PlayerVersionMessage) message).getVersion());
-		} else {
+		} else if(message != null) {
 			Adapter.getAdapter().getLogger().warn("Received unexpected plugin message " + message.getClass().getName());
 		}
 	}
@@ -74,5 +76,11 @@ public class GameEventsManager implements Listeners {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !below.getType().equals(Materials.AIR)))
 			np.isUsingSlimeBlock = false;
+	}
+	
+	@EventListener
+	public void changeWorld(PlayerChangeWorldEvent e) {
+		Player p = e.getPlayer();
+		p.setInternalWorld(new CompensatedWorld(p, e.getServerWorld()));
 	}
 }

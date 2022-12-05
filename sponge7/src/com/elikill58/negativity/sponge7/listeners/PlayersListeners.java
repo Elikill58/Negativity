@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerChangeWorldEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
@@ -21,10 +22,12 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge7.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge7.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge7.impl.location.SpongeWorld;
 
 public class PlayersListeners {
 	
@@ -56,6 +59,10 @@ public class PlayersListeners {
 
 	@Listener
 	public void onTeleport(MoveEntityEvent.Teleport e, @First Player p) {
+		if(!e.getFromTransform().getExtent().equals(e.getToTransform().getExtent())) {
+			EventManager.callEvent(new PlayerChangeWorldEvent(SpongeEntityManager.getPlayer(p), World.getWorld(e.getToTransform().getExtent().getName(), (a) -> new SpongeWorld(e.getToTransform().getExtent()))));
+		}
+		
 		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), SpongeLocation.toCommon(e.getFromTransform().getLocation()),
 				SpongeLocation.toCommon(e.getToTransform().getLocation())));
 	}

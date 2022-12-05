@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -17,6 +18,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerChangeWorldEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
@@ -24,11 +26,13 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 
 public class PlayersListeners implements Listener {
 	
@@ -65,6 +69,12 @@ public class PlayersListeners implements Listener {
 		EventManager.callEvent(event);
 		if(event.isCancelled())
 			e.setCancelled(event.isCancelled());
+	}
+	
+	@EventHandler
+	public void onChangeWorld(PlayerChangedWorldEvent e) {
+		org.bukkit.World old = e.getPlayer().getWorld();
+		EventManager.callEvent(new PlayerChangeWorldEvent(SpigotEntityManager.getPlayer(e.getPlayer()), World.getWorld(old.getName(), (a) -> new SpigotWorld(old))));
 	}
 	
 	@EventHandler

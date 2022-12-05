@@ -90,32 +90,27 @@ public class NegativityPacketInListener implements Listeners {
 
 			switch (action.action) {
 			case LEAVE_BED:
-				p.setSleeping(false);
-				break;
 			case OPEN_INVENTORY:
-				break;
 			case START_FALL_FLYING:
-				break;
 			case START_RIDING_JUMP:
-				break;
 			case STOP_RIDING_JUMP:
-				break;
 			case STOP_SLEEPING:
-				p.setSleeping(false);
 				break;
 			case START_SNEAKING:
-				EventManager.callEvent(new PlayerToggleActionEvent(p, ToggleAction.SNEAK, false));
-				p.setSneaking(true);
+				PlayerToggleActionEvent sneakToggle = new PlayerToggleActionEvent(p, ToggleAction.SNEAK, false);
+				EventManager.callEvent(sneakToggle);
+				if(sneakToggle.isCancelled())
+					e.setCancelled(true);
 				break;
 			case STOP_SNEAKING:
-				p.setSneaking(false);
 				break;
 			case START_SPRINTING:
-				EventManager.callEvent(new PlayerToggleActionEvent(p, ToggleAction.SPRINT, false));
-				p.setSprinting(true);
+				PlayerToggleActionEvent sprintToggle = new PlayerToggleActionEvent(p, ToggleAction.SPRINT, false);
+				EventManager.callEvent(sprintToggle);
+				if(sprintToggle.isCancelled())
+					e.setCancelled(true);
 				break;
 			case STOP_SPRINTING:
-				p.setSprinting(false);
 				break;
 			}
 		} else if (packet instanceof NPacketPlayInChat) {

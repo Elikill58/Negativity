@@ -10,6 +10,13 @@ public class NPacketPlayOutCustomPayload implements NPacketPlayOut {
 
 	public String channel;
 	public byte[] data;
+
+	public NPacketPlayOutCustomPayload() {}
+	
+	public NPacketPlayOutCustomPayload(String channel, byte[] data) {
+		this.channel = channel;
+		this.data = data;
+	}
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {

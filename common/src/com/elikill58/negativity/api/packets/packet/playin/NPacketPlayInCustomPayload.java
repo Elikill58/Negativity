@@ -14,7 +14,7 @@ public class NPacketPlayInCustomPayload implements NPacketPlayIn {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		this.channel = serializer.readString();
-		this.data = serializer.readByteArray();
+		this.data = serializer.readAvailableBytes();
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class NPacketPlayOutCustomPayload implements NPacketPlayOut {
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
 		this.channel = serializer.readString();
-		this.data = serializer.readByteArray(1048576);
+		this.data = serializer.readAvailableBytes();
 	}
 
 	@Override

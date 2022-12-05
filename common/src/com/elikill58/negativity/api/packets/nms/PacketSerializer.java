@@ -263,6 +263,12 @@ public class PacketSerializer {
 		return this.buf.readBytes(bytebuffer);
 	}
 
+	public byte[] readAvailableBytes() {
+		byte[] b = new byte[buf.readableBytes()];
+		buf.readBytes(b);
+		return b;
+	}
+
 	public ByteBuf skipBytes(int i) {
 		return this.buf.skipBytes(i);
 	}
@@ -334,7 +340,7 @@ public class PacketSerializer {
 	public int writeBytes(ScatteringByteChannel scatteringbytechannel, int i) throws IOException {
 		return this.buf.writeBytes(scatteringbytechannel, i);
 	}
-
+	
 	public ByteBuf writeZero(int i) {
 		return this.buf.writeZero(i);
 	}

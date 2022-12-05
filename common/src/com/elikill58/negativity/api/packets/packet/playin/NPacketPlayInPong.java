@@ -29,7 +29,7 @@ public class NPacketPlayInPong implements NPacketPlayIn {
 	    //serializer.readShort();
 	    //serializer.readByte();
 		
-	    // 1.9 fields
+	    // 1.9 & more fields
 	    //serializer.readShort();
 	    //serializer.readBoolean();
 	}

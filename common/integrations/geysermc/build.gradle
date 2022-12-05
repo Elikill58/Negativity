@@ -2,8 +2,11 @@ evaluationDependsOn(':common')
 
 sourceSets {
     main {
-        java.srcDirs = ['src']
+        java.srcDirs = ['src8']
         resources.srcDirs = ['resources']
+    }
+    java17 {
+        java.srcDirs = ['src17']
     }
 }
 
@@ -20,6 +23,20 @@ dependencies {
     api(project(':common'))
 }
 
-compileJava.javaCompiler.set(
-        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
-)
+compileJava {
+    javaCompiler.set(
+            javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(8) }
+    )
+}
+
+compileJava17Java {
+    javaCompiler.set(
+            javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+    )
+}
+
+tasks.jar {
+    from(tasks.compileJava17Java) {
+        exclude "previous-compilation-data.bin"
+    }
+}

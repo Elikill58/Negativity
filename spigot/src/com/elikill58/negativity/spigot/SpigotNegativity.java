@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -70,17 +69,11 @@ public class SpigotNegativity extends JavaPlugin {
 		else {
 			getLogger().info("Detected server version: " + v.getName().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
 		}
-		getLogger().info("Running with Java " + System.getProperty("java.version"));
 
 		Negativity.loadNegativity();
 
-		try {
-			Class.forName("com.google.gson.JsonObject");
-			new Metrics(this, 1743)
-					.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
-		} catch (ClassNotFoundException e) {
-			// on 1.7, there isn't any gson feature
-		}
+		new Metrics(this, 1743)
+				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersListeners(), this);

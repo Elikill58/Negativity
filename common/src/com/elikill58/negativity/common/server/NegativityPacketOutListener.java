@@ -11,11 +11,13 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
+import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketOutListener implements Listeners {
 
@@ -53,6 +55,9 @@ public class NegativityPacketOutListener implements Listeners {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
 			change.blockStates.forEach((pos, m) -> w.addTimingBlock(p.getPing(), m, pos.getX(), pos.getY(), pos.getZ()));
+		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
+			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
+			Adapter.getAdapter().debug("Channel: " + a.channel);
 		}
 	}
 }

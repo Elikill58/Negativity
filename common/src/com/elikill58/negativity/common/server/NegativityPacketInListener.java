@@ -17,12 +17,12 @@ import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
@@ -67,16 +67,6 @@ public class NegativityPacketInListener implements Listeners {
 			if (flying.hasLocation()) {
 				if (p.getLocation() == null) {
 					p.setLocation(flying.getLocation(p.getWorld()));
-				}
-				if(p.isSprinting()) {
-					Location loc = p.getLocation();
-					if(loc.getBlockX() != flying.getBlockX() || loc.getBlockY() != flying.getBlockY() || loc.getBlockZ() != flying.getBlockZ()) {
-						Adapter ada = Adapter.getAdapter();
-						ada.debug("Below: " + flying.getLocation(p.getWorld()).sub(0, 1, 0).getBlock().getType() + ", loc: " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
-						/*p.getWorld().getBlocks().forEach((key, val) -> {
-							ada.debug(key + ": " + val);
-						});*/
-					}
 				}
 				PlayerMoveEvent moveEvent = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
 				EventManager.callEvent(moveEvent);
@@ -131,6 +121,9 @@ public class NegativityPacketInListener implements Listeners {
 				EventManager.callEvent(chatEvent);
 				e.setCancelled(chatEvent.isCancelled());
 			}
+		} else if(type.equals(PacketType.Client.CUSTOM_PAYLOAD)) {
+			NPacketPlayInCustomPayload a = (NPacketPlayInCustomPayload) packet;
+			Adapter.getAdapter().debug("Channel IN: " + a.channel);
 		}
 	}
 }

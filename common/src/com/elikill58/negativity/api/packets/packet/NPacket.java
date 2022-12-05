@@ -22,7 +22,7 @@ public interface NPacket {
 	 * @param serializer the buffer that will receive write
 	 */
 	public default void write(PacketSerializer serializer, Version version) {
-		
+		throw new UnsupportedOperationException("Can't write packet " + getPacketType() + " (" + getPacketName() + "). Not implemented.");
 	}
 	
 	/**

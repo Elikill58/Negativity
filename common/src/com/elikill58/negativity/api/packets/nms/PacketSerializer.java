@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.universal.Version;
 import com.github.steveice10.opennbt.NBTIO;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.limiter.TagLimiter;
 
 import io.netty.buffer.ByteBuf;
@@ -474,14 +475,19 @@ public class PacketSerializer {
 			throw new DecoderException("Received string length is longer than maximum allowed (" + j + " > " + size + ")");
 		return s;
 	}
+	
+	public void writeString(String s) {
+		byte[] bytes = s.getBytes();
+		writeVarInt(bytes.length);
+		writeBytes(bytes);
+	}
 
 	/**
-	 * Read NBT tag.<br>
-	 * This method pass just over all bytes, but ALWAYS return null
+	 * Read NBT tag
 	 * 
-	 * @return null
+	 * @return compound tag or null
 	 */
-	public Object readNBTTag() {
+	public CompoundTag readNBTTag() {
 		try {
 			int readerIndex = buf.readerIndex();
 	        byte b = readByte();
@@ -588,5 +594,10 @@ public class PacketSerializer {
 		byte[] bytes = new byte[length];
 		readBytes(bytes);
 		return bytes;
+	}
+	
+	public void writeByteArray(byte[] bytes) {
+		writeVarInt(bytes.length);
+		writeBytes(bytes);
 	}
 }

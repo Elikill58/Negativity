@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimat
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
@@ -32,6 +33,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityHeadRotation;
@@ -185,7 +187,7 @@ public interface PacketType {
 		CHAT_PREVIEW,
 		CLIENT_COMMAND,
 		CLOSE_WINDOW,
-		CUSTOM_PAYLOAD,
+		CUSTOM_PAYLOAD(NPacketPlayInCustomPayload::new),
 		DIFFICULTY_CHANGE,
 		DIFFICULTY_LOCK,
 		ENCHANT_ITEM,
@@ -284,7 +286,7 @@ public interface PacketType {
 		COMBAT_ENTER_EVENT,
 		COMBAT_KILL_EVENT,
 		COMMANDS,
-		CUSTOM_PAYLOAD,
+		CUSTOM_PAYLOAD(NPacketPlayOutCustomPayload::new),
 		CUSTOM_SOUND_EFFECT,
 		ENTITY,
 		ENTITY_DESTROY(NPacketPlayOutEntityDestroy::new),

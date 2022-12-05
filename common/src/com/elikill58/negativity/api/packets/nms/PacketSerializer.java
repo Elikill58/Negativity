@@ -42,22 +42,22 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	/**
 	 * Create new packet serializer for the given player
 	 * 
-	 * @param p the concerned player
+	 * @param p   the concerned player
 	 * @param buf the used buffer
 	 */
 	public PacketSerializer(@Nullable Player p, ByteBuf buf) {
-		this(p, buf.array(), buf.maxCapacity());
+		this(p, BufUtils.getBytes(buf));
 	}
-	
+
 	public PacketSerializer(@Nullable Player p, byte[] array) {
-		this(p, array, array.length == 0 ? Integer.MAX_VALUE : array.length);
+		this(p, array, Integer.MAX_VALUE);
 	}
-	
+
 	public PacketSerializer(@Nullable Player p, byte[] array, int maxLength) {
 		super(UnpooledByteBufAllocator.DEFAULT, array, maxLength);
 		this.player = p;
 	}
-	
+
 	public @Nullable Player getPlayer() {
 		return player;
 	}
@@ -75,7 +75,7 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 
 	public int readInt(int byteAmount) {
 		int result = 0;
-		for(int i = 0; i < byteAmount; i++) {
+		for (int i = 0; i < byteAmount; i++) {
 			result |= (readByte() & VALUE_BITS) << i;
 		}
 		return result;
@@ -160,7 +160,7 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 			throw new DecoderException("Received string length is longer than maximum allowed (" + j + " > " + size + ")");
 		return s;
 	}
-	
+
 	public void writeString(String s) {
 		byte[] bytes = s.getBytes();
 		writeVarInt(bytes.length);
@@ -175,13 +175,13 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	public CompoundTag readNBTTag() {
 		try {
 			int readerIndex = readerIndex();
-	        byte b = readByte();
-	        if (b == 0) {
-	            return null;
-	        } else {
-	            readerIndex(readerIndex);
-	            return NBTIO.readTag((DataInput) new ByteBufInputStream(this), TagLimiter.create(2097152, 512));
-	        }
+			byte b = readByte();
+			if (b == 0) {
+				return null;
+			} else {
+				readerIndex(readerIndex);
+				return NBTIO.readTag((DataInput) new ByteBufInputStream(this), TagLimiter.create(2097152, 512));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -255,9 +255,9 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 
 	public long[] readLongArray(int maxSize) {
 		int length = readVarInt();
-		if(length <= 0)
+		if (length <= 0)
 			return new long[0];
-		if(length > maxSize)
+		if (length > maxSize)
 			throw new RuntimeException("VarInt too high for long array reading.");
 		long[] longs = new long[length];
 		for (int i = 0; i < length; i++) {
@@ -272,15 +272,15 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 
 	public byte[] readByteArray(int maxSize) {
 		int length = readVarInt();
-		if(length <= 0)
+		if (length <= 0)
 			return new byte[0];
-		if(length > maxSize)
+		if (length > maxSize)
 			throw new RuntimeException("VarInt too high for byte array reading.");
 		byte[] bytes = new byte[length];
 		readBytes(bytes);
 		return bytes;
 	}
-	
+
 	public void writeByteArray(byte[] bytes) {
 		writeVarInt(bytes.length);
 		writeBytes(bytes);

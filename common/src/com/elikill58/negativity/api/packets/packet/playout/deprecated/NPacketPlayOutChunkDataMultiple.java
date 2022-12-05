@@ -11,8 +11,6 @@ import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.universal.Version;
 
-import io.netty.buffer.Unpooled;
-
 /**
  * This packet should not well read informations. You should not use it.
  */
@@ -48,7 +46,7 @@ public class NPacketPlayOutChunkDataMultiple implements NPacketPlayOut {
 	}
 	
 	private void readChunk(PacketSerializer serializer, Version version, Chunk c, boolean skyLight, byte[] data, int bitmask, boolean fullChunk) {
-		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), Unpooled.wrappedBuffer(data));
+		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), data);
 
 		NamedVersion nv = version.getNamedVersion();
 		// Read blocks

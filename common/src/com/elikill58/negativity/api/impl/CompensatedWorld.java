@@ -69,7 +69,7 @@ public class CompensatedWorld extends World {
 	}
 	
 	public void removeEntity(int id) {
-		entities.removeIf(et -> et.isSameId(id));
+		entities.removeIf(et -> et == null || et.isSameId(id));
 	}
 
 	public List<Entity> getEntities() {

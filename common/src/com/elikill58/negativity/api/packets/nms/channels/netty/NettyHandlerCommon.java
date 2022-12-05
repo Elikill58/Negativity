@@ -51,16 +51,14 @@ public class NettyHandlerCommon {
 	 * @param p the concerned player
 	 * @param version the version of player
 	 * @param direction the direction of the received buffer
-	 * @param ctx context of channel
 	 * @param buf used buffer
 	 * @param comment the comment like the name of the channel
 	 * @return a new packet (read) or null if can't find something
 	 */
-	public static NPacket readPacketFromByteBuf(Player p, Version version, PacketDirection direction,
-			ChannelHandlerContext ctx, ByteBuf buf, String comment) {
+	public static NPacket readPacketFromByteBuf(Player p, Version version, PacketDirection direction, ByteBuf buf, String comment) {
 		if(!buf.isReadable())
 			return null;
-		PacketSerializer serializer = new PacketSerializer(p, buf);
+		PacketSerializer serializer = new PacketSerializer(p, buf.copy());
 		int packetId = serializer.readVarInt();
 		NPacket packet = version.getNamedVersion().getPacket(direction, packetId);
 		if (packet == null)

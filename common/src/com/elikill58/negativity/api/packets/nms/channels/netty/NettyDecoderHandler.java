@@ -47,9 +47,9 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
 		if (obj instanceof ByteBuf) {
 			ByteBuf msg = ((ByteBuf) obj).copy();
-			NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, ctx, msg, "decode");
+			NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
 			if (packet == null) {
-				super.channelRead(ctx, msg);
+				super.channelRead(ctx, obj);
 				return;
 			}
 			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.packets.packet.playout;
+package com.elikill58.negativity.api.packets.packet.playout.deprecated;
 
 import com.elikill58.negativity.api.block.chunks.Chunk;
 import com.elikill58.negativity.api.block.chunks.ChunkSection;

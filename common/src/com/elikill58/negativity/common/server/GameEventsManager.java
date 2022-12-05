@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common;
+package com.elikill58.negativity.common.server;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common;
+package com.elikill58.negativity.common.server;
 
 import java.util.ArrayList;
 import java.util.List;

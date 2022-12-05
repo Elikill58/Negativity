@@ -117,6 +117,31 @@ public abstract class NamedVersion {
 		return null;
 	}
 
+	/**
+	 * Create packet with given ID for the given direction.
+	 * <p>
+	 * Return unset packet if not found
+	 * 
+	 * @param dir      direction of packet (for example: server to client)
+	 * @param packetId the ID of the packet
+	 * @return new created packet
+	 */
+	public PacketType getPacketType(PacketDirection dir, int packetId) {
+		switch (dir) {
+		case CLIENT_TO_SERVER:
+			return playIn.getOrDefault(packetId, (PacketType.Client) dir.getUnset());
+		case SERVER_TO_CLIENT:
+			return playOut.getOrDefault(packetId, (PacketType.Server) dir.getUnset());
+		case HANDSHAKE:
+			return handshake.getOrDefault(packetId, (PacketType.Handshake) dir.getUnset());
+		case LOGIN:
+			return login.getOrDefault(packetId, (PacketType.Login) dir.getUnset());
+		case STATUS:
+			return status.getOrDefault(packetId, (PacketType.Status) dir.getUnset());
+		}
+		return null;
+	}
+
 	private @NonNull NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
 		PacketType type = packetTypes.get(packetId);
 		if (type != null)

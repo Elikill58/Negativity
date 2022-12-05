@@ -14,13 +14,6 @@ import io.netty.channel.Channel;
 
 public class PacketListeners extends NettyPacketListener implements Listener {
 
-	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity", KEY_HANDSHAKE = "packet_handshake_negativity",
-			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
-	
-	public PacketListeners() {
-		super(SpigotVersionAdapter.getVersionAdapter().getFuturChannel());
-	}
-	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();

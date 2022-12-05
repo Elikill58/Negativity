@@ -17,8 +17,6 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerPacketEvent;
@@ -50,8 +48,7 @@ public class PacketListeners {
 			return null;
 		}
 		try {
-			ByteBuf buf = Unpooled.wrappedBuffer(nioBuffer);
-			packet.read(new PacketSerializer(buf), p.getPlayerVersion());
+			packet.read(new PacketSerializer(p, nioBuffer.array()), p.getPlayerVersion());
 		} catch (IndexOutOfBoundsException exc) {
 			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + dir.name() + " - decode)");
 			return null;

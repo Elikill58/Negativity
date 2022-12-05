@@ -38,7 +38,6 @@ import io.netty.buffer.ByteBuf;
  */
 public class ChunkSectionReader1_8 {
 
-	@SuppressWarnings("deprecation")
 	public static ChunkSection read(PacketSerializer serializer, Version version) {
         ChunkSection chunkSection = new ChunkSectionImpl(true);
         Palette blocks = chunkSection.getPalette(PaletteType.BLOCKS);
@@ -46,7 +45,7 @@ public class ChunkSectionReader1_8 {
         // 0 index needs to be air in 1.9
         blocks.addId(0);
 
-        ByteBuf littleEndianView = serializer.getBuf().order(ByteOrder.LITTLE_ENDIAN);
+        ByteBuf littleEndianView = serializer.order(ByteOrder.LITTLE_ENDIAN);
         for (int idx = 0; idx < ChunkSection.SIZE; idx++) {
         	blocks.setIdAt(idx, littleEndianView.readShort());
         }

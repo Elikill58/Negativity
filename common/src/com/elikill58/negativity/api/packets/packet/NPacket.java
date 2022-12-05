@@ -4,9 +4,6 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Version;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 public interface NPacket {
 
 	/**
@@ -30,10 +27,10 @@ public interface NPacket {
 	 * 
 	 * @return new filled buffer
 	 */
-	public default ByteBuf create(Version version) {
-		PacketSerializer serializer = new PacketSerializer(Unpooled.buffer());
+	public default PacketSerializer create(Version version) {
+		PacketSerializer serializer = new PacketSerializer(null, new byte[0]);
 		write(serializer, version);
-		return serializer.getBuf();
+		return serializer;
 	}
 	
 	/**

@@ -14,8 +14,6 @@ import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
-import io.netty.buffer.Unpooled;
-
 public class ChunkData {
 
 	public int chunkX, chunkZ;
@@ -133,7 +131,7 @@ public class ChunkData {
 	}
 	
 	public void deserializer1_8(boolean skyLight, byte[] data, int bitmask, boolean fullChunk) {
-		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), Unpooled.wrappedBuffer(data));
+		PacketSerializer input = new PacketSerializer(serializer.getPlayer(), data);
 
 		NamedVersion nv = version.getNamedVersion();
 		// Read blocks

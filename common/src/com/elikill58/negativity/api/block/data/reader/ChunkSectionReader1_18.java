@@ -45,7 +45,8 @@ public class ChunkSectionReader1_18 {
         return chunkSection;
 	}
 
-    private static Palette readPalette(PaletteType type, PacketSerializer serializer, Version version) {
+    @SuppressWarnings("null")
+	private static Palette readPalette(PaletteType type, PacketSerializer serializer, Version version) {
     	final int originalBitsPerValue = serializer.readByte();
         int bitsPerValue = originalBitsPerValue;
 

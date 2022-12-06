@@ -28,6 +28,9 @@ public abstract class AbstractPlayer implements Player {
 		
 		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
 		this.playerVersion = Version.getVersionByProtocolID(getProtocolVersion());
+		
+		if(location != null)
+			location.setWorld(world);
 	}
 
 	@Override

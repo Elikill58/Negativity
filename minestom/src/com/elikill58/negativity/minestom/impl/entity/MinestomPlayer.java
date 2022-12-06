@@ -25,7 +25,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomPlayerInventory;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
-import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
@@ -41,24 +41,8 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 	
 	public MinestomPlayer(net.minestom.server.entity.Player p) {
 		this.entity = p;
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return Version.getVersionByProtocolID(MinecraftServer.PROTOCOL_VERSION);
-	}
-	
-	@Override
-	public void setPlayerVersion(Version version) {
-	}
-	
-	@Override
-	public int getProtocolVersion() {
-		return MinecraftServer.PROTOCOL_VERSION;
-	}
-	
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
+		this.location = MinestomLocation.toCommon(p.getInstance(), p.getPosition());
+		init();
 	}
 
 	@Override

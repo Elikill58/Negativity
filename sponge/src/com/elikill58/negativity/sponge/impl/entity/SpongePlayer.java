@@ -57,6 +57,8 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	
 	public SpongePlayer(ServerPlayer p) {
 		this.entity = p;
+		this.location = LocationUtils.toNegativity(p.serverLocation());
+		init();
 	}
 	
 	@Override
@@ -464,7 +466,7 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public String getServerName() {
-		return null;
+		return "SpongeServer";
 	}
 
 	@Override

@@ -45,6 +45,8 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	
 	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
 		this.entity = p;
+		this.location = SpongeLocation.toCommon(p.getLocation());
+		init();
 	}
 
 	@Override

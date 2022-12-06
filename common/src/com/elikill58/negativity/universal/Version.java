@@ -41,6 +41,7 @@ public enum Version {
 
 	private final double power;
 	private final int firstProtocolNumber, lastProtocolNumber;
+	private final Callable<NamedVersion> versionCreator;
 	private final String name;
 	private NamedVersion version;
 
@@ -51,13 +52,9 @@ public enum Version {
 	Version(String name, double power, Callable<NamedVersion> versionCreator, int firstProtocolNumber, int lastProtocolNumber) {
 		this.name = name;
 		this.power = power;
+		this.versionCreator = versionCreator;
 		this.firstProtocolNumber = firstProtocolNumber;
 		this.lastProtocolNumber = lastProtocolNumber;
-		try {
-			this.version = versionCreator.call();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -112,8 +109,7 @@ public enum Version {
 	}
 
 	/**
-	 * Get the power of the version
-	 * (used to check newer/older)
+	 * Get the power of the version (used to check newer/older)
 	 * 
 	 * @return the power version
 	 */
@@ -128,6 +124,13 @@ public enum Version {
 	 * @return the named version or null if something gone wrong
 	 */
 	public NamedVersion getNamedVersion() {
+		if(version == null) {
+			try {
+				this.version = versionCreator.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return version;
 	}
 

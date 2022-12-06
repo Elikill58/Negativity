@@ -83,7 +83,6 @@ build.dependsOn shadowJar
 
 parent.tasks.named('shadowJar', ShadowJar) {
     it.from(shadowJar.outputs)
-    it.manifest.inheritFrom(tasks.jar.manifest)
 }
 
 task prepareServer(type: Copy) {

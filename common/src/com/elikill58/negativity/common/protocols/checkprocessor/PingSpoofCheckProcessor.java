@@ -41,14 +41,13 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 	public void handlePacketSent(PacketSendEvent e) {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
-		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
 			long pingId = R.nextInt(50000);
 			waitingIds.add(pingId);
 			timeById.put(pingId, System.currentTimeMillis());
 			lastKeepAliveSent = (NPacketPlayOutKeepAlive) packet;
-			p.queuePacket(new NPacketPlayOutPing(pingId)); // send ping packet
+			e.getPlayer().queuePacket(new NPacketPlayOutPing(pingId)); // send ping packet
 		}
 	}
 	

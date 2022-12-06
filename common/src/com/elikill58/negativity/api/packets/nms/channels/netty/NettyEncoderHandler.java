@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
@@ -39,10 +40,14 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 		if(obj instanceof ByteBuf) { // firstly start running everything for us
 			ByteBuf msg = ((ByteBuf) obj).copy();
 			NettyHandlerCommon.runAsync(() -> {
-				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "encode");
-				if(packet == null)
-					return;
-				EventManager.callEvent(new PacketSendEvent(packet, p));
+				try {
+					NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg.copy(), "encode");
+					if(packet == null)
+						return;
+					EventManager.callEvent(new PacketSendEvent(packet, p));
+				} catch (Exception e) {
+					Adapter.getAdapter().getLogger().printError("Failed to read packet and call event", e);
+				}
 			});
 		}
 		super.write(ctx, obj, promise); // let server manage it

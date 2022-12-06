@@ -40,6 +40,15 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	}
 
 	/**
+	 * Create new packet serializer
+	 * 
+	 * @param p concerned player
+	 */
+	public PacketSerializer(@Nullable Player p) {
+		this(p, new byte[0]);
+	}
+
+	/**
 	 * Create new packet serializer for the given player
 	 * 
 	 * @param p   the concerned player

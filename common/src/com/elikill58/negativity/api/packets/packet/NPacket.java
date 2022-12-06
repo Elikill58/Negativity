@@ -1,8 +1,11 @@
 package com.elikill58.negativity.api.packets.packet;
 
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Version;
+
+import io.netty.buffer.ByteBuf;
 
 public interface NPacket {
 
@@ -27,10 +30,11 @@ public interface NPacket {
 	 * 
 	 * @return new filled buffer
 	 */
-	public default PacketSerializer create(Version version) {
-		PacketSerializer serializer = new PacketSerializer(null, new byte[0]);
+	public default ByteBuf create(Player p, Version version) {
+		PacketSerializer serializer = new PacketSerializer(p);
+		serializer.writeVarInt(version.getNamedVersion().getPacketId(getPacketType()));
 		write(serializer, version);
-		return serializer;
+		return serializer.writerIndex(0);
 	}
 	
 	/**

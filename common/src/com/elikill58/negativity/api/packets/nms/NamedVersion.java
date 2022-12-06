@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -140,6 +141,25 @@ public abstract class NamedVersion {
 			return status.getOrDefault(packetId, (PacketType.Status) dir.getUnset());
 		}
 		return null;
+	}
+
+	/**
+	 * Get packet ID from given packet type
+	 * 
+	 * @param type the given type
+	 * @return id or -1 if not found
+	 */
+	public int getPacketId(PacketType type) {
+		for (HashMap<Integer, ? extends PacketType> types : Arrays.asList(playIn, playOut, handshake, login, status)) {
+			if (types.containsValue(type))
+				continue;
+			for (Entry<Integer, ? extends PacketType> entries : types.entrySet()) {
+				if (entries.getValue() == type) {
+					return entries.getKey();
+				}
+			}
+		}
+		return -1;
 	}
 
 	private @NonNull NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {

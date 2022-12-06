@@ -17,7 +17,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
@@ -25,7 +24,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityE
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.potion.PotionEffectType;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.Maths;
 
@@ -140,10 +138,6 @@ public class PacketListener implements Listeners {
 
 	@EventListener
 	public void onPacketSend(PacketSendEvent e) {
-		if(e.getPacket().getPacketType().equals(PacketType.Handshake.IS_SET_PROTOCOL)) {
-			NPacketHandshakeInSetProtocol p = (NPacketHandshakeInSetProtocol) e.getPacket();
-			Adapter.getAdapter().debug("> " + p.protocol + " : " + p.hostname + ":" + p.port + " >> " + p.nextState);
-		}
 		if(!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();

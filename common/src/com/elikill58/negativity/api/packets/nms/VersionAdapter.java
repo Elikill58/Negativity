@@ -46,7 +46,7 @@ public abstract class VersionAdapter<R> {
 	public abstract AbstractChannel getPlayerChannel(R p);
 	
 	public void sendPacket(Player p, NPacket packet) {
-		sendPacket(getR(p), packet.create(p.getPlayerVersion()));
+		sendPacket(getR(p), packet.create(p, p.getPlayerVersion()));
 	}
 	
 	public void sendPacket(R p, ByteBuf buf) {
@@ -54,7 +54,7 @@ public abstract class VersionAdapter<R> {
 	}
 	
 	public void queuePacket(Player p, NPacket packet) {
-		queuePacket(getR(p), packet.create(p.getPlayerVersion()));
+		queuePacket(getR(p), packet.create(p, p.getPlayerVersion()));
 	}
 	
 	public void queuePacket(R p, ByteBuf buf) {

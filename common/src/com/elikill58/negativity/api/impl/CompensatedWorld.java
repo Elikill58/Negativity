@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.elikill58.negativity.api.block.Block;
@@ -69,11 +70,16 @@ public class CompensatedWorld extends World {
 	}
 	
 	public void removeEntity(int id) {
-		entities.removeIf(et -> et == null || et.isSameId(id));
+		synchronized (entities) {
+			entities.removeIf(et -> et == null || et.isSameId(id));
+		}
 	}
 
 	public List<Entity> getEntities() {
-		return entities;
+		synchronized (entities) {
+			entities.removeIf(Objects::isNull);
+			return entities;
+		}
 	}
 	
 	public Optional<Entity> getEntityById(int id) {

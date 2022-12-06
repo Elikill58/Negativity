@@ -124,14 +124,16 @@ public enum Version {
 	 * @return the named version or null if something gone wrong
 	 */
 	public NamedVersion getNamedVersion() {
-		if(version == null) {
-			try {
-				this.version = versionCreator.call();
-			} catch (Exception e) {
-				e.printStackTrace();
+		synchronized (versionCreator) {
+			if(version == null) {
+				try {
+					this.version = versionCreator.call();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			return version;
 		}
-		return version;
 	}
 
 	/**

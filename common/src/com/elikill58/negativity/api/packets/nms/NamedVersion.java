@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,21 +26,25 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
 public abstract class NamedVersion {
 
-	protected final HashMap<Integer, PacketType.Client> playIn = new HashMap<>();
-	protected final HashMap<Integer, PacketType.Server> playOut = new HashMap<>();
-	protected final HashMap<Integer, PacketType.Handshake> handshake = new HashMap<>();
-	protected final HashMap<Integer, PacketType.Login> login = new HashMap<>();
-	protected final HashMap<Integer, PacketType.Status> status = new HashMap<>();
-	protected final HashMap<Integer, EntityType> entityTypes = new HashMap<>();
-	protected final HashMap<Integer, Material> materials = new HashMap<>();
-	protected final HashMap<Integer, String> materialNameEntities = new HashMap<>();
+	protected final Int2ObjectMap<PacketType.Client> playIn = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<PacketType.Server> playOut = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<PacketType.Handshake> handshake = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<PacketType.Login> login = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<PacketType.Status> status = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<EntityType> entityTypes = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<Material> materials = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<String> materialNameEntities = new Int2ObjectOpenHashMap<>();
 	protected final String name;
 
 	public NamedVersion(String name) {
 		this.name = name;
 		handshake.put(0, Handshake.IS_SET_PROTOCOL);
+		handshake.put(1, Handshake.IN_LISTENER);
 
 		int i = 0;
 		for (String type : Arrays.asList("furnace", "chest", "trapped_chest", "ender_chest", "jukebox", "dispenser", "dropper", "sign", "spawner", "piston", "brewing_stand",
@@ -150,10 +153,10 @@ public abstract class NamedVersion {
 	 * @return id or -1 if not found
 	 */
 	public int getPacketId(PacketType type) {
-		for (HashMap<Integer, ? extends PacketType> types : Arrays.asList(playIn, playOut, handshake, login, status)) {
+		for (Int2ObjectMap<? extends PacketType> types : Arrays.asList(playIn, playOut, handshake, login, status)) {
 			if (types.containsValue(type))
 				continue;
-			for (Entry<Integer, ? extends PacketType> entries : types.entrySet()) {
+			for (Entry<Integer, ? extends PacketType> entries : types.int2ObjectEntrySet()) {
 				if (entries.getValue() == type) {
 					return entries.getKey();
 				}
@@ -162,7 +165,7 @@ public abstract class NamedVersion {
 		return -1;
 	}
 
-	private @NonNull NPacket createPacket(PacketDirection dir, int packetId, HashMap<Integer, ? extends PacketType> packetTypes) {
+	private @NonNull NPacket createPacket(PacketDirection dir, int packetId, Int2ObjectMap<? extends PacketType> packetTypes) {
 		PacketType type = packetTypes.get(packetId);
 		if (type != null)
 			return type.createNewPacket();

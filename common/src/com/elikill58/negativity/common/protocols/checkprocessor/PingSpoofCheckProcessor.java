@@ -1,9 +1,6 @@
 package com.elikill58.negativity.common.protocols.checkprocessor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -23,14 +20,19 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
+
 public class PingSpoofCheckProcessor implements CheckProcessor {
 
 	private static final Random R = new Random();
 	
 	private final Cheat c = Cheat.forKey(CheatKeys.PINGSPOOF);
 	private final NegativityPlayer np;
-	private final List<Long> waitingIds = new ArrayList<>();
-	private final HashMap<Long, Long> timeById = new HashMap<>();
+	private final LongList waitingIds = new LongArrayList();
+	private final Long2LongMap timeById = new Long2LongOpenHashMap();
 	private NPacketPlayOutKeepAlive lastKeepAliveSent = null;
 	
 	public PingSpoofCheckProcessor(NegativityPlayer np) {
@@ -63,10 +65,8 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 			NPacketPlayInPong pong = (NPacketPlayInPong) packet;
 			if(lastKeepAliveSent == null)// already received
 				return;
-			if(waitingIds.remove(pong.id)) { // is good id
+			if(waitingIds.rem(pong.id)) { // is good id
 				Long packetTime = timeById.remove(pong.id);
-				if(packetTime == null) // should never append, but prevent error
-					packetTime = System.currentTimeMillis();
 				long realPing = System.currentTimeMillis() - packetTime;
 				long reliability = p.getPing() > realPing ? p.getPing() - realPing : realPing - p.getPing(); // check if ping isn't updated yet
 				long amount = (isReachable(p, p.getPing()) ? 5 : 1) * reliability / 100;

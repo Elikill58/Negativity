@@ -16,11 +16,14 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.universal.Adapter;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
+
 public class CompensatedWorld extends World {
 
 	protected final Player p;
 	protected World serverWorld;
-	protected List<Entity> entities = new ArrayList<>();
+	protected ObjectList<Entity> entities = new ObjectArrayList<>();
 	protected List<BlockTransition> transitions = new ArrayList<>();
 	
 	public CompensatedWorld(Player p) {

@@ -47,7 +47,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPositio
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityLook;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMove;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMoveLook;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRespawn;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntityLiving;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
@@ -331,7 +330,7 @@ public interface PacketType {
 		REL_ENTITY_MOVE_LOOK(NPacketPlayOutRelEntityMoveLook::new),
 		REMOVE_ENTITY_EFFECT,
 		RESOURCE_PACK_SEND,
-		RESPAWN(NPacketPlayOutRespawn::new),
+		RESPAWN,
 		SCOREBOARD_DISPLAY_OBJECTIVE,
 		SCOREBOARD_OBJECTIVE,
 		SCOREBOARD_SCORE,

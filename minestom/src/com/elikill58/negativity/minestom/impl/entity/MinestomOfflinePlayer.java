@@ -7,6 +7,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.ConnectionManager;
+
 public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlayer {
 
 	private final UUID uuid;
@@ -24,7 +27,7 @@ public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlay
 
 	@Override
 	public boolean isOnline() {
-		return false;
+		return uuid != null && MinecraftServer.getConnectionManager().getPlayer(uuid) != null;
 	}
 
 	@Override
@@ -39,7 +42,8 @@ public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlay
 
 	@Override
 	public String getName() {
-		return name;
+		ConnectionManager cm = MinecraftServer.getConnectionManager();
+		return name == null ? (uuid == null ? "??" : uuid.toString()) : (cm.getPlayer(uuid) == null ? uuid.toString() : cm.getPlayer(uuid).getUsername());
 	}
 
 	@Override

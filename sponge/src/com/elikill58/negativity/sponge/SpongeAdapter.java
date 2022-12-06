@@ -51,6 +51,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minecraft.SharedConstants;
 
 public class SpongeAdapter extends Adapter {
 	
@@ -71,7 +72,7 @@ public class SpongeAdapter extends Adapter {
 		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
 		
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(plugin.getConfigDir().resolve("lang"), "Negativity", "CheatHover");
-		this.serverVersion = Version.getVersionByName(getVersion());
+		this.serverVersion = Version.getVersionByProtocolID(SharedConstants.getProtocolVersion());
 		this.scheduler = new SpongeScheduler(plugin.getContainer());
 	}
 	

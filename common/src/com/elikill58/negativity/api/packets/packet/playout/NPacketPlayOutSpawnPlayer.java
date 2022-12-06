@@ -22,9 +22,15 @@ public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 	public void read(PacketSerializer serializer, Version version) {
 	    this.entityId = serializer.readVarInt();
 	    this.uuid = serializer.readUUID();
-	    this.x = serializer.readInt();
-	    this.y = serializer.readInt();
-	    this.z = serializer.readInt();
+	    if(version.isNewerOrEquals(Version.V1_9)) {
+		    this.x = serializer.readDouble();
+		    this.y = serializer.readDouble();
+		    this.z = serializer.readDouble();
+	    } else {
+		    this.x = serializer.readInt();
+		    this.y = serializer.readInt();
+		    this.z = serializer.readInt();
+	    }
 	    this.yaw = serializer.readByte();
 	    this.pitch = serializer.readByte();
 	    this.itemId = serializer.readShort();

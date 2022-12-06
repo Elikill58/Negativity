@@ -1,7 +1,5 @@
 package com.elikill58.negativity.minestom.listeners;
 
-import java.nio.ByteBuffer;
-
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -15,7 +13,6 @@ import com.elikill58.negativity.minestom.nms.MinestomPlayPackets;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
-import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -40,17 +37,19 @@ public class PacketListeners {
 	}
 	
 	private NPacket getPacketFromWriter(Player p, NetworkBuffer.Writer writer, int packetId, PacketDirection dir) {
-		NetworkBuffer buffer = new NetworkBuffer();
-		writer.write(buffer);
-		ByteBuffer nioBuffer = (ByteBuffer) ReflectionUtils.getField(buffer, "nioBuffer");
 		NPacket packet = getNamedVersion(p).getPacket(dir, packetId);
 		if(packet == null) {
 			return null;
 		}
 		try {
-			packet.read(new PacketSerializer(p, nioBuffer.array()), p.getPlayerVersion());
+			NetworkBuffer buffer = new NetworkBuffer();
+			writer.write(buffer);
+			//buffer.writeIndex(0);
+			byte[] bytes = new byte[buffer.readableBytes()];
+			buffer.copyTo(0, bytes, 0, bytes.length);
+			packet.read(new PacketSerializer(p, bytes), p.getPlayerVersion());
 		} catch (IndexOutOfBoundsException exc) {
-			Adapter.getAdapter().getLogger().warn("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + dir.name() + " - decode)");
+			Adapter.getAdapter().getLogger().printError("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + dir.name() + " - decode - " + p.getPlayerVersion().getName() + ")", exc);
 			return null;
 		}
 		return packet;

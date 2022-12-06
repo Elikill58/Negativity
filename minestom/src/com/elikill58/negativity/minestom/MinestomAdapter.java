@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
+import com.elikill58.negativity.minestom.impl.entity.MinestomOfflinePlayer;
 import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemBuilder;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemRegistrar;
@@ -202,12 +203,14 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		return getPlayer(name); // TODO add offline players
+		Player p = getPlayer(name); // TODO add offline players
+		return p == null ? new MinestomOfflinePlayer(null, name) : p;
 	}
 	
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
-		return getPlayer(uuid);
+		Player p = getPlayer(uuid);
+		return p == null ? new MinestomOfflinePlayer(uuid, null) : p;
 	}
 
 	@Override

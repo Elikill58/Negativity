@@ -16,9 +16,11 @@ import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.item.inventory.InventoryArchetypes;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.AABB;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.AbstractPlayer;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -433,5 +435,19 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	@Override
 	public void setVelocity(Vector vel) {
 		entity.setVelocity(new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
+	}
+	
+	@Override
+	public int getEntityId() {
+		return entity.getUniqueId().hashCode();
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		AABB box = entity.getBoundingBox().orElse(null);
+		if(box == null)
+			return null;
+		Vector3d min = box.getMin(), max = box.getMax();
+		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

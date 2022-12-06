@@ -203,7 +203,7 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		Player p = getPlayer(name); // TODO add offline players
+		Player p = getPlayer(name);
 		return p == null ? new MinestomOfflinePlayer(null, name) : p;
 	}
 	

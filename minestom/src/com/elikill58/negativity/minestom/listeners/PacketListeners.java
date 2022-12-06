@@ -49,7 +49,10 @@ public class PacketListeners {
 			buffer.copyTo(0, bytes, 0, bytes.length);
 			packet.read(new PacketSerializer(p, bytes), p.getPlayerVersion());
 		} catch (IndexOutOfBoundsException exc) {
-			Adapter.getAdapter().getLogger().printError("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + dir.name() + " - decode - " + p.getPlayerVersion().getName() + ")", exc);
+			if(packetId == 2)
+				Adapter.getAdapter().getLogger().warn("Failed to read SpawnPlayer packet sent to player " + p.getName() + " (" + dir.name() + " - decode - " + p.getPlayerVersion().getName() + "). Do NOT report this.");
+			else
+				Adapter.getAdapter().getLogger().printError("Failed to read packet with ID " + packetId + " for player " + p.getName() + " (" + dir.name() + " - decode - " + p.getPlayerVersion().getName() + ")", exc);
 			return null;
 		}
 		return packet;

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.AbstractPlayer;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -380,5 +381,16 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 	@Override
 	public void setVelocity(Vector vel) {
 		entity.setVelocity(new Vec(vel.getX(), vel.getY(), vel.getZ()));
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		net.minestom.server.collision.BoundingBox box = entity.getBoundingBox();
+		return new BoundingBox(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
+	}
+	
+	@Override
+	public int getEntityId() {
+		return entity.getEntityId();
 	}
 }

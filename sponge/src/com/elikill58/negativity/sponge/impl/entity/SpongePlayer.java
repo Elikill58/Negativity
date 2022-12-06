@@ -22,11 +22,13 @@ import org.spongepowered.api.network.channel.Channel;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.util.Ticks;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.AbstractPlayer;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -478,5 +480,19 @@ public class SpongePlayer extends AbstractPlayer implements Player {
 	public Vector getTheoricVelocity() {
 		Vector3d vec = entity.getOrElse(Keys.VELOCITY, new Vector3d(0, 0, 0));
 		return new Vector(vec.x(), vec.y(), vec.z());
+	}
+	
+	@Override
+	public int getEntityId() {
+		return entity.uniqueId().hashCode();
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		AABB box = entity.boundingBox().orElse(null);
+		if(box == null)
+			return null;
+		Vector3d min = box.min(), max = box.max();
+		return new BoundingBox(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
 	}
 }

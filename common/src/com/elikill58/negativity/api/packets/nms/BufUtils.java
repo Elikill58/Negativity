@@ -5,7 +5,6 @@ import static com.elikill58.negativity.universal.utils.Maths.isOutOfBounds;
 import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.util.internal.PlatformDependent;
 
 public class BufUtils {
 
@@ -48,7 +47,7 @@ public class BufUtils {
 			}
 		}
 
-		byte[] bytes = PlatformDependent.allocateUninitializedArray(length);
+		byte[] bytes = new byte[length];
 		buf.getBytes(start, bytes);
 		buf.readerIndex(start); // be sure to go back at begin
 		return bytes;

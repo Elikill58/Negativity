@@ -7,7 +7,6 @@ import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -16,7 +15,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -269,16 +267,6 @@ public abstract class Adapter {
 	 * @return the player, or {@code null} if no player with this UUID is online
 	 */
 	public abstract @Nullable Player getPlayer(UUID uuid);
-	
-	/**
-	 * Create a fake player
-	 * WARN: Not supported yet with all platform
-	 * 
-	 * @param loc the location of the fake player
-	 * @param name the name of the fake player
-	 * @return the fake player
-	 */
-	public abstract FakePlayer createFakePlayer(Location loc, String name);
 	
 	/**
 	 * Send message to the specified player which can run a command and have a message showed when the mouse is drag hover the message.

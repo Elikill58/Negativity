@@ -22,7 +22,6 @@ import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
-import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -31,13 +30,11 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
-import com.elikill58.negativity.sponge7.impl.entity.SpongeFakePlayer;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge7.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge7.impl.item.SpongeItemBuilder;
@@ -236,11 +233,6 @@ public class SpongeAdapter extends Adapter {
 		}
 		return Sponge.getServiceManager().provideUnchecked(UserStorageService.class)
 			.get(uuid).map(SpongeOfflinePlayer::new).orElse(null);
-	}
-	
-	@Override
-	public FakePlayer createFakePlayer(Location loc, String name) {
-		return new SpongeFakePlayer(loc, name);
 	}
 
 	@Override

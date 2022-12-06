@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -13,7 +12,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 
@@ -57,11 +55,6 @@ public abstract class ProxyAdapter extends Adapter {
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		throw new UnsupportedOperationException("Inventory is unsupported on proxies");
-	}
-
-	@Override
-	public FakePlayer createFakePlayer(Location loc, String name) {
-		throw new UnsupportedOperationException("FakePlayer is unsupported on proxies");
 	}
 	
 	/*@Override

@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -24,7 +23,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -227,12 +225,6 @@ public class SpigotAdapter extends Adapter {
 		if (p.hasPlayedBefore()) {
 			return new SpigotOfflinePlayer(p);
 		}
-		return null;
-	}
-	
-	@Override
-	public FakePlayer createFakePlayer(Location loc, String name) {
-		// TODO implement fake player on adapter
 		return null;
 	}
 	

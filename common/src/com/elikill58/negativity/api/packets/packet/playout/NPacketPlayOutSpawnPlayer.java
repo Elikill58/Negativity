@@ -9,7 +9,11 @@ import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 
-	public int entityId, itemId;
+	public int entityId;
+	/**
+	 * Warn: this field have been removed since 1.9
+	 */
+	public int itemId;
 	public UUID uuid;
 	public double x, y, z;
 	public float yaw, pitch;
@@ -33,8 +37,9 @@ public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 	    }
 	    this.yaw = serializer.readByte();
 	    this.pitch = serializer.readByte();
-	    this.itemId = serializer.readShort();
-	    // TODO now read data watcher
+	    if(!version.isNewerOrEquals(Version.V1_9))
+	    	this.itemId = serializer.readShort();
+	    // finally, data watcher until 1.14 included
 	}
 	
 	@Override

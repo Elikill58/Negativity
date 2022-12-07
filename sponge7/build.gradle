@@ -1,23 +1,6 @@
-buildscript {
-    repositories {
-        maven {
-            name = 'forge'
-            url = 'https://files.minecraftforge.net/maven'
-        }
-    }
-
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
-    }
-}
-
 plugins {
     id 'com.github.johnrengelman.shadow'
 }
-
-evaluationDependsOn(':common')
-
-apply plugin: 'net.minecraftforge.gradle'
 
 evaluationDependsOn(':common')
 
@@ -38,13 +21,6 @@ repositories {
 dependencies {
     api project(':common')
     compileOnly 'org.spongepowered:spongeapi:7.1.0'
-
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
-}
-
-minecraft {
-    mappings channel: 'snapshot', version: '20180131-1.12'
-    accessTransformer(file('resources/META-INF/negativity_at.cfg'))
 }
 
 processResources {
@@ -77,13 +53,6 @@ shadowJar {
 }
 
 build.dependsOn shadowJar
-afterEvaluate {
-    shadowJar.finalizedBy reobfJar
-    reobfJar {
-        dependsOn shadowJar
-        input = shadowJar.archiveFile
-    }
-}
 
 task prepareServer(type: Copy) {
     from shadowJar.outputs

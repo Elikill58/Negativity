@@ -434,4 +434,9 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public void setVelocity(Vector vel) {
 		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
 	}
+	
+	@Override
+	public void sendMessage(String msg) {
+		entity.sendMessage(msg);
+	}
 }

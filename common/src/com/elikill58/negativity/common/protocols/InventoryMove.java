@@ -38,10 +38,10 @@ public class InventoryMove extends Cheat implements Listeners {
 			Adapter.getAdapter().debug("Velocity length: " + p.getVelocity().length());
 			return;
 		}
-		if (p.getOpenInventory() == null) {
+		/*if (p.hasOpenInventory()) {
 			Adapter.getAdapter().debug("No opened inventory but data always running ?");
 			return;
-		}
+		}*/
 		int amount = 0;
 		if(p.isSprinting())
 			amount += data.sprint ? 1 : 5; // means it started sprinting since inv open

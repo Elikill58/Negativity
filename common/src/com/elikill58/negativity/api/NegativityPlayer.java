@@ -439,13 +439,6 @@ public class NegativityPlayer {
 					return true;
 		return false;
 	}
-
-	/**
-	 * Make fake player appears
-	 */
-	public void makeAppearEntities() {
-		// TODO make appear fake players
-	}
 	
 	/**
 	 * Create ban effect

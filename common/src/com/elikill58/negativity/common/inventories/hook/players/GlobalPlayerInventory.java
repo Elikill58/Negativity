@@ -70,8 +70,6 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 				
 		inv.set(19, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		inv.set(20, getWoolItem(p, np.getAccount().isMcLeaks()));
-		// TODO add again fake players
-		//inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		
 		inv.set(27, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(28, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
@@ -148,11 +146,6 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		if (m.equals(Materials.EYE_OF_ENDER)) {
 			p.teleport(cible.getLocation());
 			p.closeInventory();
-		} else if (m.equals(Materials.SKELETON_SKULL)) {
-			if(e.getSlot() == 12) {
-				p.closeInventory();
-				np.makeAppearEntities();
-			}
 		} else if(m.equals(Materials.SPIDER_EYE)){
 			p.openInventory(cible.getInventory());
 		} else if(m.equals(Materials.TNT)) {

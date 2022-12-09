@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PrePacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -129,20 +130,25 @@ public class PacketListener implements Listeners {
 
 	@EventListener(priority = EventPriority.PRE)
 	public void onJumpBoostUse(PacketSendEvent e) {
+		if(!e.hasPlayer())
+			return;
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
+		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
 		NPacketPlayOutEntityEffect packet = (NPacketPlayOutEntityEffect) e.getPacket();
 		if (packet.type.equals(PotionEffectType.JUMP))
-			NegativityPlayer.getNegativityPlayer(e.getPlayer()).isUsingJumpBoost = true;
+			np.isUsingJumpBoost = true;
 	}
 
 	@EventListener
-	public void onPacketSend(PacketSendEvent e) {
+	public void onPacketSend(PrePacketSendEvent e) {
 		if(!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 		if(type.equals(PacketType.Server.ENTITY_TELEPORT))
 			np.isTeleporting = true;
 		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
@@ -154,6 +160,5 @@ public class PacketListener implements Listeners {
 				randomNb = -26;
 			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
 		}
-		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 	}
 }

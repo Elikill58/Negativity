@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PrePacketSendEvent;
 import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.impl.entity.CompensatedEntity;
 import com.elikill58.negativity.api.impl.entity.CompensatedPlayer;
@@ -47,7 +48,17 @@ public class NegativityPacketOutListener implements Listeners {
 			p.getWorld().getEntityById(flying.entityId).ifPresent(entity -> {
 				entity.getLocation().add(flying.deltaX, flying.deltaY, flying.deltaZ);
 			});
-		} else if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
+		}
+	}
+	
+	@EventListener
+	public void onPacketPreSend(PrePacketSendEvent e) {
+		if(!e.hasPlayer())
+			return;
+		Player p = e.getPlayer();
+		NPacket packet = (NPacket) e.getPacket();
+		PacketType type = packet.getPacketType();
+		if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
 			w.addTimingBlock(p.getPing(), change.type, change.pos.getX(), change.pos.getY(), change.pos.getZ());

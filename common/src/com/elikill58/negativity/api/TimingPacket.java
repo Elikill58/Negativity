@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 
 public class TimingPacket {
 
@@ -58,7 +60,6 @@ public class TimingPacket {
 	}
 	
 	private void finalReceive(NPacket packet) {
-		PacketReceiveEvent e = new PacketReceiveEvent(packet, p);
-		EventManager.callEvent(e);
+		EventManager.callEvent(packet instanceof NPacketPlayOut ? new PacketSendEvent(packet, p) : new PacketReceiveEvent(packet, p));
 	}
 }

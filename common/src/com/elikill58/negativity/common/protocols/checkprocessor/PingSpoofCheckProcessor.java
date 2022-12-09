@@ -6,7 +6,7 @@ import java.util.Random;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
-import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PrePacketSendEvent;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
@@ -40,7 +40,7 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 	}
 	
 	@Override
-	public void handlePacketSent(PacketSendEvent e) {
+	public void handlePacketSent(PrePacketSendEvent e) {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
 		NPacket packet = e.getPacket();

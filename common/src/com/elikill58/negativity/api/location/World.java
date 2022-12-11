@@ -1,11 +1,14 @@
 package com.elikill58.negativity.api.location;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockHashMap;
+import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.impl.block.EmptyBlock;
 
 public abstract class World implements NegativityObject {
 
@@ -36,6 +39,7 @@ public abstract class World implements NegativityObject {
 	}
 	
 	protected final BlockHashMap content = new BlockHashMap(this);
+	protected final EmptyBlock emptyBlock = new EmptyBlock(this);
 	
 	/**
 	 * Get the world name
@@ -52,7 +56,7 @@ public abstract class World implements NegativityObject {
 	 * @param x The X block location
 	 * @param y The Y block location
 	 * @param z The Z block location
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public Block getBlockAt(int x, int y, int z) {
 		return content.get(x, y, z);
@@ -66,7 +70,7 @@ public abstract class World implements NegativityObject {
 	 * @param x The X block location
 	 * @param y The Y block location
 	 * @param z The Z block location
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public Block getBlockAt(double x, double y, double z) {
 		return content.get((int) x, (int) y, (int) z);
@@ -78,7 +82,7 @@ public abstract class World implements NegativityObject {
 	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param v the block vector position
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public Block getBlockAt(Vector v) {
 		return content.get(v);
@@ -90,7 +94,7 @@ public abstract class World implements NegativityObject {
 	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param loc the block location
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public Block getBlockAt(Location loc) {
 		return content.get(loc.toBlockVector());
@@ -103,7 +107,7 @@ public abstract class World implements NegativityObject {
 	 * Load directly from world
 	 * 
 	 * @param loc the block location
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public Block getBlockAt0(Location loc) {
 		return getBlockAt0(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -118,7 +122,7 @@ public abstract class World implements NegativityObject {
 	 * @param x The X block location
 	 * @param y The Y block location
 	 * @param z The Z block location
-	 * @return the founded block
+	 * @return the founded block or empty one
 	 */
 	public abstract Block getBlockAt0(int x, int y, int z);
 	
@@ -142,6 +146,8 @@ public abstract class World implements NegativityObject {
 	 * @return the min height
 	 */
 	public abstract int getMinHeight();
+	
+	public abstract Optional<Entity> getEntityById(int id);
 	
 	@Override
 	public boolean equals(Object obj) {

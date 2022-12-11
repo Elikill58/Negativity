@@ -1,13 +1,16 @@
 package com.elikill58.negativity.sponge.impl.location;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.spongepowered.api.world.server.ServerWorld;
 
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge.impl.block.SpongeBlock;
+import com.elikill58.negativity.sponge.impl.entity.SpongeEntity;
 import com.elikill58.negativity.sponge.utils.Utils;
 
 public class SpongeWorld extends World {
@@ -42,6 +45,11 @@ public class SpongeWorld extends World {
 	public int getMinHeight() {
 		int min = w.min().y();
 		return min > 0 ? 0 : min;
+	}
+	
+	@Override
+	public Optional<Entity> getEntityById(int id) {
+		return w.entities().stream().filter(et -> et.uniqueId().hashCode() == id).findFirst().map(SpongeEntity::new);
 	}
 
 	@Override

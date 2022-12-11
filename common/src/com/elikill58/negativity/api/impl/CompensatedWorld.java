@@ -85,8 +85,10 @@ public class CompensatedWorld extends World {
 		}
 	}
 	
-	public Optional<Entity> getEntityById(int id) { // TODO should try to get from server world
-		return getEntities().stream().filter(e -> e.isSameId(id)).findFirst();
+	@Override
+	public Optional<Entity> getEntityById(int id) {
+		Optional<Entity> opt = getEntities().stream().filter(e -> e.isSameId(id)).findFirst();
+		return opt.isPresent() ? opt : getServerWorld().getEntityById(id);
 	}
 
 	@Override

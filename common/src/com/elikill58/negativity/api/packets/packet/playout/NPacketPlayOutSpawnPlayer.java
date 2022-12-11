@@ -31,9 +31,9 @@ public class NPacketPlayOutSpawnPlayer implements NPacketPlayOut {
 		    this.y = serializer.readDouble();
 		    this.z = serializer.readDouble();
 	    } else {
-		    this.x = serializer.readInt();
-		    this.y = serializer.readInt();
-		    this.z = serializer.readInt();
+		    this.x = serializer.readInt() / 32;
+		    this.y = serializer.readInt() / 32;
+		    this.z = serializer.readInt() / 32;
 	    }
 	    this.yaw = serializer.readByte();
 	    this.pitch = serializer.readByte();

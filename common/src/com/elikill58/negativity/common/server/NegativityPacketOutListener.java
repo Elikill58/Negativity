@@ -45,6 +45,7 @@ public class NegativityPacketOutListener implements Listeners {
 			CompensatedPlayer et = new CompensatedPlayer(spawn.entityId, spawn.uuid, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch));
 			p.getWorld().addEntity(et);
+			Adapter.getAdapter().debug("Spawn player " + spawn.entityId + " / " + et.getLocation());
 		} else if(type.equals(PacketType.Server.SPAWN_ENTITY_LIVING)) {
 			NPacketPlayOutSpawnEntityLiving spawn = (NPacketPlayOutSpawnEntityLiving) packet;
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
@@ -72,12 +73,14 @@ public class NegativityPacketOutListener implements Listeners {
 					Adapter.getAdapter().debug("Entity with ID " + flying.entityId + " (named " + et.getName() + ") isn't compensated.");
 					return;
 				}
-				if(et instanceof Player && (flying.deltaX != 0 || flying.deltaZ != 0))
-					Adapter.getAdapter().debug("Move player " + et.getName() + " of " + flying.deltaX + " / " + flying.deltaY + " / " + flying.deltaZ);
+				/*if(et instanceof Player && (flying.deltaX != 0 || flying.deltaZ != 0))
+					Adapter.getAdapter().debug("Move player " + et.getName() + " of " + flying.deltaX + " / " + flying.deltaY + " / " + flying.deltaZ);*/
 				if(et instanceof Player) {
 					Player platform = Adapter.getAdapter().getPlayer(((Player) et).getUniqueId());
 					Location l = platform.getLocation(), cl = et.getLocation();
-					Adapter.getAdapter().debug(p.getName() + " distance: " + (l.getX() - cl.getX()) + " / " + (l.getY() - cl.getY()) + " / " + (l.getZ() - cl.getZ()));
+					if(l.distance(cl) > 0.1) {
+						Adapter.getAdapter().debug(p.getName() + " distance: " + (l.getX() - cl.getX()) + " / " + (l.getY() - cl.getY()) + " / " + (l.getZ() - cl.getZ()) + " > " + l.toString() + " to " + cl.toString() + ", packet: " + flying.deltaX + " / " + flying.deltaY + " / " + flying.deltaZ);
+					}
 				}
 				Location loc = et.getLocation();
 				loc.add(flying.deltaX, flying.deltaY, flying.deltaZ);

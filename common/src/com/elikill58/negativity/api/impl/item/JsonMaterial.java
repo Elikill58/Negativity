@@ -30,4 +30,9 @@ public class JsonMaterial extends Material {
 	public Object getDefault() {
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return "JsonMaterial{id=" + getId() + "}";
+	}
 }

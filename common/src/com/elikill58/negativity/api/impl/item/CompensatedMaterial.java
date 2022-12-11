@@ -38,4 +38,9 @@ public class CompensatedMaterial extends Material {
 	public Object getDefault() {
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return "CompensatedMaterial{id=" + id + "}";
+	}
 }

@@ -46,7 +46,7 @@ public class CompensatedEntity extends AbstractEntity {
 
 	@Override
 	public double getEyeHeight() {
-		return 0;
+		return 1.8F * 0.85f;
 	}
 
 	@Override
@@ -86,5 +86,9 @@ public class CompensatedEntity extends AbstractEntity {
 	public Object getDefault() {
 		return this;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "CompensatedEntity{id=" + getEntityId() + ",type=" + getType() + ",world=" + (world == null ? null : world.getName()) + "}";
+	}
 }

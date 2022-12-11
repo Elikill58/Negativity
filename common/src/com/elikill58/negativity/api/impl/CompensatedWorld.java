@@ -108,4 +108,9 @@ public class CompensatedWorld extends World {
 	public Object getDefault() {
 		return getServerWorld().getDefault();
 	}
+	
+	@Override
+	public String toString() {
+		return "CompensatedWorld{playered=" + (p == null ? null : p.getUniqueId()) + ",name=" + getName() + ",entities=" + getEntities().size() + "}";
+	}
 }

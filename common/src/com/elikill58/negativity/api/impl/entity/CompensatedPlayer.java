@@ -352,4 +352,8 @@ public class CompensatedPlayer extends AbstractPlayer {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return "CompensatedPlayer{id=" + getEntityId() + ",uuid=" + getUniqueId() + ",world=" + (world == null ? null : world.getName()) + "}";
+	}
 }

@@ -10,7 +10,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.AbstractPlayer;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.impl.CompensatedWorld;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
@@ -341,6 +343,12 @@ public class CompensatedPlayer extends AbstractPlayer {
 	@Override
 	public boolean isOp() {
 		return false;
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		Player cible = Adapter.getAdapter().getPlayer(uuid);
+		return cible == null ? new BoundingBox(location.getX() - 0.25, location.getY(), location.getZ() - 0.25, location.getX() + 0.25, location.getY() + 1, location.getZ() + 0.25) : cible.getBoundingBox();
 	}
 
 	@Override

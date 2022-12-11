@@ -38,9 +38,7 @@ public interface Entity extends CommandSender {
 	double getEyeHeight();
 	
 	default Location getEyeLocation() {
-	    Location loc = getLocation().clone();
-	    loc.setY(loc.getY() + getEyeHeight());
-	    return loc;
+	    return getLocation().clone().add(0, getEyeHeight(), 0);
 	}
 	
 	/**

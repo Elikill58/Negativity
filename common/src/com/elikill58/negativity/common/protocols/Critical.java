@@ -8,7 +8,6 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
@@ -29,7 +28,7 @@ public class Critical extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground", description = "Check damage according to Y", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })
-	public void onDamaged(PlayerDamagedByEntityEvent e, NegativityPlayer np, CriticalData data) {
+	public void onDamaged(PlayerDamageEntityEvent e, NegativityPlayer np, CriticalData data) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();

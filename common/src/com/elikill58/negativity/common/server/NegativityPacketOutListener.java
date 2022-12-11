@@ -1,5 +1,8 @@
 package com.elikill58.negativity.common.server;
 
+import java.util.Optional;
+
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -17,6 +20,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityDestroy;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntityLiving;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -34,20 +38,30 @@ public class NegativityPacketOutListener implements Listeners {
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
+			Adapter.getAdapter().debug("Spawned entity " + spawn.entityId + " / " + spawn.type + " for " + p.getName());
 		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
 			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) packet;
 			CompensatedPlayer et = new CompensatedPlayer(spawn.entityId, spawn.uuid, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
+			Adapter.getAdapter().debug("Spawned player " + spawn.entityId + " / " + spawn.uuid + " for " + p.getName());
+		} else if(type.equals(PacketType.Server.SPAWN_ENTITY_LIVING)) {
+			NPacketPlayOutSpawnEntityLiving spawn = (NPacketPlayOutSpawnEntityLiving) packet;
+			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
+			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
+			p.getWorld().addEntity(et);
+			Adapter.getAdapter().debug("Spawned living " + spawn.entityId + " / " + spawn.type + " for " + p.getName());
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {
 			NPacketPlayOutEntityDestroy destroy = (NPacketPlayOutEntityDestroy) packet;
 			for(int ids : destroy.entityIds)
 				p.getWorld().removeEntity(ids);
 		} else if(type.isFlyingPacket()) {
 			NPacketPlayOutEntity flying = (NPacketPlayOutEntity) packet;
-			p.getWorld().getEntityById(flying.entityId).ifPresent(entity -> {
-				entity.getLocation().add(flying.deltaX, flying.deltaY, flying.deltaZ);
-			});
+			Optional<Entity> et = p.getWorld().getEntityById(flying.entityId);
+			if(et.isPresent())
+				et.get().getLocation().add(flying.deltaX, flying.deltaY, flying.deltaZ);
+			else
+				Adapter.getAdapter().debug("Failed to find entity with ID " + flying.entityId + " for player " + p.getName() + " and world " + p.getWorld());
 		}
 	}
 	

@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.universal.Adapter;
 
 public class CompensatedPlayer extends AbstractPlayer {
 
@@ -344,7 +345,7 @@ public class CompensatedPlayer extends AbstractPlayer {
 
 	@Override
 	public String getName() {
-		return null;
+		return Adapter.getAdapter().getOfflinePlayer(uuid).getName();
 	}
 
 	@Override

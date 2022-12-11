@@ -38,7 +38,7 @@ public class NegativityPacketOutListener implements Listeners {
 			CompensatedEntity et = new CompensatedEntity(spawn.entityId, spawn.type, p.getWorld());
 			et.setLocation(new Location(p.getWorld(), spawn.x, spawn.y, spawn.z));
 			p.getWorld().addEntity(et);
-			Adapter.getAdapter().debug("Spawned entity " + spawn.entityId + " / " + spawn.type + " for " + p.getName());
+			//Adapter.getAdapter().debug("Spawned entity " + spawn.entityId + " / " + spawn.type + " for " + p.getName());
 		} else if(type.equals(PacketType.Server.SPAWN_PLAYER)) {
 			NPacketPlayOutSpawnPlayer spawn = (NPacketPlayOutSpawnPlayer) packet;
 			CompensatedPlayer et = new CompensatedPlayer(spawn.entityId, spawn.uuid, p.getWorld());
@@ -58,10 +58,14 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.isFlyingPacket()) {
 			NPacketPlayOutEntity flying = (NPacketPlayOutEntity) packet;
 			Optional<Entity> et = p.getWorld().getEntityById(flying.entityId);
-			if(et.isPresent())
+			if(et.isPresent()) {
+				if(et.get() instanceof Player)
+					Adapter.getAdapter().debug("Move player " + et.get().getName() + " of " + flying.deltaX + " / " + flying.deltaY + " / " + flying.deltaZ);
 				et.get().getLocation().add(flying.deltaX, flying.deltaY, flying.deltaZ);
-			else
+			} else
 				Adapter.getAdapter().debug("Failed to find entity with ID " + flying.entityId + " for player " + p.getName() + " and world " + p.getWorld());
+		} else if(type.equals(PacketType.Server.POSITION)) {
+			Adapter.getAdapter().debug("Sending position");
 		}
 	}
 	

@@ -27,6 +27,9 @@ import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketOutListener implements Listeners {
 
+	public int nb = 0;
+	public double dx = 0, dy = 0, dz = 0;
+	
 	@EventListener
 	public void onPacketSend(PacketSendEvent e) {
 		if(!e.hasPlayer())
@@ -56,9 +59,12 @@ public class NegativityPacketOutListener implements Listeners {
 			NPacketPlayOutEntityTeleport teleport = (NPacketPlayOutEntityTeleport) packet;
 			p.getWorld().getEntityById(teleport.entityId).ifPresent(et -> {
 				if(et instanceof CompensatedEntity) {
-					CompensatedEntity comp = (CompensatedEntity) et;
-					comp.setLocation(teleport.getLocation(p.getWorld()));
-				}
+					((CompensatedEntity) et).setLocation(teleport.getLocation(p.getWorld()));
+				} else if(et instanceof CompensatedPlayer) {
+					Adapter.getAdapter().debug("Teleporting " + et.getName() + " to " + teleport.x + ", " + teleport.y + ", " + teleport.z);
+					((CompensatedPlayer) et).setLocation(teleport.getLocation(p.getWorld()));
+				} else
+					Adapter.getAdapter().debug("Failed to find valid class for entity " + teleport.entityId + " and class " + et.getClass().getSimpleName());
 			});
 		} else if(type.equals(PacketType.Server.ENTITY_DESTROY)) {
 			NPacketPlayOutEntityDestroy destroy = (NPacketPlayOutEntityDestroy) packet;
@@ -78,8 +84,13 @@ public class NegativityPacketOutListener implements Listeners {
 				if(et instanceof Player) {
 					Player platform = Adapter.getAdapter().getPlayer(((Player) et).getUniqueId());
 					Location l = platform.getLocation(), cl = et.getLocation();
+					nb++;
+					dx += Math.abs(l.getX() - cl.getX());
+					dy += Math.abs(l.getY() - cl.getY());
+					dz += Math.abs(l.getZ() - cl.getZ());
 					if(l.distance(cl) > 0.1) {
-						Adapter.getAdapter().debug(p.getName() + " distance: " + (l.getX() - cl.getX()) + " / " + (l.getY() - cl.getY()) + " / " + (l.getZ() - cl.getZ()) + " > " + l.toString() + " to " + cl.toString() + ", packet: " + flying.deltaX + " / " + flying.deltaY + " / " + flying.deltaZ);
+						Adapter.getAdapter().debug(p.getName() + " distance: " + (l.getX() - cl.getX()) + " / " + (l.getY() - cl.getY()) + " / " + (l.getZ() - cl.getZ()) + " > dx: "
+									+ String.format("%.2f", (dx / nb)) + ", dy: " + String.format("%.2f", (dy / nb)) +", dz: " + String.format("%.2f", (dz / nb)));
 					}
 				}
 				Location loc = et.getLocation();

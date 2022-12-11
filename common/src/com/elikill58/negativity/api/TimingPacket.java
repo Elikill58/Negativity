@@ -34,7 +34,8 @@ public class TimingPacket {
 		if(ping < diffTime)
 			finalReceive(packet);
 		else
-			packets.put(packet, System.currentTimeMillis() + p.getPing());
+			finalReceive(packet);
+		//packets.put(packet, System.currentTimeMillis() + p.getPing());
 	}
 
 	public void destroy() {

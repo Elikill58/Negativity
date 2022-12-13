@@ -368,7 +368,7 @@ public interface PacketType {
 		TILE_ENTITY_DATA,
 		TITLE,
 		PING(NPacketPlayOutPing::new),
-		UNLOAD_CHUNK,
+		UNLOAD_CHUNK(NPacketPlayOutUnloadChunk::new),
 		UPDATE_ATTRIBUTES,
 		UPDATE_ENABLED_FEATURES,
 		UPDATE_ENTITY_NBT,

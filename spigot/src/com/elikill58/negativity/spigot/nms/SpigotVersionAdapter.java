@@ -77,13 +77,15 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 			this.getBukkitEntity = PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBukkitEntity");
 
-			Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
-
-			try {
-				getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
-			} catch (NoSuchMethodException e) { // method not present
-				Class<?> persistentEntitySectionClass = PacketUtils.getNmsClass("PersistentEntitySectionManager", "world.level.entity.");
-				entityLookup = ReflectionUtils.getFirstFieldWith(worldServer, persistentEntitySectionClass);
+			if(version.isNewerOrEquals(Version.V1_17)) {
+				Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
+	
+				try {
+					getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
+				} catch (NoSuchMethodException e) { // method not present
+					Class<?> persistentEntitySectionClass = PacketUtils.getNmsClass("PersistentEntitySectionManager", "world.level.entity.");
+					entityLookup = ReflectionUtils.getFirstFieldWith(worldServer, persistentEntitySectionClass);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

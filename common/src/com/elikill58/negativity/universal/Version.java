@@ -24,7 +24,7 @@ import com.elikill58.negativity.api.packets.nms.versions.VersionUnknown;
 public enum Version {
 	
 	LOWER("lower", 0, VersionUnknown::new, 0, 5),
-	V1_8("1.8", 8, Version1_8::new, 6, 47),
+	V1_8("1.8.8", 8, Version1_8::new, 6, 47),
 	V1_9("1.9", 9, Version1_9::new, 48, 110),
 	V1_10("1.10", 10, Version1_10::new, 201, 210),
 	V1_11("1.11", 11, Version1_11::new, 301, 316),

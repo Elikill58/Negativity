@@ -79,14 +79,14 @@ public abstract class NamedVersion {
 				}
 			}
 
-			loadBlocks(blocks.toString());
+			//loadBlocks(blocks.toString());
 		} catch (Exception e) {
 			ada.getLogger().error("Failed to read blocks.json file.");
 			e.printStackTrace();
 		}
 	}
 
-	private void loadBlocks(String rawJson) throws ParseException {
+	protected void loadBlocks(String rawJson) throws ParseException {
 		JSONArray json = (JSONArray) new JSONParser().parse(rawJson);
 		for (Object obj : json) {
 			JSONObject jsonBlock = (JSONObject) obj;

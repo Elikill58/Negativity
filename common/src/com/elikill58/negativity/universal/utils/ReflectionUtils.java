@@ -75,6 +75,16 @@ public class ReflectionUtils {
 		return null;
 	}
 	
+	public static Field getFirstFieldWith(Class<?> clazz, Class<?> searchingFor) throws Exception {
+		for (Field f : clazz.getDeclaredFields()) {
+			if (f.getType().equals(searchingFor) && !Modifier.isStatic(f.getModifiers())) {
+				f.setAccessible(true);
+				return f;
+			}
+		}
+		return null;
+	}
+	
 	public static Class<?> getSubClassWithName(Class<?> clazz, String name){
 		for(Class<?> cl : clazz.getDeclaredClasses())
 			if(cl.getSimpleName().equalsIgnoreCase(name))

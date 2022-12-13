@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -141,6 +142,21 @@ public class PacketUtils {
 	public static Object getWorldServer(Location loc) {
 		try {
 			return getObcClass("CraftWorld").getMethod("getHandle").invoke(loc.getWorld());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get the NMS world server
+	 * 
+	 * @param w the spigot world
+	 * @return the world server of location's world
+	 */
+	public static Object getWorldServer(World w) {
+		try {
+			return getObcClass("CraftWorld").getMethod("getHandle").invoke(w);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

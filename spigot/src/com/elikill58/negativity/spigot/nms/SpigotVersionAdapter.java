@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -28,27 +29,27 @@ import io.netty.channel.ChannelFuture;
 
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	protected Method getPlayerHandle, mathTps;
+	protected Method getPlayerHandle, mathTps, getEntityLookup, getBukkitEntity;
 	protected Field recentTpsField, pingField, tpsField, playerConnectionField;
-	protected Field minX, minY, minZ, maxX, maxY, maxZ;
+	protected Field minX, minY, minZ, maxX, maxY, maxZ, entityLookup;
 	protected Object dedicatedServer;
-	
+
 	public SpigotVersionAdapter(int protocolVersion) {
 		this.version = Version.getVersionByProtocolID(protocolVersion);
 		try {
 			dedicatedServer = PacketUtils.getDedicatedServer();
-			
+
 			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper", "util.");
 			mathTps = mathHelperClass.getDeclaredMethod("a", long[].class);
-			
+
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
 			tpsField = mcServer.getDeclaredField(getTpsFieldName());
 
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
-			
+
 			Class<?> entityPlayerClass = PacketUtils.getNmsClass("EntityPlayer", "server.level.");
-			if(version.isNewerOrEquals(Version.V1_17)) {
+			if (version.isNewerOrEquals(Version.V1_17)) {
 				pingField = entityPlayerClass.getDeclaredField("e");
 				playerConnectionField = entityPlayerClass.getDeclaredField("b");
 			} else {
@@ -57,11 +58,11 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 			Class<?> bbClass = PacketUtils.getNmsClass("AxisAlignedBB", "world.phys.");
 
-			if(version.isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
+			if (version.isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
 				minX = bbClass.getDeclaredField("minX");
 				minY = bbClass.getDeclaredField("minY");
 				minZ = bbClass.getDeclaredField("minZ");
-				
+
 				maxX = bbClass.getDeclaredField("maxX");
 				maxY = bbClass.getDeclaredField("maxY");
 				maxZ = bbClass.getDeclaredField("maxZ");
@@ -69,19 +70,29 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				minX = bbClass.getDeclaredField("a");
 				minY = bbClass.getDeclaredField("b");
 				minZ = bbClass.getDeclaredField("c");
-				
+
 				maxX = bbClass.getDeclaredField("d");
 				maxY = bbClass.getDeclaredField("e");
 				maxZ = bbClass.getDeclaredField("f");
+			}
+			this.getBukkitEntity = PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBukkitEntity");
+
+			Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
+
+			try {
+				getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
+			} catch (NoSuchMethodException e) { // method not present
+				Class<?> persistentEntitySectionClass = PacketUtils.getNmsClass("PersistentEntitySectionManager", "world.level.entity.");
+				entityLookup = ReflectionUtils.getFirstFieldWith(worldServer, persistentEntitySectionClass);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private boolean hasMinField(Class<?> bbClass) {
-		for(Field f : bbClass.getDeclaredFields())
-			if(f.getName().equalsIgnoreCase("minX"))
+		for (Field f : bbClass.getDeclaredFields())
+			if (f.getName().equalsIgnoreCase("minX"))
 				return true;
 		return false;
 	}
@@ -94,7 +105,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return 0;
 		}
 	}
-	
+
 	public abstract String getTpsFieldName();
 
 	public List<Player> getOnlinePlayers() {
@@ -140,7 +151,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public Channel getChannel(Player p) {
 		try {
-			return new PacketContent(getNetworkManager(p)).getSpecificModifier(Channel.class).readSafely(0);
+			PacketContent packet = new PacketContent(getNetworkManager(p));
+			return version.equals(Version.V1_17) ? (Channel) packet.getAllObjects().read("k") : packet.getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -154,7 +166,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public List<ChannelFuture> getFuturChannel() {
 		try {
 			Object co = ReflectionUtils.getFirstWith(dedicatedServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
-			if(Version.getVersion().isNewerOrEquals(Version.V1_17)) {
+			if (Version.getVersion().isNewerOrEquals(Version.V1_17)) {
 				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "f");
 			} else {
 				try {
@@ -168,34 +180,64 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return new ArrayList<>();
 		}
 	}
-	
+
 	public BoundingBox getBoundingBox(Entity et) {
 		try {
 			Object ep = PacketUtils.getNMSEntity(et);
 			Object bb = ReflectionUtils.getFirstWith(ep, PacketUtils.getNmsClass("Entity", "world.entity."), PacketUtils.getNmsClass("AxisAlignedBB", "world.phys."));
-			
+
 			double minX = this.minX.getDouble(bb);
 			double minY = this.minY.getDouble(bb);
 			double minZ = this.minZ.getDouble(bb);
-			
+
 			double maxX = this.maxX.getDouble(bb);
 			double maxY = this.maxY.getDouble(bb);
 			double maxZ = this.maxZ.getDouble(bb);
-			
+
 			return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public org.bukkit.inventory.ItemStack createSkull(OfflinePlayer owner) { // method used by old versions
 		// should be "PLAYER_HEAD" and nothing else.
 		// can't use direct material else we will have running issue on old versions
 		org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault());
-    	SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+		SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
 		skullmeta.setOwningPlayer(owner); // warn: this method seems to exist since 1.12.1
 		return itemStack;
+	}
+
+	public List<Entity> getEntities(World w) {
+		if(!version.isNewerOrEquals(Version.V1_17))
+			return w.getEntities();
+		List<Entity> entities = new ArrayList<>();
+		try {
+			Object worldServer = PacketUtils.getWorldServer(w);
+			Object lookup;
+			if(getEntityLookup != null)
+				lookup = getEntityLookup.invoke(worldServer);
+			else {
+				Object persistentEntityManager = entityLookup.get(worldServer);
+				lookup = persistentEntityManager.getClass().getDeclaredMethod("d").invoke(persistentEntityManager);
+			}
+			((Iterable<?>) lookup.getClass().getDeclaredMethod("a").invoke(lookup)).forEach(e -> {
+				if (e != null) {
+					try {
+						Object craftEntity = getBukkitEntity.invoke(e);
+						if (craftEntity != null && craftEntity instanceof Entity && ((Entity) craftEntity).isValid())
+							entities.add((Entity) craftEntity);
+					} catch (Exception exc) {
+						exc.printStackTrace();
+					}
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return entities;
 	}
 
 	private static SpigotVersionAdapter instance;
@@ -233,6 +275,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_18_R2();
 			case "v1_19_R1":
 				return instance = new Spigot_1_19_R1();
+			case "v1_19_R2":
+				return instance = new Spigot_1_19_R2();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

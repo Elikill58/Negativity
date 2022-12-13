@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
+
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntity;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotWorld extends World {
@@ -49,14 +52,14 @@ public class SpigotWorld extends World {
 	
 	@Override
 	public List<Entity> getEntities() {
+		if(!Bukkit.isPrimaryThread()) // prevent error
+			return SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntity::new).collect(Collectors.toList());
 		return w.getEntities().stream().map(SpigotEntity::new).collect(Collectors.toList());
 	}
 	
 	@Override
 	public Optional<Entity> getEntityById(int id) {
-		/*if(!Bukkit.isPrimaryThread()) // prevent error
-			return Optional.empty();*/
-		return w.getEntities().stream().filter(e -> e.getEntityId() != id).findFirst().map(SpigotEntity::new);
+		return getEntities().stream().filter(e -> e.getEntityId() == id).findFirst();
 	}
 
 	@Override

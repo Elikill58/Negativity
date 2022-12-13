@@ -194,7 +194,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "no-ground-y", description = "When not in ground, check y", conditions = { CheckConditions.NO_ELYTRA,
-			CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL })
+			CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onGroundY(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

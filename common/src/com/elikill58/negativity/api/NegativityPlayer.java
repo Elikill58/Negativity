@@ -90,7 +90,6 @@ public class NegativityPlayer {
 	public double sensitivity = 0.0;
 	private String clientName;
 	private @Nullable ScheduledTask fightCooldownTask;
-	private TimingPacket timingPacket;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -103,7 +102,6 @@ public class NegativityPlayer {
 		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
-		this.timingPacket = new TimingPacket(p);
 		
 		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
 		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));
@@ -388,7 +386,6 @@ public class NegativityPlayer {
 	 * Save and destroy Negativity player and account
 	 */
 	public void destroy() {
-		timingPacket.destroy();
 		checkProcessors.forEach(CheckProcessor::stop);
 		CompletableFuture.runAsync(() -> {
 			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
@@ -457,15 +454,6 @@ public class NegativityPlayer {
 		entityClick = 0;
 		leftCancelled = 0;
 		leftFinished = 0;
-	}
-	
-	/**
-	 * Get the object that manage the ping-related packets
-	 * 
-	 * @return timing packet instance for given player
-	 */
-	public TimingPacket getTimingPacket() {
-		return timingPacket;
 	}
 	
 	public <D extends CheckData> D getCheckData(Cheat cheat) {

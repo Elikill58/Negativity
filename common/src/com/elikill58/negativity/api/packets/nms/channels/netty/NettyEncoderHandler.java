@@ -1,9 +1,8 @@
 package com.elikill58.negativity.api.packets.nms.channels.netty;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.packets.PrePacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
@@ -20,20 +19,11 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 	private final Player p;
 	private final PacketDirection direction;
 	private final Version version;
-	private NegativityPlayer np;
 	
 	public NettyEncoderHandler(Player p, PacketDirection direction) {
 		this.p = p;
 		this.direction = direction;
 		this.version = PlayerVersionManager.getPlayerVersion(p);
-		this.np = NegativityPlayer.getNegativityPlayer(p);
-	}
-
-	public NegativityPlayer getNegativityPlayer() {
-		if (np == null) {
-			this.np = NegativityPlayer.getNegativityPlayer(p);
-		}
-		return np;
 	}
 	
 	@Override
@@ -54,8 +44,7 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 					NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg.copy(), "encode");
 					if(packet == null)
 						return;
-					EventManager.callEvent(new PrePacketSendEvent(packet, p));
-					getNegativityPlayer().getTimingPacket().add(packet);
+					EventManager.callEvent(new PacketSendEvent(packet, p));
 				} catch (Exception e) {
 					Adapter.getAdapter().getLogger().printError("Failed to read packet and call event", e);
 				}

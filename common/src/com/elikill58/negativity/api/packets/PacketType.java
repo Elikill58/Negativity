@@ -47,9 +47,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPositio
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityLook;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMove;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutRelEntityMoveLook;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntityLiving;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnloadChunk;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
@@ -352,12 +349,12 @@ public interface PacketType {
 		SET_TITLE_TEXT,
 		SET_TITLE_ANIMATION,
 		SIMULATION_DISTANCE,
-		SPAWN_ENTITY(NPacketPlayOutSpawnEntity::new),
-		SPAWN_ENTITY_LIVING(NPacketPlayOutSpawnEntityLiving::new),
+		SPAWN_ENTITY,
+		SPAWN_ENTITY_LIVING,
 		SPAWN_ENTITY_EXPERIENCE_ORB,
 		SPAWN_ENTITY_PAINTING,
 		SPAWN_ENTITY_WEATHER,
-		SPAWN_PLAYER(NPacketPlayOutSpawnPlayer::new),
+		SPAWN_PLAYER,
 		SPAWN_POSITION,
 		STATISTIC,
 		STOP_SOUND,

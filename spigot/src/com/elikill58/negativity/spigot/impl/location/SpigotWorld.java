@@ -1,6 +1,8 @@
 package com.elikill58.negativity.spigot.impl.location;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -43,6 +45,11 @@ public class SpigotWorld extends World {
 	@Override
 	public int getMinHeight() {
 		return Version.getVersion().isNewerOrEquals(Version.V1_18) ? -64 : 0;
+	}
+	
+	@Override
+	public List<Entity> getEntities() {
+		return w.getEntities().stream().map(SpigotEntity::new).collect(Collectors.toList());
 	}
 	
 	@Override

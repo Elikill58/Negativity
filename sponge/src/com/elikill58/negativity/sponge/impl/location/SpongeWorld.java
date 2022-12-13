@@ -1,7 +1,9 @@
 package com.elikill58.negativity.sponge.impl.location;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.spongepowered.api.world.server.ServerWorld;
 
@@ -45,6 +47,11 @@ public class SpongeWorld extends World {
 	public int getMinHeight() {
 		int min = w.min().y();
 		return min > 0 ? 0 : min;
+	}
+	
+	@Override
+	public List<Entity> getEntities() {
+		return w.entities().stream().map(SpongeEntity::new).collect(Collectors.toList());
 	}
 	
 	@Override

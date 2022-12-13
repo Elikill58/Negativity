@@ -8,7 +8,7 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
-import com.elikill58.negativity.api.events.packets.PrePacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -35,7 +35,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	public void onPacket(PacketEvent e, NegativityPlayer np) {}
 	
 	@EventListener
-	public void onPacketSent(PrePacketSendEvent e) {
+	public void onPacketSent(PacketSendEvent e) {
 		NPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
 			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);

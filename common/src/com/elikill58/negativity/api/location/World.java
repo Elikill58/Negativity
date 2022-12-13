@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.location;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -146,6 +147,8 @@ public abstract class World implements NegativityObject {
 	 * @return the min height
 	 */
 	public abstract int getMinHeight();
+	
+	public abstract List<Entity> getEntities();
 	
 	public abstract Optional<Entity> getEntityById(int id);
 	

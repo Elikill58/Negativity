@@ -1,6 +1,8 @@
 package com.elikill58.negativity.minestom.impl.location;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -45,6 +47,11 @@ public class MinestomWorld extends World {
 	@Override
 	public int getMinHeight() {
 		return w.getDimensionType().getMinY();
+	}
+	
+	@Override
+	public List<Entity> getEntities() {
+		return w.getEntities().stream().map(MinestomEntity::new).collect(Collectors.toList());
 	}
 	
 	@Override

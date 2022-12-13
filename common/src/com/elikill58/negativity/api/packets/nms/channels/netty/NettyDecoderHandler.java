@@ -1,6 +1,5 @@
 package com.elikill58.negativity.api.packets.nms.channels.netty;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -18,20 +17,11 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 	private final Player p;
 	private final PacketDirection direction;
 	private final Version version;
-	private NegativityPlayer np;
 
 	public NettyDecoderHandler(Player p, PacketDirection direction) {
 		this.p = p;
 		this.direction = direction;
 		this.version = PlayerVersionManager.getPlayerVersion(p);
-		this.np = NegativityPlayer.getNegativityPlayer(p);
-	}
-
-	public NegativityPlayer getNegativityPlayer() {
-		if (np == null) {
-			this.np = NegativityPlayer.getNegativityPlayer(p);
-		}
-		return np;
 	}
 
 	@Override
@@ -56,7 +46,6 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 			EventManager.callEvent(event);
 			if (!event.isCancelled()) {
 				super.channelRead(ctx, obj);
-				//getNegativityPlayer().getTimingPacket().add(packet); // prepare for beeing done after ping things
 			}
 		} else
 			super.channelRead(ctx, obj);

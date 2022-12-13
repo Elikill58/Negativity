@@ -1,7 +1,7 @@
 name: Negativity
 main: com.elikill58.negativity.spigot.SpigotNegativity
 version: ${version}
-author: [Elikill58, RedNesto]
+authors: [Elikill58, RedNesto]
 description: It's an Advanced AntiCheat Detection, by Elikill58.
 api-version: 1.13
 softdepend: [ProtocolLib, Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, LiteBans, ViaVersion, ProtocolSupport, floodgate, UltraPunishments, Geyser-Spigot]

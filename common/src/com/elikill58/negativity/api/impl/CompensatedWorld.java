@@ -2,7 +2,6 @@ package com.elikill58.negativity.api.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import com.elikill58.negativity.api.block.Block;
@@ -16,14 +15,10 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.universal.Adapter;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
-
 public class CompensatedWorld extends World {
 
 	protected final Player p;
 	protected World serverWorld;
-	protected ObjectList<Entity> entities = new ObjectArrayList<>();
 	protected List<BlockTransition> transitions = new ArrayList<>();
 	
 	public CompensatedWorld(Player p) {
@@ -54,7 +49,7 @@ public class CompensatedWorld extends World {
 	public Block getBlockAt0(int x, int y, int z) {
 		synchronized (transitions) {
 			transitions.removeIf(BlockTransition::expired);
-			for(BlockTransition t : transitions) {
+			for(BlockTransition t : new ArrayList<>(transitions)) {
 				if(t.concern(x, y, z)) {
 					return new CompensatedBlock(new Location(this, x, y, z), t.getOld());
 				}
@@ -67,28 +62,15 @@ public class CompensatedWorld extends World {
 		long time = System.currentTimeMillis();
 		transitions.add(new BlockTransition(time, time + expireTime, getServerWorld().getBlockAt0(x, y, z).getType(), next, x, y, z));
 	}
-	
-	public void addEntity(Entity e) {
-		entities.add(e);
-	}
-	
-	public void removeEntity(int id) {
-		synchronized (entities) {
-			entities.removeIf(et -> et == null || et.isSameId(id));
-		}
-	}
 
+	@Override
 	public List<Entity> getEntities() {
-		synchronized (entities) {
-			entities.removeIf(Objects::isNull);
-			return entities;
-		}
+		return getServerWorld().getEntities();
 	}
 	
 	@Override
 	public Optional<Entity> getEntityById(int id) {
-		Optional<Entity> opt = getEntities().stream().filter(e -> e.isSameId(id)).findFirst();
-		return opt.isPresent() ? opt : getServerWorld().getEntityById(id);
+		return getServerWorld().getEntityById(id);
 	}
 
 	@Override

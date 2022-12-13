@@ -62,7 +62,7 @@ public class Reach extends Cheat {
 			Location loc = p.getLocation();
 			Adapter.getAdapter().debug("Positions: " + cibleLocation + ", locs: " + loc);
 			double dis = getDistance(loc, cibleLocation);
-			p.sendMessage(ChatColor.color("&7Reach: " + getColoredDistance(dis) + "&7, basic: " + getColoredDistance(getDistanceBasic(p, cible)) + "&7, head: " + getColoredDistance(getDistanceHead(p, cible)) + "&7, nearest: " + getColoredDistance(getDistanceNearest(p, cible))));
+			//p.sendMessage(ChatColor.color("&7Reach: " + getColoredDistance(dis) + "&7, basic: " + getColoredDistance(getDistanceBasic(p, cible)) + "&7, head: " + getColoredDistance(getDistanceHead(p, cible)) + "&7, nearest: " + getColoredDistance(getDistanceNearest(p, cible))));
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			Adapter.getAdapter().debug("Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
 			double max = getConfig().getDouble("checks.reach-event.value", 3.2) + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
@@ -75,16 +75,16 @@ public class Reach extends Cheat {
 		}
 	}
 	
-	private double getDistanceBasic(Player p, Entity et) {
+	protected double getDistanceBasic(Player p, Entity et) {
 		return p.getLocation().distance(et.getLocation());
 	}
 	
-	private double getDistanceHead(Player p, Entity et) {
+	protected double getDistanceHead(Player p, Entity et) {
 		BoundingBox bb1 = p.getBoundingBox(), bb2 = et.getBoundingBox();
 		return bb1.getAsHeadPoint().distance(bb2.getIntersectPoint(p));
 	}
 	
-	private double getDistanceNearest(Player p, Entity et) {
+	protected double getDistanceNearest(Player p, Entity et) {
 		BoundingBox bb1 = p.getBoundingBox(), bb2 = et.getBoundingBox();
 		return bb1.getNearestPoint(bb2.getMid()).distance(bb2.getNearestPoint(bb2.getMid()));
 	}

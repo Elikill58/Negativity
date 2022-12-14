@@ -28,6 +28,7 @@ shadowJar {
     archiveAppendix.set('common')
     archiveClassifier.set(null)
 
+    relocate("com.github.steveice10.opennbt", "com.elikill58.deps.opennbt")
     relocate("it.unimi.dsi.fastutil", "com.elikill58.deps.fastutil")
     minimize {
         include(dependency("it.unimi.dsi:fastutil:.*"))

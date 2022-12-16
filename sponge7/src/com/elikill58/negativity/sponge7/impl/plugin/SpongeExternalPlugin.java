@@ -25,10 +25,12 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 	@Override
 	public Object getDefault() {
 		// Let's assume the instance exists
-		// Let's assume the instance exists
 		//noinspection OptionalGetWithoutIsPresent
 		return pl.getInstance().get();
 	}
 	
-	
+	@Override
+	public String getVersion() {
+		return pl.getVersion().orElse("??");
+	}
 }

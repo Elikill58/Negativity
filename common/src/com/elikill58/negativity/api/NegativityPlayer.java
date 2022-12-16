@@ -85,7 +85,7 @@ public class NegativityPlayer {
 	
 	// general values
 	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false,
-			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
+			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true, buggedVersion = false;
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;
 	private String clientName;
@@ -153,7 +153,7 @@ public class NegativityPlayer {
 	 * @return true if the player can be detected
 	 */
 	public boolean hasDetectionActive(Cheat c) {
-		if (!c.isActive() || Negativity.tpsDrop)
+		if (!c.isActive() || Negativity.tpsDrop || buggedVersion)
 			return false;
 		if (timeInvincibility > System.currentTimeMillis())
 			return false;
@@ -181,6 +181,8 @@ public class NegativityPlayer {
 			return "Cheat disabled";
 		if(Negativity.tpsDrop)
 			return "TPS drop";
+		if(buggedVersion)
+			return "Bugged Version (1.19.2)";
 		if(timeInvincibility > System.currentTimeMillis())
 			return "Player invincibility";
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))

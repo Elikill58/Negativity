@@ -28,4 +28,8 @@ public class VelocityExternalPlugin extends ExternalPlugin {
 		return pl.getInstance().get();
 	}
 	
+	@Override
+	public String getVersion() {
+		return pl.getDescription().getVersion().orElse("??");
+	}
 }

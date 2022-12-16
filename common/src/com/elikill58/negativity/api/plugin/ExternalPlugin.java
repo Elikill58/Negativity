@@ -12,4 +12,6 @@ public abstract class ExternalPlugin implements NegativityObject {
 	 * @return true if the plugin is enabled
 	 */
 	public abstract boolean isEnabled();
+	
+	public abstract String getVersion();
 }

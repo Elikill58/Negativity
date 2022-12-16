@@ -26,5 +26,9 @@ public class BungeeExternalPlugin extends ExternalPlugin {
 	public Object getDefault() {
 		return pl;
 	}
-	
+
+	@Override
+	public String getVersion() {
+		return pl.getDescription().getVersion();
+	}
 }

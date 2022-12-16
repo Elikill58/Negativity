@@ -27,4 +27,8 @@ public class SpigotExternalPlugin extends ExternalPlugin {
 		return pl;
 	}
 
+	@Override
+	public String getVersion() {
+		return pl.getDescription().getVersion();
+	}
 }

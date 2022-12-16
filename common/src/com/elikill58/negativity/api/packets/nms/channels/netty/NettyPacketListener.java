@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketDirection;
+import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import io.netty.channel.Channel;
 
@@ -38,6 +42,15 @@ public abstract class NettyPacketListener {
 	}
 
 	private void addChannel(Player p) {
+		Version version = PlayerVersionManager.getPlayerVersion(p);
+		if(version.equals(Version.V1_19_2) && !Adapter.getAdapter().getServerVersion().equals(Version.V1_19_2)) {
+			ExternalPlugin plugin = Adapter.getAdapter().getPlugin("ViaVersion");
+			if(plugin != null && plugin.getVersion().startsWith("4.5")) {
+				Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " can't be checked because of ViaVersion issue.");
+				NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
+				return;
+			}
+		}
 		Channel channel = getChannel(p);
 		checked.add(channel);
 		try {

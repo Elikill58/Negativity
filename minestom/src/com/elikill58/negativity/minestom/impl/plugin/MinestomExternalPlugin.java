@@ -27,5 +27,8 @@ public class MinestomExternalPlugin extends ExternalPlugin {
 		return e;
 	}
 	
-	
+	@Override
+	public String getVersion() {
+		return e.getOrigin().getVersion();
+	}
 }

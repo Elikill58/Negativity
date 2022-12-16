@@ -17,7 +17,6 @@ public class PacketUtils {
 	public static final String NMS_PREFIX;
 
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_SERVER_CLASS, CRAFT_ENTITY_CLASS;
-	public static Class<?> ENUM_PLAYER_INFO;
 	
 	/**
 	 * This Map is to reduce Reflection action which take more ressources than just RAM action
@@ -27,7 +26,6 @@ public class PacketUtils {
 	static {
 		NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
 		try {
-			ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
 			CRAFT_SERVER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftServer");
 			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
@@ -164,24 +162,6 @@ public class PacketUtils {
 			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Get the EnumPlayerInfoAction class which depend of packet PacketPlayOutPlayerInfo
-	 * 
-	 * @return the class of EnumPlayerInfoAction
-	 * @throws ClassNotFoundException 
-	 * @throws SecurityException 
-	 */
-	private static Class<?> getEnumPlayerInfoAction() throws SecurityException, ClassNotFoundException {
-		try {
-			return Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "network.protocol.game." : "") + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
-		} catch (Exception e) {
-			for(Class<?> clazz : getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getDeclaredClasses())
-				if(clazz.getName().contains("EnumPlayerInfoAction"))
-					return clazz;
 			return null;
 		}
 	}

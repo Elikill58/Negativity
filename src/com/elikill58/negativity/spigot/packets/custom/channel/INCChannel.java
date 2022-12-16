@@ -23,7 +23,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
-@SuppressWarnings("unchecked")
 public class INCChannel extends ChannelAbstract {
 	
 	public INCChannel(CustomPacketManager customPacketManager) {

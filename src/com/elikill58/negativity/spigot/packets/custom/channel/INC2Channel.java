@@ -24,7 +24,6 @@ import io.netty.channel.ChannelPromise;
 
 public class INC2Channel extends ChannelAbstract {
 	
-	@SuppressWarnings("unchecked")
 	public INC2Channel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
 		try {

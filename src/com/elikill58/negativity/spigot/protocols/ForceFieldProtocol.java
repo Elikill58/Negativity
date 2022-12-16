@@ -147,15 +147,4 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	private String getColor(double d) {
 		return (d > 3 ? (d > 4 ? "&c" : "&6") : "&a");
 	}
-	
-	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
-		if(np.fakePlayerTouched == 0) return;
-		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
-		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
-		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
-		SpigotNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
-				parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched
-						+ " entites touch in " + timeBehindStart + " millisecondes",
-						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
-	}
 }

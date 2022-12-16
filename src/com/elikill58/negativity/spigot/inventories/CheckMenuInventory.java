@@ -51,7 +51,6 @@ public class CheckMenuInventory extends AbstractInventory {
 		inv.setItem(10, ItemUtils.hideAttributes(createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
 		inv.setItem(11, createItem(ItemUtils.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Launcher: " + ChatColor.YELLOW + np.clientName, ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
-		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
 		if(!Perm.hasPerm(np, Perm.MOD))
 			inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
 		inv.setItem(19, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
@@ -132,11 +131,6 @@ public class CheckMenuInventory extends AbstractInventory {
 		if (m == ItemUtils.EYE_OF_ENDER) {
 			p.teleport(cible);
 			p.closeInventory();
-		} else if (m == ItemUtils.SKELETON_SKULL) {
-			if(e.getRawSlot() == 12) {
-				p.closeInventory();
-				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
-			}
 		} else {
 			switch (m) {
 			case SPIDER_EYE:

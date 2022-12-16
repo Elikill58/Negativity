@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -32,14 +31,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.protocols.InventoryMoveProtocol.InventoryMoveData;
 import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
@@ -50,7 +47,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -68,7 +64,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	private static final Map<UUID, SpigotNegativityPlayer> players = new HashMap<>();
 
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
-	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public HashMap<String, Double> contentDouble = new HashMap<>();
@@ -106,7 +101,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public BukkitTask fightTask = null;
 	public String clientName;
 	public int fakePlayerTouched = 0, ping = 0, protocolVersion = 0;
-	public long timeStartFakePlayer = 0;
 	private Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
@@ -317,12 +311,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void startAnalyze(Cheat c) {
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
-		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
-			if (timeStartFakePlayer == 0)
-				timeStartFakePlayer = 1; // not on the player connection
-			else
-				makeAppearEntities();
-		}
 	}
 
 	@Override
@@ -388,123 +376,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		// and they are NOT showed to player
 		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb,
 				nbConsole);
-	}
-
-	public void makeAppearEntities() {
-		if (!Cheat.forKey(CheatKeys.FORCEFIELD).isActive() || Version.getVersion().isNewerOrEquals(Version.V1_17)
-				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
-			return;
-		timeStartFakePlayer = System.currentTimeMillis();
-		fakePlayerTouched = 0;
-
-		spawnRight();
-		spawnLeft();
-		spawnBehind();
-	}
-
-	public void spawnRandom() {
-		if (fakePlayerTouched > 20) // limit to prevent player freeze
-			return;
-		int choice = new Random().nextInt(3);
-		if (choice == 0)
-			spawnRight();
-		else if (choice == 1)
-			spawnBehind();
-		else
-			spawnLeft();
-	}
-
-	private void spawnRight() {
-		Location loc = getPlayer().getLocation().clone();
-		Vector dir = getPlayer().getEyeLocation().getDirection();
-		double x = dir.getX(), z = dir.getZ();
-		if (x >= 0 && z >= 0) {
-			loc.add(-1, 0, 1);
-		} else if (x >= 0 && z <= 0) {
-			loc.add(-1, 0, 0);
-		} else if (x <= 0 && z >= 0) {
-			loc.add(-1, 0, 0);
-		} else if (x <= 0 && z <= 0) {
-			loc.add(-1, 0, 1);
-		}
-		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
-		FAKE_PLAYER.add(fp);
-	}
-
-	private void spawnLeft() {
-		Location loc = getPlayer().getLocation().clone();
-		Vector dir = getPlayer().getEyeLocation().getDirection();
-		double x = dir.getX(), z = dir.getZ();
-		if (x >= 0 && z >= 0) {
-			loc.add(0, 0, -1);
-		} else if (x >= 0 && z <= 0) {
-			loc.add(-1, 0, 1);
-		} else if (x <= 0 && z >= 0) {
-			loc.add(1, 0, -1);
-		} else if (x <= 0 && z <= 0) {
-			loc.add(1, 0, 1);
-		}
-		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
-		FAKE_PLAYER.add(fp);
-	}
-
-	private void spawnBehind() {
-		Location loc = getPlayer().getLocation().clone();
-		Vector dir = getPlayer().getEyeLocation().getDirection();
-		double x = dir.getX(), z = dir.getZ();
-		if (x >= 0 && z >= 0) {
-			loc.add(1, 0, -1);
-		} else if (x >= 0 && z <= 0) {
-			loc.add(1, 0, 1);
-		} else if (x <= 0 && z >= 0) {
-			loc.add(1, 0, 1);
-		} else if (x <= 0 && z <= 0) {
-			loc.add(1, 0, -1);
-		}
-		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
-		FAKE_PLAYER.add(fp);
-	}
-
-	private String getRandomFakePlayerName() {
-		List<Player> online = Utils.getOnlinePlayers();
-		if (online.size() <= 1) {
-			return new Random().nextBoolean() ? "Elikill58" : "RedNesto";
-		}
-		return online.get(new Random().nextInt(online.size())).getName();
-	}
-
-	public List<FakePlayer> getFakePlayers() {
-		return new ArrayList<>(FAKE_PLAYER);
-	}
-
-	public void removeFakePlayer(FakePlayer fp, boolean detected) {
-		if (!FAKE_PLAYER.contains(fp))
-			return;
-		FAKE_PLAYER.remove(fp);
-		if (!detected) {
-			if (fakePlayerTouched > 0)
-				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if (FAKE_PLAYER.size() == 0)
-				fakePlayerTouched = 0;
-			return;
-		}
-		fakePlayerTouched++;
-		long l = (System.currentTimeMillis() - timeStartFakePlayer);
-		if (l >= 3000) {
-			if (FAKE_PLAYER.size() == 0) {
-				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-				fakePlayerTouched = 0;
-			}
-		} else {
-			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if (fakePlayerTouched < 100) {
-				spawnRandom();
-				spawnRandom();
-			}
-		}
 	}
 
 	public void logProof(String msg) {

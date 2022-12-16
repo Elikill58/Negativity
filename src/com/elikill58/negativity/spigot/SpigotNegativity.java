@@ -58,7 +58,6 @@ import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
-import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -145,8 +144,6 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
-		if(!v.isNewerOrEquals(Version.V1_17))
-			FakePlayer.loadClass();
 		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
 		setupValue();
 
@@ -178,7 +175,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		(invTimer = new ActualizeInvTimer()).runTaskTimer(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
-		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
 
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.hasListener())

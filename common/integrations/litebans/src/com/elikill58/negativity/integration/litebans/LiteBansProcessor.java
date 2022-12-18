@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
@@ -33,8 +34,7 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 	@Override
 	public BanResult executeBan(Ban ban) {
 		try {
-			String timeValue = (ban.isDefinitive() ? ""
-					: ChatUtils.getTimeFromLong(ban.getExpirationTime() - ban.getExecutionTime()) + " ");
+			String timeValue = (ban.isDefinitive() ? "" : ChatUtils.getTimeFromLong(ban.getExpirationTime() - ban.getExecutionTime()) + " ");
 			String sender;
 			switch (ban.getBanType()) {
 			case MOD:
@@ -50,8 +50,7 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 				sender = "--sender=" + ban.getBannedBy();
 				break;
 			}
-			Adapter.getAdapter()
-					.runConsoleCommand("ban " + ban.getPlayerId() + " " + timeValue + sender + " " + ban.getReason());
+			Adapter.getAdapter().runConsoleCommand("ban " + ban.getPlayerId() + " " + timeValue + sender + " " + ban.getReason());
 			return new BanResult(BanResultType.DONE, ban);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,67 +72,74 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 
 	@Override
 	public Ban getActiveBan(UUID playerId) {
-		try (PreparedStatement st = Database.get()
-				.prepareStatement("SELECT * FROM {bans} WHERE uuid = ? AND active = ? LIMIT 1")) {
-			st.setString(1, playerId.toString());
-			st.setBoolean(2, true);
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					return getBan(rs);
+		return CompletableFuture.supplyAsync(() -> {
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE uuid = ? AND active = ? LIMIT 1")) {
+				st.setString(1, playerId.toString());
+				st.setBoolean(2, true);
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						return getBan(rs);
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+			return null;
+		}).join();
 	}
 
 	@Override
 	public List<Ban> getLoggedBans(UUID playerId) {
-		List<Ban> loggedBans = new ArrayList<>();
-		try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE uuid = ?")) {
-			st.setString(1, playerId.toString());
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					loggedBans.add(getBan(rs));
+		return CompletableFuture.supplyAsync(() -> {
+			List<Ban> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE uuid = ?")) {
+				st.setString(1, playerId.toString());
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						loggedBans.add(getBan(rs));
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loggedBans;
+			return loggedBans;
+		}).join();
 	}
 
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
-		List<Ban> loggedBans = new ArrayList<>();
-		try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE ip = ?")) {
-			st.setString(1, ip);
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					loggedBans.add(getBan(rs));
+		return CompletableFuture.supplyAsync(() -> {
+			List<Ban> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE ip = ?")) {
+				st.setString(1, ip);
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						loggedBans.add(getBan(rs));
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loggedBans;
+			return loggedBans;
+		}).join();
 	}
 
 	@Override
 	public List<Ban> getAllBans() {
-		List<Ban> loggedBans = new ArrayList<>();
-		try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE active = ?")) {
-			st.setBoolean(1, true);
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					loggedBans.add(getBan(rs));
+		return CompletableFuture.supplyAsync(() -> {
+			List<Ban> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE active = ?")) {
+				st.setBoolean(1, true);
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						loggedBans.add(getBan(rs));
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loggedBans;
+			return loggedBans;
+		}).join();
 	}
 
 	@Override
@@ -145,8 +151,7 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 			} else {
 				sender = "--sender=" + warn.getWarnedBy();
 			}
-			Adapter.getAdapter()
-					.runConsoleCommand("warn " + warn.getPlayerId() + " " + sender + " " + warn.getReason());
+			Adapter.getAdapter().runConsoleCommand("warn " + warn.getPlayerId() + " " + sender + " " + warn.getReason());
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,8 +162,7 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 	@Override
 	public WarnResult revokeWarn(UUID playerId, String revoker) {
 		try {
-			Adapter.getAdapter().runConsoleCommand("unwarn " + playerId + " --sender"
-					+ (UniversalUtils.isUUID(revoker) ? "-uuid" : "") + "=" + revoker);
+			Adapter.getAdapter().runConsoleCommand("unwarn " + playerId + " --sender" + (UniversalUtils.isUUID(revoker) ? "-uuid" : "") + "=" + revoker);
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,8 +173,7 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 	@Override
 	public WarnResult revokeWarn(Warn warn, String revoker) {
 		try {
-			Adapter.getAdapter().runConsoleCommand("unwarn " + warn.getPlayerId() + " --sender"
-					+ (UniversalUtils.isUUID(revoker) ? "-uuid" : "") + "=" + revoker);
+			Adapter.getAdapter().runConsoleCommand("unwarn " + warn.getPlayerId() + " --sender" + (UniversalUtils.isUUID(revoker) ? "-uuid" : "") + "=" + revoker);
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,53 +183,54 @@ public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 
 	@Override
 	public List<Warn> getWarn(UUID playerId) {
-		List<Warn> loggedBans = new ArrayList<>();
-		try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {warnings} WHERE uuid = ?")) {
-			st.setString(1, playerId.toString());
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					loggedBans.add(getWarn(rs));
+		return CompletableFuture.supplyAsync(() -> {
+			List<Warn> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {warnings} WHERE uuid = ?")) {
+				st.setString(1, playerId.toString());
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						loggedBans.add(getWarn(rs));
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loggedBans;
+			return loggedBans;
+		}).join();
 	}
 
 	@Override
 	public List<Warn> getActiveWarnOnSameIP(String ip) {
-		List<Warn> loggedBans = new ArrayList<>();
-		try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {warnings} WHERE ip = ?")) {
-			st.setString(1, ip);
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					loggedBans.add(getWarn(rs));
+		return CompletableFuture.supplyAsync(() -> {
+			List<Warn> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {warnings} WHERE ip = ?")) {
+				st.setString(1, ip);
+				try (ResultSet rs = st.executeQuery()) {
+					while (rs.next()) {
+						loggedBans.add(getWarn(rs));
+					}
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return loggedBans;
+			return loggedBans;
+		}).join();
 	}
 
 	private Warn getWarn(ResultSet rs) throws SQLException {
 		String bannedUUID = rs.getString("banned_by_uuid");
-		return new Warn(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), rs.getString("reason"),
-				bannedUUID == null ? rs.getString("banned_by_name") : bannedUUID, getSanctionnerType(bannedUUID),
-				rs.getString("ip"), rs.getLong("time"), rs.getBoolean("active"),
-				rs.getTimestamp("removed_by_date").getTime(), rs.getString("removed_by_uuid"));
+		return new Warn(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), rs.getString("reason"), bannedUUID == null ? rs.getString("banned_by_name") : bannedUUID,
+				getSanctionnerType(bannedUUID), rs.getString("ip"), rs.getLong("time"), rs.getBoolean("active"), rs.getTimestamp("removed_by_date").getTime(),
+				rs.getString("removed_by_uuid"));
 	}
 
 	private Ban getBan(ResultSet rs) throws SQLException {
 		String reason = rs.getString("reason");
 		SanctionnerType banType = getSanctionnerType(rs.getString("banned_by_uuid"));
 		String removedName = rs.getString("removed_by_name");
-		return new Ban(UUID.fromString(rs.getString("uuid")), reason, rs.getString("banned_by_name"), banType,
-				rs.getLong("until"), reason, rs.getString("ip"),
-				rs.getBoolean("active") ? BanStatus.ACTIVE
-						: (removedName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED),
-				rs.getLong("time"), rs.getTimestamp("removed_by_date").getTime());
+		return new Ban(UUID.fromString(rs.getString("uuid")), reason, rs.getString("banned_by_name"), banType, rs.getLong("until"), reason, rs.getString("ip"),
+				rs.getBoolean("active") ? BanStatus.ACTIVE : (removedName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED), rs.getLong("time"),
+				rs.getTimestamp("removed_by_date").getTime());
 	}
 
 	@Override

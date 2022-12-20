@@ -28,10 +28,12 @@ shadowJar {
     archiveAppendix.set('common')
     archiveClassifier.set(null)
 
+    relocate("org.yaml.snakeyaml", "com.elikill58.deps.yaml")
     relocate("com.github.steveice10.opennbt", "com.elikill58.deps.opennbt")
     relocate("it.unimi.dsi.fastutil", "com.elikill58.deps.fastutil")
     minimize {
         include(dependency("it.unimi.dsi:fastutil:.*"))
+        include(dependency("org.yaml:snakeyaml:.*"))
     }
     
     mergeServiceFiles()

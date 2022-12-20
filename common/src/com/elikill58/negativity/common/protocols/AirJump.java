@@ -5,6 +5,7 @@ import static com.elikill58.negativity.universal.detections.keys.CheatKeys.AIR_J
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -39,8 +40,9 @@ public class AirJump extends Cheat {
 				locDownDown = locDown.clone().sub(0, 1, 0);
 		if (locDown.getBlockChecker(1).hasOther("AIR"))
 			return;
-		String idDown = locDown.getBlock().getType().getId(), idDownDown = locDownDown.getBlock().getType().getId();
-		if (idDownDown.contains("STAIR") || idDown.contains("STAIR"))
+		Material mDown = locDown.getBlock().getType();
+		String idDown = mDown.getId(), idDownDown = locDownDown.getBlock().getType().getId();
+		if (idDownDown.contains("STAIR") || idDown.contains("STAIR") || mDown.isSolid())
 			return;
 
 		Scheduler.getInstance().runDelayed(() -> {

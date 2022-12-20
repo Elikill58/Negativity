@@ -46,6 +46,9 @@ import com.elikill58.negativity.universal.playerModifications.PlayerModification
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+
 public class NegativityPlayer {
 
 	private static final Map<UUID, NegativityPlayer> PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
@@ -58,7 +61,7 @@ public class NegativityPlayer {
 	public HashMap<String, String> mods = new HashMap<>();
 	
 	// packets
-	public ConcurrentHashMap<PacketType, Integer> packets = new ConcurrentHashMap<>();
+	public Object2IntMap<PacketType> packets = new Object2IntArrayMap<>();
 	public int allPackets = 0, lastClick = 0;
 	
 	// setBack

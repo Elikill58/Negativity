@@ -97,6 +97,8 @@ subprojects {
     if (project.name != "common") {
         tasks.withType(ShadowJar).configureEach {
             dependencies {
+                exclude(dependency("com.viaversion:opennbt:.*"))
+                exclude(dependency("org.yaml:snakeyaml:.*"))
                 exclude(dependency("it.unimi.dsi:fastutil:.*"))
             }
         }

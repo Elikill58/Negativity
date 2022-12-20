@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.universal.Version;
 import com.github.steveice10.opennbt.NBTIO;
+import com.github.steveice10.opennbt.tag.TagRegistry;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.limiter.TagLimiter;
 
@@ -21,11 +22,18 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.buffer.UnpooledHeapByteBuf;
 import io.netty.handler.codec.DecoderException;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 public class PacketSerializer extends UnpooledHeapByteBuf {
 
 	private static final int CONTINUE_BIT = 0x80;
 	private static final int VALUE_BITS = 0x7F;
+	
+	static {
+		// Sanitize result: this is only to pre-load some class of OpenNBT
+		TagRegistry.getClassFor(0);
+		new Object2IntOpenHashMap<Object>();
+	}
 
 	private final Player player;
 
@@ -185,12 +193,10 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 		try {
 			int readerIndex = readerIndex();
 			byte b = readByte();
-			if (b == 0) {
+			if (b == 0)
 				return null;
-			} else {
-				readerIndex(readerIndex);
-				return NBTIO.readTag((DataInput) new ByteBufInputStream(this), TagLimiter.create(2097152, 512));
-			}
+			readerIndex(readerIndex);
+			return NBTIO.readTag((DataInput) new ByteBufInputStream(this), TagLimiter.create(2097152, 512));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

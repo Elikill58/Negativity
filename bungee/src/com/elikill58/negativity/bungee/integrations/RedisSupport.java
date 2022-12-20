@@ -52,7 +52,7 @@ public class RedisSupport implements Listener, MultiProxy {
 	}
 
 	public static Player tryGetPlayer(UUID uuid) {
-		if(uuid == null)
+		if(uuid == null || !RedisBungee.getApi().isPlayerOnline(uuid)) // player not online
 			return null;
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
 	}

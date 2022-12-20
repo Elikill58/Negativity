@@ -1,5 +1,6 @@
 package com.elikill58.negativity.bungee.impl.entity;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 
@@ -7,6 +8,9 @@ import com.elikill58.negativity.api.entity.AbstractProxyPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
 import com.imaginarycode.minecraft.redisbungee.RedisBungee;
+
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 
 public class RedisBungeePlayer extends AbstractProxyPlayer {
 
@@ -23,7 +27,8 @@ public class RedisBungeePlayer extends AbstractProxyPlayer {
 	
 	@Override
 	public String getIP() {
-		return RedisBungee.getApi().getPlayerIp(uuid).getHostAddress();
+		InetAddress addr = RedisBungee.getApi().getPlayerIp(uuid);
+		return addr == null ? null : addr.getHostAddress();
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class RedisBungeePlayer extends AbstractProxyPlayer {
 	
 	@Override
 	public int getProtocolVersion() {
-		return 0;
+		return getPlayerVersion().getFirstProtocolNumber();
 	}
 
 	@Override
@@ -58,7 +63,7 @@ public class RedisBungeePlayer extends AbstractProxyPlayer {
 
 	@Override
 	public Object getDefault() {
-		return null;
+		return ProxyServer.getInstance().getPlayer(uuid);
 	}
 
 	@Override
@@ -93,7 +98,8 @@ public class RedisBungeePlayer extends AbstractProxyPlayer {
 	
 	@Override
 	public String getServerName() {
-		return RedisBungee.getApi().getServerFor(uuid).getName();
+		ServerInfo si = RedisBungee.getApi().getServerFor(uuid);
+		return si == null ? null : si.getName();
 	}
 	
 	@Override

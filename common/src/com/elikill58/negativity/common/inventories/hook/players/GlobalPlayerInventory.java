@@ -78,7 +78,8 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		}
 		
 		inv.set(34, ItemBuilder.Builder(Materials.APPLE).displayName(getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
-		inv.set(35, ItemBuilder.Builder(Materials.BEACON).displayName(getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
+		if(WarnManager.warnActive)
+			inv.set(35, ItemBuilder.Builder(Materials.BEACON).displayName(getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
 		p.openInventory(inv);
 	}
 
@@ -178,9 +179,8 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if(m.equals(Materials.BONE)) {
 			np.lastClick = 0;
 			np.clearClick();
-			NegativityAccount acc = np.getAccount();
-			acc.setMostClicksPerSecond(0);
-			Adapter.getAdapter().getAccountManager().update(acc);
+			np.getAccount().setMostClicksPerSecond(0);
+			Adapter.getAdapter().getAccountManager().save(np.getUUID());
 		}
 	}
 }

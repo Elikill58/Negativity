@@ -107,7 +107,7 @@ public class Speed extends Cheat implements Listeners {
 		} else {
 			if (p.hasPotionEffect(PotionEffectType.SPEED))
 				moveFactor *= data.getSpeedModifier();
-			return;
+			//return;
 		}
 
 		double predicted = deltaXZ * friction;

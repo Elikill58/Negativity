@@ -69,7 +69,7 @@ public class LocationUtils {
 	 * (1 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param ms Material's name that we are searchingWarn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
+	 * @param ms Material's name that we are searching. Warn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated

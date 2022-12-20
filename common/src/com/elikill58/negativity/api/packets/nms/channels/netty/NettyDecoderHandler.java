@@ -35,19 +35,20 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
-		if (obj instanceof ByteBuf) {
-			ByteBuf msg = ((ByteBuf) obj).copy();
-			NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
-			if (packet == null) {
-				super.channelRead(ctx, obj);
-				return;
+		try {
+			if (obj instanceof ByteBuf) {
+				ByteBuf msg = ((ByteBuf) obj).copy();
+				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
+				if(packet != null) {
+					PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+					EventManager.callEvent(event);
+					if (event.isCancelled())
+						return;
+				}
 			}
-			PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
-			EventManager.callEvent(event);
-			if (!event.isCancelled()) {
-				super.channelRead(ctx, obj);
-			}
-		} else
-			super.channelRead(ctx, obj);
+		} catch (Exception e) { // manage error myself to let everything continue
+			NettyHandlerCommon.manageError(ctx, e, "internal receiving");
+		}
+		super.channelRead(ctx, obj);
 	}
 }

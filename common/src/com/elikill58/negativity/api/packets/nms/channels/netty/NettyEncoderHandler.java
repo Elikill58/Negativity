@@ -51,7 +51,7 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 					}
 				});
 			}
-		} catch (Exception e) { // manage error myself to let everything continue
+		} catch (Throwable e) { // manage error myself to let everything continue
 			NettyHandlerCommon.manageError(ctx, e, "internal sending");
 		}
 		super.write(ctx, obj, promise); // let server manage it

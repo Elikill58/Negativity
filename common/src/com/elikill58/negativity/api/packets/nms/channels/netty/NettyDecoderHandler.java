@@ -46,7 +46,7 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 						return;
 				}
 			}
-		} catch (Exception e) { // manage error myself to let everything continue
+		} catch (Throwable e) { // manage error myself to let everything continue
 			NettyHandlerCommon.manageError(ctx, e, "internal receiving");
 		}
 		super.channelRead(ctx, obj);

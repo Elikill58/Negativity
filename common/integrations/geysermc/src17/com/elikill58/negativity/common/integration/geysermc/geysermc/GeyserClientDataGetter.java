@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.geysermc.geysermc;
+package com.elikill58.negativity.common.integration.geysermc.geysermc;
 
 import java.util.UUID;
 

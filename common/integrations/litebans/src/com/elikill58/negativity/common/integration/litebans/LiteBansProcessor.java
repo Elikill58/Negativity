@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.litebans;
+package com.elikill58.negativity.common.integration.litebans;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

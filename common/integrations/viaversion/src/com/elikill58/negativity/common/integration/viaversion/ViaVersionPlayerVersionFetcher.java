@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.viaversion;
+package com.elikill58.negativity.common.integration.viaversion;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;

@@ -50,6 +50,10 @@ public abstract class NettyPacketListener {
 				NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
 				return;
 			}
+		} else if(version.equals(Version.HIGHER) || version.equals(Version.LOWER)) {
+			Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " seems to login with unknow version, protocol: " + PlayerVersionManager.getPlayerProtocolVersion(p));
+			NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
+			return;
 		}
 		Channel channel = getChannel(p);
 		checked.add(channel);

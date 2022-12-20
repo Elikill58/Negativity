@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.geysermc.geysermc;
+package com.elikill58.negativity.common.integration.geysermc.geysermc;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
@@ -11,7 +11,7 @@ public class GeyserClientDataProvider implements BedrockClientDataProvider, Plug
 	public BedrockClientDataGetter create(Adapter adapter) {
 		try {
 			Class<?> processorClass = getClass().getClassLoader()
-					.loadClass("com.elikill58.negativity.integration.geysermc.geysermc.GeyserClientDataGetter");
+					.loadClass("com.elikill58.negativity.common.integration.geysermc.geysermc.GeyserClientDataGetter");
 			return (BedrockClientDataGetter) processorClass.getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

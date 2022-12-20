@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.advancedban;
+package com.elikill58.negativity.common.integration.advancedban;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.integration.professionalbans;
+package com.elikill58.negativity.common.integration.professionalbans;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

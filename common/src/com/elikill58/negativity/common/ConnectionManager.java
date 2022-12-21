@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.ban.AltAccountBan;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanStatus;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.ChatUtils;
@@ -40,7 +41,7 @@ public class ConnectionManager implements Listeners {
 		if(!Adapter.getAdapter().getPlatformID().isProxy())
 			np.delta = np.lastDelta = p.getLocation().clone();
 		np.timeInvincibility = System.currentTimeMillis() + 8000;
-		Adapter.getAdapter().debug("Player " + p.getName() + " just connect using protocol " + p.getProtocolVersion() + " (version: " + p.getPlayerVersion().getName() + "). EntityId: " + p.getEntityId());
+		Adapter.getAdapter().debug(Debug.GENERAL, "Player " + p.getName() + " just connect using protocol " + p.getProtocolVersion() + " (version: " + p.getPlayerVersion().getName() + "). EntityId: " + p.getEntityId());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		

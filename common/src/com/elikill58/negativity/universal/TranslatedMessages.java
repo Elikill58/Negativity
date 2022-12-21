@@ -125,7 +125,7 @@ public class TranslatedMessages {
 			String fallbackMessage = fallbackTranslationProvider.get(key, placeholders);
 			if (fallbackMessage != null) {
 				if(fallbackMessage.contains("%prefix%")) { // contains prefix
-					String prefix = provider.get("prefix");
+					String prefix = (provider == null ? fallbackTranslationProvider : provider).get("prefix");
 					if(prefix == null || prefix.isEmpty())
 						prefix = DEFAULT_PREFIX;
 					return fallbackMessage.replace("%prefix%", prefix);

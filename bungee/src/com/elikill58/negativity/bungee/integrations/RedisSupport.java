@@ -10,6 +10,7 @@ import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.entity.RedisBungeePlayer;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.multiproxy.MultiProxy;
 import com.elikill58.negativity.universal.multiproxy.MultiProxyManager;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -74,7 +75,7 @@ public class RedisSupport implements Listener, MultiProxy {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
 				UUID uuid = redisMsg.getUUID();
 				if (ProxyServer.getInstance().getPlayer(uuid) != null) {
-					Adapter.getAdapter().debug("Received redis from " + redisMsg.getProxyId() + " (" + redisMsg.getUUID().toString() + "), sending alert...");
+					Adapter.getAdapter().debug(Debug.GENERAL, "Received redis from " + redisMsg.getProxyId() + " (" + redisMsg.getUUID().toString() + "), sending alert...");
 					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(ProxyServer.getInstance().getPlayer(uuid))).getPlayer();
 					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage()));
 				}

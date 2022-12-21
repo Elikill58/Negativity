@@ -27,6 +27,7 @@ import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
 import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
@@ -62,7 +63,7 @@ public class BanManager {
 	public static Ban getActiveBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find ban processor while trying to get active ban from " + playerId);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find ban processor while trying to get active ban from " + playerId);
 			return null;
 		}
 
@@ -81,7 +82,7 @@ public class BanManager {
 	public static BanResult executeBan(Ban ban) {
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find ban processor while trying to execute ban from " + ban.getPlayerId());
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find ban processor while trying to execute ban from " + ban.getPlayerId());
 			return new BanResult(BanResultType.UNKNOW_PROCESSOR, null);
 		}
 
@@ -106,7 +107,7 @@ public class BanManager {
 	public static BanResult revokeBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find ban processor while trying to revoke ban from " + playerId);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find ban processor while trying to revoke ban from " + playerId);
 			return null;
 		}
 
@@ -124,7 +125,7 @@ public class BanManager {
 	public static List<Ban> getActiveBanOnSameIP(String ip){
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find ban processor while trying to get active ban on IP " + ip);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find ban processor while trying to get active ban on IP " + ip);
 			return null;
 		}
 

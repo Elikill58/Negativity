@@ -25,6 +25,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -54,17 +55,17 @@ public class Reach extends Cheat {
 				return;
 			Entity cible = p.getWorld().getEntityById(useEntity.entityId).orElse(null);
 			if (cible == null) {
-				Adapter.getAdapter().debug("Failed to find entity with ID " + useEntity.entityId + ", all: " + p.getWorld().getEntities());
+				Adapter.getAdapter().debug(Debug.CHECK, "Failed to find entity with ID " + useEntity.entityId + ", all: " + p.getWorld().getEntities());
 				return;
 			}
 			Location cibleLocation = cible.getLocation();
-			Adapter.getAdapter().debug("Select entity with ID " + useEntity.entityId + ", type: " + cible.getType());
+			Adapter.getAdapter().debug(Debug.CHECK, "Select entity with ID " + useEntity.entityId + ", type: " + cible.getType());
 			Location loc = p.getLocation();
-			Adapter.getAdapter().debug("Positions: " + cibleLocation + ", locs: " + loc);
+			Adapter.getAdapter().debug(Debug.CHECK, "Positions: " + cibleLocation + ", locs: " + loc);
 			double dis = getDistance(loc, cibleLocation);
 			//p.sendMessage(ChatColor.color("&7Reach: " + getColoredDistance(dis) + "&7, basic: " + getColoredDistance(getDistanceBasic(p, cible)) + "&7, head: " + getColoredDistance(getDistanceHead(p, cible)) + "&7, nearest: " + getColoredDistance(getDistanceNearest(p, cible))));
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			Adapter.getAdapter().debug("Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
+			Adapter.getAdapter().debug(Debug.CHECK, "Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
 			double max = getConfig().getDouble("checks.reach-event.value", 3.2) + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
 			if (dis > max) {
 				if (Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dis - max) * 90), "reach-event",

@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Tuple;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.webhooks.Webhook;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook.DiscordWebhookRequest.EmbedObject;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
@@ -150,7 +151,7 @@ public class DiscordWebhook implements Webhook {
 			return;
 		Adapter ada = Adapter.getAdapter();
 		if (!confMsg.getBoolean("enabled", true)) {
-			ada.debug("Webhook for " + msg.getMessageType().name() + " is not enabled.");
+			ada.debug(Debug.FEATURE, "Webhook for " + msg.getMessageType().name() + " is not enabled.");
 			return;
 		}
 		// if offline, don't care about cooldown
@@ -158,12 +159,12 @@ public class DiscordWebhook implements Webhook {
 				|| (msg.getConcerned().isOnline() && hasCooldown(msg.getConcerned(), msg.getMessageType()))) {
 			// should skip
 			queue.add(msg);
-			ada.debug("Skipping " + msg.getMessageType().name() + ": "
+			ada.debug(Debug.FEATURE, "Skipping " + msg.getMessageType().name() + ": "
 					+ (time > System.currentTimeMillis() ? "waiting for discord"
 							: "player cooldown: " + getCooldown(msg.getConcerned(), msg.getMessageType())));
 			return;
 		}
-		ada.debug("Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": "
+		ada.debug(Debug.FEATURE, "Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": "
 				+ getCooldown(msg.getConcerned(), msg.getMessageType()));
 		setCooldown(msg.getConcerned(), msg.getMessageType());
 		DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
@@ -211,11 +212,10 @@ public class DiscordWebhook implements Webhook {
 			}
 
 			webhook.addEmbed(obj);
-			ada.debug("Added embed");
-		} else
-			ada.debug("No embed to add.");
+			ada.debug(Debug.FEATURE, "Added embed");
+		}
 		Tuple<Integer, String> webhookResult = webhook.execute();
-		ada.debug("Webhook result: " + webhookResult.toString());
+		ada.debug(Debug.FEATURE, "Webhook result: " + webhookResult.toString());
 		int code = webhookResult.getA();
 		if (code < 200 || code >= 300) {
 			if (code == 429) { // good config and error while sending

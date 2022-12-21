@@ -32,6 +32,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -104,7 +105,7 @@ public class Scaffold extends Cheat {
 		BlockRay blockRay = new BlockRayBuilder(p).neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList()))
 				.maxDistance(6).build();
 		if(blockRay.getBasePosition().getYaw() > 1000) {
-			Adapter.getAdapter().debug("Cancel yaw: " + blockRay.getBasePosition().getYaw());
+			Adapter.getAdapter().debug(Debug.CHECK, "Cancel yaw: " + blockRay.getBasePosition().getYaw());
 			return; // invalid yaw
 		}
 		Adapter.getAdapter().runSync(() -> {

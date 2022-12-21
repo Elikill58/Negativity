@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.maths.Point;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class BoundingBox {
 
@@ -259,15 +260,15 @@ public class BoundingBox {
 			} else {
 				// now check if it's too far
 				if(shouldBeStopped(bb.x, far.x, current.x)) { // check x
-					Adapter.getAdapter().debug("Return far for x");
+					Adapter.getAdapter().debug(Debug.GENERAL, "Return far for x");
 					return null;
 				}
 				if(shouldBeStopped(bb.y, far.y, current.y)) { // check y
-					Adapter.getAdapter().debug("Return far for y");
+					Adapter.getAdapter().debug(Debug.GENERAL, "Return far for y");
 					return null;
 				}
 				if(shouldBeStopped(bb.z, far.z, current.z)) { // check z
-					Adapter.getAdapter().debug("Return far for z");
+					Adapter.getAdapter().debug(Debug.GENERAL, "Return far for z");
 					return null;
 				}
 				
@@ -275,8 +276,8 @@ public class BoundingBox {
 			cal--;
 			if(cal <= 0) {
 				// prevent stack overflow
-				Adapter.getAdapter().debug("Overflow ! Stopping for " + toString() + ", point: " + bb.toShowableString() + ", dir: " + baseDir.toString());
-				Adapter.getAdapter().debug("Current: " + current.toString() + ", dir: " + dir.toString());
+				Adapter.getAdapter().debug(Debug.GENERAL, "Overflow ! Stopping for " + toString() + ", point: " + bb.toShowableString() + ", dir: " + baseDir.toString());
+				Adapter.getAdapter().debug(Debug.GENERAL, "Current: " + current.toString() + ", dir: " + dir.toString());
 				return null;
 			}
 		}

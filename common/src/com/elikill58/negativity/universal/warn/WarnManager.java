@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.warn.WarnResult.WarnResultType;
 import com.elikill58.negativity.universal.warn.processor.WarnProcessor;
@@ -48,7 +49,7 @@ public class WarnManager {
 	public static List<Warn> getWarn(UUID playerId) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find warn processor while trying to get active warn from " + playerId);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find warn processor while trying to get active warn from " + playerId);
 			return new ArrayList<>();
 		}
 
@@ -58,7 +59,7 @@ public class WarnManager {
 	public static List<Warn> getActiveWarn(UUID playerId) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find warn processor while trying to get active warn from " + playerId);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find warn processor while trying to get active warn from " + playerId);
 			return null;
 		}
 
@@ -77,7 +78,7 @@ public class WarnManager {
 	public static WarnResult executeWarn(Warn warn) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find processor while trying to execute warn from " + warn.getPlayerId());
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find processor while trying to execute warn from " + warn.getPlayerId());
 			return new WarnResult(WarnResultType.UNKNOW_PROCESSOR);
 		}
 
@@ -101,7 +102,7 @@ public class WarnManager {
 	public static WarnResult revokeWarn(UUID playerId, String revoker) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find processor while trying to revoke warn from " + playerId);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find processor while trying to revoke warn from " + playerId);
 			return new WarnResult(WarnResultType.UNKNOW_PROCESSOR);
 		}
 
@@ -121,7 +122,7 @@ public class WarnManager {
 	public static WarnResult revokeWarn(Warn w, String revoker) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find processor while trying to revoke warn " + w);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find processor while trying to revoke warn " + w);
 			return new WarnResult(WarnResultType.UNKNOW_PROCESSOR);
 		}
 
@@ -139,7 +140,7 @@ public class WarnManager {
 	public static List<Warn> getActiveWarnOnSameIP(String ip){
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find processor while trying to get active warn on IP " + ip);
+			Adapter.getAdapter().debug(Debug.FEATURE, "Cannot find processor while trying to get active warn on IP " + ip);
 			return Collections.emptyList();
 		}
 

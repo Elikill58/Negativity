@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.packets.PacketType.Handshake;
 import com.elikill58.negativity.api.packets.nms.versions.PreFlattening;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -169,7 +170,7 @@ public abstract class NamedVersion {
 		PacketType type = packetTypes.get(packetId);
 		if (type != null)
 			return type.createNewPacket();
-		Adapter.getAdapter().debug("Failed to find packetId " + packetId + " for " + dir.name() + " (registered: " + packetTypes.size() + ")");
+		Adapter.getAdapter().debug(Debug.BEHAVIOR, "Failed to find packetId " + packetId + " for " + dir.name() + " (registered: " + packetTypes.size() + ")");
 		return dir.createUnsetPacket("ID:" + packetId);
 	}
 
@@ -182,7 +183,7 @@ public abstract class NamedVersion {
 	 */
 	public @NonNull EntityType getEntityType(int id) {
 		if (!entityTypes.containsKey(id))
-			Adapter.getAdapter().debug("Can't find entity type with id " + id);
+			Adapter.getAdapter().debug(Debug.BEHAVIOR, "Can't find entity type with id " + id);
 		return entityTypes.getOrDefault(id, EntityType.UNKNOWN);
 	}
 
@@ -196,7 +197,7 @@ public abstract class NamedVersion {
 	 */
 	public Material getMaterial(int id) {
 		if (!materials.containsKey(id))
-			Adapter.getAdapter().debug("Can't find material with id " + id);
+			Adapter.getAdapter().debug(Debug.BEHAVIOR, "Can't find material with id " + id);
 		return materials.getOrDefault(id, Materials.AIR);
 	}
 

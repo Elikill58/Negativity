@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.logger.Debug;
 
 import io.netty.buffer.ByteBuf;
 
@@ -67,7 +68,7 @@ public abstract class VersionAdapter<R> {
 			f.setAccessible(true);
 			return (T) f.get(obj);
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find field " + name + " in class " + obj.getClass().getSimpleName());
+			Adapter.getAdapter().debug(Debug.GENERAL, "Failed to find field " + name + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +82,7 @@ public abstract class VersionAdapter<R> {
 			f.setAccessible(true);
 			return (T) f.invoke(obj);
 		} catch (NoSuchMethodException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find method " + methodName + " in class " + obj.getClass().getSimpleName());
+			Adapter.getAdapter().debug(Debug.GENERAL, "Failed to find method " + methodName + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();

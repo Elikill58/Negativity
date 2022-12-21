@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -110,7 +111,7 @@ public class Chat extends Cheat {
 			if (Character.isUpperCase(msg.charAt(i)))
 				upperCase++;
 		double percent = upperCase / msg.length() * 100.0D;
-		Adapter.getAdapter().debug("Message: " + msg + ", upper: " + upperCase + ", percent: " + percent);
+		Adapter.getAdapter().debug(Debug.CHECK, "Message: " + msg + ", upper: " + upperCase + ", percent: " + percent);
 		if(percent >= getConfig().getDouble("checks.caps.percent", 70)) {
 			if(Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, (int) percent, "caps", "Message: " + msg + ", percent: " + percent, new CheatHover.Literal("Caps message: " + msg + " (" + String.format("%.2f", percent) + "% caps)"), (long) (upperCase - 5)) && isSetBack()) {
 				e.setCancelled(true);

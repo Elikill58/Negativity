@@ -14,6 +14,7 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -49,7 +50,6 @@ public class ProxyEventsManager implements Listeners {
 			for (Player mod : ada.getOnlinePlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(mod);
 				if (Perm.hasPerm(mod, Perm.SHOW_ALERT) && nPlayer.getAccount().isShowAlert()) {
-					ada.debug("Sending alert to " + mod.getName());
 					String msg = Messages.getMessage(mod, alertMessageKey, place);
 					String hover = Messages.getMessage(mod, "alert_hover", place);
 					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
@@ -60,8 +60,7 @@ public class ProxyEventsManager implements Listeners {
 					hover += "\n\n";
 					hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
 					ada.sendMessageRunnableHover(mod, msg, hover, "/negativitytp " + p.getName());
-				} else
-					ada.debug("Player " + mod.getName() + ", show: " + nPlayer.getAccount().isShowAlert());
+				}
 			}
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
@@ -96,7 +95,7 @@ public class ProxyEventsManager implements Listeners {
 			ShowAlertStatusMessage msg = (ShowAlertStatusMessage) message;
 			NegativityAccount.get(msg.getUUID()).setShowAlert(msg.isShowAlert());
 		} else if (message instanceof ProxyPingMessage) {
-			Adapter.getAdapter().debug("Received proxy ping from " + p.getName() + ": " + p.getServerName());
+			Adapter.getAdapter().debug(Debug.GENERAL, "Received proxy ping from " + p.getName() + ": " + p.getServerName());
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID,
 					new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, ada.getAllPlugins()));
 		} else

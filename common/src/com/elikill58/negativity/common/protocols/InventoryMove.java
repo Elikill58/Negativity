@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -35,7 +36,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		// if in water
 		if (LocationUtils.isInWater(p.getLocation()) || p.getVelocity().length() > 0.1) {
-			Adapter.getAdapter().debug("Velocity length: " + p.getVelocity().length());
+			Adapter.getAdapter().debug(Debug.CHECK, "Velocity length: " + p.getVelocity().length());
 			return;
 		}
 		/*if (p.hasOpenInventory()) {
@@ -56,7 +57,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		if(distance >= data.distance && distance >= p.getWalkSpeed() && p.getFallDistance() < 0.5) // fall "allow" to make the distance goes brr
 			amount += (data.distanceXZ - distanceXZ) + 1 - p.getFallDistance();
 		if(data.timeSinceOpen > 2)
-			Adapter.getAdapter().debug("Time: " + data.timeSinceOpen + ", amount: " + amount);
+			Adapter.getAdapter().debug(Debug.CHECK, "Time: " + data.timeSinceOpen + ", amount: " + amount);
 		if (data.timeSinceOpen >= 3 && amount > 2) {
 			Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(80 + data.timeSinceOpen), "stay-distance",

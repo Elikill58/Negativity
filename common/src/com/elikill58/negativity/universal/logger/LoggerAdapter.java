@@ -9,4 +9,8 @@ public interface LoggerAdapter {
 	void error(String msg);
 	
 	void printError(String message, Exception e);
+	
+	default void debug(String msg) {
+		info("[Debug] " + msg);
+	}
 }

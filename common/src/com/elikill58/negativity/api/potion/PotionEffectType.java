@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public enum PotionEffectType {
 
@@ -100,7 +101,7 @@ public enum PotionEffectType {
 		for(PotionEffectType type : values())
 			if(type.id.equalsIgnoreCase(name) || type.name().equalsIgnoreCase(name) || type.getAlias().contains(name.toUpperCase(Locale.ROOT)))
 				return type;
-		Adapter.getAdapter().debug("[PotionEffectType] Cannot found effect " + name + " !");
+		Adapter.getAdapter().debug(Debug.GENERAL, "[PotionEffectType] Cannot found effect " + name + " !");
 		return UNKNOW;
 	}
 }

@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomP
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -58,7 +59,7 @@ public class GameEventsManager implements Listeners {
 	public void onChannelMessage(GameChannelNegativityMessageEvent e) {
 		Player p = e.getPlayer();
 		NegativityMessage message = e.getMessage();
-		Adapter.getAdapter().debug("Message: " + (message == null ? null : message.messageId() + ": " + message.getClass().getSimpleName()));
+		Adapter.getAdapter().debug(Debug.GENERAL, "Message: " + (message == null ? null : message.messageId() + ": " + message.getClass().getSimpleName()));
 		if (message instanceof ProxyPingMessage) {
 			ProxyPingMessage pingMessage = (ProxyPingMessage) message;
 			ProxyCompanionManager.foundCompanion(pingMessage);

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -20,6 +21,7 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
@@ -41,6 +43,8 @@ public abstract class Adapter {
 	public static Adapter getAdapter() {
 		return adapter;
 	}
+	
+	private List<Debug> allowedDebugs;
 	
 	/**
 	 * Get the platform
@@ -84,10 +88,51 @@ public abstract class Adapter {
 	 * 
 	 * @param msg the message to log
 	 */
+	@Deprecated
 	public void debug(String msg) {
-		if (getConfig().getBoolean("debug", false))
-			getLogger().info("[Debug] " + msg);
+		debug(Debug.ALL, msg);
 	}
+
+	/**
+	 * Log this message if debug is enabled
+	 * 
+	 * @param type the type of debug
+	 * @param msg the message to log
+	 */
+	public void debug(Debug type, String msg) {
+		if(allowedDebugs != null) {
+			if(allowedDebugs.contains(type))
+				getLogger().debug(msg);
+			return;
+		}
+		allowedDebugs = new ArrayList<>();
+		if(getConfig().contains("debug")) {
+			Object obj = getConfig().get("debug");
+			if(obj instanceof Boolean && ((Boolean) obj).booleanValue()) {
+				allowedDebugs.add(Debug.ALL);
+			} else if(obj instanceof List) {
+				for(Object tmp : (List<Object>) obj) {
+					for(Debug all : Debug.values()) {
+						if(tmp.toString().equalsIgnoreCase(all.name())) {
+							allowedDebugs.add(all);
+						}
+					}
+				}
+			} else {
+				String val = obj.toString();
+				if(val.equalsIgnoreCase("true"))
+					allowedDebugs.add(Debug.ALL);
+				else {
+					for(Debug all : Debug.values()) {
+						if(val.equalsIgnoreCase(all.name())) {
+							allowedDebugs.add(all);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	
 	/**

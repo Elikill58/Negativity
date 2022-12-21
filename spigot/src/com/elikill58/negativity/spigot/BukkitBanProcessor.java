@@ -39,10 +39,8 @@ public class BukkitBanProcessor implements BanProcessor {
 		Date expirationDate = ban.isDefinitive() ? null : Date.from(Instant.ofEpochMilli(ban.getExpirationTime()));
 		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME)
 				.addBan(player.getName(), ban.getReason(), expirationDate, ban.getBannedBy());
-		if (banEntry == null) {
-			Adapter.getAdapter().debug("[BukkitProcessor] Cannot find BanEntry " + ban.getPlayerId());
+		if (banEntry == null)
 			return null;
-		}
 		BanUtils.kickForBan(player, ban);
 
 		return new BanResult(BanResultType.DONE, ban);

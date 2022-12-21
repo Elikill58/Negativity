@@ -12,6 +12,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -32,7 +33,7 @@ public class FastPlace extends Cheat implements Listeners {
 			return;
 		long actual = System.currentTimeMillis();
 		long diff = actual - data.lastTime;
-		if (diff < 50) {
+		if (diff < 50) { // TODO check according to ticks
 			if (++data.buffer > 2) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1/data.buffer)), "time", "Diff: " + diff + ", " + data.buffer);
 				if (isSetBack() && mayCancel)
@@ -42,7 +43,7 @@ public class FastPlace extends Cheat implements Listeners {
 			data.buffer = 0;
 		else
 			data.reduce();
-		Adapter.getAdapter().debug("Diff: " + diff + ", buffer: " + data.buffer);
+		Adapter.getAdapter().debug(Debug.CHECK, "Diff: " + diff + ", buffer: " + data.buffer);
 		data.lastTime = actual;
 	}
 }

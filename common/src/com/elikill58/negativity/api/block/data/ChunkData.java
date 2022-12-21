@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class ChunkData {
 
@@ -60,7 +61,7 @@ public class ChunkData {
 			try {
 				/* Object nbt = */serializer.readNBTTag();
 			} catch (Exception e) {
-				Adapter.getAdapter().debug("Failed to read NBT: " + e.getMessage());
+				Adapter.getAdapter().debug(Debug.BEHAVIOR, "Failed to read NBT: " + e.getMessage());
 				return;
 			}
 			blockEntites.put(new BlockPosition((chunkX * 16) + ((xz >> 4) & 0xF), y, (chunkZ * 16) + (xz & 0xF)), version.getNamedVersion().getMaterialForEntityBlock(blockType));

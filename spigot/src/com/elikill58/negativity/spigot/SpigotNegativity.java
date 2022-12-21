@@ -30,6 +30,7 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.database.Database;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -104,7 +105,7 @@ public class SpigotNegativity extends JavaPlugin {
 					Negativity.tpsDrop = false;
 				} else if (!Negativity.tpsDrop && i > 50) { // if not disabled but need to be
 					Negativity.tpsDrop = true;
-					Adapter.getAdapter().debug("Disabling detection because of TPS lagspike: " + i);
+					Adapter.getAdapter().debug(Debug.GENERAL, "Disabling detection because of TPS lagspike: " + i);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

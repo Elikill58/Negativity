@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
@@ -49,7 +50,7 @@ public class ProxyCompanionManager {
 	public static void sendProxyPing(Player p) {
 		searchedCompanion = true;
 		try {
-			Adapter.getAdapter().debug("Sending ping message...");
+			Adapter.getAdapter().debug(Debug.GENERAL, "Sending ping message...");
 			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION));
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, pingMessage);
 		} catch (IOException exc) {

@@ -20,6 +20,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -56,7 +57,7 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 				setState(amountInvalid > 0 ? RiseCheckState.SLOT_CHANGE_INVALID : RiseCheckState.SLOT_CHANGE_VALID);
 			} else
 				setState(RiseCheckState.SLOT_CHANGE_BASIC);
-			Adapter.getAdapter().debug("Slots: " + held.slot + ", possible: " + possibleSlot + ", old: " + inv.getHeldItemSlot() + ", invalid: " + amountInvalid + ", times v/inv: " + (System.currentTimeMillis() - lastValid) + "/" + (System.currentTimeMillis() - lastInvalid));
+			Adapter.getAdapter().debug(Debug.CHECK, "Slots: " + held.slot + ", possible: " + possibleSlot + ", old: " + inv.getHeldItemSlot() + ", invalid: " + amountInvalid + ", times v/inv: " + (System.currentTimeMillis() - lastValid) + "/" + (System.currentTimeMillis() - lastInvalid));
 
 			if(!proofs.isEmpty()) {
 				String last = proofs.get(proofs.size() - 1);
@@ -100,11 +101,11 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			} else {
 				lastValid = System.currentTimeMillis();
 				if(state == RiseCheckState.SLOT_CHANGE_INVALID) {
-					Adapter.getAdapter().debug("CHEAT !!! " + amountInvalid + " / " + amount + sloc);
+					Adapter.getAdapter().debug(Debug.CHECK, "CHEAT !!! " + amountInvalid + " / " + amount + sloc);
 					proofs.add(System.currentTimeMillis() + ": Cheat ! Is that clear now ? " + sloc);
 				} else if(state == RiseCheckState.INVALID) {
 					proofs.add(System.currentTimeMillis() + ": Now valid, before wasn't: " + amountInvalid + sloc);
-					Adapter.getAdapter().debug("Now valid, before wasn't: " + amountInvalid + sloc);
+					Adapter.getAdapter().debug(Debug.CHECK, "Now valid, before wasn't: " + amountInvalid + sloc);
 					amountInvalid = 0;
 				}
 				setState(RiseCheckState.VALID);
@@ -117,14 +118,14 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 				if(amountInvalid > 40 && speed >= p.getWalkSpeed()) // if lot of invalid changes and go fast
 					Negativity.alertMod(ReportType.WARNING, p, c, UniversalUtils.parseInPorcent(amountInvalid), "rise-slot", proofs.toString(), new CheatHover.Literal("Pitch: " + lastFlying.pitch), amount);
 				else
-					Adapter.getAdapter().debug("Amount invalid: " + amountInvalid);
+					Adapter.getAdapter().debug(Debug.CHECK, "Amount invalid: " + amountInvalid);
 			}
 		}
 	}
 
 	private void setState(RiseCheckState state) {
 		if(this.state != state)
-			Adapter.getAdapter().debug("new state: " + state.name() + " (old: " + this.state.name() + ")");
+			Adapter.getAdapter().debug(Debug.CHECK, "new state: " + state.name() + " (old: " + this.state.name() + ")");
 		this.state = state;
 	}
 	

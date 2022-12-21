@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class ToolboxChecker extends Special implements Listeners {
 
@@ -29,7 +30,7 @@ public class ToolboxChecker extends Special implements Listeners {
 		if (data == null)
 			return; // not bedrock -> can't use toolbox
 		if (!data.getDeviceOs().isPhone()) {
-			Adapter.getAdapter().debug("Not phone");
+			Adapter.getAdapter().debug(Debug.CHECK, "Not phone");
 			return;
 		}
 		if (data.getDeviceModel() == null)
@@ -45,7 +46,7 @@ public class ToolboxChecker extends Special implements Listeners {
 			} else
 				Adapter.getAdapter().getLogger().info("Player " + p.getName() + " just joined with toolbox.");
 		} else
-			Adapter.getAdapter().debug("Not invalid name: " + modelName);
+			Adapter.getAdapter().debug(Debug.CHECK, "Not invalid name: " + modelName);
 	}
 
 	private boolean isForbiddenName(String modelName) {

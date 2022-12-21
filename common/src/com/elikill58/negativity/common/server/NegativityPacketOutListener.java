@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockCh
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class NegativityPacketOutListener implements Listeners {
 
@@ -31,7 +32,7 @@ public class NegativityPacketOutListener implements Listeners {
 			change.blockStates.forEach((pos, m) -> w.addTimingBlock(p.getPing(), m, pos.getX(), pos.getY(), pos.getZ()));
 		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
 			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
-			Adapter.getAdapter().debug("Channel: " + a.channel);
+			Adapter.getAdapter().debug(Debug.GENERAL, "Channel: " + a.channel);
 		}
 	}
 }

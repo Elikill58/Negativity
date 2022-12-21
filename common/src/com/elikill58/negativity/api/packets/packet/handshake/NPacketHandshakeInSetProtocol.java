@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.packets.nms.PacketSerializer;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class NPacketHandshakeInSetProtocol implements NPacketHandshake {
 
@@ -24,7 +25,7 @@ public class NPacketHandshakeInSetProtocol implements NPacketHandshake {
 		    this.port = serializer.readUnsignedShort();
 		    this.nextState = serializer.readVarInt();
 		} catch (Exception e) {
-			Adapter.getAdapter().debug("Wrong handshake read: " + e.getMessage());
+			Adapter.getAdapter().debug(Debug.FEATURE, "Wrong handshake read: " + e.getMessage());
 		}
 	}
 	

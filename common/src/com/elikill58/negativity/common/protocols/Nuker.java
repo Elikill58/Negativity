@@ -21,6 +21,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -46,7 +47,7 @@ public class Nuker extends Cheat {
 				double bestDistance = Double.MAX_VALUE;
 				for(Block targetBlock : target) {
 					if(!targetBlock.getLocation().getWorld().equals(blockLoc.getWorld())) {
-						Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
+						Adapter.getAdapter().debug(Debug.CHECK, "[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
 						break;
 					}
 					double distance = targetBlock.getLocation().distance(blockLoc);

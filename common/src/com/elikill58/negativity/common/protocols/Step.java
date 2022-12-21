@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -129,7 +130,7 @@ public class Step extends Cheat implements Listeners {
 									+ p.isOnGround() + ", vel: " + p.getVelocity(),
 							hoverMsg("main", "%block%", String.format("%.2f", max)), (long) ((total - min) * 10));
 				} else
-					Adapter.getAdapter().debug("[Step] Total: " + total + ", min/max: " + min + "/" + max + ", all: "
+					Adapter.getAdapter().debug(Debug.CHECK, "[Step] Total: " + total + ", min/max: " + min + "/" + max + ", all: "
 							+ data.oldY + ", ground: " + p.isOnGround() + ", vel: " + p.getVelocity());
 			}
 			data.oldY.clear();

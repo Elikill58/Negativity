@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class NegativityPacketInListener implements Listeners {
 
@@ -123,7 +124,7 @@ public class NegativityPacketInListener implements Listeners {
 			}
 		} else if(type.equals(PacketType.Client.CUSTOM_PAYLOAD)) {
 			NPacketPlayInCustomPayload a = (NPacketPlayInCustomPayload) packet;
-			Adapter.getAdapter().debug("Channel IN: " + a.channel);
+			Adapter.getAdapter().debug(Debug.GENERAL, "Channel IN: " + a.channel);
 		}
 	}
 }

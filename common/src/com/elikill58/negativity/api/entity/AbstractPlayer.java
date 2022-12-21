@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 public abstract class AbstractPlayer implements Player {
@@ -68,7 +69,7 @@ public abstract class AbstractPlayer implements Player {
 		BlockRay ray = new BlockRayBuilder(this).maxDistance(maxDistance).ignoreAir(true).build();
 		BlockRayResult result = ray.compile();
 		if(!result.getRayResult().isFounded()) {
-			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());
+			Adapter.getAdapter().debug(Debug.BEHAVIOR, "Begin: " + getLocation() + ", vec: " + ray.getVector().toString());
 			//Adapter.getAdapter().debug("Tested locs: " + result.getAllTestedLoc().toString());
 			return new ArrayList<>();
 		}

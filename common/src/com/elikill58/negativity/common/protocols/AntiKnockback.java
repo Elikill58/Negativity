@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -51,7 +52,7 @@ public class AntiKnockback extends Cheat {
 		Adapter ada = Adapter.getAdapter();
 		if (entId == -1 || velY == -1) {
 			if(entId == -1)
-				ada.debug("The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY
+				ada.debug(Debug.CHECK, "The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY
 					+ " for EntityVelocity.");
 			return;
 		}
@@ -80,7 +81,7 @@ public class AntiKnockback extends Cheat {
 		Adapter ada = Adapter.getAdapter();
 		// don't check if there is a ceiling or anything that could block from taking kb
 		if (hasAntiKbBypass(p)) {
-			ada.debug("AntiKb detection: " + p.getName() + " has bypass.");
+			ada.debug(Debug.CHECK, "AntiKb detection: " + p.getName() + " has bypass.");
 			return;
 		}
 
@@ -131,7 +132,7 @@ public class AntiKnockback extends Cheat {
 									+ percentage,
 								new CheatHover.Literal("Reached Y too different from predicted Y"));
 						} else
-							ada.debug("AntiKb detection: prediction: " + predictedY + ", percentage: " + percentage
+							ada.debug(Debug.CHECK, "AntiKb detection: prediction: " + predictedY + ", percentage: " + percentage
 								+ ", reachedY: " + reachedY);
 						task.cancel();
 					}

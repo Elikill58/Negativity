@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.block;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.item.Material;
@@ -24,6 +25,13 @@ public class BlockChecker {
 	
 	public List<Block> getBlocks() {
 		return blocks;
+	}
+
+	public boolean has(Predicate<Material> checker) {
+		for(Block b : blocks)
+			if(checker.test(b.getType()))
+				return true;
+		return false;
 	}
 
 	public boolean has(Material... types) {

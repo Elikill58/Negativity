@@ -18,7 +18,7 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 	private long nbConsole, nbAlert;
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String checkName, String proof, CheatHover hover, long nbAlert) {
-		this(type, p, c, reliability, hasRelia, ping, checkName, proof, hover, nbAlert, 1);
+		this(type, p, c, reliability, hasRelia, ping, checkName, proof, hover, nbAlert, nbAlert);
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String checkName, String proof, CheatHover hover, long nbAlert, long nbAlertConsole) {

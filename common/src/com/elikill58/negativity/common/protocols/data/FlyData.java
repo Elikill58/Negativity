@@ -9,9 +9,10 @@ import com.elikill58.negativity.api.protocols.CheckData;
 public class FlyData extends CheckData {
 
 	public double groundWarn = 0;
-	public int notMovingY = 0, y0times = 0, nbAirBelow = 0;
+	public int notMovingY = 0, nbAirBelow = 0;
 	public boolean boatFalling = false, wasOnGround = false;
 	public List<Double> flyMove = new ArrayList<>();
+	public double lastY = 0;
 	
 	public FlyData(NegativityPlayer np) {
 		super(np);

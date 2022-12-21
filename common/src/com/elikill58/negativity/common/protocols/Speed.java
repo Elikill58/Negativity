@@ -110,14 +110,14 @@ public class Speed extends Cheat implements Listeners {
 			//return;
 		}
 
-		double predicted = deltaXZ * friction;
+		double predicted = data.deltaXZ * friction;
 
-		double difference = data.deltaXZ - predicted - moveFactor;
+		double difference = deltaXZ - predicted - moveFactor;
 
 		if (difference > 1.0E-6) { // actually seems to false when on air
 			if (++data.walkSpeedBuffer > getConfig().getInt("checks.walk-speed.buffer", 3)) {
 				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
-						String.format("%.4f", deltaXZ) + ", predict: " + String.format("%.4f", predicted) + ", factor: "
+						String.format("%.4f", deltaXZ) + ", last deltaXZ: " + String.format("%.4f", data.deltaXZ) + ", predict: " + String.format("%.4f", predicted) + ", factor: "
 								+ String.format("%.4f", moveFactor) + ", final diff: "
 								+ String.format("%.6f", Math.abs(difference)) + " > buffer: " + data.walkSpeedBuffer
 								+ ", ws: " + String.format("%.2f", p.getWalkSpeed()),

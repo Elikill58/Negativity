@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class CompensatedWorld extends World {
 
 	protected final Player p;
 	protected World serverWorld;
-	protected List<BlockTransition> transitions = new ArrayList<>();
+	protected List<BlockTransition> transitions = Collections.synchronizedList(new ArrayList<>());
 	
 	public CompensatedWorld(Player p) {
 		this.p = p;
@@ -47,12 +48,10 @@ public class CompensatedWorld extends World {
 
 	@Override
 	public Block getBlockAt0(int x, int y, int z) {
-		synchronized (transitions) {
-			transitions.removeIf(BlockTransition::expired);
-			for(BlockTransition t : new ArrayList<>(transitions)) {
-				if(t.concern(x, y, z)) {
-					return new CompensatedBlock(new Location(this, x, y, z), t.getOld());
-				}
+		transitions.removeIf(BlockTransition::expired);
+		for(BlockTransition t : new ArrayList<>(transitions)) {
+			if(t.concern(x, y, z)) {
+				return new CompensatedBlock(new Location(this, x, y, z), t.getOld());
 			}
 		}
 		return getServerWorld().getBlockAt(x, y, z);

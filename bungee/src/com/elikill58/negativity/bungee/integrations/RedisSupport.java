@@ -73,16 +73,16 @@ public class RedisSupport implements Listener, MultiProxy {
 			NegativityMessage negMsg = NegativityMessagesManager.readMessage(e.getMessage().getBytes());
 			if(negMsg instanceof RedisNegativityMessage) {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
-				if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
-					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "), sending alert...");
+				//if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
+					Adapter.getAdapter().debug("Received redis from " + redisMsg.getProxyId() + " (" + redisMsg.getUUID().toString() + "), sending alert...");
 					UUID uuid = redisMsg.getUUID();
 					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> {
 						ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
 						return pp == null ? new RedisBungeePlayer(uuid) : new BungeePlayer(pp);
 					}).getPlayer();
 					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage(), false));
-				} else
-					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "). Wrong proxy.");
+				/*} else
+					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "). Wrong proxy.");*/
 			} else
 				Adapter.getAdapter().getLogger().error("Received message with redis is not supported: " + negMsg.getClass().getSimpleName());
 		} catch (Exception exc) {

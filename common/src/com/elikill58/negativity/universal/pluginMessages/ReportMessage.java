@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ReportMessage implements NegativityMessage {
+public class ReportMessage implements NegativityMessage, NegativityMessageMultiProxy {
 
 	public static final byte MESSAGE_ID = 2;
 

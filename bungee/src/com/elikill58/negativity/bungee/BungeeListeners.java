@@ -19,7 +19,10 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.multiproxy.MultiProxyManager;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessageMultiProxy;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
 import net.md_5.bungee.api.ChatColor;
@@ -49,11 +52,9 @@ public class BungeeListeners implements Listener {
 	@EventHandler
 	public void onReceiveMessage(PluginMessageEvent e) {
 		BiConsumer<Player, byte[]> cons = channelListeners.get(e.getTag());
-		ProxiedPlayer p = (ProxiedPlayer) (e.getSender() instanceof ProxiedPlayer ? e.getSender()
-				: (e.getReceiver() instanceof ProxiedPlayer ? e.getReceiver() : null));
+		ProxiedPlayer p = (ProxiedPlayer) (e.getSender() instanceof ProxiedPlayer ? e.getSender() : (e.getReceiver() instanceof ProxiedPlayer ? e.getReceiver() : null));
 		if (cons != null && p != null) {
-			cons.accept(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer(),
-					e.getData());
+			cons.accept(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer(), e.getData());
 		}
 	}
 
@@ -64,23 +65,29 @@ public class BungeeListeners implements Listener {
 		}
 
 		event.setCancelled(true);
-		
-		ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender()
-				: (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
+
+		ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender() : (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
 		if (player == null) {
-			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message. Player null (Sender: " + event.getSender()
-					+ " Receiver: " + event.getReceiver() + ")");
+			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message. Player null (Sender: " + event.getSender() + " Receiver: " + event.getReceiver() + ")");
 			return;
 		}
-		EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
-					() -> new BungeePlayer(player)).getPlayer(), event.getData(), true));
+		Player p = NegativityPlayer.getNegativityPlayer(player.getUniqueId(), () -> new BungeePlayer(player)).getPlayer();
+		try {
+			NegativityMessage msg = NegativityMessagesManager.readMessage(event.getData());
+			if (MultiProxyManager.isUsingMultiProxy() && msg instanceof NegativityMessageMultiProxy) { // if has multiproxy AND is message to send everywhere
+				MultiProxyManager.getMultiProxy().sendMessage(p, msg);
+			} else {
+				EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, msg));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@EventHandler
 	public void onPreLogin(net.md_5.bungee.api.event.LoginEvent e) {
 		PendingConnection co = e.getConnection();
-		LoginEvent event = new LoginEvent(co.getUniqueId(), co.getName(),
-				e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED, co.getAddress().getAddress(), getReason(e));
+		LoginEvent event = new LoginEvent(co.getUniqueId(), co.getName(), e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED, co.getAddress().getAddress(), getReason(e));
 		EventManager.callEvent(event);
 		if (!event.getLoginResult().equals(Result.ALLOWED)) {
 			e.setCancelled(true);
@@ -131,8 +138,7 @@ public class BungeeListeners implements Listener {
 	public void onServerChange(ServerConnectedEvent event) {
 		try {
 			ClientModsListMessage message = new ClientModsListMessage(event.getPlayer().getModList());
-			event.getServer().sendData(NegativityMessagesManager.CHANNEL_ID,
-					NegativityMessagesManager.writeMessage(message));
+			event.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(message));
 		} catch (IOException e) {
 			Adapter.getAdapter().getLogger().error("Could not write ClientModsListMessage : " + e.getMessage());
 		}
@@ -144,8 +150,7 @@ public class BungeeListeners implements Listener {
 		private String cmd;
 
 		public Report(String cmd, Object... parts) {
-			place = new Object[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%",
-					parts[3] };
+			place = new Object[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%", parts[3] };
 			this.cmd = cmd;
 		}
 
@@ -154,15 +159,11 @@ public class BungeeListeners implements Listener {
 			String hover = Messages.getMessage(p.getUniqueId(), "alert_hover", place);
 			if (hover.contains("\\n")) {
 				ArrayList<TextComponent> components = new ArrayList<>();
-				TextComponent hoverMessage = new TextComponent(
-						new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 2]).color(ChatColor.GOLD)
-								.create());
+				TextComponent hoverMessage = new TextComponent(new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 2]).color(ChatColor.GOLD).create());
 				hoverMessage.addExtra(new TextComponent(ComponentSerializer.parse("{text: \"\n\"}")));
-				hoverMessage.addExtra(new TextComponent(
-						new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 1]).create()));
+				hoverMessage.addExtra(new TextComponent(new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 1]).create()));
 				components.add(hoverMessage);
-				msg.setHoverEvent(
-						new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(components.toArray(new BaseComponent[0]))));
+				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(components.toArray(new BaseComponent[0]))));
 			} else
 				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder(hover).create())));
 			msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));

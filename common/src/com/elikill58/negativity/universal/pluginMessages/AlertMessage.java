@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.detections.Cheat;
 
-public class AlertMessage implements NegativityMessage {
+public class AlertMessage implements NegativityMessage, NegativityMessageMultiProxy {
 
 	public static final byte MESSAGE_ID = 0;
 

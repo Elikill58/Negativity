@@ -19,14 +19,13 @@ import com.imaginarycode.minecraft.redisbungee.RedisBungee;
 import com.imaginarycode.minecraft.redisbungee.events.PubSubMessageEvent;
 
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class RedisSupport implements Listener, MultiProxy {
 
 	private static final String REDIS_CHANNEL = "NEGATIVITY_MESSAGES";
-	
+
 	public static void load(BungeeNegativity pl) {
 		RedisBungee.getApi().registerPubSubChannels(REDIS_CHANNEL);
 		RedisSupport rs = new RedisSupport();
@@ -37,7 +36,7 @@ public class RedisSupport implements Listener, MultiProxy {
 	public static String getProxyId() {
 		return RedisBungee.getApi().getServerId();
 	}
-	
+
 	public static void sendRedisMessage(Player p, NegativityMessage message) {
 		try {
 			RedisBungee.getApi().sendChannelMessage(REDIS_CHANNEL,
@@ -52,44 +51,40 @@ public class RedisSupport implements Listener, MultiProxy {
 	}
 
 	public static Player tryGetPlayer(UUID uuid) {
-		if(uuid == null || !RedisBungee.getApi().isPlayerOnline(uuid)) // player not online
+		if (uuid == null || !RedisBungee.getApi().isPlayerOnline(uuid)) // player not online
 			return null;
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
 	}
-	
+
 	public static String getPlayerName(UUID uuid) {
 		return RedisBungee.getApi().getNameFromUuid(uuid);
 	}
-	
+
 	public static String getServerNameForPlayer(UUID uuid) {
 		return BungeeNegativity.getServerName(RedisBungee.getApi().getServerFor(uuid));
 	}
-	
+
 	@EventHandler
 	public void pubSub(PubSubMessageEvent e) {
 		if (!e.getChannel().equals(REDIS_CHANNEL))
 			return;
 		try {
 			NegativityMessage negMsg = NegativityMessagesManager.readMessage(e.getMessage().getBytes());
-			if(negMsg instanceof RedisNegativityMessage) {
+			if (negMsg instanceof RedisNegativityMessage) {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
-				//if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
+				UUID uuid = redisMsg.getUUID();
+				if (ProxyServer.getInstance().getPlayer(uuid) != null) {
 					Adapter.getAdapter().debug("Received redis from " + redisMsg.getProxyId() + " (" + redisMsg.getUUID().toString() + "), sending alert...");
-					UUID uuid = redisMsg.getUUID();
-					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> {
-						ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
-						return pp == null ? new RedisBungeePlayer(uuid) : new BungeePlayer(pp);
-					}).getPlayer();
-					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage(), false));
-				/*} else
-					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "). Wrong proxy.");*/
+					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(ProxyServer.getInstance().getPlayer(uuid))).getPlayer();
+					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage()));
+				}
 			} else
 				Adapter.getAdapter().getLogger().error("Received message with redis is not supported: " + negMsg.getClass().getSimpleName());
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public boolean isMultiProxy() {
 		return true;

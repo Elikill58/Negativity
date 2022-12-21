@@ -5,6 +5,7 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockChecker;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -207,7 +208,8 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 
-		if (p.getBoundingBox().expand(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER", "LAVA")) {
+		BlockChecker blocksAround = p.getBoundingBox().expand(0.5, 0.5, 0.5).getBlocks(p.getWorld());
+		if (blocksAround.has("WATER", "LAVA")) {
 			data.notMovingY = 0;
 			if (flying.hasLocation())
 				data.lastY = flying.y;
@@ -222,10 +224,10 @@ public class Fly extends Cheat implements Listeners {
 				Material type = from.getBlock().getType();
 	
 				double distance = from.distance(to);
-				if (y == 0 && !type.isSolid()) {
+				if (y == 0 && !type.isSolid() && !blocksAround.hasOther(Materials.AIR)) {
 					if (++data.notMovingY > 2) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(data.notMovingY * 30), "not-moving-y",
-								"Times not moving Y and on ground: " + data.notMovingY + ", distance: " + distance + ", ws: " + p.getWalkSpeed() + ", threshold: " + data.notMovingY, null, data.notMovingY < 3 ? 1 : data.notMovingY - 2);
+								"Not moving Y: " + data.notMovingY + ", distance: " + distance + ", ws: " + p.getWalkSpeed() + ", fd: " + p.getFallDistance(), null, data.notMovingY < 3 ? 1 : data.notMovingY - 2);
 						if (mayCancel && isSetBack())
 							LocationUtils.teleportPlayerOnGround(p);
 					}
@@ -233,7 +235,7 @@ public class Fly extends Cheat implements Listeners {
 					data.notMovingY = 0;
 			}
 		} else {
-			if ((data.lastY == flying.y || !flying.hasPos) && p.getTheoricVelocity().length() < 0.1) {
+			if ((data.lastY == flying.y) && p.getTheoricVelocity().length() < 0.1) {
 				if (++data.notMovingY > 2) {
 					Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(90 + data.notMovingY), "not-moving-y",
 							"Last Y: " + data.lastY + ", threshold: " + data.notMovingY, null, data.notMovingY);

@@ -25,6 +25,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSetCreativeSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSettings;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
@@ -205,7 +206,7 @@ public interface PacketType {
 		RESOURCE_PACK_STATUS,
 		SET_COMMAND_BLOCK,
 		SET_COMMAND_MINECART,
-		SET_CREATIVE_SLOT,
+		SET_CREATIVE_SLOT(NPacketPlayInSetCreativeSlot::new),
 		SET_JIGSAW,
 		SETTINGS(NPacketPlayInSettings::new),
 		SPECTATE,

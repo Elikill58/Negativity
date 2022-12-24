@@ -73,11 +73,12 @@ public class NettyHandlerCommon {
 					+ ") to " + p.getName() + " (" + direction.name() + " - " + comment + " - " + version.getName()
 					+ ")");
 			String key = packetId + "_" + packet.getPacketType() + "_" + e.getMessage();
-			if (sentMessages.contains(key))
-				return packet;
-			sentMessages.add(key);
-			ada.warn(e.getMessage());
-			e.printStackTrace();
+			if (!sentMessages.contains(key)) {
+				sentMessages.add(key);
+				ada.warn(e.getMessage());
+				e.printStackTrace();
+			}
+			return null; // try to don't return partial packet
 		}
 		return packet;
 	}

@@ -7,9 +7,11 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInCustomPayload;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.SanctionnerType;
@@ -17,6 +19,7 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
+import com.elikill58.negativity.universal.logger.Debug;
 
 public class ServerCrasher extends Special implements Listeners {
 
@@ -25,7 +28,19 @@ public class ServerCrasher extends Special implements Listeners {
 	}
 
 	@EventListener(priority = EventPriority.PRE)
-	public void onPacketClear(PacketReceiveEvent e) {
+	public void onPlayerCommand(PlayerCommandPreProcessEvent e) {
+		if (!isActive())
+			return;
+		String cmd = e.getCommand().toLowerCase();
+		Player p = e.getPlayer();
+		if (!p.isOp() && (cmd.contains("pex demote") || cmd.contains("pex promote") || cmd.contains("for(") || cmd.contains("while("))) {
+			tryingToCrash(NegativityPlayer.getNegativityPlayer(p), p, "Wrong command.");
+			e.setCancelled(true);
+		}
+	}
+
+	@EventListener(priority = EventPriority.PRE)
+	public void onPacketReceive(PacketReceiveEvent e) {
 		if (!isActive() || !e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
@@ -36,9 +51,29 @@ public class ServerCrasher extends Special implements Listeners {
 				tryingToCrash(np, p, "Spam TP");
 				e.setCancelled(true);
 			}
-		} else if(packet.getPacketType().equals(PacketType.Client.SET_CREATIVE_SLOT)) {
-			if(!p.getGameMode().equals(GameMode.CREATIVE)) {
+		} else if (packet.getPacketType().equals(PacketType.Client.ARM_ANIMATION)) {
+			if (!np.isDisconnecting() && np.packets.getOrDefault(PacketType.Client.ARM_ANIMATION, 0) > 1000) {
+				tryingToCrash(np, p, "Spam Attack");
+				e.setCancelled(true);
+			}
+		} else if (packet.getPacketType().equals(PacketType.Client.SET_CREATIVE_SLOT)) {
+			if (!p.getGameMode().equals(GameMode.CREATIVE)) {
 				tryingToCrash(np, p, "Set creative slot");
+				e.setCancelled(true);
+			}
+		} else if (packet.getPacketType().equals(PacketType.Client.CUSTOM_PAYLOAD)) {
+			NPacketPlayInCustomPayload payload = (NPacketPlayInCustomPayload) packet;
+			if (payload.channel.equalsIgnoreCase("MC|BSign")) {
+				if (!p.getInventory().contains(Materials.BOOK_AND_QUILL)) {
+					tryingToCrash(np, p, "Edit inexistant file");
+					e.setCancelled(true);
+				} else
+					Adapter.getAdapter().debug(Debug.GENERAL, "Has book with BSign");
+			} else if (payload.data.length > 32767) { // max as described here: https://wiki.vg/Protocol#Plugin_Message_2
+				tryingToCrash(np, p, "Too large data in payload");
+				e.setCancelled(true);
+			} else {
+				Adapter.getAdapter().debug(Debug.GENERAL, "Good length and not managed channel: " + payload.channel);
 			}
 		}
 	}
@@ -59,8 +94,8 @@ public class ServerCrasher extends Special implements Listeners {
 						"server_crash", p.getIP()));
 			}
 		} else if (getConfig().getBoolean("kick", true)) {
-			np.setDisconnecting(true);
 			p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", reason));
+			np.setDisconnecting(true);
 		}
 	}
 }

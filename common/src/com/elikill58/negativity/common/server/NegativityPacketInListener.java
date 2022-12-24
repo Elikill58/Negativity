@@ -22,13 +22,10 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInCustomPayload;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.logger.Debug;
 
 public class NegativityPacketInListener implements Listeners {
 
@@ -122,9 +119,6 @@ public class NegativityPacketInListener implements Listeners {
 				EventManager.callEvent(chatEvent);
 				e.setCancelled(chatEvent.isCancelled());
 			}
-		} else if(type.equals(PacketType.Client.CUSTOM_PAYLOAD)) {
-			NPacketPlayInCustomPayload a = (NPacketPlayInCustomPayload) packet;
-			Adapter.getAdapter().debug(Debug.GENERAL, "Channel IN: " + a.channel);
 		}
 	}
 }

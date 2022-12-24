@@ -38,7 +38,7 @@ public enum Version {
 	V1_18("1.18", 18, Version1_18::new, 757, 758),
 	V1_19("1.19", 19, Version1_19::new, 759),
 	V1_19_2("1.19.2", 19.2, Version1_19_2::new, 760),
-	V1_19_3("1.19.3", 19.2, Version1_19_3::new, 761, 999),
+	V1_19_3("1.19.3", 19.3, Version1_19_3::new, 761, 999),
 	HIGHER("higher", 42, VersionUnknown::new, 1000);
 
 	private final double power;

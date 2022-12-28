@@ -43,7 +43,7 @@ public abstract class NettyPacketListener {
 
 	private void addChannel(Player p) {
 		Version version = PlayerVersionManager.getPlayerVersion(p);
-		if(version.equals(Version.V1_19_2) && !Adapter.getAdapter().getServerVersion().equals(Version.V1_19_2)) {
+		if((version.equals(Version.V1_19) || version.equals(Version.V1_19_2)) && !Adapter.getAdapter().getServerVersion().equals(Version.V1_19_2)) {
 			ExternalPlugin plugin = Adapter.getAdapter().getPlugin("ViaVersion");
 			if(plugin != null && plugin.getVersion().startsWith("4.5")) {
 				Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " can't be checked because of ViaVersion issue.");

@@ -92,7 +92,7 @@ public class Jesus extends Cheat implements Listeners {
 		data.applyYDiff(dif);
 	}
 	
-	@Check(name = "dif", description = "Little check dif")
+	@Check(name = "dif", description = "Little check dif", conditions = CheckConditions.NO_BLOCK_MID_AROUND)
 	public void onDif(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

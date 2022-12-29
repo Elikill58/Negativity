@@ -146,7 +146,7 @@ public class AimBot extends Cheat {
 		Location loc = np.getPingedLocation(), cloc = cible instanceof Player
 				? NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation()
 				: cible.getLocation();
-		if (!p.getWorld().equals(cloc.getWorld())) // entity just beeing tp
+		if (!p.getWorld().equals(cloc.getWorld()) || (cloc.getYaw() == 0.0 && cloc.getPitch() == 0.0)) // entity just beeing tp
 			return;
 		double xzDistance = loc.distanceXZ(cloc);
 		if (xzDistance < 0.5)
@@ -186,7 +186,7 @@ public class AimBot extends Cheat {
 		if (amount > 0)
 			Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction",
-					"Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + ", xzDis: "
+					"Pos: " + p.getLocation() + " / " + cloc + ", dir: " + direction.name() + ", xzDis: "
 							+ xzDistance,
 					null, amount);
 	}

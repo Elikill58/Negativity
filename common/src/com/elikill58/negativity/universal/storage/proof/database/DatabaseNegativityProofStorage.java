@@ -104,7 +104,7 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 	}
 
 	private Proof getWithSet(ResultSet rs) throws SQLException {
-		return new Proof(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), ReportType.valueOf(rs.getString("report_type")), CheatKeys.fromLowerKey(rs.getString("check_key")),
+		return new Proof(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), ReportType.valueOf(rs.getString("report_type")), CheatKeys.fromLowerKey(rs.getString("cheat_key")),
 				rs.getString("check_name"), rs.getInt("ping"), rs.getLong("amount"), rs.getInt("reliability"),
 				rs.getTimestamp("time"), rs.getString("check_informations"),
 				Version.valueOf(rs.getString("version")), rs.getLong("warn"), sqlToSql(rs.getString("tps")));

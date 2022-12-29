@@ -28,7 +28,7 @@ public class Speed extends Cheat implements Listeners {
 
 	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = {
 			CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
-			CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -68,7 +68,7 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
-			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND, CheckConditions.NO_ELYTRA,
+			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,
 			CheckConditions.NO_USE_TRIDENT })
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
 		if (!e.getPacket().getPacketType().isFlyingPacket())

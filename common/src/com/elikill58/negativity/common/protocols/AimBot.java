@@ -157,7 +157,7 @@ public class AimBot extends Cheat {
 		int reliability = 0;
 		switch (direction) {
 		case BACK: // should never appear, clearly a cheat
-			amount = np.getWarn(this) + 1;
+			amount = 8;
 			reliability = 100;
 			break;
 		case BACK_LEFT:

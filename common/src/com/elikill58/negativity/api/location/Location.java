@@ -77,6 +77,10 @@ public final class Location implements Cloneable {
 	}
 
 	public float getYaw() {
+		while(yaw > 360)
+			yaw -= 360;
+		while(yaw < -360)
+			yaw += 360;
 		return yaw;
 	}
 

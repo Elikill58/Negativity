@@ -104,7 +104,7 @@ public class PacketListener implements Listeners {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
 		} else if (type == PacketType.Client.STEER_VEHICLE) {
-			np.timeInvincibility = System.currentTimeMillis() + p.getPing() * 2;
+			np.invincibilityTicks += 5;
 		} else if (type == PacketType.Client.PONG) {
 			NPacketPlayInPong pong = (NPacketPlayInPong) packet;
 			if(np.idWaitingAppliedVelocity != -1 && np.idWaitingAppliedVelocity == pong.id) {

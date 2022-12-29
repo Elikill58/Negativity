@@ -73,6 +73,8 @@ public class NegativityPacketInListener implements Listeners {
 				else
 					p.setLocation(flying.getLocation(p.getWorld()));
 			}
+			if(np.invincibilityTicks > 0)
+				np.invincibilityTicks--;
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;
 

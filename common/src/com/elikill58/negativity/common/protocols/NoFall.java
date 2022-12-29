@@ -86,10 +86,10 @@ public class NoFall extends Cheat {
 		if (Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		double distance = to.toVector().distance(from.toVector());
+		double distance = to.distance(from);
 		if (distance == 0.0D || from.getY() < to.getY())
 			return;
-		int relia = UniversalUtils.parseInPorcent(distance * 100);
+		int relia = UniversalUtils.parseInPorcent(distance * 40);
 		if (distance > 2D) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-no-ground",
 					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance + ", vel: " + p.getVelocity()

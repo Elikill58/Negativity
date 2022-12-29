@@ -62,7 +62,7 @@ public class NegativityPlayer {
 	
 	// packets
 	public Object2IntMap<PacketType> packets = new Object2IntArrayMap<>();
-	public int allPackets = 0, lastClick = 0;
+	public int allPackets = 0, lastClick = 0, invincibilityTicks = 0;
 	
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
@@ -70,7 +70,9 @@ public class NegativityPlayer {
 	public List<PotionEffect> potionEffects = new ArrayList<>();
 	
 	// detection and bypass
-	public long loginTime, timeInvincibility = 0;
+	public long loginTime;
+	@Deprecated
+	public long timeInvincibility = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean isOnLadders = false, isTeleporting = false;
@@ -160,6 +162,8 @@ public class NegativityPlayer {
 			return false;
 		if (timeInvincibility > System.currentTimeMillis())
 			return false;
+		if (invincibilityTicks > 0)
+			return false;
 		if (isFreeze)
 			return false;
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
@@ -187,8 +191,10 @@ public class NegativityPlayer {
 		if(disconnecting)
 			return "Disconnecting";
 		if(buggedVersion)
-			return "Bugged Version (1.19.2)";
+			return "Bugged Version (1.19)";
 		if(timeInvincibility > System.currentTimeMillis())
+			return "Player invincibility (old)";
+		if (invincibilityTicks > 0)
 			return "Player invincibility";
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return "In fight";

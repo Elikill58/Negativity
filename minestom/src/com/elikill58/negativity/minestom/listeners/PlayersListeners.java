@@ -104,7 +104,7 @@ public class PlayersListeners {
 	}
 
 	public void onGlide(PlayerStartFlyingWithElytraEvent e) {
-		NegativityPlayer.getCached(e.getPlayer().getUuid()).timeInvincibility = System.currentTimeMillis() + 800;
+		NegativityPlayer.getCached(e.getPlayer().getUuid()).invincibilityTicks += 10;
 	}
 	
 	public void onCommand(PlayerCommandEvent e) {

@@ -202,22 +202,31 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 		}
 		return null;
 	}
-
-	@SuppressWarnings("unused")
+	
+	@Deprecated
 	public ItemStack readItemStack() {
-		ItemStack itemstack = null;
-		short itemId = readShort();
-		if (itemId >= 0) {
-			byte amount = readByte();
-			short data = readShort();
-			readNBTTag();
-			// just read things but not take in count yet
-			/*
-			 * itemstack = new ItemStack(Item.getById(itemId), amount, data);
-			 * itemstack.setTag(readNBTTag());
-			 */
+		return readItemStack(Version.V1_8);
+	}
+
+	/**
+	 * Read item stack according to given version<br>
+	 * WARN: This will always return null, it just pass through bytes
+	 * 
+	 * @param version the version
+	 * @return null
+	 */
+	public ItemStack readItemStack(Version version) {
+		if(version.isNewerOrEquals(Version.V1_15)) {
+			if(!readBoolean())
+				return null;
+		} else {
+			if (readShort() < 0)
+				return null;
 		}
-		return itemstack;
+		readByte(); // amount
+		readShort(); // data
+		readNBTTag(); // just read things but not take in count yet
+		return null;
 	}
 
 	public BlockPosition readChunkSectionPosition() {

@@ -274,6 +274,7 @@ public class LocationUtils {
 	/**
 	 * Check is there is a boat around the location (Distance of 3)
 	 * 
+	 * @param world the world of entities
 	 * @param loc The location to check
 	 * @return true if there is a boat
 	 */

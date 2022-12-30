@@ -166,7 +166,7 @@ public class PacketUtils {
 	/**
 	 * Get protocol version.
 	 * <p>
-	 * This should work for ALL servers versions <bold>BUT</bold> not at startup of server (only around 5 tickets after). This is not true since MC 1.16.5.
+	 * This should work for ALL servers versions <strong>BUT</strong> not at startup of server (only around 5 tickets after). This is not true since MC 1.16.5.
 	 * <p>
 	 * The "issue" of loading comes from the way to get protocol version.
 	 * 

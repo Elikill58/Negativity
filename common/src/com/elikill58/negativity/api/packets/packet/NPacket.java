@@ -13,6 +13,7 @@ public interface NPacket {
 	 * Read packet from given serializer.
 	 * 
 	 * @param serializer the content of packet
+	 * @param version the version of packet
 	 */
 	public void read(PacketSerializer serializer, Version version);
 	
@@ -20,6 +21,7 @@ public interface NPacket {
 	 * Write packet to given serializer
 	 * 
 	 * @param serializer the buffer that will receive write
+	 * @param version the version of packet
 	 */
 	public default void write(PacketSerializer serializer, Version version) {
 		throw new UnsupportedOperationException("Can't write packet " + getPacketType() + " (" + getPacketName() + "). Not implemented.");
@@ -28,6 +30,8 @@ public interface NPacket {
 	/**
 	 * Create ByteBuf of this packet with all necessary data
 	 * 
+	 * @param p the player that will receive the packet
+	 * @param version the version of packet
 	 * @return new filled buffer
 	 */
 	public default ByteBuf create(Player p, Version version) {

@@ -12,6 +12,9 @@ public class BufUtils {
 	 * Create a copy of the underlying storage from {@code buf} into a byte array.
 	 * The copy will start at {@link ByteBuf#readerIndex()} and copy
 	 * {@link ByteBuf#readableBytes()} bytes.
+	 * 
+	 * @param buf Buffer that contains all bytes
+	 * @return bytes of buffer
 	 */
 	public static byte[] getBytes(ByteBuf buf) {
 		return getBytes(buf, buf.readerIndex(), buf.readableBytes());
@@ -20,6 +23,11 @@ public class BufUtils {
 	/**
 	 * Create a copy of the underlying storage from {@code buf} into a byte array.
 	 * The copy will start at {@code start} and copy {@code length} bytes.
+	 * 
+	 * @param buf Buffer that contains all bytes
+	 * @param start the start index of bytes
+	 * @param length the length of bytes
+	 * @return bytes of buffer
 	 */
 	public static byte[] getBytes(ByteBuf buf, int start, int length) {
 		return getBytes(buf, start, length, true);
@@ -30,6 +38,12 @@ public class BufUtils {
 	 * The copy will start at {@code start} and copy {@code length} bytes. If
 	 * {@code copy} is true a copy will be made of the memory. If {@code copy} is
 	 * false the underlying storage will be shared, if possible.
+	 * 
+	 * @param buf Buffer that contains all bytes
+	 * @param start the start index of bytes
+	 * @param length the length of bytes
+	 * @param copy true if should copy the content from buffer (and don't change the index)
+	 * @return bytes of buffer
 	 */
 	public static byte[] getBytes(ByteBuf buf, int start, int length, boolean copy) {
 		int capacity = buf.capacity();

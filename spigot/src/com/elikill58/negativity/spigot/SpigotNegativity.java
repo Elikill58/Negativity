@@ -60,8 +60,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 		}
-		if (Adapter.getAdapter() == null)
-			Adapter.setAdapter(new SpigotAdapter(this));
+		Adapter.setAdapter(new SpigotAdapter(this));
 
 		SpigotVersionAdapter versionAdapter = SpigotVersionAdapter.getVersionAdapter();
 		Version v = versionAdapter.getVersion();

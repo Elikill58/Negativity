@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,10 +19,10 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 	private final PacketDirection direction;
 	private final Version version;
 	
-	public NettyEncoderHandler(Player p, PacketDirection direction) {
+	public NettyEncoderHandler(Player p, PacketDirection direction, Version version) {
 		this.p = p;
 		this.direction = direction;
-		this.version = PlayerVersionManager.getPlayerVersion(p);
+		this.version = version;
 	}
 	
 	@Override

@@ -46,9 +46,9 @@ public abstract class NettyPacketListener {
 		if((version.equals(Version.V1_19) || version.equals(Version.V1_19_2)) && !Adapter.getAdapter().getServerVersion().equals(Version.V1_19_2)) {
 			ExternalPlugin plugin = Adapter.getAdapter().getPlugin("ViaVersion");
 			if(plugin != null && plugin.getVersion().startsWith("4.5")) {
-				Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " can't be checked because of ViaVersion issue.");
-				NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
-				return;
+				Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue.");
+				version = Adapter.getAdapter().getServerVersion();
+				p.setPlayerVersion(version);
 			}
 		} else if(version.equals(Version.HIGHER) || version.equals(Version.LOWER)) {
 			Adapter.getAdapter().getLogger().warn("Player " + p.getName() + " seems to login with unknow version, protocol: " + PlayerVersionManager.getPlayerProtocolVersion(p));
@@ -59,10 +59,10 @@ public abstract class NettyPacketListener {
 		checked.add(channel);
 		try {
 			// Managing incoming packet (from player)
-			channel.pipeline().addBefore(DECODER_KEY, DECODER_KEY_HANDLER, new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER));
+			channel.pipeline().addBefore(DECODER_KEY, DECODER_KEY_HANDLER, new NettyDecoderHandler(p, PacketDirection.CLIENT_TO_SERVER, version));
 
 			// Managing outgoing packet (to the player)
-			channel.pipeline().addBefore(ENCODER_KEY, ENCODER_KEY_HANDLER, new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT));
+			channel.pipeline().addBefore(ENCODER_KEY, ENCODER_KEY_HANDLER, new NettyEncoderHandler(p, PacketDirection.SERVER_TO_CLIENT, version));
 		} catch (NoSuchElementException exc) {
 			if (!p.isOnline())
 				return; // ignore, just left

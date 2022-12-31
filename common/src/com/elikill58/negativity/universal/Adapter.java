@@ -30,13 +30,6 @@ public abstract class Adapter {
 	private static Adapter adapter = null;
 
 	public static void setAdapter(Adapter adapter) {
-		if(Adapter.adapter != null) {
-			try {
-				throw new IllegalAccessException("No ! You don't must to change the Adapter !");
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
 		Adapter.adapter = adapter;
 	}
 

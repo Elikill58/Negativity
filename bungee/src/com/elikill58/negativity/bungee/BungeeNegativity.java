@@ -1,5 +1,6 @@
 package com.elikill58.negativity.bungee;
 
+import java.io.File;
 import java.util.UUID;
 
 import org.bstats.bungeecord.MetricsLite;
@@ -22,6 +23,16 @@ public class BungeeNegativity extends Plugin {
 	private static boolean redisBungee = false;
 	public static boolean isRedisBungee() {
 		return redisBungee;
+	}
+	
+	@Override
+	public void onLoad() {
+		File oldFolder = new File(getProxy().getPluginsFolder(), "BungeeNegativity");
+		if(oldFolder.exists()) {
+			getLogger().info("Old version found. Changing folder ...");
+			oldFolder.renameTo(new File(getProxy().getPluginsFolder(), "Negativity"));
+			getLogger().warning("Folder 'BungeeNegativity' renamed to 'Negativity'.");
+		}
 	}
 	
 	@Override

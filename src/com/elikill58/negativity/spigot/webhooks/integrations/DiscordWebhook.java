@@ -21,8 +21,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.elikill58.json.JSONObject;
-import com.elikill58.json.parser.JSONParser;
+import com.elikill58.deps.json.JSONObject;
+import com.elikill58.deps.json.parser.JSONParser;
 import com.elikill58.negativity.spigot.utils.Tuple;
 import com.elikill58.negativity.spigot.webhooks.Webhook;
 import com.elikill58.negativity.spigot.webhooks.integrations.DiscordWebhook.DiscordWebhookRequest.EmbedObject;

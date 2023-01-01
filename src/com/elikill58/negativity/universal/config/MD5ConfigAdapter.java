@@ -8,11 +8,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.List;
 
+import com.elikill58.deps.md_5.config.Configuration;
+import com.elikill58.deps.md_5.config.ConfigurationProvider;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.utils.IOSupplier;
-
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
 
 public abstract class MD5ConfigAdapter implements ConfigAdapter {
 

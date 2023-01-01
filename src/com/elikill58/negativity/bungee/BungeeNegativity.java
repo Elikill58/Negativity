@@ -6,6 +6,8 @@ import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
 import java.util.StringJoiner;
 
+import com.elikill58.deps.md_5.config.ConfigurationProvider;
+import com.elikill58.deps.md_5.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -23,8 +25,6 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeNegativity extends Plugin {
 

@@ -7,6 +7,8 @@ import java.io.UncheckedIOException;
 
 import org.slf4j.Logger;
 
+import com.elikill58.deps.md_5.config.ConfigurationProvider;
+import com.elikill58.deps.md_5.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -25,9 +27,6 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
-
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 @Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.PLUGIN_VERSION,
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})

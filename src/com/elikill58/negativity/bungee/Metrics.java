@@ -26,14 +26,14 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.elikill58.deps.md_5.config.Configuration;
+import com.elikill58.deps.md_5.config.ConfigurationProvider;
+import com.elikill58.deps.md_5.config.YamlConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 /**
  * bStats collects some data for plugin authors.

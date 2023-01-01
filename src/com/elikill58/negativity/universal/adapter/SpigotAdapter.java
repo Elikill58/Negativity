@@ -15,9 +15,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.elikill58.json.JSONObject;
-import com.elikill58.json.parser.JSONParser;
-import com.elikill58.json.parser.ParseException;
+import com.elikill58.deps.json.JSONObject;
+import com.elikill58.deps.json.parser.JSONParser;
+import com.elikill58.deps.json.parser.ParseException;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.WorldRegionBypass;

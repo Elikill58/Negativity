@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.api.impl.server.CompensatedWorld;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.block.BlockRay;

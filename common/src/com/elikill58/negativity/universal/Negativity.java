@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.StringJoiner;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -280,18 +280,6 @@ public class Negativity {
 		}
 	}
 	
-	/**
-	 * Get visual TPS to put them on file
-	 * 
-	 * @return a visual string of tps
-	 */
-	public static String getVisualTPS() {
-		StringJoiner sj = new StringJoiner(" / ");
-		for(double d : Adapter.getAdapter().getTPS())
-			sj.add(String.format("%.4f", d));
-		return sj.toString();
-	}
-	
 	private static final Set<String> integratedPlugins = Collections.synchronizedSet(new HashSet<>());
 	
 	/**
@@ -315,9 +303,9 @@ public class Negativity {
 		NegativityAccountStorage.init();
 		EventManager.load();
 		PlayerVersionManager.init();
+		Special.loadSpecial();
 		Configuration config = ada.getConfig();
 		if(!ada.getPlatformID().isProxy()) {
-			Special.loadSpecial();
 			Cheat.loadCheat();
 			BypassManager.loadBypass();
 			BedrockPlayerManager.init();
@@ -353,12 +341,12 @@ public class Negativity {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");
 		}
 
-		new Thread(() -> {
+		CompletableFuture.runAsync(() -> {
 			SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
 			if (latestVersion != null) {
-				ada.getLogger().info("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
+				ada.getLogger().warn("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
 			}
-		}).start();
+		});
 		ada.getLogger().info("Negativity " + ada.getPluginVersion() + " loaded for server version " + ada.getServerVersion().getName());
 	}
 	

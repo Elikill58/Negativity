@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.impl.entity;
+package com.elikill58.negativity.api.impl.server.entity;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.BoundingBox;

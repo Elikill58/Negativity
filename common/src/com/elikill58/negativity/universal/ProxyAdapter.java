@@ -6,6 +6,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.impl.proxy.item.ProxyItemRegistrar;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -24,7 +25,7 @@ public abstract class ProxyAdapter extends Adapter {
 
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		throw new UnsupportedOperationException("ItemRegistrar is unsupported on proxies");
+		return ProxyItemRegistrar.getInstance();
 	}
 
 	@Override
@@ -56,11 +57,6 @@ public abstract class ProxyAdapter extends Adapter {
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		throw new UnsupportedOperationException("Inventory is unsupported on proxies");
 	}
-	
-	/*@Override
-	public Scheduler getScheduler() {
-		throw new UnsupportedOperationException("Scheduler can't be used on proxy servers");
-	}*/
 	
 	@Override
 	public double[] getTPS() {

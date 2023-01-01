@@ -16,6 +16,8 @@ public class WorldDownloader extends Special implements Listeners {
 
 	public WorldDownloader() {
 		super(SpecialKeys.WORLD_DOWNLOADER, Materials.GRASS);
+		if(!isActive())
+			return;
 		Adapter.getAdapter().registerNewIncomingChannel(Version.getVersion().isNewerOrEquals(Version.V1_13) ? "wdl:init" : "WDL|INIT", (p, data) -> {
 			if(!isActive())
 				return;

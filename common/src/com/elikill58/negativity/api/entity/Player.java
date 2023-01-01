@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.api.impl.server.CompensatedWorld;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.Enchantment;

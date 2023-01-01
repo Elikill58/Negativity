@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
-import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.api.impl.server.CompensatedWorld;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;

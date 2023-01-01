@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.impl;
+package com.elikill58.negativity.api.impl.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockTransition;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.impl.block.CompensatedBlock;
+import com.elikill58.negativity.api.impl.server.block.CompensatedBlock;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.location.Location;

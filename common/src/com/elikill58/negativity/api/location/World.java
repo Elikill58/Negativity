@@ -9,7 +9,7 @@ import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockHashMap;
 import com.elikill58.negativity.api.entity.Entity;
-import com.elikill58.negativity.api.impl.block.EmptyBlock;
+import com.elikill58.negativity.api.impl.server.block.EmptyBlock;
 
 public abstract class World implements NegativityObject {
 

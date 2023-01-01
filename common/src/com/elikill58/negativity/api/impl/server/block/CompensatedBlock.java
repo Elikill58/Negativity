@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.impl.block;
+package com.elikill58.negativity.api.impl.server.block;
 
 import java.util.Locale;
 

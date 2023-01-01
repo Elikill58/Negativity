@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.events.player.PlayerChangeWorldEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
-import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.api.impl.server.CompensatedWorld;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
 import com.elikill58.negativity.universal.Adapter;

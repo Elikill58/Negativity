@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.impl.entity;
+package com.elikill58.negativity.api.impl.server.entity;
 
 import java.net.InetSocketAddress;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.entity.AbstractPlayer;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.impl.CompensatedWorld;
+import com.elikill58.negativity.api.impl.server.CompensatedWorld;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;

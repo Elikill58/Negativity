@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.api.entity.EntityType;
-import com.elikill58.negativity.api.impl.item.JsonMaterial;
+import com.elikill58.negativity.api.impl.server.item.JsonMaterial;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;

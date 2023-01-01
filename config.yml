@@ -383,10 +383,6 @@ cheat-bedrock-disabled:
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:
-  #
-  # WARNING: An auto-checking all cheats can be create some lag on your server.
-  #
-
   # AirPlace is when someone places a block that isn't against another (floating)
   airplace:
     # Max ping before forgiving the player
@@ -521,17 +517,6 @@ cheats:
   regen:
     ping: 200
     exact_name: "Regen"
-    isActive: true
-    reliability_alert: 60
-    setBack: false
-    kick: false
-    alert_to_kick: 5
-    check_in_verif: true
-
-  # Blink enables a hacker to teleport by simulating low ping (i.e. lag)
-  blink:
-    ping: 200
-    exact_name: "Blink"
     isActive: true
     reliability_alert: 60
     setBack: false
@@ -734,29 +719,6 @@ cheats:
   nopitchlimit:
     ping: 200
     exact_name: "NoPitchLimit"
-    isActive: true
-    reliability_alert: 60
-    setBack: false
-    kick: false
-    alert_to_kick: 5
-    check_in_verif: true
-
-  # Timer makes the player game's go faster
-  timer:
-    ping: 200
-    exact_name: "Timer"
-    isActive: true
-    reliability_alert: 60
-    setBack: false
-    kick: false
-    alert_to_kick: 5
-    check_in_verif: true
-    max_variation: 7
-
-  # PingSpoof fakes the ping of the player to trick the anti-cheat
-  pingspoof:
-    ping: 100000
-    exact_name: "PingSpoof"
     isActive: true
     reliability_alert: 60
     setBack: false

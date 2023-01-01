@@ -105,32 +105,6 @@ public class PacketsTimers implements Consumer<Task> {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.forKey(CheatKeys.BLINK);
-			if (np.hasDetectionActive(BLINK) && !np.bypassBlink && ping < 140) {
-				int total = np.ALL - np.KEEP_ALIVE;
-				if (total == 0) {
-					int reliability = UniversalUtils.parseInPorcent(150 - ping);
-					if (reliability >= BLINK.getReliabilityAlert()) {
-						boolean last = np.IS_LAST_SEC_BLINK == 2;
-						np.IS_LAST_SEC_BLINK++;
-						long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-						if (last) {
-							SpongeNegativity.alertMod(ReportType.WARNING, p, BLINK, reliability,
-									"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
-											+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
-						}
-					}
-				} else {
-					np.IS_LAST_SEC_BLINK = 0;
-				}
-
-				if(ping < BLINK.getMaxAlertPing()){
-					int allPos = np.POSITION_LOOK + np.POSITION;
-					if(allPos > 60) {
-						SpongeNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, UniversalUtils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
-					}
-				}
-			}
 			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
 			if (np.hasDetectionActive(SNEAK) && ping < 140) {
 				if (np.ENTITY_ACTION > 35) {

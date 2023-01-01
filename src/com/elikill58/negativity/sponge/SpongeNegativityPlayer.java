@@ -69,19 +69,15 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public ArrayList<Double> flyMoveAmount = new ArrayList<>();
 	private Player p = null;
 	// Packets
-	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
-			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
+	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0, BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
 	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	// setBack
-	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
+	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
 	public double lastYDiff = -3.142654;
-	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
-			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
+	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0, LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
-			isFreeze = false, isUsingSlimeBlock = false, already_blink = false,
-			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
+	public boolean IS_LAST_SEC_SNEAK = false, isFreeze = false, isUsingSlimeBlock = false, isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	private boolean mustToBeSaved = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
@@ -116,7 +112,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void sendFmlPacket(byte... data) {
-		if(SpongeNegativity.fmlChannel == null)
+		if (SpongeNegativity.fmlChannel == null)
 			return;
 		SpongeNegativity.fmlChannel.sendTo(p, (payload) -> {
 			payload.writeBytes(data);
@@ -137,17 +133,17 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean hasDetectionActive(Cheat c) {
-		if(!c.isActive())
+		if (!c.isActive())
 			return false;
-		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
 		if (isInFight && c.isBlockedInFight())
 			return false;
-		//if(WorldRegionBypass.hasBypass(c, p.getLocation()))
-			//return false;
-		if(SpongeNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
+		// if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+		// return false;
+		if (SpongeNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
 			return false;
-		if(hasBypassTicket(c))
+		if (hasBypassTicket(c))
 			return false;
 		Player p = getPlayer();
 		return p == null || Utils.getPing(p) < c.getMaxAlertPing();
@@ -158,7 +154,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveData() {
-		if(mustToBeSaved) {
+		if (mustToBeSaved) {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
@@ -234,7 +230,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void stopAnalyze(Cheat c) {
-		
+
 	}
 
 	private void destroy() {
@@ -242,8 +238,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!Cheat.forKey(CheatKeys.FORCEFIELD).isActive()
-				|| Adapter.getAdapter().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
+		if (!Cheat.forKey(CheatKeys.FORCEFIELD).isActive() || Adapter.getAdapter().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
 		spawnRight();
@@ -255,10 +250,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
 		FAKE_PLAYER.remove(fp);
-		if(!detected) {
-			if(fakePlayerTouched > 0)
+		if (!detected) {
+			if (fakePlayerTouched > 0)
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if(FAKE_PLAYER.size() == 0)
+			if (FAKE_PLAYER.size() == 0)
 				fakePlayerTouched = 0;
 			return;
 		}
@@ -271,7 +266,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			}
 		} else {
 			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if(fakePlayerTouched < 100) {
+			if (fakePlayerTouched < 100) {
 				spawnRandom();
 				spawnRandom();
 			}
@@ -350,10 +345,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public String getReason(Cheat c) {
 		String n = "";
-		for(Cheat all : Cheat.values())
-			if(getAllWarn(all) > 5)
+		for (Cheat all : Cheat.values())
+			if (getAllWarn(all) > 5)
 				n = n + (n.equals("") ? "" : ", ") + all.getName();
-		if(!n.contains(c.getName()))
+		if (!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
@@ -426,24 +421,23 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void kickPlayer(String reason, String time, String by, boolean def) {
-		p.kick(Messages.getMessage(p, "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%",
-				String.valueOf(time), "%by%", by));
+		p.kick(Messages.getMessage(p, "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
 	@Override
 	public void banEffect() {
 		System.out.println("[SpongeNegativityPlayer] SOOOON");
 	}
-	
-	public List<PlayerCheatEvent.Alert> getAlertForAllCheat(){
+
+	public List<PlayerCheatEvent.Alert> getAlertForAllCheat() {
 		final List<PlayerCheatEvent.Alert> list = new ArrayList<>();
 		pendingAlerts.forEach((c, listAlerts) -> {
-			if(!listAlerts.isEmpty())
+			if (!listAlerts.isEmpty())
 				list.add(getAlertForCheat(c, listAlerts));
 		});
 		return list;
 	}
-	
+
 	public PlayerCheatEvent.Alert getAlertForCheat(Cheat c, List<PlayerCheatEvent.Alert> list) {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
@@ -451,28 +445,30 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		ReportType type = ReportType.NONE;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
-		for(PlayerCheatEvent.Alert e : list) {
+		for (PlayerCheatEvent.Alert e : list) {
 			nb += e.getNbAlert();
-			
+
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
 
 			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
 
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+			if (type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
 
-			if(hoverProof == null && e.getHover() != null)
+			if (hoverProof == null && e.getHover() != null)
 				hoverProof = e.getHover();
-			
+
 			nbConsole += e.getNbAlertConsole();
 			e.clearNbAlertConsole();
 		}
-		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary,
+		// and a the nb of alert to upgrade it
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
+		// we can ignore "proof" and "stats_send" because they have been already saved
+		// and they are NOT showed to player
 		return new PlayerCheatEvent.Alert(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
@@ -494,25 +490,25 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			fightTask.cancel();
 		fightTask = null;
 	}
-	
+
 	public boolean hasThorns(Player p) {
-		if(hasThornsForItem(p.getHelmet().orElse(null)))
+		if (hasThornsForItem(p.getHelmet().orElse(null)))
 			return true;
-		if(hasThornsForItem(p.getChestplate().orElse(null)))
+		if (hasThornsForItem(p.getChestplate().orElse(null)))
 			return true;
-		if(hasThornsForItem(p.getLeggings().orElse(null)))
+		if (hasThornsForItem(p.getLeggings().orElse(null)))
 			return true;
-		if(hasThornsForItem(p.getBoots().orElse(null)))
+		if (hasThornsForItem(p.getBoots().orElse(null)))
 			return true;
 		return false;
 	}
-	
+
 	private boolean hasThornsForItem(ItemStack item) {
-		if(item == null)
+		if (item == null)
 			return false;
 		Optional<EnchantmentData> opt = item.get(EnchantmentData.class);
-		if(opt.isPresent())
-			if(opt.get().contains(Enchantment.of(EnchantmentTypes.THORNS, 1)))
+		if (opt.isPresent())
+			if (opt.get().contains(Enchantment.of(EnchantmentTypes.THORNS, 1)))
 				return true;
 		return false;
 	}
@@ -529,8 +525,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public static SpongeNegativityPlayer getNegativityPlayer(User player) {
 		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
 	}
-	
-	public static Map<UUID, SpongeNegativityPlayer> getAllPlayers(){
+
+	public static Map<UUID, SpongeNegativityPlayer> getAllPlayers() {
 		return PLAYERS_CACHE;
 	}
 

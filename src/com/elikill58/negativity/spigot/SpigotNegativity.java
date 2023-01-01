@@ -479,10 +479,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if(reloading || !c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.equals(Cheat.forKey(CheatKeys.BLINK))) {
-			np.already_blink = true;
-			return false;
-		}
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if(VerificationManager.isDisablingAlertOnVerif() && hasVerifications(p.getUniqueId()))

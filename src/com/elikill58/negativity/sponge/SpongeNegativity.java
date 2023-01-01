@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -82,7 +84,6 @@ import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -116,8 +117,6 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.google.inject.Inject;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-
-import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 @Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.PLUGIN_VERSION, description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
@@ -503,11 +502,6 @@ public class SpongeNegativity {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.forKey(CheatKeys.BLINK)))
-			if (!np.already_blink) {
-				np.already_blink = true;
-				return false;
-			}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))

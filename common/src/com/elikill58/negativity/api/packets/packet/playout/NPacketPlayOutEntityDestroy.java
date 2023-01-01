@@ -12,9 +12,14 @@ public class NPacketPlayOutEntityDestroy implements NPacketPlayOut {
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		this.entityIds = new int[serializer.readVarInt()];
-		for(int i = 0; i < entityIds.length; i++)
-			entityIds[i] = serializer.readVarInt();
+		if(version.equals(Version.V1_17)) {
+			this.entityIds = new int[1];
+			this.entityIds[0] = serializer.readVarInt();
+		} else {
+			this.entityIds = new int[serializer.readVarInt()];
+			for(int i = 0; i < entityIds.length; i++)
+				entityIds[i] = serializer.readVarInt();
+		}
 	}
 	
 	@Override

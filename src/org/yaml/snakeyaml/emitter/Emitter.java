@@ -1087,7 +1087,7 @@ public final class Emitter implements Emitable
             this.first = first;
         }
         
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({ "rawtypes" })
 		@Override
         public void expect() throws IOException {
             if (Emitter.this.event instanceof DocumentStartEvent) {

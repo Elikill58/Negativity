@@ -48,7 +48,6 @@ public class PacketContent {
 		private Object obj;
 		private HashMap<String, T> content = new HashMap<>();
 
-		@SuppressWarnings("unchecked")
 		public ContentModifier(Object obj, Class<?> clazz) {
 			this.obj = obj;
 			
@@ -68,7 +67,6 @@ public class PacketContent {
 			return content.size();
 		}
 
-		@SuppressWarnings("unchecked")
 		public T read(int i) {
 			return (T) content.values().toArray()[i];
 		}

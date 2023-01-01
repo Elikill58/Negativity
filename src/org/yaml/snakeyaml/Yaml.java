@@ -32,7 +32,6 @@ import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.resolver.Resolver;
 
-@SuppressWarnings("unchecked")
 public class Yaml
 {
     protected final Resolver resolver;

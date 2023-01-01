@@ -224,17 +224,9 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
-		for (Player player : Sponge.getServer().getOnlinePlayers()) {
-			SpongeNegativityPlayer nPlayer = SpongeNegativityPlayer.getNegativityPlayer(player);
-			nPlayer.saveData();
-		}
+		Sponge.getServer().getOnlinePlayers().stream().map(SpongeNegativityPlayer::getNegativityPlayer).forEach(SpongeNegativityPlayer::saveData);
 		if (!ProxyCompanionManager.isIntegrationEnabled())
-			Task.builder().async().delayTicks(1).execute(new Runnable() {
-				@Override
-				public void run() {
-					Stats.updateStats(StatsType.ONLINE, 0 + "");
-				}
-			}).submit(this);
+			Task.builder().async().delayTicks(1).execute(() -> Stats.updateStats(StatsType.ONLINE, 0 + "")).submit(this);
 		Database.close();
 	}
 

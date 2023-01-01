@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 package net.md_5.bungee.config;
 
 import java.util.ArrayList;
@@ -12,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public final class Configuration
 {
     //private static final char SEPARATOR = '.';

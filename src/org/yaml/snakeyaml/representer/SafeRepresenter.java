@@ -25,7 +25,6 @@ import java.util.TimeZone;
 import org.yaml.snakeyaml.nodes.Tag;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 class SafeRepresenter extends BaseRepresenter
 {
     protected Map<Class<?>, Tag> classTags;

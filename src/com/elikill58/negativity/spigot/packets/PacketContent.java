@@ -68,7 +68,6 @@ public class PacketContent {
 		private Object obj;
 		private HashMap<Field, T> content = new HashMap<>();
 
-		@SuppressWarnings("unchecked")
 		public ContentModifier(Object obj, Class<?> clazz) {
 			this.obj = obj;
 			

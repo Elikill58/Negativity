@@ -34,7 +34,6 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.nodes.NodeId;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public abstract class BaseConstructor
 {
     protected final Map<NodeId, Construct> yamlClassConstructors;

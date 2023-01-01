@@ -110,7 +110,6 @@ public class Representer extends SafeRepresenter
         return new NodeTuple(nodeKey, nodeValue);
     }
     
-    @SuppressWarnings("unchecked")
 	protected void checkGlobalTag(final Property property, final Node node, final Object object) {
         if (object.getClass().isArray() && object.getClass().getComponentType().isPrimitive()) {
             return;

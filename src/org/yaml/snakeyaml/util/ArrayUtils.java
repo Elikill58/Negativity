@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
-
 package org.yaml.snakeyaml.util;
 
 import java.util.AbstractList;
@@ -13,7 +9,6 @@ public class ArrayUtils
     private ArrayUtils() {
     }
     
-    @SuppressWarnings("unchecked")
 	public static <E> List<E> toUnmodifiableList(final E... elements) {
         return (elements.length == 0) ? Collections.emptyList() : new UnmodifiableArrayList<E>(elements);
     }

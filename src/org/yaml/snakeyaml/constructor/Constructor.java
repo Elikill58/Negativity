@@ -26,7 +26,6 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
-@SuppressWarnings("unchecked")
 public class Constructor extends SafeConstructor
 {
     public Constructor() {

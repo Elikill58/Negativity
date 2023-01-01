@@ -37,7 +37,6 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		return type;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Listener
 	public void onClick(ClickInventoryEvent e, @First Player p) {
 		if (e.getTransactions().isEmpty() || !(e.getTargetInventory() instanceof CarriedInventory<?>))

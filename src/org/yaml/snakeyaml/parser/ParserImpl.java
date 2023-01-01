@@ -84,7 +84,6 @@ public class ParserImpl implements Parser
         return value;
     }
     
-    @SuppressWarnings("unchecked")
 	private VersionTagsTuple processDirectives() {
         DumperOptions.Version yamlVersion = null;
         final HashMap<String, String> tagHandles = new HashMap<String, String>();

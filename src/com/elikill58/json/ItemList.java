@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class ItemList {
 	private String sp = ",";
 	List items = new ArrayList<>();

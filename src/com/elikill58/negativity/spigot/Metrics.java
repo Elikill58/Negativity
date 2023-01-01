@@ -40,7 +40,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
  *
  * Check out https://bStats.org/ to learn more about bStats!
  */
-@SuppressWarnings("unchecked")
 public class Metrics {
 
 	static {

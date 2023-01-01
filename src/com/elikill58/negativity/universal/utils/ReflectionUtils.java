@@ -65,7 +65,6 @@ public class ReflectionUtils {
 	 * @return the field (or null if not found)
 	 * @throws Exception if something gone wrong
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T getFirstWith(Object from, Class<?> clazz, Class<T> searchingFor) throws Exception {
 		for (Field f : clazz.getDeclaredFields()) {
 			if (f.getType().equals(searchingFor) && !Modifier.isStatic(f.getModifiers())) {

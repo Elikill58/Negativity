@@ -75,8 +75,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
 	public double lastYDiff = -3.142654;
-	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0, LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
-	public String LAST_OTHER_KEEP_ALIVE;
+	public long TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0, LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public boolean IS_LAST_SEC_SNEAK = false, isFreeze = false, isUsingSlimeBlock = false, isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	private boolean mustToBeSaved = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -176,11 +175,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (!SpongeNegativity.hasPrecogs)
 			return false;
 		return NegativityBypassTicket.hasBypassTicket(c, p);
-	}
-
-	@Deprecated
-	public void addWarn(Cheat c) {
-		addWarn(c, 100);
 	}
 
 	public void addWarn(Cheat c, int reliability) {

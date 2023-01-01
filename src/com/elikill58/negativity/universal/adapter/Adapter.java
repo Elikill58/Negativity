@@ -46,46 +46,6 @@ public abstract class Adapter {
 	public abstract File getDataFolder();
 
 	/**
-	 * @deprecated Use {@code getConfig().getString(key)} instead
-	 */
-	@Deprecated
-	public String getStringInConfig(String key) {
-		return getConfig().getString(key);
-	}
-
-	/**
-	 * @deprecated Use {@code getConfig().getBoolean(key)} instead
-	 */
-	@Deprecated
-	public boolean getBooleanInConfig(String key) {
-		return getConfig().getBoolean(key);
-	}
-
-	/**
-	 * @deprecated Use {@code getConfig().getInteger(key)} instead
-	 */
-	@Deprecated
-	public int getIntegerInConfig(String key) {
-		return getConfig().getInt(key);
-	}
-
-	/**
-	 * @deprecated Use {@code getConfig().getDouble(key)} instead
-	 */
-	@Deprecated
-	public double getDoubleInConfig(String key) {
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * @deprecated Use {@code getConfig().getStringList(key)} instead
-	 */
-	@Deprecated
-	public List<String> getStringListInConfig(String key) {
-		return getConfig().getStringList(key);
-	}
-
-	/**
 	 * @deprecated Use {@code getConfig().set(key, value)} instead
 	 */
 	@Deprecated

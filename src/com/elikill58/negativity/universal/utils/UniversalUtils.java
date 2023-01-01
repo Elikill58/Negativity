@@ -13,11 +13,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -30,13 +25,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -113,13 +101,6 @@ public class UniversalUtils {
 		for(String s : args)
 			if(isInteger(s))
 				return Optional.of(Integer.parseInt(s));
-		return Optional.empty();
-	}
-
-	public static Optional<Cheat> getCheatFromName(String s) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(s))
-				return Optional.of(c);
 		return Optional.empty();
 	}
 
@@ -266,35 +247,6 @@ public class UniversalUtils {
 			}
 			return null;
 		});
-	}
-
-	public static void doTrustToCertificates() throws KeyManagementException, NoSuchAlgorithmException {
-		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-			public X509Certificate[] getAcceptedIssuers() {
-				return null;
-			}
-
-			public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-				return;
-			}
-
-			public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-				return;
-			}
-		} };
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		HostnameVerifier hv = new HostnameVerifier() {
-			public boolean verify(String urlHostName, SSLSession session) {
-				if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-					Adapter.getAdapter().getLogger().warn("Warning: URL host '" + urlHostName + "' is different to SSLSession host '"
-							+ session.getPeerHost() + "'.");
-				}
-				return true;
-			}
-		};
-		HttpsURLConnection.setDefaultHostnameVerifier(hv);
 	}
 
 	public static String replacePlaceholders(String rawMessage, Object... placeholders) {

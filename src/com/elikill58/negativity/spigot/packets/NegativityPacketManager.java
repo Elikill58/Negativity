@@ -11,7 +11,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
 import com.elikill58.negativity.universal.PacketType;
-import com.elikill58.negativity.universal.PacketType.Client;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class NegativityPacketManager {
@@ -76,10 +75,6 @@ public class NegativityPacketManager {
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.POSITION || type == PacketType.Client.FLYING || type == PacketType.Client.LOOK || type == PacketType.Client.POSITION_LOOK) {
 			np.setOnGround(packet.getContent().getBooleans().read(0));
-		}
-		if (packet.getPacketType() != Client.KEEP_ALIVE) {
-			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
-			np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
 		}
 	}
 }

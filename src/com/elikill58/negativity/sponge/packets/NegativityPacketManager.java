@@ -82,9 +82,5 @@ public class NegativityPacketManager {
 			default:
 			}
 		}
-		if (packet.getPacketType() != Client.KEEP_ALIVE) {
-			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
-			np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
-		}
 	}
 }

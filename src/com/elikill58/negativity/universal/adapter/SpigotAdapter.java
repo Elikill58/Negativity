@@ -23,6 +23,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.WorldRegionBypass;
 import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -109,6 +110,7 @@ public class SpigotAdapter extends Adapter {
 		SpigotNegativity.trySendProxyPing();
 		SpigotNegativity.setupValue();
 		WorldRegionBypass.init();
+		WebhookManager.init();
 		for(Player p : Utils.getOnlinePlayers())
 			SpigotNegativity.manageAutoVerif(p);
 		if(FloodGateSupportManager.hasSupport) {

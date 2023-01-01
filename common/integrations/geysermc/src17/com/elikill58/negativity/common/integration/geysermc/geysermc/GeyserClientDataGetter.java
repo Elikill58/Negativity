@@ -14,6 +14,8 @@ import com.elikill58.negativity.universal.bedrock.data.BedrockClientDataGetter;
 
 public class GeyserClientDataGetter implements BedrockClientDataGetter {
 	
+	private boolean shouldCheckFloodgate = false;
+	
 	@Override
 	public @Nullable BedrockClientData getClientData(UUID uuid) {
 		GeyserSession session = GeyserImpl.getInstance().connectionByUuid(uuid);
@@ -21,7 +23,22 @@ public class GeyserClientDataGetter implements BedrockClientDataGetter {
 			return null;
 		org.geysermc.geyser.session.auth.BedrockClientData data = session.getClientData();
 		Adapter ada = Adapter.getAdapter();
-		BedrockOs os = BedrockOs.valueOf(ada.hasPlugin("floodgate") ? FloodgateApi.getInstance().getPlayer(uuid).getDeviceOs().name() : data.getDeviceOs().name());
+		String osName = null;
+		if(shouldCheckFloodgate && ada.hasPlugin("floodgate"))
+			osName = FloodgateApi.getInstance().getPlayer(uuid).getDeviceOs().name();
+		else {
+			try {
+				osName = data.getDeviceOs().name();
+			} catch (LinkageError e) {
+				ada.getLogger().warn("LinkageError between GeyserMC and Floodgate. Trying to fix ...");
+				shouldCheckFloodgate = true;
+			}
+		}
+		if(osName == null) {
+			ada.getLogger().warn("Failed to find valid Device OS from GeyserMC");
+			return null;
+		}
+		BedrockOs os = BedrockOs.valueOf(osName);
 		
 		return new BedrockClientData(data.getDeviceId(), data.getDeviceModel(), os);
 	}

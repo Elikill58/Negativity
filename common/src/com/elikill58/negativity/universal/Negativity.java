@@ -303,12 +303,12 @@ public class Negativity {
 		NegativityAccountStorage.init();
 		EventManager.load();
 		PlayerVersionManager.init();
+		BedrockPlayerManager.init();
 		Special.loadSpecial();
 		Configuration config = ada.getConfig();
 		if(!ada.getPlatformID().isProxy()) {
 			Cheat.loadCheat();
 			BypassManager.loadBypass();
-			BedrockPlayerManager.init();
 			PlayerModificationsManager.init();
 			NegativityProofStorage.init();
 			VerificationManager.init();

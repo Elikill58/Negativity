@@ -14,6 +14,9 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
+import com.elikill58.negativity.spigot.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.spigot.webhooks.messages.WebhookMessage.WebhookMessageType;
 
 public class KickCommand implements CommandExecutor, TabCompleter {
 
@@ -46,6 +49,7 @@ public class KickCommand implements CommandExecutor, TabCompleter {
 		String reason = stringJoiner.toString();
 		target.kickPlayer(Messages.getMessage(target, "kick.kicked", "%name%", target.getName(), "%reason%", reason));
 		Messages.sendMessage(sender, "kick.well_kick", "%name%", target.getName(), "%reason%", reason);
+		WebhookManager.send(new WebhookMessage(WebhookMessageType.KICK, target, sender.getName(), System.currentTimeMillis(), "%reason%", reason));
 		return false;
 	}
 

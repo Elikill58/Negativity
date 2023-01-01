@@ -62,6 +62,9 @@ import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
+import com.elikill58.negativity.spigot.webhooks.messages.AlertWebhookMessage;
+import com.elikill58.negativity.spigot.webhooks.messages.WebhookMessage.WebhookMessageType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -183,6 +186,7 @@ public class SpigotNegativity extends JavaPlugin {
 		loadCommand();
 
 		ItemUseBypass.load();
+		WebhookManager.init();
 		Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
 			if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 				getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
@@ -529,7 +533,8 @@ public class SpigotNegativity extends JavaPlugin {
 		if(type == ReportType.INFO) { // if it's a debug alert, ignore it
 			sendAlertMessage(np, alert);
 			return false;
-		}
+		} else
+			WebhookManager.addToQueue(new AlertWebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), alert.getNbAlert() == 0 ? 1 : alert.getNbAlert(), alert.getReliability(), alert.getCheat()));
 		callSyncEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;

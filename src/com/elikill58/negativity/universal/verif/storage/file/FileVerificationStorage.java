@@ -51,7 +51,6 @@ public class FileVerificationStorage extends VerificationStorage {
 						JSONObject json = (JSONObject) new JSONParser().parse(reader);
 						Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
 						String startedBy = json.get("startedBy").toString();
-						@SuppressWarnings("unchecked")
 						List<String> result = (List<String>) json.get("result");
 						int version = (int) (long) json.get("version");
 						Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
@@ -68,7 +67,6 @@ public class FileVerificationStorage extends VerificationStorage {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletableFuture<Void> saveVerification(Verificator verif) {
 		return CompletableFuture.runAsync(() -> {

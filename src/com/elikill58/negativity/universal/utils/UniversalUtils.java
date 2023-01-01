@@ -18,6 +18,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -349,6 +352,12 @@ public class UniversalUtils {
 		}
 
 		return time;
+	}
+	
+	public static @Nullable String formatTime(long time) {
+		if(time <= 0)
+			return null;
+		return GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()));
 	}
 
 	public static boolean isValidName(String name) {

@@ -7,4 +7,6 @@ public interface LoggerAdapter {
 	public void warn(String msg);
 	
 	public void error(String msg);
+	
+	void printError(String message, Exception e);
 }

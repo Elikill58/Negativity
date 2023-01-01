@@ -17,6 +17,9 @@ import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
+import com.elikill58.negativity.spigot.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.spigot.webhooks.messages.WebhookMessage.WebhookMessageType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -82,6 +85,8 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		np.TIME_REPORT = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
+		
+		WebhookManager.send(new WebhookMessage(WebhookMessageType.REPORT, target, p.getName(), System.currentTimeMillis(), "%reason%", reason));
 		return false;
 	}
 

@@ -33,6 +33,7 @@ import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -156,6 +157,7 @@ public class PlayersEvents implements Listener {
 		Player p = e.getPlayer();
 
 		Bukkit.getScheduler().runTaskLater(pl, () -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId()), 2);
+		WebhookManager.getWebhooks().forEach(w -> w.clean(e.getPlayer()));
 	}
 
 	@EventHandler

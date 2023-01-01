@@ -32,6 +32,8 @@ import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryTy
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.webhooks.Webhook;
+import com.elikill58.negativity.spigot.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -165,6 +167,29 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory(p));
+			return true;
+		} else if (arg[0].equalsIgnoreCase("webhook")) {
+			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			if(WebhookManager.isEnabled()) {
+				List<Webhook> webhooks = WebhookManager.getWebhooks();
+				if(webhooks.isEmpty()) {
+					sender.sendMessage(ChatColor.YELLOW + "No webhook configurated.");
+				} else {
+					for(Webhook hook : webhooks) {
+						
+						if(hook.ping(sender.getName())) {
+							sender.sendMessage(ChatColor.GREEN + hook.getWebhookName() + " well configurated.");
+						} else {
+							sender.sendMessage(ChatColor.RED + hook.getWebhookName() + " seems to don't work.");
+						}
+					}
+				}
+			} else {
+				sender.sendMessage(ChatColor.YELLOW + "Webhooks are disabled.");
+			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
@@ -343,6 +368,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				suggestions.add("debug");
 			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT))
 				suggestions.add("admin");
+			if ("webhook".startsWith(prefix) && WebhookManager.isEnabled())
+				suggestions.add("webhook");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif") || arg[0].equalsIgnoreCase("debug")) {
 				// both command use tab arguments to works

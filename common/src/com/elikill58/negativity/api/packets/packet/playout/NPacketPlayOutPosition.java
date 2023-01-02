@@ -8,9 +8,17 @@ import com.elikill58.negativity.universal.Version;
 
 public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 
+	/**
+	 * Since 1.9
+	 */
+	public int teleportId;
 	public double x, y, z;
 	public float yaw, pitch;
 	public EnumPlayerTeleportFlags flag;
+	/**
+	 * Since 1.17
+	 */
+	public boolean shouldDismount;
 
 	public NPacketPlayOutPosition() {
 
@@ -24,6 +32,11 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 		this.yaw = serializer.readFloat();
 		this.pitch = serializer.readFloat();
 		this.flag = EnumPlayerTeleportFlags.values()[serializer.readUnsignedByte()];
+		if(version.isNewerOrEquals(Version.V1_9)) {
+			this.teleportId = serializer.readVarInt();
+			if(version.isNewerOrEquals(Version.V1_17))
+				this.shouldDismount = serializer.readBoolean();
+		}
 	}
 
 	@Override

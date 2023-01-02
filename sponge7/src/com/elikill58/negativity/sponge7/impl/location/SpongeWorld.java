@@ -56,6 +56,11 @@ public class SpongeWorld extends World {
 	}
 
 	@Override
+	public boolean isChunkLoaded(int chunkX, int chunkZ) {
+		return w.getChunk(chunkX, 0, chunkZ).isPresent();
+	}
+
+	@Override
 	public Object getDefault() {
 		return w;
 	}

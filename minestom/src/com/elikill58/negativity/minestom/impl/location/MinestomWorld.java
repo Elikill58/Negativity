@@ -60,6 +60,11 @@ public class MinestomWorld extends World {
 	}
 
 	@Override
+	public boolean isChunkLoaded(int chunkX, int chunkZ) {
+		return w.isChunkLoaded(chunkX, chunkZ);
+	}
+
+	@Override
 	public Object getDefault() {
 		return w;
 	}

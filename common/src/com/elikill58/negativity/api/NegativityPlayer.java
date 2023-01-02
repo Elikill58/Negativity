@@ -174,8 +174,12 @@ public class NegativityPlayer {
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && PlayerModificationsManager.shouldIgnoreMovementChecks(p))
-			return false;
+		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
+				return false;
+			if (!p.getWorld().isChunkLoaded(p.getLocation()))
+				return false;
+		}
 		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
 			return false;
 		if(BypassManager.hasBypass(p, c))
@@ -204,8 +208,12 @@ public class NegativityPlayer {
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return "Low TPS";
 		Player p = getPlayer();
-		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && PlayerModificationsManager.shouldIgnoreMovementChecks(p))
-			return "Should ignore movement";
+		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
+				return "Should ignore movement";
+			if (!p.getWorld().isChunkLoaded(p.getLocation()))
+				return "Chunk not loaded";
+		}
 		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
 			return "Allowed to fly";
 		if(BypassManager.hasBypass(p, c))

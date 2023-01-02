@@ -151,7 +151,13 @@ public abstract class World implements NegativityObject {
 	public abstract List<Entity> getEntities();
 	
 	public abstract Optional<Entity> getEntityById(int id);
-	
+
+	public boolean isChunkLoaded(Location loc) {
+		return isChunkLoaded(loc.getBlockX() / 16, loc.getBlockZ() / 16);
+	}
+
+	public abstract boolean isChunkLoaded(int chunkX, int chunkZ);
+
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof World))

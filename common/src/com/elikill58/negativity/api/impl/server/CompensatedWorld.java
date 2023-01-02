@@ -91,6 +91,11 @@ public class CompensatedWorld extends World {
 	public Object getDefault() {
 		return getServerWorld().getDefault();
 	}
+
+	@Override
+	public boolean isChunkLoaded(int chunkX, int chunkZ) {
+		return getServerWorld().isChunkLoaded(chunkX, chunkZ);
+	}
 	
 	@Override
 	public String toString() {

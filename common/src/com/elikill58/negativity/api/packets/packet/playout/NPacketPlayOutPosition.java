@@ -15,6 +15,9 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 	 * Since 1.9
 	 */
 	public int teleportId;
+	/**
+	 * Warn: those values can be relative (and not absolute) according to {@link #flags}
+	 */
 	public double x, y, z;
 	public float yaw, pitch;
 	public List<EnumPlayerTeleportFlags> flags;
@@ -63,6 +66,7 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 	}
 
 	public enum EnumPlayerTeleportFlags {
+		
 		X, Y, Z, Y_ROT, X_ROT;
 
 		private int charge() {
@@ -73,12 +77,17 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 			return ((param1Int & charge()) == charge());
 		}
 
-		public static List<EnumPlayerTeleportFlags> get(int param1Int) {
+		/**
+		 * Get flags values according to given packet value
+		 * 
+		 * @param val the value from packet
+		 * @return all flags
+		 */
+		public static List<EnumPlayerTeleportFlags> get(int val) {
 			List<EnumPlayerTeleportFlags> flags = new ArrayList<>();
-			for (EnumPlayerTeleportFlags enumPlayerTeleportFlags : values()) {
-				if (enumPlayerTeleportFlags.isValid(param1Int))
+			for (EnumPlayerTeleportFlags enumPlayerTeleportFlags : values())
+				if (enumPlayerTeleportFlags.isValid(val))
 					flags.add(enumPlayerTeleportFlags);
-			}
 			return flags;
 		}
 	}

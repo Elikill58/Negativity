@@ -41,7 +41,7 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 				ByteBuf msg = ((ByteBuf) obj).copy();
 				NettyHandlerCommon.runAsync(() -> {
 					try {
-						NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg.copy(), "encode");
+						NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "encode");
 						if(packet == null)
 							return;
 						EventManager.callEvent(new PacketSendEvent(packet, p));

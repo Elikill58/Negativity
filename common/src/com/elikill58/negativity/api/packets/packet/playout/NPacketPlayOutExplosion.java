@@ -23,9 +23,15 @@ public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 	
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-	    this.x = serializer.readFloat();
-	    this.y = serializer.readFloat();
-	    this.z = serializer.readFloat();
+		if(version.isNewerOrEquals(Version.V1_19_3)) {
+		    this.x = serializer.readDouble();
+		    this.y = serializer.readDouble();
+		    this.z = serializer.readDouble();
+		} else {
+		    this.x = serializer.readFloat();
+		    this.y = serializer.readFloat();
+		    this.z = serializer.readFloat();
+		}
 	    this.strength = serializer.readFloat();
 	    int i = serializer.readVarInt();
 	    this.positions = new ArrayList<>(i);

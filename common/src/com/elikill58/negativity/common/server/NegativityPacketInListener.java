@@ -26,7 +26,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
-import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityPacketInListener implements Listeners {
 
@@ -38,7 +37,6 @@ public class NegativityPacketInListener implements Listeners {
 		NPacket packet = e.getPacket();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		PacketType type = packet.getPacketType();
-		Adapter.getAdapter().getLogger().info("Packet " + packet.getPacketName());
 		if (type == PacketType.Client.BLOCK_DIG && packet instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet;
 			if (blockDig.action != DigAction.FINISHED_DIGGING)

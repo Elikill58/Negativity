@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntity;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -32,7 +33,13 @@ public class SpigotWorld extends World {
 	public Block getBlockAt0(int x, int y, int z) {
 		if(!w.isChunkLoaded(x / 16, z / 16))
 			return emptyBlock;
-		return new SpigotBlock(w.getBlockAt(x, y, z));
+		try {
+			return new SpigotBlock(w.getBlockAt(x, y, z));
+		} catch (IllegalStateException e) {
+			// tried to load async
+			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> w.getBlockAt(x, y, z)); // ask for block, to be sure the chunk is loaded but sync
+			return emptyBlock;
+		}
 	}
 	
 	@Override

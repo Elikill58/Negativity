@@ -1,5 +1,8 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.PacketSerializer;
@@ -14,7 +17,7 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 	public int teleportId;
 	public double x, y, z;
 	public float yaw, pitch;
-	public EnumPlayerTeleportFlags flag;
+	public List<EnumPlayerTeleportFlags> flags;
 	/**
 	 * Since 1.17
 	 */
@@ -31,10 +34,10 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 		this.z = serializer.readDouble();
 		this.yaw = serializer.readFloat();
 		this.pitch = serializer.readFloat();
-		this.flag = EnumPlayerTeleportFlags.values()[serializer.readUnsignedByte()];
-		if(version.isNewerOrEquals(Version.V1_9)) {
+		this.flags = EnumPlayerTeleportFlags.get(serializer.readUnsignedByte());
+		if (version.isNewerOrEquals(Version.V1_9)) {
 			this.teleportId = serializer.readVarInt();
-			if(version.isNewerOrEquals(Version.V1_17))
+			if (version.isNewerOrEquals(Version.V1_17))
 				this.shouldDismount = serializer.readBoolean();
 		}
 	}
@@ -62,5 +65,21 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 	public enum EnumPlayerTeleportFlags {
 		X, Y, Z, Y_ROT, X_ROT;
 
+		private int charge() {
+			return 1 << ordinal();
+		}
+
+		private boolean isValid(int param1Int) {
+			return ((param1Int & charge()) == charge());
+		}
+
+		public static List<EnumPlayerTeleportFlags> get(int param1Int) {
+			List<EnumPlayerTeleportFlags> flags = new ArrayList<>();
+			for (EnumPlayerTeleportFlags enumPlayerTeleportFlags : values()) {
+				if (enumPlayerTeleportFlags.isValid(param1Int))
+					flags.add(enumPlayerTeleportFlags);
+			}
+			return flags;
+		}
 	}
 }

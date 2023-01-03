@@ -156,7 +156,7 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	public String readString() {
 		int j = readVarInt();
 		if (j < 0)
-			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
+			throw new DecoderException("The received encoded string buffer length is less than zero! (" + j + ")");
 		byte[] bytes = new byte[j];
 		for (int i = 0; i < j; i++)
 			bytes[i] = readByte();
@@ -165,10 +165,10 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 
 	public String readString(int size) {
 		int j = readVarInt();
+		if (j < 0)
+			throw new DecoderException("The received encoded string buffer length is less than zero! (" + j + ")");
 		if (j > size * 4)
 			throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + (size * 4) + ")");
-		if (j < 0)
-			throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
 		byte[] bytes = new byte[j];
 		for (int i = 0; i < j; i++)
 			bytes[i] = readByte();

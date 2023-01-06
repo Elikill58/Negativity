@@ -53,8 +53,7 @@ public class DiscordWebhook implements Webhook {
 	}
 
 	public long getCooldown(Player p, WebhookMessageType type) {
-		long saved = players.get(type, p.getUniqueId().toString(),
-				System.currentTimeMillis() + getTheoricCooldown(type));
+		long saved = players.get(type, p.getUniqueId().toString(), System.currentTimeMillis() + getTheoricCooldown(type));
 		return saved == 0 ? 0 : System.currentTimeMillis() - saved;
 	}
 
@@ -126,13 +125,12 @@ public class DiscordWebhook implements Webhook {
 
 	@Override
 	public void send(WebhookMessage msg) {
-		if(!msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
+		if (!msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
 			return;
 		try {
 			executorService.execute(() -> sendAsync(msg));
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger()
-					.printError("Error while executing async webhook message about " + msg.getConcerned().getName(), e);
+			Adapter.getAdapter().getLogger().printError("Error while executing async webhook message about " + msg.getConcerned().getName(), e);
 		}
 	}
 
@@ -140,8 +138,7 @@ public class DiscordWebhook implements Webhook {
 		try {
 			sendAsyncWithException(msg);
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger()
-					.printError("Error while sending webhook message about " + msg.getConcerned().getName(), e);
+			Adapter.getAdapter().getLogger().printError("Error while sending webhook message about " + msg.getConcerned().getName(), e);
 		}
 	}
 
@@ -155,17 +152,14 @@ public class DiscordWebhook implements Webhook {
 			return;
 		}
 		// if offline, don't care about cooldown
-		if (time > System.currentTimeMillis()
-				|| (msg.getConcerned().isOnline() && hasCooldown(msg.getConcerned(), msg.getMessageType()))) {
+		if (time > System.currentTimeMillis() || (msg.getConcerned().isOnline() && hasCooldown(msg.getConcerned(), msg.getMessageType()))) {
 			// should skip
 			queue.add(msg);
 			ada.debug(Debug.FEATURE, "Skipping " + msg.getMessageType().name() + ": "
-					+ (time > System.currentTimeMillis() ? "waiting for discord"
-							: "player cooldown: " + getCooldown(msg.getConcerned(), msg.getMessageType())));
+					+ (time > System.currentTimeMillis() ? "waiting for discord" : "player cooldown: " + getCooldown(msg.getConcerned(), msg.getMessageType())));
 			return;
 		}
-		ada.debug(Debug.FEATURE, "Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": "
-				+ getCooldown(msg.getConcerned(), msg.getMessageType()));
+		ada.debug(Debug.FEATURE, "Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": " + getCooldown(msg.getConcerned(), msg.getMessageType()));
 		setCooldown(msg.getConcerned(), msg.getMessageType());
 		DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 		webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
@@ -173,42 +167,33 @@ public class DiscordWebhook implements Webhook {
 			webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
 		} else { // is first message
 			alreadySent.add(msg.getConcerned().getUniqueId());
-			webhook.setContent(
-					msg.applyPlaceHolders(confMsg.getString("content_first", confMsg.getString("content", ""))));
+			webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content_first", confMsg.getString("content", ""))));
 		}
-		webhook.setAvatarUrl(msg.applyPlaceHolders(
-				confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
+		webhook.setAvatarUrl(msg.applyPlaceHolders(confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 		Configuration embed = confMsg.getSection("embed");
 		if (embed != null) {
 			EmbedObject obj = new DiscordWebhookRequest.EmbedObject();
 			obj.setColor(Color.getColor(embed.getString("color", "red")));
-			obj.setTitle(msg
-					.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase(Locale.ROOT))));
+			obj.setTitle(msg.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase(Locale.ROOT))));
 			obj.setDescription(msg.applyPlaceHolders(embed.getString("description", "")));
 
 			Configuration fields = embed.getSection("fields");
 			if (fields != null) {
 				fields.getKeys().forEach((key) -> {
 					Configuration fieldConfig = fields.getSection(key);
-					obj.addField(msg.applyPlaceHolders(fieldConfig.getString("key", "")),
-							msg.applyPlaceHolders(fieldConfig.getString("value", "")),
-							fieldConfig.getBoolean("inline", true));
+					obj.addField(msg.applyPlaceHolders(fieldConfig.getString("key", "")), msg.applyPlaceHolders(fieldConfig.getString("value", "")), fieldConfig.getBoolean("inline", true));
 				});
 			}
 
-			obj.setThumbnail(msg.applyPlaceHolders(
-					embed.getString("thumbnail", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
+			obj.setThumbnail(msg.applyPlaceHolders(embed.getString("thumbnail", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 			Configuration footer = embed.getSection("footer");
 			if (footer != null) {
-				obj.setFooter(msg.applyPlaceHolders(footer.getString("name", "Negativity - %date%")),
-						footer.getString("link", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"));
+				obj.setFooter(msg.applyPlaceHolders(footer.getString("name", "Negativity - %date%")), footer.getString("link", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"));
 			}
 			Configuration author = embed.getSection("author");
 			if (author != null) {
-				obj.setAuthor(msg.applyPlaceHolders(author.getString("name", "Negativity")),
-						msg.applyPlaceHolders(author.getString("link", "https://github.com/Elikill58/Negativity")),
-						msg.applyPlaceHolders(
-								author.getString("icon", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
+				obj.setAuthor(msg.applyPlaceHolders(author.getString("name", "Negativity")), msg.applyPlaceHolders(author.getString("link", "https://github.com/Elikill58/Negativity")),
+						msg.applyPlaceHolders(author.getString("icon", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 			}
 
 			webhook.addEmbed(obj);
@@ -223,17 +208,15 @@ public class DiscordWebhook implements Webhook {
 				synchronized (queue) {
 					queue.add(msg);
 				}
-				long retryAfter = (long) json.get("retry_after");
+				long retryAfter = Long.parseLong(json.get("retry_after").toString());
 				time = System.currentTimeMillis() + retryAfter; // wait 5 s until next send
 				ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter / 1000) + " secs more.");
 			} else if (code == 405) {
 				enabled = false;
 				executorService.shutdown();
-				ada.getLogger().warn(
-						"A discord issue appear. The webhook is disabled until next restart: " + webhookResult.getB());
+				ada.getLogger().warn("A discord issue appear. The webhook is disabled until next restart: " + webhookResult.getB());
 			} else
-				ada.getLogger().warn(
-						"Error while trying to send webhook request (code: " + code + "): " + webhookResult.getB());
+				ada.getLogger().warn("Error while trying to send webhook request (code: " + code + "): " + webhookResult.getB());
 		}
 	}
 
@@ -243,13 +226,10 @@ public class DiscordWebhook implements Webhook {
 		webhook.setContent("");
 		webhook.setAvatarUrl("https://www.spigotmc.org/data/resource_icons/86/86874.jpg");
 		webhook.setUsername("Negativity Test");
-		webhook.addEmbed(new DiscordWebhookRequest.EmbedObject().setColor(Color.GREEN).setTitle("Test")
-				.setDescription(asker + " try to ping webhook.").addField("Player name", asker, true)
+		webhook.addEmbed(new DiscordWebhookRequest.EmbedObject().setColor(Color.GREEN).setTitle("Test").setDescription(asker + " try to ping webhook.").addField("Player name", asker, true)
 				.setThumbnail("https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
-				.setFooter("Negativity - " + new Timestamp(System.currentTimeMillis()).toString().split("\\.", 2)[0],
-						"https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
-				.setAuthor("Negativity", "https://github.com/Elikill58/Negativity",
-						"https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
+				.setFooter("Negativity - " + new Timestamp(System.currentTimeMillis()).toString().split("\\.", 2)[0], "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
+				.setAuthor("Negativity", "https://github.com/Elikill58/Negativity", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
 				.setUrl("https://github.com/Elikill58/Negativity"));
 		try {
 			webhook.execute();

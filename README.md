@@ -19,7 +19,7 @@ A complete wiki explain [how to install](https://github.com/Elikill58/Negativity
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
+You can check it on **play.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
 
 ## What are the detected cheat ?
 

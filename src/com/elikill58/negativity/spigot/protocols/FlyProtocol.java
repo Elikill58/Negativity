@@ -89,7 +89,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& !hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 				&& !np.contentBoolean.getOrDefault("jump-boost-use", false) && (e.getFrom().getY() <= e.getTo().getY())
-				&& p.getVelocity().length() < 1.5) {
+				&& p.getVelocity().length() < 1) {
 			if (!(p.hasPotionEffect(PotionEffectType.JUMP)
 					&& Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() > 2)) {
 				double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
@@ -101,7 +101,7 @@ public class FlyProtocol extends Cheat implements Listener {
 					mayCancel = SpigotNegativity.alertMod(
 							np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
 							"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: "
-									+ inBoat + ". Warn for fly: " + np.getWarn(this),
+									+ inBoat + ". Velocity: " + p.getVelocity() + ", nbAir: " + nbTimeAirBelow,
 							hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb)) || mayCancel;
 				}
 			}

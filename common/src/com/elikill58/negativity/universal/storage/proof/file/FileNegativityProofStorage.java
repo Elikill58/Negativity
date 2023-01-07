@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -39,15 +40,13 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					continue;
 				if (file.getName().endsWith(".txt")) {
 					UUID uuid = UUID.fromString(file.getName().split("\\.")[0]);
-					saveProof(Files.readAllLines(file.toPath()).stream()
-							.map(line -> OldProofFileMigration.getProof(uuid, line)).collect(Collectors.toList()));
+					saveProof(Files.readAllLines(file.toPath()).stream().map(line -> OldProofFileMigration.getProof(uuid, line)).collect(Collectors.toList()));
 					file.delete(); // remove old files
 					migrated++;
 				}
 			}
 			if (migrated > 0)
-				Adapter.getAdapter().getLogger()
-						.info("Migrated " + migrated + " files from old (txt) to new system (yml).");
+				Adapter.getAdapter().getLogger().info("Migrated " + migrated + " files from old (txt) to new system (yml).");
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().printError("Failed to migrate old proof file to new one.", e);
 		}
@@ -56,27 +55,35 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	@Override
 	public CompletableFuture<List<Proof>> getProof(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
-			File file = new File(proofDir, playerId + ".yml");
-			if (!file.exists())
-				return null;
-			Configuration proofConfig = YamlConfiguration.load(file);
-			List<Proof> proof = new ArrayList<>();
-			proofConfig.getKeys().forEach(key -> proof.addAll(
-					getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
-			return proof;
+			try {
+				File file = new File(proofDir, playerId + ".yml");
+				if (!file.exists())
+					return Collections.emptyList();
+				Configuration proofConfig = YamlConfiguration.load(file);
+				List<Proof> proof = new ArrayList<>();
+				proofConfig.getKeys().forEach(key -> proof.addAll(getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
+				return proof;
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().printError("Failed to read proofs for player " + playerId.toString(), e);
+			}
+			return Collections.emptyList();
 		});
 	}
 
 	@Override
 	public CompletableFuture<List<Proof>> getProofForCheat(UUID playerId, CheatKeys key) {
 		return CompletableFuture.supplyAsync(() -> {
-			File file = new File(proofDir, playerId + ".yml");
-			if (!file.exists())
-				return null;
-			Configuration proofConfig = YamlConfiguration.load(file);
-			if (proofConfig.contains(key.getLowerKey()))
-				return getProofInCheatKeySection(playerId, proofConfig.getSection(key.getLowerKey()), key);
-			return new ArrayList<>();
+			try {
+				File file = new File(proofDir, playerId + ".yml");
+				if (!file.exists())
+					return Collections.emptyList();
+				Configuration proofConfig = YamlConfiguration.load(file);
+				if (proofConfig.contains(key.getLowerKey()))
+					return getProofInCheatKeySection(playerId, proofConfig.getSection(key.getLowerKey()), key);
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().printError("Failed to read proofs for player " + playerId.toString() + " and cheat " + key, e);
+			}
+			return Collections.emptyList();
 		});
 	}
 
@@ -84,11 +91,9 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 		List<Proof> proof = new ArrayList<>();
 		config.getKeys().forEach(key -> {
 			Configuration c = config.getSection(key);
-			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")),
-					cheatKey, c.getString("check.name"), c.getInt("ping"), c.getInt("amount"), c.getInt("reliability"),
-					new Timestamp(c.getLong("time")), c.getString("check.informations"),
-					Version.getVersionByName(c.getString("version")), c.getLong("warn"),
-					fileToTps(c.getDoubleList("tps"))));
+			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")), cheatKey, c.getString("check.name"), c.getInt("ping"),
+					c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersionByName(c.getString("version")),
+					c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
 		});
 		return proof;
 	}
@@ -110,34 +115,38 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	@Override
 	public void saveProof(Proof proof) {
 		CompletableFuture.runAsync(() -> {
-			File file = new File(proofDir, proof.getUUID().toString() + ".yml");
-			if (!file.exists()) {
-				try {
-					proofDir.mkdirs();
-					file.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
+			try {
+				File file = new File(proofDir, proof.getUUID().toString() + ".yml");
+				if (!file.exists()) {
+					try {
+						proofDir.mkdirs();
+						file.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
+				Configuration accountConfig = YamlConfiguration.load(file);
+				Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
+				if (cheatSection == null)
+					cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
+				int key = 0;
+				while (cheatSection.contains(String.valueOf(key)))
+					key++;
+				Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+				proofConfig.set("report_type", proof.getReportType().name());
+				proofConfig.set("check.name", proof.getCheckName());
+				proofConfig.set("check.informations", proof.getCheckInformations());
+				proofConfig.set("ping", proof.getPing());
+				proofConfig.set("amount", proof.getAmount());
+				proofConfig.set("reliability", proof.getReliability());
+				proofConfig.set("time", proof.getTime().getTime());
+				proofConfig.set("version", proof.getVersion().name());
+				proofConfig.set("warn", proof.getWarn());
+				proofConfig.set("tps", tpsToFile(proof.getTps()));
+				accountConfig.directSave();
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().printError("Failed to save proof for " + proof.getUUID().toString(), e);
 			}
-			Configuration accountConfig = YamlConfiguration.load(file);
-			Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
-			if (cheatSection == null)
-				cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
-			int key = 0;
-			while (cheatSection.contains(String.valueOf(key)))
-				key++;
-			Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
-			proofConfig.set("report_type", proof.getReportType().name());
-			proofConfig.set("check.name", proof.getCheckName());
-			proofConfig.set("check.informations", proof.getCheckInformations());
-			proofConfig.set("ping", proof.getPing());
-			proofConfig.set("amount", proof.getAmount());
-			proofConfig.set("reliability", proof.getReliability());
-			proofConfig.set("time", proof.getTime().getTime());
-			proofConfig.set("version", proof.getVersion().name());
-			proofConfig.set("warn", proof.getWarn());
-			proofConfig.set("tps", tpsToFile(proof.getTps()));
-			accountConfig.directSave();
 		});
 	}
 
@@ -145,8 +154,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	public void saveProof(List<Proof> allProofs) {
 		CompletableFuture.runAsync(() -> {
 			HashMap<UUID, HashMap<CheatKeys, List<Proof>>> proofsPerUUID = new HashMap<>();
-			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>())
-					.computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
+			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>()).computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
 
 			proofsPerUUID.forEach((uuid, proofPerKey) -> {
 				File file = new File(proofDir, uuid.toString() + ".yml");

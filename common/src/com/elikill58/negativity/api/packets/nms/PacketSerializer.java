@@ -197,9 +197,7 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 				return null;
 			readerIndex(readerIndex);
 			return NBTIO.readTag((DataInput) new ByteBufInputStream(this), TagLimiter.create(2097152, 512));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 		return null;
 	}
 	

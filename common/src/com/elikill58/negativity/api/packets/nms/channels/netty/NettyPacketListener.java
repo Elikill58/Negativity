@@ -57,7 +57,7 @@ public abstract class NettyPacketListener {
 			if(playerIs19 && !serverIs19) {
 				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.19+ on 1.18- servers).");
 				version = serverVersion;
-			} else if(serverIs19 && !playerIs19) {
+			} else if(serverIs19 && !serverVersion.equals(version)) {
 				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.18- on 1.19+ servers).");
 				version = serverVersion;
 			}

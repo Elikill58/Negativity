@@ -33,7 +33,7 @@ public class FastPlace extends Cheat implements Listeners {
 			return;
 		long actual = System.currentTimeMillis();
 		long diff = actual - data.lastTime;
-		if (diff < 50) { // TODO check according to ticks
+		if (diff < getConfig().getDouble("checks.time.time_place", 25)) { // TODO check according to ticks
 			if (++data.buffer > 2) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1/data.buffer)), "time", "Diff: " + diff + ", " + data.buffer);
 				if (isSetBack() && mayCancel)

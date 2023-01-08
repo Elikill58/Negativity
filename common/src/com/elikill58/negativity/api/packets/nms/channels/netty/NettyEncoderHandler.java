@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.packets.nms.channels.netty;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
@@ -18,11 +19,13 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 	private final Player p;
 	private final PacketDirection direction;
 	private final Version version;
+	private final NegativityPlayer np;
 	
 	public NettyEncoderHandler(Player p, PacketDirection direction, Version version) {
 		this.p = p;
 		this.direction = direction;
 		this.version = version;
+		this.np = NegativityPlayer.getNegativityPlayer(p);
 	}
 	
 	@Override
@@ -33,13 +36,17 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 		}
 		NettyHandlerCommon.manageError(ctx, cause, "sending");
 	}
+	
+	public NegativityPlayer getNegativityPlayer() {
+		return np;
+	}
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object obj, ChannelPromise promise) throws Exception {
 		try {
 			if(obj instanceof ByteBuf) { // firstly start running everything for us
 				ByteBuf msg = ((ByteBuf) obj).copy();
-				NettyHandlerCommon.runAsync(() -> {
+				getNegativityPlayer().getExecutor().submit(() -> {
 					try {
 						NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "encode");
 						if(packet == null)

@@ -5,8 +5,6 @@ import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketDirection;
@@ -22,12 +20,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class NettyHandlerCommon {
 
-	private static final ExecutorService channelExecutor = Executors.newCachedThreadPool();
 	private static final List<String> sentMessages = new ArrayList<>();
-
-	public static void runAsync(Runnable r) {
-		channelExecutor.execute(r);
-	}
 	
 	public static void manageError(ChannelHandlerContext ctx, Throwable cause, String source) {
 		if (cause.getMessage().toLowerCase(Locale.ENGLISH).contains("connection reset by ")

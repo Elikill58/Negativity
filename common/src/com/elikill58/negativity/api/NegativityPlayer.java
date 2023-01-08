@@ -9,6 +9,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -95,6 +97,8 @@ public class NegativityPlayer {
 	public double sensitivity = 0.0;
 	private String clientName;
 	private @Nullable ScheduledTask fightCooldownTask;
+	// one thread per person
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -148,6 +152,15 @@ public class NegativityPlayer {
 	 */
 	public boolean isBedrockPlayer() {
 		return isBedrockPlayer;
+	}
+	
+	/**
+	 * Get executor for all players content
+	 * 
+	 * @return the executor service
+	 */
+	public ExecutorService getExecutor() {
+		return executor;
 	}
 	
 	/**

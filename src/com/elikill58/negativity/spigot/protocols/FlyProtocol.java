@@ -44,8 +44,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || np.isUsingTrident() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY,
-				ItemUtils.WEB, Material.LADDER, Material.VINE))
+		if (np.hasElytra() || np.isUsingTrident() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB, Material.LADDER, Material.VINE))
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -54,54 +53,39 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (Utils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() > 5)
 				return;
 		}
-		if (np.getAllowFlight() || Utils.isSwimming(p) || p.isFlying()
-				|| LocationUtils.hasMaterialsAround(new SpigotLocation(p.getLocation()), "SCAFFOLD"))
+		if (np.getAllowFlight() || Utils.isSwimming(p) || p.isFlying() || LocationUtils.hasMaterialsAround(new SpigotLocation(p.getLocation()), "SCAFFOLD"))
 			return;
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();
-		SpigotLocation loc = new SpigotLocation(p.getLocation()), locUnder = loc.clone().subtract(0, 1, 0),
-				locUnderUnder = loc.clone().subtract(0, 2, 0);
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), locUnder = loc.clone().subtract(0, 1, 0), locUnderUnder = loc.clone().subtract(0, 2, 0);
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
-		boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
-				&& LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");
-		boolean isInWater = loc.getBlock().getType().name().contains("WATER"),
-				isOnWater = locUnder.getBlock().getType().name().contains("WATER");
-		if (String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4")
-				&& !p.isInsideVehicle() && !inBoat && !hasBuggedBlockAroundForGeyser && !np.isInFight
-				&& !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)) {
+		boolean isInWater = loc.getBlock().getType().name().contains("WATER"), isOnWater = locUnder.getBlock().getType().name().contains("WATER");
+		if (String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !inBoat && !np.isInFight
+				&& !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater) && !np.isBedrockPlayer()) {
 			int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
-			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "Suspicious Y: " + y);
+			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)),
+					"Suspicious Y: " + y);
 		}
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
 		double d = e.getTo().getY() - e.getFrom().getY();
-		if (!(p.isSprinting() && d > 0) && locUnder.getBlock().getType().equals(Material.AIR)
-				&& locUnderUnder.getBlock().getType().equals(Material.AIR) && (p.getFallDistance() == 0.0F || inBoat)
-				&& !(p.isInsideVehicle() && p.getFallDistance() == 0) && typeUpper.equals(Material.AIR) && i > 0.8
-				&& !np.isOnGround()) {
-			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, parseInPorcent((int) i * 50),
-					"Player not in ground, i: " + i + ". fall: " + p.getFallDistance() + ", d: " + d,
-					inBoat ? hoverMsg("boat") : null) || mayCancel;
+		if (!(p.isSprinting() && d > 0) && locUnder.getBlock().getType().equals(Material.AIR) && locUnderUnder.getBlock().getType().equals(Material.AIR)
+				&& (p.getFallDistance() == 0.0F || inBoat) && !(p.isInsideVehicle() && p.getFallDistance() == 0) && typeUpper.equals(Material.AIR) && i > 0.8 && !np.isOnGround()) {
+			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, parseInPorcent((int) i * 50),
+					"Player not in ground, i: " + i + ". fall: " + p.getFallDistance() + ", d: " + d, inBoat ? hoverMsg("boat") : null) || mayCancel;
 		}
 
-		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(loc.clone(), "AIR")
-				&& !hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
-				&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
-				&& !np.contentBoolean.getOrDefault("jump-boost-use", false) && (e.getFrom().getY() <= e.getTo().getY())
+		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(loc.clone(), "AIR") && !hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
+				&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0 && !np.contentBoolean.getOrDefault("jump-boost-use", false) && (e.getFrom().getY() <= e.getTo().getY())
 				&& p.getVelocity().length() < 1) {
-			if (!(p.hasPotionEffect(PotionEffectType.JUMP)
-					&& Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() > 2)) {
+			if (!(p.hasPotionEffect(PotionEffectType.JUMP) && Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() > 2)) {
 				double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 				np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 				if (nbTimeAirBelow > 6) { // we don't care when player jump
 					int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
 					if (nb < 5)
 						porcent = parseInPorcent(porcent - 15);
-					mayCancel = SpigotNegativity.alertMod(
-							np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-							"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: "
-									+ inBoat + ". Velocity: " + p.getVelocity() + ", nbAir: " + nbTimeAirBelow,
+					mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
+							"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: " + inBoat + ". Velocity: " + p.getVelocity() + ", nbAir: " + nbTimeAirBelow,
 							hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb)) || mayCancel;
 				}
 			}
@@ -111,30 +95,25 @@ public class FlyProtocol extends Cheat implements Listener {
 		SpigotLocation to = e.getTo().clone();
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
-		if (distanceWithoutY == i && !np.isOnGround() && i != 0 && typeUpper.equals(Material.AIR)
-				&& !p.isInsideVehicle() && !type.name().contains("WATER") && distanceWithoutY > 0.3) {
+		if (distanceWithoutY == i && !np.isOnGround() && i != 0 && typeUpper.equals(Material.AIR) && !p.isInsideVehicle() && !type.name().contains("WATER") && distanceWithoutY > 0.3) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
-				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
-						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY)
-						|| mayCancel;
+				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,
+						"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY) || mayCancel;
 			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
 			np.contentBoolean.put("fly-not-moving-y", false);
 
-		if(d == 0) {
-			for(Block b : new Rect(PacketUtils.getBoundingBox(p)).add(0, 0.9, 0).getBlocks(p.getWorld())) {
-				if(b.getType().isSolid()) {
+		if (d == 0) {
+			for (Block b : new Rect(PacketUtils.getBoundingBox(p)).add(0, 0.9, 0).getBlocks(p.getWorld())) {
+				if (b.getType().isSolid()) {
 					np.flyMoveAmount.clear();
 					return;
 				}
 			}
 		}
-		boolean onGround = ((Entity) p).isOnGround(),
-				wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
-		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream()
-				.filter((entity) -> entity instanceof Boat).findFirst().isPresent();
-		if (p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle()
-				&& onGround == wasOnGround && !np.isInFight) {
+		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
+		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream().filter((entity) -> entity instanceof Boat).findFirst().isPresent();
+		if (p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle() && onGround == wasOnGround && !np.isInFight) {
 			int size = np.flyMoveAmount.size();
 			int amount = 0;
 			for (int x = 1; x < size - 1; x++) {
@@ -153,14 +132,12 @@ public class FlyProtocol extends Cheat implements Listener {
 				}
 			}
 			if (amount > 1) {
-				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount + " > "
-								+ onGround + " : " + wasOnGround + ", d: " + d + ", fall: " + p.getFallDistance(),
-						(CheatHover) null, amount) || mayCancel;
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount),
+						"OmegaCraftFly - " + np.flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", d: " + d + ", fall: " + p.getFallDistance(), (CheatHover) null, amount)
+						|| mayCancel;
 			}
 		}
-		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || isInWater || isOnWater
-				|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "WATER", "LAVA")
+		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || isInWater || isOnWater || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "WATER", "LAVA")
 				|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "WATER", "LAVA", "VINE") || hasBoatAround)
 			np.flyMoveAmount.clear();
 		else

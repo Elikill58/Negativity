@@ -30,7 +30,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
-		if (!np.hasDetectionActive(this) || np.hasElytra() || e.isCancelled())
+		if (!np.hasDetectionActive(this) || np.hasElytra() || e.isCancelled() || np.isBedrockPlayer())
 			return;
 		SpigotLocation loc = new SpigotLocation(p.getLocation());
 		if (!loc.getBlock().getType().equals(Material.LADDER)){

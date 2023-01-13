@@ -34,40 +34,34 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		if (!np.hasDetectionActive(this) || np.hasPotionEffect("JUMP_BOOST"))
 			return;
 		SpigotLocation loc = new SpigotLocation(p.getLocation().clone());
-		if (p.isFlying() || p.getVehicle() != null || np.isUsingTrident() || np.hasElytra() || np.isInFight
-				|| loc.getBlock().getType().name().contains("STAIR"))
+		if (p.isFlying() || p.getVehicle() != null || np.isUsingTrident() || np.hasElytra() || np.isInFight || loc.getBlock().getType().name().contains("STAIR"))
 			return;
 		SpigotLocation locDown = loc.clone().subtract(0, 1, 0), locDownDown = locDown.clone().subtract(0, 1, 0);
 		if (hasOtherThan(loc, "AIR") || hasOtherThan(locDown, "AIR"))
 			return;
 
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
-			if (locDownDown.getBlock().getType().name().contains("STAIR")
-					|| locDown.getBlock().getType().name().contains("STAIR"))
+			if (locDownDown.getBlock().getType().name().contains("STAIR") || locDown.getBlock().getType().name().contains("STAIR"))
 				return;
 			boolean mayCancel = false;
 
-			String allTypes = ", actual: " + loc.getBlock().getType().name() + ", down: "
-					+ locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name();
+			String allTypes = ", actual: " + loc.getBlock().getType().name() + ", down: " + locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name();
 			double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
 			double lastDiffY = np.contentDouble.getOrDefault("diff-y", 0.0), velLen = p.getVelocity().length();
-			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > p.getVelocity().getY()) {
-				mayCancel = SpigotNegativity.alertMod(
-						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > Math.abs(p.getVelocity().getY())) {
+				mayCancel = SpigotNegativity.alertMod(diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - np.ping),
-						"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + np.lastYDiff + allTypes + ", velY: "
-								+ p.getVelocity().getY());
+						"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + np.lastYDiff + allTypes + ", velY: " + p.getVelocity().getY());
 			}
 			np.lastYDiff = diffYtoFrom;
 
 			boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
-			if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5 && velLen < p.getVelocity().getY()
-					&& locDown.getBlock().getType().name().equalsIgnoreCase("AIR") && velLen < 1.5) { // 0.5 when use
-																										// stairs or
-																										// slab
-				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(diffYtoFrom * 200),
+			if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5 && velLen < p.getVelocity().getY() && locDown.getBlock().getType().name().equalsIgnoreCase("AIR")
+					&& velLen < 1.5) { // 0.5 when use
+										// stairs or
+										// slab
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200),
 						"Was going down, last y " + lastDiffY + ", current: " + diffYtoFrom + allTypes);
 			}
 			np.contentDouble.put("diff-y", diffYtoFrom);

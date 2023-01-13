@@ -9,10 +9,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.InventoryView;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -29,32 +30,38 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || np.hasElytra() || p.isInsideVehicle()
-				|| p.getLocation().getBlock().getType().name().contains("WATER") || p.getFallDistance() > 0.5
-				|| np.inventoryMoveData == null || p.getVelocity().length() > 0.1) // if in vehicle, in water or falling
+		if (!np.hasDetectionActive(this) || np.isUsingTrident() || np.hasElytra() || p.isInsideVehicle() || p.getFallDistance() > 0.5 || np.inventoryMoveData == null
+				|| LocationUtils.isInWater(new SpigotLocation(p.getLocation())) || p.getVelocity().length() > 0.1) {
+			Adapter.getAdapter().debug("Velocity length: " + p.getVelocity().length());
 			return;
+		}
 		if (p.getOpenInventory() == null) {
 			np.inventoryMoveData = null;
 			Adapter.getAdapter().debug("No opened inventory but data always running ?");
 			return;
 		}
 		InventoryMoveData data = np.inventoryMoveData;
-		double last = data.getLastDistance();
-		double actual = e.getFrom().distance(e.getTo());
-		if (actual >= last && data.timeSinceOpen >= 4 && actual >= 0.1) { // if running at least at the same
-			InventoryView iv = p.getOpenInventory();
-			Adapter.getAdapter().debug("IV " + iv.getType().name() + ": " + iv.getBottomInventory().getSize() + " / " + iv.getTopInventory().getSize() + " > " + String.format("%.3f", last) + " / " + String.format("%.3f", actual));
-			int amount = 1;
-			if (p.isSprinting())
-				amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting
-			if (p.isSneaking())
-				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
-			SpigotNegativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING,
-					p, this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()),
-					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", velLen: " + p.getVelocity().length() + ", fd: " + String.format("%.5f", p.getFallDistance()), (CheatHover) null,
-					amount);
+		int amount = 0;
+		if (p.isSprinting())
+			amount += data.sprint ? 1 : 5; // means it started sprinting since inv open
+		if (p.isSneaking())
+			amount += data.sneak ? 1 : 5; // means it started sneaking since inv open
+
+		double distance = e.getFrom().distance(e.getTo());
+		double distanceXZ = LocationUtils.distanceXZ(e.getFrom(), e.getTo());
+		if (distanceXZ >= data.distanceXZ && distanceXZ >= p.getWalkSpeed()) // if running at least at the same
+			amount += (data.distanceXZ - distanceXZ) + 1; // +1 to always have alert
+
+		if (distance >= data.distance && distance >= p.getWalkSpeed() && p.getFallDistance() < 0.5) // fall "allow" to make the distance goes brr
+			amount += (data.distanceXZ - distanceXZ) + 1 - p.getFallDistance();
+		if (data.timeSinceOpen > 2)
+			Adapter.getAdapter().debug("Time: " + data.timeSinceOpen + ", amount: " + amount);
+		if (data.timeSinceOpen >= 3 && amount > 2) {
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(80 + data.timeSinceOpen),
+					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
+					(CheatHover) null, amount);
 		}
-		data.setDistance(actual);
+		data.update(distance, distanceXZ);
 	}
 
 	@EventHandler
@@ -64,15 +71,11 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getWhoClicked());
 		if (!np.hasDetectionActive(this))
 			return;
-		Adapter.getAdapter().debug("InvClick " + e.getWhoClicked().getName() +" act: " + e.getClick().name() +" / " + e.getSlotType().name() + " : " + e.getHotbarButton());
 		checkInvMove(np, (Player) e.getWhoClicked(), "Click");
-		InventoryView iv = e.getWhoClicked().getOpenInventory();
-		Adapter.getAdapter().debug("IV " + iv.getType().name() + ": " + iv.getBottomInventory().getSize() + " / " + iv.getTopInventory().getSize());
 	}
 
 	@EventHandler
 	public void onOpen(InventoryOpenEvent e) {
-		Adapter.getAdapter().debug("InvOpen " + e.getPlayer().getName());
 		if (!(e.getPlayer() instanceof Player))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getPlayer());
@@ -91,7 +94,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	private void checkInvMove(SpigotNegativityPlayer np, Player p, String from) {
 		if (np.hasElytra() || p.isInsideVehicle() || p.getLocation().getBlock().getType().name().contains("WATER"))
 			return;
-		np.inventoryMoveData = new InventoryMoveData(p);
+		np.inventoryMoveData = new InventoryMoveData(np);
 	}
 
 	@Override
@@ -101,31 +104,34 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 
 	public static class InventoryMoveData {
 
-		private double lastDistance = 0;
+		public SpigotNegativityPlayer np;
+		public double distance = 0, distanceXZ = 0;
 		public int timeSinceOpen = 0;
-		public final boolean sprint, sneak;
+		public boolean sprint, sneak, active;
 
-		public InventoryMoveData(Player p) {
-			this.sprint = p.isSprinting();
-			this.sneak = p.isSneaking();
+		public InventoryMoveData(SpigotNegativityPlayer np) {
+			this.np = np;
+			reset();
 		}
 
-		public double getLastDistance() {
-			return lastDistance;
-		}
-		
-		public int getTimeSinceOpen() {
-			return timeSinceOpen;
-		}
-		
-		public void setDistance(double distance) {
-			this.lastDistance = distance;
+		public void update(double distance, double distanceXZ) {
+			this.distance = distance;
+			this.distanceXZ = distanceXZ;
 			this.timeSinceOpen++;
+		}
+
+		public void reset() {
+			this.sprint = np.getPlayer().isSprinting();
+			this.sneak = np.getPlayer().isSneaking();
+			this.active = false;
+			this.distance = 0;
+			this.distanceXZ = 0;
+			this.timeSinceOpen = 0;
 		}
 
 		@Override
 		public String toString() {
-			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance=" + lastDistance + ",time="
+			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance=" + String.format("%.3f", distance) + ",distanceXZ=" + String.format("%.3f", distance) + ",time="
 					+ timeSinceOpen + "}";
 		}
 	}

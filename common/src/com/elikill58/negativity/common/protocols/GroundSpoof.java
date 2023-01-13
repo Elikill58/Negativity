@@ -44,7 +44,7 @@ public class GroundSpoof extends Cheat {
 			return;
 		}
 		double diffY = e.getTo().getY() - e.getFrom().getY();
-		if (diffY >= 0.3 || diffY <= 0)
+		if (diffY <= 0)
 			return;
 		if (data.wasAlert)
 			Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",

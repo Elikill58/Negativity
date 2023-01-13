@@ -29,6 +29,6 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 	
 	@Override
 	public String getVersion() {
-		return pl.metadata().version().getQualifier();
+		return pl.metadata().version().toString();
 	}
 }

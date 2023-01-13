@@ -19,6 +19,7 @@ import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.yaml.snakeyaml.representer.Representer;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Tuple;
 
 public class YamlConfiguration {
 	private static final ThreadLocal<Yaml> yaml = new ThreadLocal<Yaml>() {
@@ -62,10 +63,12 @@ public class YamlConfiguration {
 	}
 
 	private static void beSureItsGoodYaml(File f) throws IOException {
-		beSureItsGoodList(f, Files.readAllLines(f.toPath()), false);
+		Tuple<Integer, String> content = beSureItsGoodList(f, Files.readAllLines(f.toPath()), false);
+		if(content != null && Adapter.getAdapter() != null) // should not appear but idk
+			Adapter.getAdapter().getLogger().warn("Fixed file " + f.getName() + " by removing line " + content.getA() + ": " + content.getB());
 	}
 
-	private static void beSureItsGoodList(File f, List<String> lines, boolean changed) throws IOException {
+	private static Tuple<Integer, String> beSureItsGoodList(File f, List<String> lines, boolean changed) throws IOException {
 		try {
 			yaml.get().loadAs(new StringReader(String.join("\n", lines)), LinkedHashMap.class);
 			if(changed)
@@ -74,10 +77,10 @@ public class YamlConfiguration {
 			int line = e.getProblemMark().getLine();
 			if (lines.size() > line) {
 				String removedLine = lines.remove(line);
-				if(Adapter.getAdapter() != null) // should not appear but idk
-					Adapter.getAdapter().getLogger().warn("Fixed file " + f.getName() + " by removing line " + line + ": " + removedLine);
 				beSureItsGoodList(f, lines, true);
+				return new Tuple<>(line, removedLine);
 			}
 		}
+		return null;
 	}
 }

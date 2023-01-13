@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
@@ -50,7 +51,7 @@ public abstract class NettyPacketListener {
 			return;
 		}
 		ExternalPlugin plugin = ada.getPlugin("ViaVersion");
-		if(plugin != null && plugin.getVersion().startsWith("4.5")) { // can have viaversion issue
+		if(plugin != null && plugin.getVersion().startsWith("4.5") && ada.getPlatformID().equals(Platform.SPIGOT)) { // can have viaversion issue
 			Version serverVersion = ada.getServerVersion();
 			boolean playerIs19 = version.equals(Version.V1_19) || version.equals(Version.V1_19_2) || version.equals(Version.V1_19_3);
 			boolean serverIs19 = serverVersion.equals(Version.V1_19) || serverVersion.equals(Version.V1_19_2) || serverVersion.equals(Version.V1_19_3);

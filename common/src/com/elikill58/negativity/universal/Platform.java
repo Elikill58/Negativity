@@ -8,7 +8,6 @@ public enum Platform {
 	SPIGOT("spigot", "Spigot", false),
 	SPONGE("sponge", "Sponge", false),
 	SPONGE8("sponge8", "Sponge8", false),
-	SPONGE9("sponge9", "Sponge9", false),
 	VELOCITY("velocity", "Velocity", true);
 	
 	private final String name, completeName;

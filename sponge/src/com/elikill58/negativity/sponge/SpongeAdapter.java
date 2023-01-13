@@ -242,12 +242,12 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public boolean hasPlugin(String name) {
-		return Sponge.pluginManager().plugin(name).isPresent();
+		return Sponge.pluginManager().plugin(name.toLowerCase()).isPresent();
 	}
 	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new SpongeExternalPlugin(Sponge.pluginManager().plugin(name).orElse(null));
+		return Sponge.pluginManager().plugin(name.toLowerCase()).map(SpongeExternalPlugin::new).orElse(null);
 	}
 	
 	@Override

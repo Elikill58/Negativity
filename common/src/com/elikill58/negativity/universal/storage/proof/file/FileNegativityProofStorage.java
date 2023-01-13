@@ -90,10 +90,12 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	private List<Proof> getProofInCheatKeySection(UUID uuid, Configuration config, CheatKeys cheatKey) {
 		List<Proof> proof = new ArrayList<>();
 		config.getKeys().forEach(key -> {
-			Configuration c = config.getSection(key);
-			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")), cheatKey, c.getString("check.name"), c.getInt("ping"),
-					c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersionByName(c.getString("version")),
-					c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
+			try {
+				Configuration c = config.getSection(key);
+				proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")), cheatKey, c.getString("check.name"), c.getInt("ping"),
+						c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersionByName(c.getString("version")),
+						c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
+			} catch (Exception e) {} // ignore and skip bugged save
 		});
 		return proof;
 	}

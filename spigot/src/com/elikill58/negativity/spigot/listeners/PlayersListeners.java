@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -84,7 +85,7 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onRegainHealth(EntityRegainHealthEvent e) {
-		if(e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC")) {
+		if(e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC") && (e.getRegainReason().equals(RegainReason.EATING) || e.getRegainReason().equals(RegainReason.SATIATED))) {
 			PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()));
 			EventManager.callEvent(event);
 			if(event.isCancelled())

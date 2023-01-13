@@ -242,40 +242,58 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			
 			if(arg[1].equalsIgnoreCase("cheat")) {
-				Cheat c = Cheat.fromString(arg[2]);
-				if(arg[3].equalsIgnoreCase("active")) {
-					c.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isActive());
-				} else if(arg[3].equalsIgnoreCase("kick")) {
-					c.setAllowKick(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.allowKick());
-				} else if(arg[3].equalsIgnoreCase("set_back")) {
-					c.setBack(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isSetBack());
-				} else if(arg[3].equalsIgnoreCase("bedrock")) {
-					c.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isDisabledForBedrock());
-				} else if(arg[3].equalsIgnoreCase("check")) {
-					Check check = arg.length >= 5 ? c.getChecks().stream().filter(ch -> ch.name().equalsIgnoreCase(arg[4])).findFirst().orElse(null) : null;
-					if(check == null) {
-						sender.sendMessage(ChatColor.RED + "Can't find check.");
-						return false;
+				Cheat cheat = Cheat.fromString(arg[2]);
+				if(cheat == null == !arg[2].equalsIgnoreCase("all")) {
+					sender.sendMessage(ChatColor.RED + "Failed to find given cheat.");
+					return false;
+				}
+				for(Cheat c : cheat == null ? Cheat.values() : Arrays.asList(cheat)) {
+					if(arg[3].equalsIgnoreCase("active")) {
+						c.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isActive());
+					} else if(arg[3].equalsIgnoreCase("kick")) {
+						c.setAllowKick(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.allowKick());
+					} else if(arg[3].equalsIgnoreCase("set_back")) {
+						c.setBack(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isSetBack());
+					} else if(arg[3].equalsIgnoreCase("bedrock")) {
+						c.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isDisabledForBedrock());
+					} else if(arg[3].equalsIgnoreCase("check")) {
+						Check check = arg.length >= 5 ? c.getChecks().stream().filter(ch -> ch.name().equalsIgnoreCase(arg[4])).findFirst().orElse(null) : null;
+						if(check == null) {
+							sender.sendMessage(ChatColor.RED + "Can't find check.");
+							return false;
+						}
+						c.setCheckActive(check, arg.length >= 6 ? UniversalUtils.getBoolean(arg[5]) : !c.checkActive(check));
+					} else {
+						sender.sendMessage(ChatColor.RED + "Unknow options");
+						return true;
 					}
-					c.setCheckActive(check, arg.length >= 6 ? UniversalUtils.getBoolean(arg[5]) : !c.checkActive(check));
-				} else {
-					sender.sendMessage(ChatColor.RED + "Unknow options");
-					return true;
+					c.saveConfig();
 				}
-				c.saveConfig();
-				sender.sendMessage(ChatColor.GREEN + "Options edited.");
+				if(cheat == null)
+					sender.sendMessage(ChatColor.GREEN + "Option for all cheats edited.");
+				else
+					sender.sendMessage(ChatColor.GREEN + "Option for " + cheat.getName() + " edited.");
 			} else if(arg[1].equalsIgnoreCase("special")) {
-				Special c = Special.fromString(arg[2]);
-				if(arg[3].equalsIgnoreCase("active")) {
-					c.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isActive());
-				} else if(arg[3].equalsIgnoreCase("bedrock")) {
-					c.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isDisabledForBedrock());
-				} else {
-					sender.sendMessage(ChatColor.RED + "Unknow options");
-					return true;
+				Special special = Special.fromString(arg[2]);
+				if(special == null == !arg[2].equalsIgnoreCase("all")) {
+					sender.sendMessage(ChatColor.RED + "Failed to find given cheat.");
+					return false;
 				}
-				c.saveConfig();
-				sender.sendMessage(ChatColor.GREEN + "Options edited.");
+				for(Special s : special == null ? Special.values() : Arrays.asList(special)) {
+					if(arg[3].equalsIgnoreCase("active")) {
+						s.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !s.isActive());
+					} else if(arg[3].equalsIgnoreCase("bedrock")) {
+						s.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !s.isDisabledForBedrock());
+					} else {
+						sender.sendMessage(ChatColor.RED + "Unknow options");
+						return true;
+					}
+					s.saveConfig();
+				}
+				if(special == null)
+					sender.sendMessage(ChatColor.GREEN + "Option for all specials edited.");
+				else
+					sender.sendMessage(ChatColor.GREEN + "Option for " + special.getName() + " edited.");
 			} else if(arg[1].equalsIgnoreCase("global")) {
 				if(arg[2].equalsIgnoreCase("lang")) {
 					String lang = arg[3];
@@ -583,6 +601,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				} else if(arg[1].equalsIgnoreCase("cheat")) {
 					if(arg.length == 3) {
 						possible = Arrays.asList(CheatKeys.values()).stream().map(CheatKeys::getLowerKey).collect(Collectors.toList());
+						if (prefix.isEmpty() || "all".startsWith(prefix))
+							suggestions.add("all");
 					} else if(arg.length == 4) { // what should be changed
 						possible = Arrays.asList("active", "kick", "check", "set_back", "bedrock");
 					} else if(arg.length == 5) {
@@ -600,6 +620,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				} else if(arg[1].equalsIgnoreCase("special")) {
 					if(arg.length == 3) {
 						possible = Arrays.asList(SpecialKeys.values()).stream().map(SpecialKeys::getLowerKey).collect(Collectors.toList());
+						if (prefix.isEmpty() || "all".startsWith(prefix))
+							suggestions.add("all");
 					} else if(arg.length == 4) { // what should be changed
 						possible = Arrays.asList("active", "bedrock");
 					} else if(arg.length == 5) {

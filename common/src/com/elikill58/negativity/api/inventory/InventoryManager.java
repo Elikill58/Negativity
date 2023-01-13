@@ -38,6 +38,7 @@ import com.elikill58.negativity.common.inventories.hook.players.SeeWarnInventory
 import com.elikill58.negativity.common.inventories.hook.players.WarnInventory;
 import com.elikill58.negativity.common.inventories.hook.players.offline.AlertOfflineInventory;
 import com.elikill58.negativity.common.inventories.hook.players.offline.GlobalPlayerOfflineInventory;
+import com.elikill58.negativity.universal.Adapter;
 
 public class InventoryManager implements Listeners {
 	
@@ -111,6 +112,12 @@ public class InventoryManager implements Listeners {
 	 * @param args the arguments to open the inventory
 	 */
 	public static void open(NegativityInventory type, Player p, Object... args) {
-		CompletableFuture.runAsync(() -> getInventory(type).ifPresent((inv) -> inv.openInventory(p, args)));
+		CompletableFuture.runAsync(() -> getInventory(type).ifPresent((inv) -> {
+			try {
+				inv.openInventory(p, args);
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().printError("Failed to open inventory " + type + " for " + p.getName(), e);
+			}
+		}));
 	}
 }

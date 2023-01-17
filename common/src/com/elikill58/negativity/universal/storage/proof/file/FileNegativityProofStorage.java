@@ -61,7 +61,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					return Collections.emptyList();
 				Configuration proofConfig = YamlConfiguration.load(file);
 				List<Proof> proof = new ArrayList<>();
-				proofConfig.getKeys().forEach(key -> proof.addAll(getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
+				proofConfig.getKeys().stream().filter(proofConfig::isSection).forEach(key -> proof.addAll(getProofInCheatKeySection(playerId, proofConfig.getSection(key), CheatKeys.fromLowerKey(key))));
 				return proof;
 			} catch (Exception e) {
 				Adapter.getAdapter().getLogger().printError("Failed to read proofs for player " + playerId.toString(), e);

@@ -235,7 +235,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new SpigotExternalPlugin(Bukkit.getPluginManager().getPlugin(name));
+		return Bukkit.getPluginManager().isPluginEnabled(name) ? new SpigotExternalPlugin(Bukkit.getPluginManager().getPlugin(name)) : null;
 	}
 	
 	@Override

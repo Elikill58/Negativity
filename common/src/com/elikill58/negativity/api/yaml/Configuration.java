@@ -120,6 +120,10 @@ public final class Configuration {
     	return conf;
     }
     
+    public boolean isSection(String path) {
+    	return contains(path) && getSectionFor(path) != null;
+    }
+    
     public Configuration getSection(final String path) {
         final Object def = this.getDefault(path);
         return (Configuration) this.get(path, (def instanceof Configuration) ? def : new Configuration((this.defaults == null) ? null : this.defaults.getSection(path)));

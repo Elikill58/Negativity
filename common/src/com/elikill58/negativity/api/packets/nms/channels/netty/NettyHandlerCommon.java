@@ -34,8 +34,9 @@ public class NettyHandlerCommon {
 			return;
 		if(cause instanceof IOException) // TODO handle better the io things
 			return; // closing channel
-		Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet");
-		cause.printStackTrace();
+		ctx.fireExceptionCaught(cause);
+		//Adapter.getAdapter().getLogger().error("Exception caught when " + source + " packet");
+		//cause.printStackTrace();
 	}
 
 	/**

@@ -33,12 +33,9 @@ import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class AimBot extends Cheat {
 
-	public static final DataType<Double> GCD = new DataType<Double>("gcd", "Gcd of pitchs",
-			() -> new DoubleDataCounter());
-	public static final DataType<Double> PITCHS = new DataType<Double>("pitchs", "Pitchs movements",
-			() -> new DoubleDataCounter());
-	public static final DataType<Integer> INVALID_CHANGE = new DataType<Integer>("invalid_changes", "Invalid changes",
-			() -> new IntegerDataCounter());
+	public static final DataType<Double> GCD = new DataType<Double>("gcd", "Gcd of pitchs", () -> new DoubleDataCounter());
+	public static final DataType<Double> PITCHS = new DataType<Double>("pitchs", "Pitchs movements", () -> new DoubleDataCounter());
+	public static final DataType<Integer> INVALID_CHANGE = new DataType<Integer>("invalid_changes", "Invalid changes", () -> new IntegerDataCounter());
 
 	public AimBot() {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, AimbotData::new, CheatDescription.VERIF);
@@ -46,8 +43,7 @@ public class AimBot extends Cheat {
 
 	// many killauras use a constant pitch in order to bypass the GDC check
 	// this check will fight against that and fail these killauras
-	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
+	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
 	public void ratio(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
@@ -62,9 +58,8 @@ public class AimBot extends Cheat {
 				// increment streak
 
 				if (data.ratioStreak++ > 7) {
-					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio",
-							"absYaw: " + String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak
-									+ ", difference: " + String.format("%.3f", difference)) && isSetBack())
+					if (Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio",
+							"absYaw: " + String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: " + String.format("%.3f", difference)) && isSetBack())
 						e.setCancelled(true);
 
 					data.ratioStreak -= 3;
@@ -112,15 +107,12 @@ public class AimBot extends Cheat {
 			double gcd = getGcdForLong((long) np.delta.getPitch(), (long) np.lastDelta.getPitch());
 			int averageInvalid = (int) data.allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
 			boolean exempt = !(Math.abs(pitch) < 82.5F) || np.delta.getYaw() < 5.0;
-			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
-					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && averageInvalid > 2
-					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
-				String allPitchStr = data.allPitchs.stream().map((d) -> String.format("%.3f", d))
-						.collect(Collectors.toList()).toString();
-				if (Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
-						+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: "
-						+ invalidChange + ", allChanges: " + data.allInvalidChanges + ", avInvalid: " + averageInvalid
-						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess))
+			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15) && invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3)
+					&& averageInvalid > 2 && !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
+				String allPitchStr = data.allPitchs.stream().map((d) -> String.format("%.3f", d)).collect(Collectors.toList()).toString();
+				if (Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd",
+						"GCD: " + gcd + ", allPitchs: " + allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: " + invalidChange + ", allChanges: "
+								+ data.allInvalidChanges + ", avInvalid: " + averageInvalid + ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess))
 						&& isSetBack())
 					e.setCancelled(true);
 			}
@@ -137,6 +129,7 @@ public class AimBot extends Cheat {
 		return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
 	}
 
+	// Warn: this check can be removed in next versions and replaced with new one
 	@Check(name = "direction", description = "Check for the direction between player look and cible position", conditions = CheckConditions.NO_THORNS)
 	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
@@ -157,12 +150,12 @@ public class AimBot extends Cheat {
 		int reliability = 0;
 		switch (direction) {
 		case BACK: // should never appear, clearly a cheat
-			amount = 8;
+			amount = 5;
 			reliability = 100;
 			break;
 		case BACK_LEFT:
 		case BACK_RIGHT:
-			amount = 5;
+			amount = 3;
 			reliability = 95;
 			break;
 		case FRONT:
@@ -185,7 +178,7 @@ public class AimBot extends Cheat {
 		}
 		if (amount > 0)
 			Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction",
+					UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0) - 10), "direction",
 					"Pos: " + p.getLocation() + " / " + cloc + ", dir: " + direction.name() + ", xzDis: "
 							+ xzDistance,
 					null, amount);
@@ -196,11 +189,8 @@ public class AimBot extends Cheat {
 		DataCounter<Double> gcdCounter = data.getData(GCD);
 		DataCounter<Double> pitchCounter = data.getData(PITCHS);
 		DataCounter<Integer> invalidChangeCounter = data.getData(INVALID_CHANGE);
-		return ChatColor.color("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
-				+ "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
-				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e"
-				+ String.format("%.2f", pitchCounter.getAverage()) + "&7. "
-				+ (invalidChangeCounter.getMax() > 2 ? "&c" : "&a") + "Invalid changes: "
-				+ invalidChangeCounter.getAverage());
+		return ChatColor.color("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage()) + "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
+				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e" + String.format("%.2f", pitchCounter.getAverage()) + "&7. " + (invalidChangeCounter.getMax() > 2 ? "&c" : "&a")
+				+ "Invalid changes: " + invalidChangeCounter.getAverage());
 	}
 }

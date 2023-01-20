@@ -25,15 +25,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class IncorrectPacket extends Cheat {
 
-	private final List<PacketType> checkingPackets = Arrays.asList(PacketType.Client.BLOCK_DIG,
-			PacketType.Client.BLOCK_PLACE);
+	private final List<PacketType> checkingPackets = Arrays.asList(PacketType.Client.BLOCK_DIG, PacketType.Client.BLOCK_PLACE);
 
 	public IncorrectPacket() {
 		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG, EmptyData::new);
 	}
 
-	@Check(name = "distance", description = "Check distance between player and sent packet", conditions = {
-			CheckConditions.NO_TELEPORT, CheckConditions.NO_USE_TRIDENT })
+	@Check(name = "distance", description = "Check distance between player and sent packet", conditions = { CheckConditions.NO_TELEPORT, CheckConditions.NO_USE_TRIDENT })
 	public void onPacket(PacketReceiveEvent e) {
 		if (!e.hasPlayer())
 			return;
@@ -42,9 +40,7 @@ public class IncorrectPacket extends Cheat {
 			LocatedPacket lp = (LocatedPacket) packet;
 			if (!lp.hasLocation())
 				return;
-			if (packet instanceof NPacketPlayInBlockDig
-					&& !((NPacketPlayInBlockDig) packet).action.equals(DigAction.START_DIGGING)) // block dig but not
-																									// good action
+			if (packet instanceof NPacketPlayInBlockDig && !((NPacketPlayInBlockDig) packet).action.equals(DigAction.START_DIGGING)) // block dig but not good action
 				return;
 			Player p = e.getPlayer();
 			Location loc = p.getLocation();
@@ -59,11 +55,8 @@ public class IncorrectPacket extends Cheat {
 				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) / 10;
 				if (amount <= 10) // can be a plugin
 					return;
-				if (Negativity.alertMod(
-						distance > 10000 && distanceSpawn > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						relia, "distance",
-						"Packet " + e.getPacket().getPacketName() + ", player loc: " + loc.toString() + ", packet loc: "
-								+ lp.getLocation(p.getWorld()).toString() + ", distance: " + distance
+				if (Negativity.alertMod(distance > 10000 && distanceSpawn > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia, "distance",
+						"Packet " + e.getPacket().getPacketName() + ", player loc: " + loc.toString() + ", packet loc: " + lp.getLocation(p.getWorld()).toString() + ", distance: " + distance
 								+ ", spawn distance: " + distanceSpawn + ", hand: " + p.getItemInHand(),
 						null, amount) && isSetBack())
 					e.setCancelled(true);

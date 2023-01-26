@@ -35,6 +35,7 @@ public class ItemUtils {
 	public static final Material STATIONARY_WATER = getMaterialWithCompatibility("STATIONARY_WATER", "WATER");
 	public static final Material WATER_LILY = getMaterialWithCompatibility("WATER_LILY", "LILY_PAD");
 	public static final Material GRASS = getMaterialWithCompatibility("GRASS_BLOCK", "GRASS");
+	public static final Material SCAFFOLD = getMaterialWithCompatibility("SCAFFOLD", "VINE");
 
 	public static final Material BIRCH_WOOD_STAIRS = getMaterialWithCompatibility("BIRCH_WOOD_STAIRS", "BIRCH_STAIRS");
 	

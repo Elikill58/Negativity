@@ -158,7 +158,7 @@ public class DefaultConfigValue {
 		INTS.put("cheats.nofall.kill-reliability", 90);
 
 		BOOLEANS.put("cheats.fasteat.autoVerif", false);
-		INTS.put("cheats.fastplace.time_2_place", 50);
+		INTS.put("cheats.fastplace.time_2_place", 15);
 
 		BOOLEANS.put("cheats.fastbow.autoVerif", false);
 

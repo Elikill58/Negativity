@@ -25,17 +25,15 @@ public class SneakProtocol extends Cheat implements Listener {
 	public void onMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || np.getPlayerVersion().isNewerOrEquals(Version.V1_14))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.contentBoolean.getOrDefault("sneak-was-sneaking", false)) {
-			if(!np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (np.ping / 10)), "Sneaking, sprinting and not flying");
-				if(mayCancel && isSetBack()) {
-					e.setCancelled(true);
-					p.setSprinting(false);
-				}
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (np.ping / 10)), "Sneak, sprint and not fly. ws: " + p.getWalkSpeed() + ", fd: " + p.getFallDistance());
+			if(mayCancel && isSetBack()) {
+				e.setCancelled(true);
+				p.setSprinting(false);
 			}
 		}
 		np.contentBoolean.put("sneak-was-sneaking", p.isSneaking());

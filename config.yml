@@ -472,7 +472,7 @@ cheats:
     isActive: true
     # Minimum time between block places,
     # in milliseconds
-    time_2_place: 50
+    time_2_place: 15
     reliability_alert: 60
     setBack: false
     kick: false
@@ -725,6 +725,18 @@ cheats:
     kick: false
     alert_to_kick: 5
     check_in_verif: true
+
+  # TImer change the full speed of client
+  timer:
+    ping: 200
+    exact_name: "Timer"
+    isActive: true
+    reliability_alert: 60
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+    check_in_verif: true
+    max_variation: 7
 
   # These are some special features
   special:

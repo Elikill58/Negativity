@@ -42,7 +42,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 
 	private NumberFormat nf = NumberFormat.getInstance();
-	
+
 	public ForceFieldProtocol() {
 		super(CheatKeys.FORCEFIELD, true, Material.DIAMOND_SWORD, CheatCategory.COMBAT, true, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
@@ -53,7 +53,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled() || e.getCause() != DamageCause.ENTITY_ATTACK)
 			return;
 		Player p = (Player) e.getDamager();
-		if(p.hasMetadata("NPC"))
+		if (p.hasMetadata("NPC"))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || e.getEntity() == null)
@@ -61,27 +61,25 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		EntityType type = e.getEntityType();
-		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT") || type.name().contains("ARROW"))
+		if (type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT") || type.name().contains("ARROW"))
 			return;
 		ItemStack inHand = Utils.getItemInHand(p);
-		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
+		if (inHand == null || !inHand.getType().equals(Material.BOW)) {
 			Entity cible = e.getEntity();
 			Object pBB = PacketUtils.getBoundingBox(p);
 			Object cibleBB = PacketUtils.getBoundingBox(cible);
 			Adapter.getAdapter().runAsync(() -> {
 				try {
-					double oldDistance = distance(pBB, cibleBB);
-					double dis = new Rect(cibleBB).distance(p);
-					Adapter.getAdapter().debug("Distance: " + dis + ", old: " + oldDistance);
+					double dis = distance(pBB, cibleBB);
 					recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 					Material blockType = p.getLocation().getBlock().getType();
 					double maxReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach");
-					if (dis > maxReach && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA") && (dis > (maxReach + 1) || oldDistance > maxReach)) {
+					if (dis > maxReach && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA") && (dis > (maxReach + 1))) {
 						Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 							String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * (oldDistance > maxReach ? 3 : 2) * 10),
-									"With: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Distance: " + dis + ", old: " + oldDistance + ", without thorns"
-									+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
+									"With: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Distance: " + dis,
+									hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 							if (isSetBack() && mayCancel)
 								e.setCancelled(true);
 						});
@@ -92,11 +90,11 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			});
 		}
 	}
-	
+
 	private double sens = 0.005;
-	
+
 	private double distance(Object a, Object b) {
-		if(a == null || b == null) {
+		if (a == null || b == null) {
 			SpigotNegativity.getInstance().getLogger().info("Failed to get entity BoundingBox (=HitBox) A/B null: " + a + "/" + b);
 			return 0.0;
 		}
@@ -107,15 +105,15 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			Rect max = new Rect(r1, r2, (t) -> Math.max(t.a, t.b));
 			Point m1 = min.getMid(), m2 = max.getMid(); // find mid of both rectangle
 			Point mr1 = null, mr2 = null;
-			for(double x = m1.x; x <= m2.x; x += sens) {
-				for(double y = m1.y; y <= m2.y; y += sens) {
-					for(double z = m1.z; z <= m2.z; z += sens) { // searching for point which just go outside of rect
-						if(mr1 == null) {
-							if(!min.isIn(x, y, z)) {
+			for (double x = m1.x; x <= m2.x; x += sens) {
+				for (double y = m1.y; y <= m2.y; y += sens) {
+					for (double z = m1.z; z <= m2.z; z += sens) { // searching for point which just go outside of rect
+						if (mr1 == null) {
+							if (!min.isIn(x, y, z)) {
 								mr1 = new Point(x, y, z);
 							}
-						} else if(mr2 == null) {
-							if(max.isIn(x, y, z)) {
+						} else if (mr2 == null) {
+							if (max.isIn(x, y, z)) {
 								mr2 = new Point(x, y, z);
 							}
 						} else {
@@ -124,8 +122,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					}
 				}
 			}
-			if(mr1 == null || mr2 == null) {
-				//SpigotNegativity.getInstance().getLogger().warning("Cannot find valid point for calculating distance: " + mr1 + " > " + mr2);
+			if (mr1 == null || mr2 == null) {
+				// SpigotNegativity.getInstance().getLogger().warning("Cannot find valid point
+				// for calculating distance: " + mr1 + " > " + mr2);
 				return 0;
 			}
 			return mr1.distance(mr2);
@@ -134,7 +133,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> reach = data.getData(HIT_DISTANCE);
@@ -143,7 +142,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		int nb = data.getData(FAKE_PLAYERS).getSize();
 		return Utils.coloredMessage(reachStr + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
 	}
-	
+
 	private String getColor(double d) {
 		return (d > 3 ? (d > 4 ? "&c" : "&6") : "&a");
 	}

@@ -63,7 +63,7 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public String getName() {
-		return entity.getCustomName().examinableName();
+		return entity.getCustomName() != null ? entity.getCustomName().examinableName() : entity.getEntityType().namespace().path();
 	}
 	
 	@Override

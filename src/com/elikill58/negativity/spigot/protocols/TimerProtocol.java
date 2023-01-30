@@ -45,21 +45,19 @@ public class TimerProtocol extends Cheat implements Listener {
 		else // loading seconds
 			return;
 		double sum = np.TIMER_COUNT.stream().mapToInt(Integer::intValue).sum() / np.TIMER_COUNT.size();
-		int variation = Adapter.getAdapter().getConfig().getInt("cheats.timer.max_variation");
 		Player p = e.getPlayer();
-		int max = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
-		int maxVariation = max + variation;
-		if(maxVariation > sum)// in min/max variations
+		int max = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20) + Adapter.getAdapter().getConfig().getInt("cheats.timer.max_variation");
+		if(max > sum)// in min/max variations
 			return;
 		List<Integer> medianList = new ArrayList<>(np.TIMER_COUNT);
 		medianList.sort(Comparator.naturalOrder());
 		int middle = medianList.size() / 2;
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
-		if(maxVariation > medianValue) // prevent false flag
+		if(max > medianValue || medianValue == 0) // prevent false flag
 			return;
-		int amount = (int) (sum - maxVariation);
+		int amount = (int) (sum - max);
 		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (np.ping / 100)),
-				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,
+				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue + " > " + max,
 				(CheatHover) null, amount > 0 ? amount : 1);
 	}
 }

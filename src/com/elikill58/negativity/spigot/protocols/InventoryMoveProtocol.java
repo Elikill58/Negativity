@@ -66,7 +66,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		if (!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getSlotType().equals(SlotType.QUICKBAR))
+		if (!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || !e.getSlotType().equals(SlotType.CONTAINER))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getWhoClicked());
 		if (!np.hasDetectionActive(this))

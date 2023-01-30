@@ -51,15 +51,13 @@ public class StepProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if (np.hasElytra() || np.isUsingTrident() || np.isUsingSlimeBlock || Utils.isSwimming(p)
-				|| p.isFlying() || LocationUtils.isUsingElevator(p) || p.isInsideVehicle())
+				|| p.isFlying() || LocationUtils.isUsingElevator(p) || p.isInsideVehicle() || np.isBedrockPlayer())
 			return;
 		SpigotLocation from = e.getFrom(), to = e.getTo();
 		SpigotLocation down = to.clone().subtract(0, 1, 0);
 		if(down.getBlock().getType().name().contains("SHULKER") || to.getBlock().getType().name().contains("SNOW"))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
-			return;
-		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS", "SNOW"))
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() + 1 : 0);

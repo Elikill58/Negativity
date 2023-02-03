@@ -46,11 +46,12 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(0, ItemBuilder.getSkullItem(cible, p));
 		
 		List<ItemStack> sanctionItems = new ArrayList<>();
-		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive)
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive && !Perm.hasPerm(np, Perm.BAN))
 			sanctionItems.add(ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
-		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive)
+		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive && !Perm.hasPerm(np, Perm.WARN))
 			sanctionItems.add(ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
-		sanctionItems.add(ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
+		if(!cible.isOp()) // prevent for OP players
+			sanctionItems.add(ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
 
 		if(sanctionItems.size() == 1)
 			inv.set(4, sanctionItems.get(0));

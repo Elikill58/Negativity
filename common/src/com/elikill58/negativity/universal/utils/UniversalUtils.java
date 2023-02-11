@@ -10,18 +10,12 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystemAlreadyExistsException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -503,30 +497,14 @@ public class UniversalUtils {
 	public static Configuration loadConfig(File configFile, String configName) {
 		if(!configFile.exists()) {
 			configFile.getParentFile().mkdirs();
-			try {
-				URI migrationsDirUri = UniversalUtils.class.getResource("/assets/negativity").toURI();
-				if (migrationsDirUri.getScheme().equals("jar")) {
-					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
-						Path cheatPath = jarFs.getPath("/assets/negativity", configName);
-						if(Files.isRegularFile(cheatPath)) {
-							Files.copy(cheatPath, Paths.get(configFile.toURI()));
-						} else {
-							Adapter.getAdapter().getLogger().error("Cannot load config.");
-							return null;
-						}
-					} catch(FileSystemAlreadyExistsException e) { // already exist
-						try (FileSystem jarFs = FileSystems.getFileSystem(migrationsDirUri)) {
-							Path cheatPath = jarFs.getPath("/assets/negativity", configName);
-							if(Files.isRegularFile(cheatPath)) {
-								Files.copy(cheatPath, Paths.get(configFile.toURI()));
-							} else {
-								Adapter.getAdapter().getLogger().error("Cannot load config.");
-								return null;
-							}
-						}
-					}
+			try (InputStream defaultConfigStream = UniversalUtils.class.getResourceAsStream("/assets/negativity/" + configName)) {
+				if (defaultConfigStream == null) {
+					Adapter.getAdapter().getLogger().error("Could not find default file '" + configName + "'");
+					return null;
 				}
-			} catch (URISyntaxException | IOException e) {
+
+				Files.copy(defaultConfigStream, configFile.toPath());
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

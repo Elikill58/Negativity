@@ -55,7 +55,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 
 		if(sanctionItems.size() == 1)
 			inv.set(4, sanctionItems.get(0));
-		else { // can only be upper than 1
+		else if(!sanctionItems.isEmpty()) { // can only be upper than 1
 			inv.set(3, sanctionItems.remove(0)); // get first
 			inv.set(5, sanctionItems.remove(0)); // get second
 			if(!sanctionItems.isEmpty()) // if stay one

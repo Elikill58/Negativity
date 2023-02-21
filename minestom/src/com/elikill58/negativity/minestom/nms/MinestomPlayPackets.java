@@ -11,7 +11,7 @@ public class MinestomPlayPackets {
 	
 	static {
 		// same as https://github.com/Minestom/Minestom/blob/master/src/main/java/net/minestom/server/network/packet/client/ClientPacketsHandler.java
-		
+
         register(0x00, ClientTeleportConfirmPacket.class);
         register(0x01, ClientQueryBlockNbtPacket.class);
         // 0x02 difficulty packet

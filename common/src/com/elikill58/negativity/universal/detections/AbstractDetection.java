@@ -105,11 +105,20 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	}
 	
 	public boolean isDisabledForBedrock() {
-		return config.getBoolean("bedrock.disabled", false);
+		return config.getBoolean("bedrock.disabled", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.bedrock.disabled", false);
 	}
 	
 	public boolean setDisabledForBedrock(boolean b) {
 		config.getBoolean("bedrock.disabled", b);
+		return b;
+	}
+	
+	public boolean isDisabledForJava() {
+		return config.getBoolean("java.disabled", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.java.disabled", false);
+	}
+	
+	public boolean setDisabledForJava(boolean b) {
+		config.getBoolean("java.disabled", b);
 		return b;
 	}
 	

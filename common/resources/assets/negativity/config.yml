@@ -61,6 +61,22 @@ inventory:
     only_cheat_active: true # The cheat with an active detection
   inv_freeze_active: true
 
+# This apply to absolutly ALL checks: cheats and special
+config_all:
+  # Config for bedrock users
+  bedrock:
+    disabled: false
+  # Config for java users
+  java:
+    disabled: false
+
+  # Options only available for cheats
+  cheats:
+    kick:
+      active: false
+    set_back:
+      active: false
+
 # Bypass when you add effects
 #
 items:

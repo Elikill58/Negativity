@@ -61,16 +61,16 @@ public class NegativityPlayer {
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> alertNotShowed = new HashMap<>();
 	public HashMap<String, String> mods = new HashMap<>();
-	
+
 	// packets
 	public Object2IntMap<PacketType> packets = new Object2IntArrayMap<>();
 	public int allPackets = 0, lastClick = 0, invincibilityTicks = 0;
-	
+
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
 	public Material eatMaterial = null;
 	public List<PotionEffect> potionEffects = new ArrayList<>();
-	
+
 	// detection and bypass
 	public long loginTime;
 	@Deprecated
@@ -80,19 +80,19 @@ public class NegativityPlayer {
 	public boolean isOnLadders = false, isTeleporting = false;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
-	
+
 	public Location delta = new Location(null, 0, 0, 0), lastDelta = new Location(null, 0, 0, 0);
-	
+
 	// content
 	public Content<List<Double>> listDoubles = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
 	public Content<Long> longs = new Content<>();
-	
+
 	// general values
-	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false,
-			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true, buggedVersion = false;
+	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false, isInvisible = false, isAttacking = false, shouldCheckSensitivity = true,
+			buggedVersion = false;
 	private boolean isBedrockPlayer = false, disconnecting = false;
 	public double sensitivity = 0.0;
 	private String clientName;
@@ -111,8 +111,9 @@ public class NegativityPlayer {
 		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
-		
-		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
+
+		// add processors like this: checkProcessors.add(new
+		// SpiderExampleCheckProcessor(this));
 		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));
 		checkProcessors.add(new PingSpoofCheckProcessor(this));
 		checkProcessors.forEach(CheckProcessor::begin);
@@ -126,7 +127,7 @@ public class NegativityPlayer {
 	public NegativityAccount getAccount() {
 		return NegativityAccount.get(playerId);
 	}
-	
+
 	/**
 	 * Get the player UUID
 	 * 
@@ -135,7 +136,7 @@ public class NegativityPlayer {
 	public UUID getUUID() {
 		return playerId;
 	}
-	
+
 	/**
 	 * Get the player name
 	 * 
@@ -144,7 +145,7 @@ public class NegativityPlayer {
 	public String getName() {
 		return getPlayer().getName();
 	}
-	
+
 	/**
 	 * Check if it's a bedrock player
 	 * 
@@ -153,7 +154,7 @@ public class NegativityPlayer {
 	public boolean isBedrockPlayer() {
 		return isBedrockPlayer;
 	}
-	
+
 	/**
 	 * Get executor for all players content
 	 * 
@@ -162,10 +163,10 @@ public class NegativityPlayer {
 	public ExecutorService getExecutor() {
 		return executor;
 	}
-	
+
 	/**
-	 * Check if the player have be detected for the given cheat
-	 * It also check for bypass and TPS drop
+	 * Check if the player have be detected for the given cheat It also check for
+	 * bypass and TPS drop
 	 * 
 	 * @param c the cheat which we are trying to detect
 	 * @return true if the player can be detected
@@ -181,13 +182,15 @@ public class NegativityPlayer {
 			return false;
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return false;
-		if(c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
+		if (c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
+			return false;
+		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return false;
 		Adapter ada = Adapter.getAdapter();
-		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return false;
 			if (!p.getWorld().isChunkLoaded(p.getLocation()))
@@ -195,33 +198,35 @@ public class NegativityPlayer {
 		}
 		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
 			return false;
-		if(BypassManager.hasBypass(p, c))
+		if (BypassManager.hasBypass(p, c))
 			return false;
 		return p.getPing() < c.getMaxAlertPing();
 	}
-	
+
 	public String getWhyDetectionNotActive(Cheat c) {
-		if(!c.isActive())
+		if (!c.isActive())
 			return "Cheat disabled";
-		if(Negativity.tpsDrop)
+		if (Negativity.tpsDrop)
 			return "TPS drop";
-		if(disconnecting)
+		if (disconnecting)
 			return "Disconnecting";
-		if(buggedVersion)
+		if (buggedVersion)
 			return "Bugged Version (1.19)";
-		if(timeInvincibility > System.currentTimeMillis())
+		if (timeInvincibility > System.currentTimeMillis())
 			return "Player invincibility (old)";
 		if (invincibilityTicks > 0)
 			return "Player invincibility";
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return "In fight";
-		if(c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
+		if (c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return "Bedrock user";
+		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
+			return "Java user";
 		Adapter ada = Adapter.getAdapter();
-		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return "Low TPS";
 		Player p = getPlayer();
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return "Should ignore movement";
 			if (!p.getWorld().isChunkLoaded(p.getLocation()))
@@ -229,9 +234,9 @@ public class NegativityPlayer {
 		}
 		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
 			return "Allowed to fly";
-		if(BypassManager.hasBypass(p, c))
+		if (BypassManager.hasBypass(p, c))
 			return "Has bypass";
-		if(p.getPing() > c.getMaxAlertPing())
+		if (p.getPing() > c.getMaxAlertPing())
 			return "Too high ping (" + p.getPing() + " > " + c.getMaxAlertPing() + ")";
 		return "Unknown";
 	}
@@ -264,7 +269,7 @@ public class NegativityPlayer {
 	public Player getPlayer() {
 		return p;
 	}
-	
+
 	/**
 	 * Get the name of the client such as vanilla/fabric...
 	 * 
@@ -282,36 +287,35 @@ public class NegativityPlayer {
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
 	}
-	
+
 	public Location getPingedLocation() {
-		if(lastLocations.isEmpty())
+		if (lastLocations.isEmpty())
 			return p.getLocation();
 		int ping = p.getPing();
 		int nbLast = (int) (ping / 50);
-		if(lastLocations.size() <= nbLast)
+		if (lastLocations.size() <= nbLast)
 			return lastLocations.get(lastLocations.size() - 1);
 		return lastLocations.get(nbLast);
 	}
-	
+
 	/**
 	 * Kick the player after a ban
 	 * 
 	 * @param reason the reason of kick
-	 * @param time the time of the ban which make the kick
-	 * @param by who kick the player
-	 * @param def if the ban is definitive
+	 * @param time   the time of the ban which make the kick
+	 * @param by     who kick the player
+	 * @param def    if the ban is definitive
 	 */
 	public void kickPlayer(String reason, String time, String by, boolean def) {
-		getPlayer().kick(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%",
-					reason, "%time%", String.valueOf(time), "%by%", by));
+		getPlayer().kick(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
 	/**
 	 * Add multiple warn
 	 * 
-	 * @param c the cheat which create alert
+	 * @param c           the cheat which create alert
 	 * @param reliability the reliability of all warn
-	 * @param amount the amount of alert
+	 * @param amount      the amount of alert
 	 * @return old warn amount or -1 if nothing added
 	 */
 	public long addWarn(Cheat c, int reliability, long amount) {
@@ -327,7 +331,7 @@ public class NegativityPlayer {
 	/**
 	 * Set a new value for the amount of alert of the given cheat
 	 * 
-	 * @param c the cheat
+	 * @param c      the cheat
 	 * @param alerts the new amount of alert
 	 */
 	public void setWarn(Cheat c, int alerts) {
@@ -335,7 +339,7 @@ public class NegativityPlayer {
 		account.setWarnCount(c, alerts);
 		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
-	
+
 	/**
 	 * Call {@link PlayerPacketsClearEvent} and then clear all packets
 	 */
@@ -343,7 +347,7 @@ public class NegativityPlayer {
 		EventManager.callEvent(new PlayerPacketsClearEvent(getPlayer(), this));
 		packets.clear();
 	}
-	
+
 	/**
 	 * Get the reason of the given cheat
 	 * 
@@ -352,32 +356,32 @@ public class NegativityPlayer {
 	 */
 	public String getReason(Cheat c) {
 		String n = "";
-		for(Cheat all : Cheat.values())
-			if(getAllWarn(all) > 5 && all.isActive())
+		for (Cheat all : Cheat.values())
+			if (getAllWarn(all) > 5 && all.isActive())
 				n = n + (n.equals("") ? "" : ", ") + all.getName();
-		if(!n.contains(c.getName()))
+		if (!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
-	
+
 	/**
 	 * Compile and return all cheat alert for each cheat
 	 * 
 	 * @return all cheat alert
 	 */
-	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
+	public List<PlayerCheatAlertEvent> getAlertForAllCheat() {
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		alertNotShowed.forEach((c, listAlerts) -> {
-			if(!listAlerts.isEmpty())
+			if (!listAlerts.isEmpty())
 				list.add(getAlertForCheat(Cheat.forKey(c), listAlerts));
 		});
 		return list;
 	}
-	
+
 	/**
 	 * Compile the list of alert into one of the given cheat
 	 * 
-	 * @param c the cheat of all alert
+	 * @param c    the cheat of all alert
 	 * @param list all last alert of the cheat
 	 * @return a new alert, summary of all others
 	 */
@@ -388,27 +392,28 @@ public class NegativityPlayer {
 		ReportType type = ReportType.INFO;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
-		for(PlayerCheatAlertEvent e : list) {
-			if(e == null)
+		for (PlayerCheatAlertEvent e : list) {
+			if (e == null)
 				continue;
 			nb += e.getNbAlert();
-			
+
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
 
 			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
 
-			if(e.getReportType().isStronger(type))
+			if (e.getReportType().isStronger(type))
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() || hasRelia;
-			
-			if(hoverProof == null && e.getHover() != null)
+
+			if (hoverProof == null && e.getHover() != null)
 				hoverProof = e.getHover();
-			
+
 			nbConsole += e.getNbAlertConsole();
 			e.clearNbAlertConsole();
 		}
-		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary,
+		// and a the nb of alert to upgrade it
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
 		PlayerCheatAlertEvent first = list.get(0);
@@ -448,7 +453,7 @@ public class NegativityPlayer {
 			fightCooldownTask = null;
 		}
 	}
-	
+
 	/**
 	 * Get active check processors
 	 * 
@@ -464,24 +469,24 @@ public class NegativityPlayer {
 	 * @return true if at least one golem target the player
 	 */
 	public boolean isTargetByIronGolem() {
-		for(Entity et : p.getWorld().getEntities())
-			if(et instanceof IronGolem)
-				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
+		for (Entity et : p.getWorld().getEntities())
+			if (et instanceof IronGolem)
+				if (((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
 					return true;
 		return false;
 	}
-	
+
 	/**
 	 * Create ban effect
 	 */
 	public void banEffect() {
 		// TODO add ban effect
 	}
-	
+
 	public int getClick() {
 		return rightBlockClick + leftBlockClick + entityClick;
 	}
-	
+
 	public void clearClick() {
 		rightBlockClick = 0;
 		leftBlockClick = 0;
@@ -489,7 +494,7 @@ public class NegativityPlayer {
 		leftCancelled = 0;
 		leftFinished = 0;
 	}
-	
+
 	/**
 	 * Check if user is disconnecting
 	 * 
@@ -498,7 +503,7 @@ public class NegativityPlayer {
 	public boolean isDisconnecting() {
 		return disconnecting;
 	}
-	
+
 	/**
 	 * Change is user is disconnecting
 	 * 
@@ -507,11 +512,11 @@ public class NegativityPlayer {
 	public void setDisconnecting(boolean disconnecting) {
 		this.disconnecting = disconnecting;
 	}
-	
+
 	public <D extends CheckData> D getCheckData(Cheat cheat) {
-	    return (D) this.checkDatas.computeIfAbsent(cheat.getKey(), a -> cheat.getCheckDataCreator().apply(this));
+		return (D) this.checkDatas.computeIfAbsent(cheat.getKey(), a -> cheat.getCheckDataCreator().apply(this));
 	}
-	
+
 	/**
 	 * Get the Negativity Player or create a new one
 	 * 
@@ -553,18 +558,18 @@ public class NegativityPlayer {
 			return PLAYERS.get(playerId);
 		}
 	}
-	
+
 	/**
 	 * Get all uuid and their negativity players
 	 * 
 	 * @return negativity players
 	 */
-	public static Map<UUID, NegativityPlayer> getAllPlayers(){
+	public static Map<UUID, NegativityPlayer> getAllPlayers() {
 		synchronized (PLAYERS) {
 			return PLAYERS;
 		}
 	}
-	
+
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
 		synchronized (PLAYERS) {
 			return new ArrayList<>(PLAYERS.values());

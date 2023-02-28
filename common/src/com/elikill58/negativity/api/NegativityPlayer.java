@@ -286,6 +286,8 @@ public class NegativityPlayer {
 	 */
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
+		if(clientName != null && !isBedrockPlayer)
+			this.isBedrockPlayer = clientName.equalsIgnoreCase("Geyser");
 	}
 
 	public Location getPingedLocation() {

@@ -53,7 +53,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class NegativityPlayer {
 
-	private static final Map<UUID, NegativityPlayer> PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
+	private static final Map<UUID, NegativityPlayer> NEGATIVITY_PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
+	private static final Map<UUID, Player> PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, Player>());
 
 	private final UUID playerId;
 	private final Player p;
@@ -526,7 +527,9 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
-		return getNegativityPlayer(p.getUniqueId(), () -> p);
+		synchronized (NEGATIVITY_PLAYERS) {
+			return NEGATIVITY_PLAYERS.computeIfAbsent(p.getUniqueId(), (a) -> new NegativityPlayer(p));
+		}
 	}
 
 	/**
@@ -537,15 +540,8 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
-		synchronized (PLAYERS) {
-			return PLAYERS.computeIfAbsent(uuid, (a) -> {
-				try {
-					return new NegativityPlayer(call.call());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return null;
-			});
+		synchronized (NEGATIVITY_PLAYERS) {
+			return NEGATIVITY_PLAYERS.computeIfAbsent(uuid, (a) -> new NegativityPlayer(getPlayer(uuid, call)));
 		}
 	}
 
@@ -556,8 +552,8 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getCached(UUID playerId) {
-		synchronized (PLAYERS) {
-			return PLAYERS.get(playerId);
+		synchronized (NEGATIVITY_PLAYERS) {
+			return NEGATIVITY_PLAYERS.get(playerId);
 		}
 	}
 
@@ -567,14 +563,14 @@ public class NegativityPlayer {
 	 * @return negativity players
 	 */
 	public static Map<UUID, NegativityPlayer> getAllPlayers() {
-		synchronized (PLAYERS) {
-			return PLAYERS;
+		synchronized (NEGATIVITY_PLAYERS) {
+			return NEGATIVITY_PLAYERS;
 		}
 	}
 
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
-		synchronized (PLAYERS) {
-			return new ArrayList<>(PLAYERS.values());
+		synchronized (NEGATIVITY_PLAYERS) {
+			return new ArrayList<>(NEGATIVITY_PLAYERS.values());
 		}
 	}
 
@@ -584,11 +580,26 @@ public class NegativityPlayer {
 	 * @param playerId the player UUID
 	 */
 	public static void removeFromCache(UUID playerId) {
-		synchronized (PLAYERS) {
-			NegativityPlayer cached = PLAYERS.remove(playerId);
+		synchronized (NEGATIVITY_PLAYERS) {
+			NegativityPlayer cached = NEGATIVITY_PLAYERS.remove(playerId);
 			if (cached != null) {
 				cached.destroy();
 			}
 		}
+	}
+	
+	public static Player getPlayer(UUID playerId) {
+		return PLAYERS.get(playerId);
+	}
+	
+	public static Player getPlayer(UUID playerId, Callable<Player> call) {
+		return PLAYERS.computeIfAbsent(playerId, (a) -> {
+			try {
+				return call.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 }

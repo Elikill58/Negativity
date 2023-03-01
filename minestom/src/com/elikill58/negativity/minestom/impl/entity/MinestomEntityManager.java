@@ -12,7 +12,7 @@ import net.minestom.server.entity.Player;
 public class MinestomEntityManager {
 
 	public static com.elikill58.negativity.api.entity.@Nullable Player getPlayer(@Nullable Player p){
-		return p == null ? null : NegativityPlayer.getNegativityPlayer(p.getUuid(), () -> new MinestomPlayer(p)).getPlayer();
+		return p == null ? null : NegativityPlayer.getPlayer(p.getUuid(), () -> new MinestomPlayer(p));
 	}
 	
 	public static @Nullable Entity getEntity(net.minestom.server.entity.Entity e) {

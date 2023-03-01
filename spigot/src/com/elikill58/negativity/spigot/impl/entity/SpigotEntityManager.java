@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.entity.Entity;
 public class SpigotEntityManager {
 
 	public static com.elikill58.negativity.api.entity.@Nullable Player getPlayer(@Nullable Player p){
-		return p == null ? null : NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).getPlayer();
+		return p == null ? null : NegativityPlayer.getPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 	}
 	
 	public static @Nullable Entity getEntity(org.bukkit.entity.@Nullable Entity bukkitEntity) {

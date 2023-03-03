@@ -59,7 +59,7 @@ public class Version1_19_3 extends NamedVersion {
 				EntityType.PIG_ZOMBIE, EntityType.PLAYER, EntityType.FISHING_HOOK)) {
 			entityTypes.put(i++, types);
 		}
-		loadPostFlattening("/versions/v1_19/");
+		loadPostFlattening("/versions/v1_19_3/");
 
 		log();
 	}

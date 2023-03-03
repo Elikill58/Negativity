@@ -48,7 +48,7 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "same-diff", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_USE_ELEVATOR })
+	@Check(name = "same-diff", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -129,7 +129,7 @@ public class Speed extends Cheat implements Listeners {
 		data.deltaXZ = deltaXZ;
 	}
 
-	@Check(name = "high-speed", description = "Distance with high speed", conditions = { CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_SLIME, CheckConditions.NO_SWIM })
+	@Check(name = "high-speed", description = "Distance with high speed", conditions = { CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_SLIME, CheckConditions.SURVIVAL, CheckConditions.NO_SWIM })
 	public void onHighSpeed(PlayerMoveEvent e, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

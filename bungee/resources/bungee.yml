@@ -1,5 +1,5 @@
 name: Negativity
-authors: [Elikill58, RedNesto]
+author: "Elikill58, RedNesto"
 version: ${version}
 main: com.elikill58.negativity.bungee.BungeeNegativity
 

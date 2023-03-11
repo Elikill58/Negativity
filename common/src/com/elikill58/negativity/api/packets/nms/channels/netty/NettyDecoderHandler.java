@@ -55,8 +55,10 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 						return;
 					super.channelRead(ctx, obj); // call before use
 					EventManager.callEvent(new PacketReceiveEvent(packet, p));
-				}
-			}
+				} else
+					super.channelRead(ctx, obj); 
+			} else
+				super.channelRead(ctx, obj); 
 		} catch (Throwable e) { // manage error myself to let everything continue
 			NettyHandlerCommon.manageError(ctx, e, "internal receiving");
 		}

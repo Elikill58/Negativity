@@ -593,6 +593,7 @@ public class NegativityPlayer {
 			if (cached != null) {
 				cached.destroy();
 			}
+			PLAYERS.remove(playerId);
 		}
 	}
 	

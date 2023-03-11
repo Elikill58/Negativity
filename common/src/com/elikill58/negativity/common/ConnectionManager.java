@@ -100,6 +100,7 @@ public class ConnectionManager implements Listeners {
 
 	@EventListener
 	public void onLogin(LoginEvent e) {
+		NegativityPlayer.removeFromCache(e.getUUID()); // remove all possible old things
 		if(!BanManager.shouldNegativityHandleBans() || !e.getLoginResult().equals(Result.ALLOWED) || !BanManager.banActive) // already kicked or ban not enabled
 			return;
 		UUID playerId = e.getUUID();

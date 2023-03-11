@@ -67,6 +67,7 @@ public abstract class NettyPacketListener {
 			p.setPlayerVersion(version);
 		}
 		Channel channel = getChannel(p);
+		boolean hadChannel = checked.contains(channel);
 		checked.add(channel);
 		try {
 			// Managing incoming packet (from player)
@@ -79,7 +80,9 @@ public abstract class NettyPacketListener {
 				return; // ignore, just left
 			// appear when the player's channel isn't accessible because of reload.
 			ada.getLogger().warn("Please, don't use reload, this can produce some problem. Currently, " + p.getName()
-					+ " isn't fully checked because of that. More details: " + exc.getMessage() + " (NoSuchElementException)");
+					+ " isn't fully checked because of that. More details: " + exc.getMessage() + " (NoSuchElementException)." + (!hadChannel ? "Trying again ..." : ""));
+			if(!hadChannel)
+				Adapter.getAdapter().getScheduler().runDelayed(() -> addChannel(p), 10);
 		} catch (IllegalArgumentException exc) {
 			if (exc.getMessage().contains("Duplicate handler")) {
 				removeChannel(channel, DECODER_KEY_HANDLER);

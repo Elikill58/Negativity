@@ -6,7 +6,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -40,7 +40,7 @@ public class ServerCrasher extends Special implements Listeners {
 	}
 
 	@EventListener(priority = EventPriority.PRE)
-	public void onPacketReceive(PacketReceiveEvent e) {
+	public void onPacketReceive(PacketPreReceiveEvent e) {
 		if (!isActive() || !e.hasPlayer())
 			return;
 		Player p = e.getPlayer();

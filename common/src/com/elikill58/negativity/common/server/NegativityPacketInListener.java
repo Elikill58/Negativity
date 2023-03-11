@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
@@ -30,7 +30,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 public class NegativityPacketInListener implements Listeners {
 
 	@EventListener
-	public void onPacketReceive(PacketReceiveEvent e) {
+	public void onPacketReceive(PacketPreReceiveEvent e) {
 		if (!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();

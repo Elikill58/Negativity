@@ -2,6 +2,7 @@ package com.elikill58.negativity.minestom.listeners;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
@@ -70,10 +71,11 @@ public class PacketListeners {
 		if(packet == null) {
 			return;
 		}
-		PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+		PacketPreReceiveEvent event = new PacketPreReceiveEvent(packet, p);
 		EventManager.callEvent(event);
 		if(event.isCancelled())
 			e.setCancelled(true);
+		EventManager.callEvent(new PacketReceiveEvent(packet, p));
 	}
 	
 	public void onPacket(PlayerPacketOutEvent e) {

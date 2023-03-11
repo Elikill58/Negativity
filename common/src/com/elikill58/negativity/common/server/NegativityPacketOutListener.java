@@ -34,7 +34,7 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
 			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
 			Adapter.getAdapter().debug(Debug.GENERAL, "Channel: " + a.channel);
-		} else if(type.equals(PacketType.Server.POSITION))
+		} else if(type.equals(PacketType.Server.ENTITY_TELEPORT))
 			NegativityPlayer.getNegativityPlayer(p).invincibilityTicks += 5;
 	}
 }

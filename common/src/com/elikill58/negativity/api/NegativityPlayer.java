@@ -74,8 +74,6 @@ public class NegativityPlayer {
 
 	// detection and bypass
 	public long loginTime;
-	@Deprecated
-	public long timeInvincibility = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean isOnLadders = false, isTeleporting = false;
@@ -96,7 +94,7 @@ public class NegativityPlayer {
 			buggedVersion = false;
 	private boolean isBedrockPlayer = false, disconnecting = false;
 	public double sensitivity = 0.0;
-	private String clientName;
+	private String clientName, invincibilityReason = "";
 	private @Nullable ScheduledTask fightCooldownTask;
 	// one thread per person
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -175,8 +173,6 @@ public class NegativityPlayer {
 	public boolean hasDetectionActive(Cheat c) {
 		if (!c.isActive() || Negativity.tpsDrop || buggedVersion || disconnecting)
 			return false;
-		if (timeInvincibility > System.currentTimeMillis())
-			return false;
 		if (invincibilityTicks > 0)
 			return false;
 		if (isFreeze)
@@ -213,10 +209,8 @@ public class NegativityPlayer {
 			return "Disconnecting";
 		if (buggedVersion)
 			return "Bugged Version (1.19)";
-		if (timeInvincibility > System.currentTimeMillis())
-			return "Player invincibility (old)";
 		if (invincibilityTicks > 0)
-			return "Player invincibility";
+			return "Player invincibility: " + invincibilityReason;
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return "In fight";
 		if (c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
@@ -242,6 +236,20 @@ public class NegativityPlayer {
 		return "Unknown";
 	}
 
+	public void addInvincibilityTicks(int amount, String reason) {
+		this.invincibilityTicks += amount;
+		this.invincibilityReason = reason;
+	}
+	
+	public int getInvincibilityTicks() {
+		return invincibilityTicks;
+	}
+	
+	public void downInvincibilityTicks() {
+		if(invincibilityTicks > 0)
+			this.invincibilityTicks--;
+	}
+	
 	/**
 	 * Get warn of the cheat
 	 * 
@@ -322,7 +330,7 @@ public class NegativityPlayer {
 	 * @return old warn amount or -1 if nothing added
 	 */
 	public long addWarn(Cheat c, int reliability, long amount) {
-		if (System.currentTimeMillis() < timeInvincibility || c.getReliabilityAlert() > reliability)
+		if (invincibilityTicks > 0 || c.getReliabilityAlert() > reliability)
 			return -1;
 		NegativityAccount account = getAccount();
 		long old = account.getWarn(c);

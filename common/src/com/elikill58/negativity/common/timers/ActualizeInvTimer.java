@@ -34,9 +34,11 @@ public class ActualizeInvTimer implements Runnable {
 					InventoryManager.getInventory(NegativityInventory.ACTIVED_CHEAT).ifPresent((inv) -> inv.actualizeInventory(p, ((ActivedCheatHolder) nh).getCible()));
 			}
 		}
-		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-			if (NegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {
-				InventoryManager.open(NegativityInventory.FREEZE, p);
+		if(INV_FREEZE_ACTIVE) {
+			for(NegativityPlayer np : NegativityPlayer.getAllNegativityPlayers()) {
+				if (np.isFreeze) {
+					InventoryManager.open(NegativityInventory.FREEZE, np.getPlayer());
+				}
 			}
 		}
 	}

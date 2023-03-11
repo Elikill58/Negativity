@@ -104,7 +104,7 @@ public class PlayersListeners {
 	}
 
 	public void onGlide(PlayerStartFlyingWithElytraEvent e) {
-		NegativityPlayer.getCached(e.getPlayer().getUuid()).invincibilityTicks += 10;
+		NegativityPlayer.getCached(e.getPlayer().getUuid()).addInvincibilityTicks(10, "Flying with elytra");
 	}
 	
 	public void onCommand(PlayerCommandEvent e) {

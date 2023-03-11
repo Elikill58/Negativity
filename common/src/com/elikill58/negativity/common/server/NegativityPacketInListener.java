@@ -61,7 +61,7 @@ public class NegativityPacketInListener implements Listeners {
 				}
 			}
 		} else if (type == PacketType.Client.TELEPORT_ACCEPT) {
-			np.invincibilityTicks += 3; // when in unloaded chunk
+			np.addInvincibilityTicks(3, "Teleport Accept"); // when in unloaded chunk
 		} else if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if (flying.hasLocation()) {
@@ -75,8 +75,8 @@ public class NegativityPacketInListener implements Listeners {
 				else
 					p.setLocation(flying.getLocation(p.getWorld()));
 			}
-			if(flying.hasPos && np.invincibilityTicks > 0)
-				np.invincibilityTicks--;
+			if(flying.hasPos)
+				np.downInvincibilityTicks();
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;
 

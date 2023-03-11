@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.server;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -34,7 +33,6 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
 			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
 			Adapter.getAdapter().debug(Debug.GENERAL, "Channel: " + a.channel);
-		} else if(type.equals(PacketType.Server.ENTITY_TELEPORT))
-			NegativityPlayer.getNegativityPlayer(p).invincibilityTicks += 5;
+		}
 	}
 }

@@ -49,7 +49,7 @@ public class AirJump extends Cheat {
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
 			double velY = p.getVelocity().getY();
 			if (diffYtoFrom - (velY > 0 ? velY : 0) > 0.35 && data.diffY < diffYtoFrom && data.diffY > velY
-					&& data.diffY > p.getTheoricVelocity().getY() && np.invincibilityTicks <= 0) {
+					&& data.diffY > p.getTheoricVelocity().getY()) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p,
 						this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 190) - (p.getPing() / 50)), "diff-y",
 						"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + data.diffY + ". Down: " + idDown

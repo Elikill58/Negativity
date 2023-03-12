@@ -16,7 +16,7 @@ public class NPacketPlayInChat implements NPacketPlayIn {
 
 	@Override
 	public void read(PacketSerializer serializer, Version v) {
-		this.message = serializer.readString(100);
+		this.message = serializer.readString();
 	}
 
 	@Override

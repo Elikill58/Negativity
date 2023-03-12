@@ -16,13 +16,27 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
+import org.yaml.snakeyaml.reader.ReaderException;
 import org.yaml.snakeyaml.representer.Representer;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Tuple;
 
+@SuppressWarnings("deprecation")
 public class YamlConfiguration {
-	private static final ThreadLocal<Yaml> yaml = new ThreadLocal<Yaml>() {
+	private static final Yaml yaml;
+	
+	static {
+		DumperOptions options = new DumperOptions();
+		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		yaml = new Yaml(new Constructor(Configuration.class), new Representer() {
+			{
+				this.representers.put(Configuration.class, (data) -> represent(((Configuration) data).self));
+			}
+		}, options);
+	}
+	
+	/*private static final Yaml yaml = new ThreadLocal<Yaml>() {
 		@SuppressWarnings("deprecation")
 		@Override
 		protected Yaml initialValue() {
@@ -34,11 +48,11 @@ public class YamlConfiguration {
 				}
 			}, options);
 		}
-	};
+	};*/
 
 	public static void save(Configuration config, File file) throws IOException {
 		try (final FileWriter writer = new FileWriter(file)) {
-			yaml.get().dump(config.self, writer);
+			yaml.dump(config.self, writer);
 		}
 	}
 
@@ -55,7 +69,7 @@ public class YamlConfiguration {
 	}
 
 	public static Configuration load(File file, Reader reader) {
-		Map<String, Object> map = yaml.get().loadAs(reader, LinkedHashMap.class);
+		Map<String, Object> map = yaml.loadAs(reader, LinkedHashMap.class);
 		if (map == null) {
 			map = new LinkedHashMap<String, Object>();
 		}
@@ -70,9 +84,11 @@ public class YamlConfiguration {
 
 	private static Tuple<Integer, String> beSureItsGoodList(File f, List<String> lines, boolean changed) throws IOException {
 		try {
-			yaml.get().loadAs(new StringReader(String.join("\n", lines)), LinkedHashMap.class);
+			yaml.loadAs(new StringReader(String.join("\n", lines)), LinkedHashMap.class);
 			if(changed)
 				Files.write(f.toPath(), lines, StandardOpenOption.TRUNCATE_EXISTING);
+		} catch (ReaderException e) {
+			
 		} catch (MarkedYAMLException e) {
 			int line = e.getProblemMark().getLine();
 			if (lines.size() > line) {

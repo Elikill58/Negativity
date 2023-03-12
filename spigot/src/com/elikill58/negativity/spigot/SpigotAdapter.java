@@ -127,7 +127,7 @@ public class SpigotAdapter extends Adapter {
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		for (org.bukkit.entity.Player temp : Utils.getOnlinePlayers())
-			list.add(NegativityPlayer.getNegativityPlayer(temp.getUniqueId(), () -> new SpigotPlayer(temp)).getPlayer());
+			list.add(NegativityPlayer.getPlayer(temp.getUniqueId(), () -> new SpigotPlayer(temp)));
 		return list;
 	}
 

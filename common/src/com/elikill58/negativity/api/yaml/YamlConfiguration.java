@@ -29,7 +29,7 @@ public class YamlConfiguration {
 	static {
 		DumperOptions options = new DumperOptions();
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-		yaml = new Yaml(new Constructor(Configuration.class), new Representer() {
+		yaml = new Yaml(new Constructor(), new Representer() {
 			{
 				this.representers.put(Configuration.class, (data) -> represent(((Configuration) data).self));
 			}

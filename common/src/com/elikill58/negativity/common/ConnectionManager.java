@@ -40,7 +40,7 @@ public class ConnectionManager implements Listeners {
 		NegativityPlayer np = e.getNegativityPlayer();
 		if(!Adapter.getAdapter().getPlatformID().isProxy())
 			np.delta = np.lastDelta = p.getLocation().clone();
-		np.addInvincibilityTicks(10, "Connection");
+		np.addInvincibilityTicks(5, "Connection");
 		Adapter.getAdapter().debug(Debug.GENERAL, "Player " + p.getName() + " just connect using protocol " + p.getProtocolVersion() + " (version: " + p.getPlayerVersion().getName() + "). EntityId: " + p.getEntityId());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
@@ -128,7 +128,7 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onTeleport(PlayerTeleportEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(5, "Teleportation");
+		NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(3, "Teleportation");
 	}
 	
 	@EventListener

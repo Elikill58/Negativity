@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.yaml.snakeyaml.reader.ReaderException;
 import org.yaml.snakeyaml.representer.Representer;
@@ -22,18 +21,17 @@ import org.yaml.snakeyaml.representer.Representer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Tuple;
 
-@SuppressWarnings("deprecation")
 public class YamlConfiguration {
 	private static final Yaml yaml;
 	
 	static {
 		DumperOptions options = new DumperOptions();
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-		yaml = new Yaml(new Constructor(), new Representer() {
+		yaml = new Yaml(new Representer(options) {
 			{
 				this.representers.put(Configuration.class, (data) -> represent(((Configuration) data).self));
 			}
-		}, options);
+		});
 	}
 	
 	/*private static final Yaml yaml = new ThreadLocal<Yaml>() {

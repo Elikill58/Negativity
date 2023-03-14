@@ -26,7 +26,7 @@ public class Configuration {
     }
     
     public Configuration(Configuration defaults) {
-        this(null, new LinkedHashMap<Object, Object>(), defaults);
+        this(null, new LinkedHashMap<String, Object>(), defaults);
     }
     
     Configuration(File file, Map<?, ?> map, Configuration defaults) {
@@ -36,9 +36,9 @@ public class Configuration {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             String key = (entry.getKey() == null) ? "null" : entry.getKey().toString();
             if (entry.getValue() instanceof Map) {
-                this.self.put(key, new Configuration(file, (Map<?, ?>) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
-            }
-            else {
+            	Configuration nextDef = defaults == null ? null : defaults.getSection(key);
+                this.self.put(key, new Configuration(file, (Map<?, ?>) entry.getValue(), nextDef == this ? null : nextDef)); // prevent infinite loop
+            } else {
                 this.self.put(key, entry.getValue());
             }
         }

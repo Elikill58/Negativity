@@ -32,10 +32,8 @@ public class UnexpectedPacket extends Cheat {
 				if (timeLeftVehicle < 50)
 					return; // just left, strange packet but prevent issue
 				long amount = timeLeftVehicle / 50;
-				Negativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(amount < 100 ? 50 + amount : 100), "vehicle-steer",
-						"Actual vehicle: " + p.getVehicle() + ", timeLeft: " + timeLeftVehicle,
-						new CheatHover.Literal("Say he's moving with vehicle when not in vehicle"),
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount < 100 ? 50 + amount : 100), "vehicle-steer",
+						"Actual vehicle: " + p.getVehicle() + ", timeLeft: " + timeLeftVehicle, new CheatHover.Literal("Say he's moving with vehicle when not in vehicle"),
 						amount <= 0 ? 1 : (amount > 10000 ? 10000 : amount));
 			}
 		} else if (e.getPacket().getPacketType().equals(Client.ENTITY_ACTION)) {
@@ -50,8 +48,7 @@ public class UnexpectedPacket extends Cheat {
 	public void onSpectate(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.SPECTATE) && p.getGameMode().equals(GameMode.CREATIVE)) {
-			Negativity.alertMod(ReportType.WARNING, p, this, 100, "spectator",
-					"Spectate when using gamemode: " + p.getGameMode().name(),
+			Negativity.alertMod(ReportType.WARNING, p, this, 100, "spectator", "Spectate when using gamemode: " + p.getGameMode().name(),
 					new CheatHover.Literal("Spectate someone when using " + p.getGameMode().getName()));
 		}
 	}
@@ -59,14 +56,15 @@ public class UnexpectedPacket extends Cheat {
 	@Check(name = "held-change", description = "Change held slot to the same")
 	public void onHeldChange(PacketReceiveEvent e, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
-		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && data.alreadySend) {
+		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT)) {
 			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket();
-			if (p.getInventory().getHeldItemSlot() == slot.slot) {
-				Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
-						"Change held slot to the same: " + slot.slot,
-						new CheatHover.Literal("Change held slot to the same"), slot.slot);
-			}
+			if (data.lastSlot == slot.slot) {
+				Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change", "Change held slot to the same: " + slot.slot, new CheatHover.Literal("Change held slot to the same"),
+						slot.slot + data.timeSlot);
+				data.timeSlot++;
+			} else
+				data.timeSlot = 0;
+			data.lastSlot = slot.slot;
 		}
-		data.alreadySend = true;
 	}
 }

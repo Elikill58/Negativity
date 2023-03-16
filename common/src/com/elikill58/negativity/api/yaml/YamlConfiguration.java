@@ -31,7 +31,7 @@ public class YamlConfiguration {
 			{
 				this.representers.put(Configuration.class, (data) -> represent(((Configuration) data).self));
 			}
-		});
+		}, options);
 	}
 	
 	/*private static final Yaml yaml = new ThreadLocal<Yaml>() {

@@ -29,7 +29,7 @@ import io.netty.channel.ChannelFuture;
 
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	protected Method getPlayerHandle, mathTps, getEntityLookup, getBukkitEntity;
+	protected Method getPlayerHandle, getEntityLookup, getBukkitEntity;
 	protected Field recentTpsField, pingField, tpsField, playerConnectionField;
 	protected Field minX, minY, minZ, maxX, maxY, maxZ, entityLookup;
 	protected Object dedicatedServer;
@@ -38,9 +38,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		this.version = Version.getVersionByProtocolID(protocolVersion);
 		try {
 			dedicatedServer = PacketUtils.getDedicatedServer();
-
-			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper", "util.");
-			mathTps = mathHelperClass.getDeclaredMethod("a", long[].class);
 
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
@@ -101,7 +98,11 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public double getAverageTps() {
 		try {
-			return (double) mathTps.invoke(null, tpsField.get(dedicatedServer));
+			long[] array = (long[]) tpsField.get(dedicatedServer);
+		    long l = 0L;
+		    for (long m : array)
+		      l += m; 
+		    return l / array.length;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -279,6 +280,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_19_R1();
 			case "v1_19_R2":
 				return instance = new Spigot_1_19_R2();
+			case "v1_19_R3":
+				return instance = new Spigot_1_19_R3();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

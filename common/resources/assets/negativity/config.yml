@@ -127,7 +127,7 @@ Permissions:
     default: "negativity.lang"
   chat:
     clear:
-      default: "negativity.chat.cleat"
+      default: "negativity.chat.clear"
     lock:
       default: "negativity.chat.lock"
     lock_bypass:

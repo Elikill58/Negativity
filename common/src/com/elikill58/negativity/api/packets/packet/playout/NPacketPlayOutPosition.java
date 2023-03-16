@@ -22,7 +22,7 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 	public float yaw, pitch;
 	public List<EnumPlayerTeleportFlags> flags;
 	/**
-	 * Since 1.17
+	 * Since 1.17 until 1.19.3
 	 */
 	public boolean shouldDismount;
 
@@ -40,7 +40,7 @@ public class NPacketPlayOutPosition implements NPacketPlayOut, LocatedPacket {
 		this.flags = EnumPlayerTeleportFlags.get(serializer.readUnsignedByte());
 		if (version.isNewerOrEquals(Version.V1_9)) {
 			this.teleportId = serializer.readVarInt();
-			if (version.isNewerOrEquals(Version.V1_17))
+			if (version.isNewerOrEquals(Version.V1_17) && !version.isNewerOrEquals(Version.V1_19_4))
 				this.shouldDismount = serializer.readBoolean();
 		}
 	}

@@ -11,6 +11,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
+import com.elikill58.negativity.universal.utils.SemVer;
 
 import io.netty.channel.Channel;
 
@@ -26,9 +27,15 @@ public abstract class NettyPacketListener {
 	}
 
 	public List<Channel> checked = new ArrayList<>();
+	private boolean shouldFixViaversion = false;
 
 	public NettyPacketListener() {
 		instance = this;
+		Adapter ada = Adapter.getAdapter();
+		if(ada.hasPlugin("ViaVersion")) {
+			// 4.4.9 doesn't exist but it's latest before 4.5
+			shouldFixViaversion = SemVer.parse(ada.getPlugin("ViaVersion").getVersion()).isNewerThan(SemVer.parse("4.4.9"));
+		}
 	}
 
 	public void join(Player p) {
@@ -49,10 +56,10 @@ public abstract class NettyPacketListener {
 			NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
 			return;
 		}
-		if(ada.hasPlugin("ViaVersion") && ada.getPlugin("ViaVersion").getVersion().startsWith("4.5") && ada.getPlatformID().equals(Platform.SPIGOT)) { // can have viaversion issue
+		if(shouldFixViaversion && ada.getPlatformID().equals(Platform.SPIGOT)) { // can have viaversion issue
 			Version serverVersion = ada.getServerVersion();
-			boolean playerIs19 = version.equals(Version.V1_19) || version.equals(Version.V1_19_2) || version.equals(Version.V1_19_3);
-			boolean serverIs19 = serverVersion.equals(Version.V1_19) || serverVersion.equals(Version.V1_19_2) || serverVersion.equals(Version.V1_19_3);
+			boolean playerIs19 = version.name().startsWith("V1_19");
+			boolean serverIs19 = serverVersion.name().startsWith("V1_19");
 			if(playerIs19 && !serverIs19) {
 				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.19+ on 1.18- servers).");
 				version = serverVersion;

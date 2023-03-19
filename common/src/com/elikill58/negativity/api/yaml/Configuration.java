@@ -38,7 +38,7 @@ public class Configuration {
 			if (entry.getValue() instanceof Map) {
 				Configuration nextDef = defaults == null ? null : defaults.getSection(key);
 				String checkingStr = entry.getValue().toString();
-				if (checkingStr.contains(key + "=(this Map),") || checkingStr.contains("," + key + "=(this Map)"))
+				if (checkingStr.contains(key + "=(this Map)") || checkingStr.contains(key + "=(this Collection)"))
 					continue;
 				this.self.put(key, new Configuration(file, (Map<?, ?>) entry.getValue(), nextDef == this ? null : nextDef)); // prevent infinite loop
 			} else {

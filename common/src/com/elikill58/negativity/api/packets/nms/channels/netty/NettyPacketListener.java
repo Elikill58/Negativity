@@ -44,6 +44,8 @@ public abstract class NettyPacketListener {
 
 	public void left(Player p) {
 		Channel channel = getChannel(p);
+		if(channel == null)
+			return; // not fully loaded
 		removeChannel(channel, DECODER_KEY_HANDLER);
 		removeChannel(channel, ENCODER_KEY_HANDLER);
 	}
@@ -105,7 +107,7 @@ public abstract class NettyPacketListener {
 	public abstract Channel getChannel(Player p);
 
 	private void removeChannel(Channel c, String key) {
-		if (c.pipeline().get(key) != null)
+		if (c.pipeline() != null && c.pipeline().get(key) != null)
 			c.pipeline().remove(key);
 	}
 }

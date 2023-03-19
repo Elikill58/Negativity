@@ -25,6 +25,12 @@ import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.storage.proof.OldProofFileMigration;
 
+/**
+ * TODO Complete refactor to make saving on same thread or just changing content of it
+ * 
+ * @author Elikill58
+ *
+ */
 public class FileNegativityProofStorage extends NegativityProofStorage {
 
 	private final File proofDir;
@@ -139,7 +145,6 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					try {
 						return YamlConfiguration.load(file);
 					} catch (Exception e) {
-						Adapter.getAdapter().getLogger().warn("To prevent error, the proof file for " + uuid.toString() + " have been resetted.");
 						try {
 							new PrintWriter(file).close();
 						} catch (FileNotFoundException e1) {
@@ -166,7 +171,12 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 				proofConfig.set("warn", proof.getWarn());
 				proofConfig.set("tps", tpsToFile(proof.getTps()));
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().printError("Failed to save proof for " + proof.getUUID().toString(), e);
+				try {
+					// just reset if can't save
+					new PrintWriter(new File(proofDir, proof.getUUID().toString() + ".yml")).close();
+				} catch (FileNotFoundException e1) {
+					Adapter.getAdapter().getLogger().printError("Failed to save proof for " + proof.getUUID().toString(), e1);
+				}
 			}
 		});
 	}
@@ -188,7 +198,16 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 							e.printStackTrace();
 						}
 					}
-					return YamlConfiguration.load(file);
+					try {
+						return YamlConfiguration.load(file);
+					} catch (Exception e) {
+						try {
+							new PrintWriter(file).close();
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+						return YamlConfiguration.load(file);
+					}
 				});
 				proofPerKey.forEach((cheatKey, proofs) -> {
 					Configuration cheatSection = accountConfig.getSection(cheatKey.getLowerKey());

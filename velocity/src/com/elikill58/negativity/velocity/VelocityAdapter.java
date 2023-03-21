@@ -3,6 +3,7 @@ package com.elikill58.negativity.velocity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -139,12 +140,12 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return pl.getServer().getPluginManager().isLoaded(name);
+		return pl.getServer().getPluginManager().isLoaded(name.toLowerCase(Locale.ROOT));
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
+		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name.toLowerCase(Locale.ROOT)).orElse(null));
 	}
 
 	@Override

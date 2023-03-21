@@ -10,8 +10,6 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.logger.Debug;
 
-import io.netty.buffer.ByteBuf;
-
 public abstract class VersionAdapter<R> {
 
 	protected Version version;
@@ -47,19 +45,21 @@ public abstract class VersionAdapter<R> {
 	public abstract AbstractChannel getPlayerChannel(R p);
 	
 	public void sendPacket(Player p, NPacket packet) {
-		sendPacket(getR(p), packet.create(p, p.getPlayerVersion()));
-	}
-	
-	public void sendPacket(R p, ByteBuf buf) {
-		getPlayerChannel(p).write(buf);
+		queuePacket(p, packet);
 	}
 	
 	public void queuePacket(Player p, NPacket packet) {
-		queuePacket(getR(p), packet.create(p, p.getPlayerVersion()));
-	}
-	
-	public void queuePacket(R p, ByteBuf buf) {
-		getPlayerChannel(p).write(buf);
+		int packetId = version.getNamedVersion().getPacketId(packet.getPacketType());
+		PacketSerializer serializer = new PacketSerializer(p);
+		serializer.writeVarInt(packetId);
+		packet.write(serializer, version);
+
+		PacketSerializer send = new PacketSerializer(p);
+		send.writeVarInt(serializer.writerIndex());
+		send.writeVarInt(packetId);
+		packet.write(send, version);
+		getPlayerChannel(getR(p)).write(send);
+		serializer.release();
 	}
 
 	protected <T> T get(Class<?> clazz, Object obj, String name) {

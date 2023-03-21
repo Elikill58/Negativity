@@ -23,18 +23,26 @@ public class NPacketPlayOutPing implements NPacketPlayOut {
 
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		this.id = serializer.readUnsignedByte();
+		if (version.isNewerOrEquals(Version.V1_17))
+			this.id = serializer.readInt();
+		else
+			this.id = serializer.readUnsignedByte();
 		// 1.8 fields
 		// serializer.readShort();
 		// serializer.readBoolean();
 	}
-	
+
 	@Override
 	public void write(PacketSerializer serializer, Version version) {
-		serializer.writeByte((int) id);
-		if(!version.isNewerThan(Version.V1_15)) { // read more: https://wiki.vg/index.php?title=Protocol&oldid=7368#Confirm_Transaction
-			serializer.writeShort(1); // action number
-			serializer.writeBoolean(false); // accepted
+		if (version.isNewerOrEquals(Version.V1_17))
+			serializer.writeInt((int) id);
+		else {
+			serializer.writeByte((int) id);
+			if (!version.isNewerThan(Version.V1_15)) { // read more:
+														// https://wiki.vg/index.php?title=Protocol&oldid=7368#Confirm_Transaction
+				serializer.writeShort(1); // action number
+				serializer.writeBoolean(false); // accepted
+			}
 		}
 	}
 

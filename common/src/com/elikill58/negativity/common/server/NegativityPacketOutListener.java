@@ -25,7 +25,8 @@ public class NegativityPacketOutListener implements Listeners {
 		if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
-			w.addTimingBlock(p.getPing(), change.type, change.pos.getX(), change.pos.getY(), change.pos.getZ());
+			if(change.type != null) // type founded
+				w.addTimingBlock(p.getPing(), change.type, change.pos.getX(), change.pos.getY(), change.pos.getZ());
 		} else if(type.equals(PacketType.Server.MULTI_BLOCK_CHANGE)) {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();

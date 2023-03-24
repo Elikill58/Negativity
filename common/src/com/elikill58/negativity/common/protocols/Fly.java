@@ -161,7 +161,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND,
+	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND,
 			CheckConditions.NO_INSIDE_VEHICLE })
 	public void onSuspiciousY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();

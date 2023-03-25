@@ -240,16 +240,16 @@ public class NegativityPlayer {
 		this.invincibilityTicks += amount;
 		this.invincibilityReason = reason;
 	}
-	
+
 	public int getInvincibilityTicks() {
 		return invincibilityTicks;
 	}
-	
+
 	public void downInvincibilityTicks() {
-		if(invincibilityTicks > 0)
+		if (invincibilityTicks > 0)
 			this.invincibilityTicks--;
 	}
-	
+
 	/**
 	 * Get warn of the cheat
 	 * 
@@ -295,7 +295,7 @@ public class NegativityPlayer {
 	 */
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
-		if(clientName != null && !isBedrockPlayer)
+		if (clientName != null && !isBedrockPlayer)
 			this.isBedrockPlayer = clientName.equalsIgnoreCase("Geyser");
 	}
 
@@ -535,9 +535,7 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
-		synchronized (NEGATIVITY_PLAYERS) {
-			return NEGATIVITY_PLAYERS.computeIfAbsent(p.getUniqueId(), (a) -> new NegativityPlayer(p));
-		}
+		return NEGATIVITY_PLAYERS.computeIfAbsent(p.getUniqueId(), (a) -> new NegativityPlayer(p));
 	}
 
 	/**
@@ -548,9 +546,7 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
-		synchronized (NEGATIVITY_PLAYERS) {
-			return NEGATIVITY_PLAYERS.computeIfAbsent(uuid, (a) -> new NegativityPlayer(getPlayer(uuid, call)));
-		}
+		return NEGATIVITY_PLAYERS.computeIfAbsent(uuid, (a) -> new NegativityPlayer(getPlayer(uuid, call)));
 	}
 
 	/**
@@ -560,9 +556,7 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getCached(UUID playerId) {
-		synchronized (NEGATIVITY_PLAYERS) {
-			return NEGATIVITY_PLAYERS.get(playerId);
-		}
+		return NEGATIVITY_PLAYERS.get(playerId);
 	}
 
 	/**
@@ -571,15 +565,11 @@ public class NegativityPlayer {
 	 * @return negativity players
 	 */
 	public static Map<UUID, NegativityPlayer> getAllPlayers() {
-		synchronized (NEGATIVITY_PLAYERS) {
-			return NEGATIVITY_PLAYERS;
-		}
+		return NEGATIVITY_PLAYERS;
 	}
 
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
-		synchronized (NEGATIVITY_PLAYERS) {
-			return new ArrayList<>(NEGATIVITY_PLAYERS.values());
-		}
+		return new ArrayList<>(NEGATIVITY_PLAYERS.values());
 	}
 
 	/**
@@ -588,19 +578,17 @@ public class NegativityPlayer {
 	 * @param playerId the player UUID
 	 */
 	public static void removeFromCache(UUID playerId) {
-		synchronized (NEGATIVITY_PLAYERS) {
-			NegativityPlayer cached = NEGATIVITY_PLAYERS.remove(playerId);
-			if (cached != null) {
-				cached.destroy();
-			}
-			PLAYERS.remove(playerId);
+		NegativityPlayer cached = NEGATIVITY_PLAYERS.remove(playerId);
+		if (cached != null) {
+			cached.destroy();
 		}
+		PLAYERS.remove(playerId);
 	}
-	
+
 	public static Player getPlayer(UUID playerId) {
 		return PLAYERS.get(playerId);
 	}
-	
+
 	public static Player getPlayer(UUID playerId, Callable<Player> call) {
 		return PLAYERS.computeIfAbsent(playerId, (a) -> {
 			try {

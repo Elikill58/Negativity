@@ -102,11 +102,6 @@ public class NegativityPlayer {
 	public NegativityPlayer(Player p) {
 		this.p = p;
 		this.playerId = p.getUniqueId();
-		Adapter ada = Adapter.getAdapter();
-		NegativityAccount account = getAccount();
-		account.setPlayerName(p.getName());
-		account.setIp(p.getIP());
-		ada.getAccountManager().save(playerId);
 		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
@@ -118,6 +113,15 @@ public class NegativityPlayer {
 		checkProcessors.forEach(CheckProcessor::begin);
 	}
 
+	private void load() {
+		NegativityAccountManager accManager = Adapter.getAdapter().getAccountManager();
+		accManager.get(getUUID()).thenAccept(account -> {
+			account.setPlayerName(p.getName());
+			account.setIp(p.getIP());
+			accManager.save(playerId);
+		});
+	}
+	
 	/**
 	 * Get the Negativity account of the player
 	 * 
@@ -535,7 +539,13 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
-		return NEGATIVITY_PLAYERS.computeIfAbsent(p.getUniqueId(), (a) -> new NegativityPlayer(p));
+		NegativityPlayer np = NEGATIVITY_PLAYERS.get(p.getUniqueId());
+		if(np != null)
+			return np;
+		np = new NegativityPlayer(p);
+		np.load();
+		NEGATIVITY_PLAYERS.put(p.getUniqueId(), np);
+		return np;
 	}
 
 	/**
@@ -546,7 +556,13 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
-		return NEGATIVITY_PLAYERS.computeIfAbsent(uuid, (a) -> new NegativityPlayer(getPlayer(uuid, call)));
+		NegativityPlayer np = NEGATIVITY_PLAYERS.get(uuid);
+		if(np != null)
+			return np;
+		np = new NegativityPlayer(getPlayer(uuid, call));
+		np.load();
+		NEGATIVITY_PLAYERS.put(uuid, np);
+		return np;
 	}
 
 	/**

@@ -38,18 +38,18 @@ public abstract class VersionAdapter<R> {
 		return namedVersion;
 	}
 	
-	private R getR(Player p) {
+	public R getR(Player p) {
 		return (R) p.getDefault();
 	}
 	
 	public abstract AbstractChannel getPlayerChannel(R p);
 	
-	public void sendPacket(Player p, NPacket packet) {
-		queuePacket(p, packet);
+	public void queuePacket(Player p, NPacket packet) {
+		sendPacket(p, packet);
 	}
 	
-	public void queuePacket(Player p, NPacket packet) {
-		int packetId = version.getNamedVersion().getPacketId(packet.getPacketType());
+	public void sendPacket(Player p, NPacket packet) {
+		/*int packetId = version.getNamedVersion().getPacketId(packet.getPacketType());
 		PacketSerializer serializer = new PacketSerializer(p);
 		serializer.writeVarInt(packetId);
 		packet.write(serializer, version);
@@ -59,7 +59,7 @@ public abstract class VersionAdapter<R> {
 		send.writeVarInt(packetId);
 		packet.write(send, version);
 		getPlayerChannel(getR(p)).write(send);
-		serializer.release();
+		serializer.release();*/
 	}
 
 	protected <T> T get(Class<?> clazz, Object obj, String name) {

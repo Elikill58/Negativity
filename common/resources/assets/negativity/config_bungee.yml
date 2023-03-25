@@ -22,22 +22,6 @@ Database:
   user: root
   password: "myPassword"
 
-# Configuration of the permissions subsystem. For more information
-# see https://github.com/Elikill58/Negativity/wiki/Permissions
-Permissions:
-  # The checker indicates if a player has a specific permission.
-  # By default only 'platform' is available
-  checker: platform
-  showAlert:
-    default: "negativity.alert"
-  admin:
-    default: "negativity.admin"
-  showReport:
-    default: "negativity.seereport"
-  # To bypass ban system
-  notBanned:
-    default: "negativity.notbanned"
-
 Translation:
   active: false # enable or disable the translation
   lang_available:
@@ -68,56 +52,6 @@ Translation:
   # The only one available out-of-the-box is "platform".
   provider: platform
 
-# Configuration of the bans subsystem. For more information
-# see https://github.com/Elikill58/Negativity/wiki/Bans
-ban:
-  active: false
-  # Processors manage bans. Only one processor can be used at the time.
-  # Available processors :
-  # - file : Saves bans under the ban/ directory of the configuration directory
-  # - database : Saves bans in a database. Needs a configured database (see the Database category)
-  # - command : Runs commands to ban or unban
-  # The following plugins are also supported :
-  # - advancedban
-  # - dkbans
-  # - litebans
-  # - professionalbans
-  # Defaults to "file"
-  processor: "file"
-  # Commands to execute when using the "command" processor
-  # You can execute as many commands as you want. Order is respected.
-  #
-  # Available placeholders:
-  # %uuid% : uuid of banned player
-  # %name% : name of banned player
-  # %ip% : ip of the banned player
-  # %reason% : detected cheat
-  # %alert% : number of alerts for the detected cheat that triggered the ban
-  # %all_alert% : all alerts for the detected cheat since you added Negativity on your server
-  command:
-    ban:
-    - "ban %uuid% %reason%"
-    unban:
-    - "unban %uuid% %reason%"
-  # Need to be banned
-  reliability_need: 95
-  alert_need: 10
-  # How to calculate the time during the player will be banned
-  # IN MILLISECONDES
-  time:
-    # %reliability% : reliability of last alert
-    # %alert% : number of alert sent
-    calculator: "360000000 + (%reliability% * 20 * %alert%)"
-  def:
-    # Number that you need to be ban definitly
-    ban_time: 2
-  file:
-    # Log expired or revoked bans when using the "file" processor
-    log_bans: true
-  database:
-    # Log expired or revoked bans when using the "database" processor
-    log_bans: true
-
 # Accounts hold player-specific data of the plugin, like their language and alerts count.
 accounts:
   storage:
@@ -128,3 +62,20 @@ accounts:
     # - database : uses a database
     # Defaults to "database"
     id: "database"
+
+
+# Configuration of the permissions subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Permissions
+Permissions:
+  # The checker indicates if a player has a specific permission.
+  # By default only 'platform' is available
+  checker: platform
+  showAlert:
+    default: "negativity.alert"
+  admin:
+    default: "negativity.admin"
+  showReport:
+    default: "negativity.seereport"
+  # To bypass ban system
+  notBanned:
+    default: "negativity.notbanned"

@@ -48,8 +48,7 @@ processor: "file"
 # %name% : name of banned player
 # %ip% : ip of the banned player
 # %reason% : detected cheat
-# %alert% : number of alerts for the detected cheat that triggered the ban
-# %all_alert% : all alerts for the detected cheat since you added Negativity on your server
+# %alert% : The message that contains all detected cheat as "Cheat (Cheat1, Cheat2)"
 command:
   ban:
   - "ban %uuid% %reason%"

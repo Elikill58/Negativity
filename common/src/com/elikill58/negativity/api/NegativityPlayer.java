@@ -365,13 +365,13 @@ public class NegativityPlayer {
 	 * @param c the cheat
 	 * @return the reason
 	 */
-	public String getReason(Cheat c) {
+	public String getReason(@Nullable Cheat c) {
 		String n = "";
 		for (Cheat all : Cheat.values())
 			if (getAllWarn(all) > 5 && all.isActive())
-				n = n + (n.equals("") ? "" : ", ") + all.getName();
-		if (!n.contains(c.getName()))
-			n = n + (n.equals("") ? "" : ", ") + c.getName();
+				n += (n.equals("") ? "" : ", ") + all.getName();
+		if (c != null && !n.contains(c.getName()))
+			n += (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
 

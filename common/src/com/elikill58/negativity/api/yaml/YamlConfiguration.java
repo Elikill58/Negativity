@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.yaml.snakeyaml.reader.ReaderException;
 import org.yaml.snakeyaml.representer.Representer;
-
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Tuple;
 
 public class YamlConfiguration {
 	private static final Yaml yaml;
@@ -75,26 +73,17 @@ public class YamlConfiguration {
 	}
 
 	private static void beSureItsGoodYaml(File f) throws IOException {
-		Tuple<Integer, String> content = beSureItsGoodList(f, Files.readAllLines(f.toPath()), false);
-		if(content != null && Adapter.getAdapter() != null) // should not appear but idk
-			Adapter.getAdapter().getLogger().warn("Fixed file " + f.getName() + " by removing line " + content.getA() + ": " + content.getB());
+		beSureItsGoodList(f, Files.readAllLines(f.toPath()));
 	}
 
-	private static Tuple<Integer, String> beSureItsGoodList(File f, List<String> lines, boolean changed) throws IOException {
+	private static void beSureItsGoodList(File f, List<String> lines) throws IOException {
 		try {
-			yaml.loadAs(new StringReader(String.join("\n", lines)), LinkedHashMap.class);
-			if(changed)
-				Files.write(f.toPath(), lines, StandardOpenOption.TRUNCATE_EXISTING);
-		} catch (ReaderException e) {
-			
-		} catch (MarkedYAMLException e) {
-			int line = e.getProblemMark().getLine();
-			if (lines.size() > line) {
-				String removedLine = lines.remove(line);
-				beSureItsGoodList(f, lines, true);
-				return new Tuple<>(line, removedLine);
-			}
+			if(lines.size() > 0 && lines.get(0).startsWith("&id")) // remove ref
+				Files.write(f.toPath(), new ArrayList<>(), StandardOpenOption.TRUNCATE_EXISTING);
+			else
+				yaml.loadAs(new StringReader(String.join("\n", lines)), LinkedHashMap.class);
+		} catch (ReaderException | MarkedYAMLException e) { // clean bugged file
+			Files.write(f.toPath(), new ArrayList<>(), StandardOpenOption.TRUNCATE_EXISTING);
 		}
-		return null;
 	}
 }

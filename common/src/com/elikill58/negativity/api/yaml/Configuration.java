@@ -106,7 +106,7 @@ public class Configuration {
 		if (section == this) {
 			if (value == null) {
 				this.self.remove(path);
-			} else {
+			} else if(value != this) {
 				this.self.put(path, value);
 			}
 		} else {

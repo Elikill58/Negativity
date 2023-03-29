@@ -130,7 +130,7 @@ public class AimBot extends Cheat {
 	}
 
 	// Warn: this check can be removed in next versions and replaced with new one
-	@Check(name = "direction", description = "Check for the direction between player look and cible position", conditions = CheckConditions.NO_THORNS)
+	//@Check(name = "direction", description = "Check for the direction between player look and cible position", conditions = CheckConditions.NO_THORNS)
 	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

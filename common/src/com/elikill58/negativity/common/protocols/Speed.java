@@ -28,27 +28,26 @@ public class Speed extends Cheat implements Listeners {
 
 	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
 			CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE })
-	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velLen = p.getVelocity().length();
 		boolean onGround = p.isOnGround();
-		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) { // theoric length
-																																												// to
-																																												// when the
-																																												// new high
-																																												// velocity is
-																																												// actually
-																																												// taken
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(y * 190), "distance-jumping",
-					"WS: " + p.getWalkSpeed() + ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: "
-							+ String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0)) + ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(),
-					hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
-		}
+		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) {
+			data.distanceJumpingBuffer += 0.44;
+			if (data.distanceJumpingBuffer >= 0.9) {
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(y * 190), "distance-jumping",
+						"Buffer: " + data.distanceJumpingBuffer + ", WS: " + p.getWalkSpeed() + ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: "
+								+ String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0)) + ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(),
+						hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
+			}
+		} else
+			data.reduceDistanceJumpingBuffer(0.3);
 	}
 
-	@Check(name = "same-diff", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR })
+	@Check(name = "same-diff", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL,
+			CheckConditions.NO_USE_ELEVATOR })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -62,8 +61,12 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
-	/*@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
-			CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_USE_TRIDENT })*/
+	/*
+	 * @Check(name = "walk-speed", description = "Check the walk speed", conditions
+	 * = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL,
+	 * CheckConditions.NO_ICE_AROUND, CheckConditions.NO_ELYTRA,
+	 * CheckConditions.NO_FLY, CheckConditions.NO_USE_TRIDENT })
+	 */
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
 		if (!e.getPacket().getPacketType().isFlyingPacket())
 			return;
@@ -129,7 +132,8 @@ public class Speed extends Cheat implements Listeners {
 		data.deltaXZ = deltaXZ;
 	}
 
-	@Check(name = "high-speed", description = "Distance with high speed", conditions = { CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_SLIME, CheckConditions.SURVIVAL, CheckConditions.NO_SWIM })
+	@Check(name = "high-speed", description = "Distance with high speed", conditions = { CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_SLIME, CheckConditions.SURVIVAL,
+			CheckConditions.NO_SWIM })
 	public void onHighSpeed(PlayerMoveEvent e, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

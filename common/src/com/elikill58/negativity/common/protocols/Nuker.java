@@ -34,7 +34,7 @@ public class Nuker extends Cheat implements Listeners {
 		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, NukerData::new, CheatDescription.BLOCKS);
 	}
 
-	@Check(name = "distance", description = "Distance between target and breaked block", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
+	@Check(name = "distance", description = "Distance between target and breaked block", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK })
 	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();

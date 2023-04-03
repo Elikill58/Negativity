@@ -31,13 +31,10 @@ verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
 
-# Max time between 2 blocks placed
-# In milliseconds
-time_2_place: 50
-
 # Disable one check and not all detections
 checks:
   # Time between 2 place
   time:
     active: true
     median: 2.5
+    time_ticks: 5

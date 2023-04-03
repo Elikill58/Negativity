@@ -5,7 +5,7 @@ import com.elikill58.negativity.api.protocols.CheckData;
 
 public class FastPlaceData extends CheckData {
 
-	public long lastTime = 0;
+	public int lastTick = 0;
 	public double buffer = 0;
 	
 	public FastPlaceData(NegativityPlayer np) {

@@ -74,7 +74,7 @@ public class NegativityPlayer {
 
 	// detection and bypass
 	public long loginTime;
-	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0;
+	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0, ticks = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean isOnLadders = false, isTeleporting = false;
 	public List<Location> lastLocations = new ArrayList<>();
@@ -526,6 +526,25 @@ public class NegativityPlayer {
 	 */
 	public void setDisconnecting(boolean disconnecting) {
 		this.disconnecting = disconnecting;
+	}
+	
+	/**
+	 * Get ticks since the player joins.<br>
+	 * They are given by the player.
+	 * 
+	 * @return ticks
+	 */
+	public int getTicks() {
+		return ticks;
+	}
+	
+	/**
+	 * Add one ticks since the player join
+	 * 
+	 * @param ticks
+	 */
+	public void addTick() {
+		this.ticks++;
 	}
 
 	public <D extends CheckData> D getCheckData(Cheat cheat) {

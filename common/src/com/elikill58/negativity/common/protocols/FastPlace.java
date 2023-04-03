@@ -1,8 +1,11 @@
 package com.elikill58.negativity.common.protocols;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.inventory.Hand;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
@@ -23,27 +26,31 @@ public class FastPlace extends Cheat implements Listeners {
 	}
 
 	@Check(name = "time", description = "Time between 2 place")
-	public void onBlockPlace(PacketReceiveEvent e, FastPlaceData data) {
+	public void onBlockPlace(PacketReceiveEvent e, NegativityPlayer np, FastPlaceData data) {
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
 		if (packet.getPacketType().isFlyingPacket()) {
 			data.reduce();
-			return;
-		} else if (!(packet instanceof NPacketPlayInBlockPlace))
-			return;
-		long actual = System.currentTimeMillis();
-		long diff = actual - data.lastTime;
-		if (diff < getConfig().getDouble("checks.time.time_place", 25)) { // TODO check according to ticks
-			if (++data.buffer > 2) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1/data.buffer)), "time", "Diff: " + diff + ", " + data.buffer);
-				if (isSetBack() && mayCancel)
-					e.setCancelled(true);
-			}
-		} else if(diff > 500) // old
-			data.buffer = 0;
-		else
-			data.reduce();
-		Adapter.getAdapter().debug(Debug.CHECK, "Diff: " + diff + ", buffer: " + data.buffer);
-		data.lastTime = actual;
+		} else if (packet instanceof NPacketPlayInBlockPlace) {
+			NPacketPlayInBlockPlace place = (NPacketPlayInBlockPlace) packet;
+			ItemStack item = place.hand == null || place.hand.equals(Hand.MAIN) ? p.getItemInHand() : p.getItemInOffHand();
+			if(item == null || !item.getType().isSolid())
+				return; // can't be placed
+			int actual = np.getTicks();
+			int diff = actual - data.lastTick;
+			if (diff < getConfig().getDouble("checks.time.time_ticks", 5)) {
+				if (++data.buffer > 2) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1 / data.buffer)), "time",
+							"Diff: " + diff + ", " + data.buffer + ", item: " + item.getType().getId());
+					if (isSetBack() && mayCancel)
+						e.setCancelled(true);
+				}
+			} else if (diff > 500) // old
+				data.buffer = 0;
+			else
+				data.reduce();
+			Adapter.getAdapter().debug(Debug.CHECK, "Diff: " + diff + ", buffer: " + data.buffer);
+			data.lastTick = actual;
+		}
 	}
 }

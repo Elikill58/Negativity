@@ -92,7 +92,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond(), click = np.getClick();
 		try {
-			inv.set(9, getClickItem(getMessage(p, "inventory.main.last_click", "%clicks%", click), click).build());
+			inv.set(9, getClickItem(getMessage(p, "inventory.main.actual_click", "%clicks%", click), click).build());
 			Object[] clickPlaceholders = new Object[] {"%last_clicks%", np.lastClick, "%max_clicks%", betterClick};
 			inv.set(10, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), betterClick).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
 

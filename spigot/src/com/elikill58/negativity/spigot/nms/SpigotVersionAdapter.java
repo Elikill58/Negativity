@@ -74,9 +74,9 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 			this.getBukkitEntity = PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBukkitEntity");
 
-			if(version.isNewerOrEquals(Version.V1_17)) {
+			if (version.isNewerOrEquals(Version.V1_17)) {
 				Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
-	
+
 				try {
 					getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
 				} catch (NoSuchMethodException e) { // method not present
@@ -99,10 +99,10 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public double getAverageTps() {
 		try {
 			long[] array = (long[]) tpsField.get(dedicatedServer);
-		    long l = 0L;
-		    for (long m : array)
-		      l += m; 
-		    return l / array.length;
+			long l = 0L;
+			for (long m : array)
+				l += m;
+			return l / array.length;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -214,13 +214,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 
 	public List<Entity> getEntities(World w) {
-		if(!version.isNewerOrEquals(Version.V1_17))
-			return w.getEntities();
-		List<Entity> entities = new ArrayList<>();
 		try {
+			if (!version.isNewerOrEquals(Version.V1_17))
+				return w.getEntities();
+			List<Entity> entities = new ArrayList<>();
 			Object worldServer = PacketUtils.getWorldServer(w);
 			Object lookup;
-			if(getEntityLookup != null)
+			if (getEntityLookup != null)
 				lookup = getEntityLookup.invoke(worldServer);
 			else {
 				Object persistentEntityManager = entityLookup.get(worldServer);
@@ -237,10 +237,10 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 					}
 				}
 			});
-		} catch (Exception e) {
-			e.printStackTrace();
+			return entities;
+		} catch (Exception e) { // shitty spigot -> entities not loaded yet
+			return new ArrayList<>();
 		}
-		return entities;
 	}
 
 	private static SpigotVersionAdapter instance;

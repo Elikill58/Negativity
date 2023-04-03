@@ -36,6 +36,7 @@ checks:
   # Time between 2 break
   time:
     active: true
+    time_ticks: 5
   # Distance between target and breaked block
   distance:
     active: true

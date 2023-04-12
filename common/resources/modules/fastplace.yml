@@ -36,5 +36,4 @@ checks:
   # Time between 2 place
   time:
     active: true
-    median: 2.5
-    time_ticks: 5
+    time_ticks: 3

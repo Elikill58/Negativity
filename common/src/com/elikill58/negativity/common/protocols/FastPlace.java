@@ -38,7 +38,7 @@ public class FastPlace extends Cheat implements Listeners {
 				return; // can't be placed
 			int actual = np.getTicks();
 			int diff = actual - data.lastTick;
-			if (diff < getConfig().getDouble("checks.time.time_ticks", 5)) {
+			if (diff < getConfig().getDouble("checks.time.time_ticks", 3)) {
 				if (++data.buffer > 2) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1 / data.buffer)), "time",
 							"Diff: " + diff + ", " + data.buffer + ", item: " + item.getType().getId());

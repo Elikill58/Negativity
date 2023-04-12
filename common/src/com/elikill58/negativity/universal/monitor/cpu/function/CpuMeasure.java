@@ -41,14 +41,18 @@ public abstract class CpuMeasure<T> {
 		return datas;
 	}
 
-	public void add(T o, long time) {
+	public void add(Object o, long time) {
 		totalTime += time;
 		globalData.add(time);
-		datas.computeIfAbsent(o, a -> new LongDataCounter()).add(time);
+		datas.computeIfAbsent((T) o, a -> new LongDataCounter()).add(time);
 	}
 
 	public String getName() {
 		return measureName;
+	}
+	
+	public @NonNull String getVisualName(T o) {
+		return getName(o);
 	}
 
 	public abstract @NonNull String getName(T o);
@@ -80,6 +84,7 @@ public abstract class CpuMeasure<T> {
 				result.add(new MonitorMeasure(key + getName(check), data.getAverage(), data.getMin(), data.getMax(), ((double) data.getTotal() / ((System.nanoTime() - timeBegin) / 1000)) * 100));
 			}
 		});
+		result.removeIf(MonitorMeasure::isVeryLow);
 		return result;
 	}
 }

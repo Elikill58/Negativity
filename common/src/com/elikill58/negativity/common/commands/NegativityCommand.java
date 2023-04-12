@@ -196,7 +196,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			} else if(arg[1].equalsIgnoreCase("generate")) {
 				File file = null;
 				try {
-					File folder = new File(Adapter.getAdapter().getDataFolder(), "monitors");
+					Adapter ada = Adapter.getAdapter();
+					File folder = new File(ada.getDataFolder(), "monitors");
 					if(!folder.exists()) {
 						folder.mkdirs();
 					}
@@ -205,7 +206,10 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					Configuration config = YamlConfiguration.load(file);
 					config.set("date", System.currentTimeMillis());
 					config.set("by", sender.getName());
-					config.set("server.version", Adapter.getAdapter().getServerVersion().getName());
+					config.set("server.platform", ada.getPlatformID().getName());
+					config.set("server.version", ada.getServerVersion().getName());
+					config.set("plugin.version", ada.getPluginVersion());
+					config.set("plugin.all", ada.getAllPlugins());
 					for(MonitorType<?> monitor : MonitorType.getMonitors()) {
 						Configuration monitorConfig = config.createSection(monitor.getName().toLowerCase(Locale.ROOT).replace(" ", ""));
 						monitor.getMonitor().getFullConfig().forEach(result -> {

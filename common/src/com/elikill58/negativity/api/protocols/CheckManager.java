@@ -78,7 +78,7 @@ public class CheckManager implements Listeners {
 					}
 				}
 				check.invoke(e, np);
-				MonitorType.CPU.getMonitor().getMeasureForDetection(check.getCheat().getKey()).add(check.getCheck(), (System.nanoTime() - beginTime) / 1000);
+				MonitorType.CPU.getMonitor().getMeasureForDetection(check.getCheat().getKey()).add(check.getCheck().name(), (System.nanoTime() - beginTime) / 1000);
 			}
 		});
 	}

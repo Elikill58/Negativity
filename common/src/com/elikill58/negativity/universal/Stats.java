@@ -8,7 +8,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Stats {
 
-	private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
+	private static final ExecutorService THREAD_POOL = Executors.newSingleThreadScheduledExecutor((r) -> new Thread(r, "negativity-stats"));
 
     private static final String SITE_FILE = "https://api.eliapp.fr/negativity.php";
     public static boolean STATS_IN_MAINTENANCE = false;

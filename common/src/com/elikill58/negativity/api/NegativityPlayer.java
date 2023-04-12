@@ -97,7 +97,7 @@ public class NegativityPlayer {
 	private String clientName, invincibilityReason = "";
 	private @Nullable ScheduledTask fightCooldownTask;
 	// one thread per person
-	private final ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final ExecutorService executor;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -105,7 +105,8 @@ public class NegativityPlayer {
 		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
-
+		this.executor = Executors.newSingleThreadExecutor((r) -> new Thread(r, "negativity-player-" + p.getName()));
+		
 		// add processors like this: checkProcessors.add(new
 		// SpiderExampleCheckProcessor(this));
 		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));

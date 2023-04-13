@@ -123,6 +123,7 @@ public class Fly extends Cheat implements Listeners {
 					}
 				}
 			}
+			amount /= 2;
 			if (amount > 1 && i > 0.01) {
 				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((np.isBedrockPlayer() ? 70 : 85) + amount), "omega-craft",
 						data.flyMove + " > " + onGround + " : " + data.wasOnGround + ", i: " + i + ", d: " + d + ", under: " + blockUnder.getType().getId(),

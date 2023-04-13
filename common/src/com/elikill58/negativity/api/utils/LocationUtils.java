@@ -23,7 +23,7 @@ public class LocationUtils {
 		Material m = loc.getBlock().getType();
 		return m.getId().contains("WATER") || p.getBoundingBox().add(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER", "BUBBLE");
 	}
-	
+
 	public static boolean isBlockOfType(Location location, String... materials) {
 		String blockMaterial = location.getBlock().getType().getId().toUpperCase(Locale.ROOT);
 		for (String material : materials) {
@@ -35,11 +35,10 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is material around specified location
-	 * (1 block radius)
+	 * Check if there is material around specified location (1 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param ms Material that we are searching
+	 * @param ms  Material that we are searching
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -65,11 +64,12 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is material around specified location
-	 * (1 block radius)
+	 * Check if there is material around specified location (1 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param ms Material's name that we are searching. Warn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
+	 * @param ms  Material's name that we are searching. Warn: For 'REDSTONE', we
+	 *            will also find 'REDSTONE_BLOCK' and all other block with contains
+	 *            name ...
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -97,11 +97,11 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is other than material around specified location.
-	 * (2 block radius)
+	 * Check if there is other than material around specified location. (2 block
+	 * radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m The material that we are searching
+	 * @param m   The material that we are searching
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -110,11 +110,11 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is other than material around specified location.
-	 * (2 block radius)
+	 * Check if there is other than material around specified location. (2 block
+	 * radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m the name that we are searching in material names
+	 * @param m   the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -161,11 +161,10 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is material around specified location.
-	 * (2 block radius)
+	 * Check if there is material around specified location. (2 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m the name that we are searching in material names
+	 * @param m   the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -212,11 +211,11 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is other than material around specified location.
-	 * (1 block radius)
+	 * Check if there is other than material around specified location. (1 block
+	 * radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m The material that we are searching
+	 * @param m   The material that we are searching
 	 * @return true if one of specified material if around
 	 */
 	@Deprecated
@@ -242,10 +241,10 @@ public class LocationUtils {
 	}
 
 	/**
-	 * Check if there is other than material around specified location.
-	 * (1 block radius)
+	 * Check if there is other than material around specified location. (1 block
+	 * radius)
 	 * 
-	 * @param loc the location where you want to check
+	 * @param loc  the location where you want to check
 	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material is around
 	 */
@@ -270,16 +269,16 @@ public class LocationUtils {
 			return true;
 		return false;
 	}
-	
+
 	/**
 	 * Check is there is a boat around the location (Distance of 3)
 	 * 
 	 * @param world the world of entities
-	 * @param loc The location to check
+	 * @param loc   The location to check
 	 * @return true if there is a boat
 	 */
 	public static boolean hasBoatAroundHim(CompensatedWorld world, Location loc) {
-		for(Entity entity : world.getEntities()) {
+		for (Entity entity : world.getEntities()) {
 			Location l = entity.getLocation();
 			if (entity.getType().equals(EntityType.BOAT) && l.distance(loc) < 3)
 				return true;
@@ -302,7 +301,7 @@ public class LocationUtils {
 		}
 		return i;
 	}
-	
+
 	public static float getPlayerHeadHeight(Player p) {
 		float f = 1.62F;
 		if (p.isSleeping()) {
@@ -332,8 +331,7 @@ public class LocationUtils {
 				int vecZ = UniversalUtils.floor(vec3d1.getZ());
 				Location vector = new Location(w, posX, posY, posZ);
 				Material type = w.getBlockAt(vector).getType();
-				if (!type.equals(Materials.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1)
-						&& !type.getId().contains("WATER"))
+				if (!type.equals(Materials.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1) && !type.getId().contains("WATER"))
 					return false;
 
 				int i = 200;
@@ -401,8 +399,7 @@ public class LocationUtils {
 					posY = UniversalUtils.floor(vec3d.getY()) - direction.getModY();
 					posZ = UniversalUtils.floor(vec3d.getZ()) - direction.getModZ();
 					vector = new Location(w, posX, posY, posZ);
-					if (!w.getBlockAt(vector).getType().equals(Materials.AIR)
-							&& hasMovingPosition(w, vector, vec3d, vec3d1)) {
+					if (!w.getBlockAt(vector).getType().equals(Materials.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1)) {
 						return false;
 					}
 				}
@@ -423,23 +420,17 @@ public class LocationUtils {
 		Vector vec3minZ = getVectorZ(vec3d, vec3d1, 0);
 		Vector vec3maxZ = getVectorZ(vec3d, vec3d1, 1);
 		Vector objDirection = null;
-		if ((vec3minX != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3minX) < vec3d.distanceSquared(objDirection))))
+		if ((vec3minX != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3minX) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3minX;
-		if ((vec3maxX != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3maxX) < vec3d.distanceSquared(objDirection))))
+		if ((vec3maxX != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3maxX) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3maxX;
-		if ((vec3minY != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3minY) < vec3d.distanceSquared(objDirection))))
+		if ((vec3minY != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3minY) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3minY;
-		if ((vec3maxY != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3maxY) < vec3d.distanceSquared(objDirection))))
+		if ((vec3maxY != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3maxY) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3maxY;
-		if ((vec3minZ != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3minZ) < vec3d.distanceSquared(objDirection))))
+		if ((vec3minZ != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3minZ) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3minZ;
-		if ((vec3maxZ != null)
-				&& ((objDirection == null) || (vec3d.distanceSquared(vec3maxZ) < vec3d.distanceSquared(objDirection))))
+		if ((vec3maxZ != null) && ((objDirection == null) || (vec3d.distanceSquared(vec3maxZ) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3maxZ;
 		return objDirection != null;
 	}
@@ -486,51 +477,59 @@ public class LocationUtils {
 		FRONT, BACK, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT
 	}
 
+	/**
+	 * Teleport on ground and stop the player from moving to reset all speed
+	 * 
+	 * @param p the player to reset
+	 */
 	public static void teleportPlayerOnGround(Player p) {
 		Location loc = p.getLocation().clone();
-		while(loc.getBlock().getType().equals(Materials.AIR))
+		while (loc.getBlock().getType().equals(Materials.AIR))
 			loc.sub(0, 1, 0);
 		p.teleport(loc);
+		p.setFlying(false);
+		p.setSprinting(false);
+		p.setVelocity(new Vector(0, 0, 0));
+		p.setSneaking(true);
 	}
 
 	public static boolean isInWater(Location loc) {
-		return loc.getBlock().isLiquid() || loc.clone().add(0, -1, 0).getBlock().isLiquid()
-				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
+		return loc.getBlock().isLiquid() || loc.clone().add(0, -1, 0).getBlock().isLiquid() || loc.clone().add(0, 1, 0).getBlock().isLiquid();
 	}
 
 	public static Direction getDirection(Player p, Location loc) {
 		Location playerLocation = p.getLocation();
 		Vector locVector = loc.toVector().subtract(playerLocation.toVector());
-		
+
 		double locAngle = Math.atan2(locVector.getZ(), locVector.getX());
 		double playerAngle = Math.atan2(playerLocation.getDirection().getZ(), playerLocation.getDirection().getX());
-		
+
 		double angle = playerAngle - locAngle;
-		
+
 		while (angle > Math.PI) {
-		    angle = angle - 2 * Math.PI;
+			angle = angle - 2 * Math.PI;
 		}
-		
+
 		while (angle < -Math.PI) {
-		    angle = angle + 2 * Math.PI;
+			angle = angle + 2 * Math.PI;
 		}
-		
+
 		if (angle < -2.749 || angle >= 2.749) { // -7/8 pi
-		    return Direction.BACK;
+			return Direction.BACK;
 		} else if (angle < -1.963) { // -5/8 pi
-		    return Direction.BACK_RIGHT;
+			return Direction.BACK_RIGHT;
 		} else if (angle < -1.178) { // -3/8 pi
-		    return Direction.RIGHT;
+			return Direction.RIGHT;
 		} else if (angle < -0.393) { // -1/8 pi
-		    return Direction.FRONT_RIGHT;
+			return Direction.FRONT_RIGHT;
 		} else if (angle < 0.393) { // 1/8 pi
-		    return Direction.FRONT;
+			return Direction.FRONT;
 		} else if (angle < 1.178) { // 3/8 pi
-		    return Direction.FRONT_LEFT;
+			return Direction.FRONT_LEFT;
 		} else if (angle < 1.963) { // 5/8 p
-		    return Direction.LEFT;
+			return Direction.LEFT;
 		} else if (angle < 2.749) { // 7/8 pi
-		    return Direction.BACK_LEFT;
+			return Direction.BACK_LEFT;
 		}
 		return null;
 	}

@@ -14,7 +14,6 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.monitor.MonitorType;
-import com.elikill58.negativity.universal.monitor.cpu.CpuMeasure;
 import com.elikill58.negativity.universal.monitor.cpu.CpuMonitor;
 
 public class CheckManager implements Listeners {

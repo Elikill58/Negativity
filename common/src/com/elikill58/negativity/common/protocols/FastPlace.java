@@ -29,27 +29,25 @@ public class FastPlace extends Cheat implements Listeners {
 	public void onBlockPlace(PacketReceiveEvent e, NegativityPlayer np, FastPlaceData data) {
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
+		int actual = np.getTicks();
 		if (packet.getPacketType().isFlyingPacket()) {
-			data.reduce();
+			int diff = actual - data.lastTick;
+			if(diff > 20)
+				data.times.clear();
 		} else if (packet instanceof NPacketPlayInBlockPlace) {
 			NPacketPlayInBlockPlace place = (NPacketPlayInBlockPlace) packet;
 			ItemStack item = place.hand == null || place.hand.equals(Hand.MAIN) ? p.getItemInHand() : p.getItemInOffHand();
 			if(item == null || !item.getType().isSolid())
 				return; // can't be placed
-			int actual = np.getTicks();
 			int diff = actual - data.lastTick;
-			if (diff < getConfig().getDouble("checks.time.time_ticks", 3)) {
-				if (++data.buffer > 2) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1 / data.buffer)), "time",
-							"Diff: " + diff + ", " + data.buffer + ", item: " + item.getType().getId());
+			data.times.add(diff);
+			double sum = (double) data.times.stream().mapToInt(Integer::intValue).sum() / data.times.size();
+			if (data.times.size() > 2 && sum < getConfig().getDouble("checks.time.time_ticks", 3) && diff < 5) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - diff * (1 / sum)), "time",
+							"Diff: " + diff + ", times: " + data.times);
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
-				}
-			} else if (diff > 500) // old
-				data.buffer = 0;
-			else
-				data.reduce();
-			Adapter.getAdapter().debug(Debug.CHECK, "Diff: " + diff + ", buffer: " + data.buffer);
+			}
 			data.lastTick = actual;
 		}
 	}

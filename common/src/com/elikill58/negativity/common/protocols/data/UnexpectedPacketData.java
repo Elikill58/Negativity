@@ -7,6 +7,7 @@ public class UnexpectedPacketData extends CheckData {
 
 	public long vehicleLeft = 0;
 	public int lastSlot = -1, timeSlot = 0;
+	public boolean waitGround = false;
 	
 	public UnexpectedPacketData(NegativityPlayer np) {
 		super(np);

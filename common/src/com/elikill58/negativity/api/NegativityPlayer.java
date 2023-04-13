@@ -44,6 +44,7 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -188,6 +189,9 @@ public class NegativityPlayer {
 			return false;
 		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return false;
+		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
+				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
+			return false;
 		Adapter ada = Adapter.getAdapter();
 		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
@@ -222,6 +226,9 @@ public class NegativityPlayer {
 			return "Bedrock user";
 		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return "Java user";
+		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
+				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
+			return "Bypass permission";
 		Adapter ada = Adapter.getAdapter();
 		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return "Low TPS";

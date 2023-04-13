@@ -37,9 +37,6 @@ checks:
   time:
     active: true
     time_ticks: 5
-  # Distance between target and breaked block
-  distance:
-    active: true
   # Amount of breaking block packet
   packet:
     active: true

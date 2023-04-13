@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class YamlConfiguration {
 	}
 
 	private static void beSureItsGoodYaml(File f) throws IOException {
-		beSureItsGoodList(f, Files.readAllLines(f.toPath()));
+		beSureItsGoodList(f, Files.readAllLines(f.toPath(), Charset.defaultCharset()));
 	}
 
 	private static void beSureItsGoodList(File f, List<String> lines) throws IOException {

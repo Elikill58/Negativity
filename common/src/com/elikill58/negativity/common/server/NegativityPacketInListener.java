@@ -61,8 +61,6 @@ public class NegativityPacketInListener implements Listeners {
 					}
 				}
 			}
-		} else if (type == PacketType.Client.TELEPORT_ACCEPT) {
-			np.addInvincibilityTicks(2, "Teleport Accept"); // when in unloaded chunk
 		} else if (type.isFlyingPacket()) {
 			np.addTick();
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;

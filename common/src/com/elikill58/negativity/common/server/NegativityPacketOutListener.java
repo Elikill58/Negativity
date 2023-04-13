@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.server;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -9,6 +10,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.logger.Debug;
@@ -34,6 +36,9 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
 			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
 			Adapter.getAdapter().debug(Debug.GENERAL, "Channel: " + a.channel);
+		} else if(type.equals(PacketType.Server.ENTITY_TELEPORT)) {
+			if(((NPacketPlayOutEntityTeleport) packet).entityId == p.getEntityId())
+				NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(5, "Teleport Accept"); // when in unloaded chunk
 		}
 	}
 }

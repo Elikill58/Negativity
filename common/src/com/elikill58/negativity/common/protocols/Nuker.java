@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.List;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -16,13 +14,14 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
+import com.elikill58.negativity.api.ray.block.BlockRayResult;
 import com.elikill58.negativity.api.utils.ItemUtils;
 import com.elikill58.negativity.common.protocols.data.NukerData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
-import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -41,26 +40,14 @@ public class Nuker extends Cheat implements Listeners {
 			return;
 		int ping = p.getPing();
 		Adapter.getAdapter().runSync(() -> {
-			List<Block> target = p.getTargetBlock(5);
-			if (!target.isEmpty()) {
+			BlockRayResult rayResult = new BlockRayBuilder(p).build().compile();
+			if (rayResult.getRayResult().isFounded()) {
 				Location blockLoc = b.getLocation();
-				Block bestBlock = null;
-				double bestDistance = Double.MAX_VALUE;
-				for (Block targetBlock : target) {
-					if (!targetBlock.getLocation().getWorld().equals(blockLoc.getWorld())) {
-						Adapter.getAdapter().debug(Debug.CHECK, "[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/"
-								+ targetBlock.getLocation().getWorld().getName());
-						break;
-					}
-					double distance = targetBlock.getLocation().distance(blockLoc);
-					if (distance < bestDistance) {
-						bestBlock = targetBlock;
-						bestDistance = distance;
-					}
-				}
-				if (bestBlock != null && (bestBlock.getType() != type) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(bestDistance * 15 - ping), "distance",
-							"BlockDig " + b.toString() + ", player see " + bestBlock.toString() + ". Distance between blocks " + bestDistance + " block.");
+				Block bestBlock = rayResult.getBlock();
+				double bestDistance = bestBlock.getLocation().distance(blockLoc);
+				if (bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4)+1 && bestBlock.getType() != Materials.AIR) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(bestDistance * 15 - ping/10), "distance",
+							"BlockDig " + b.toString() + ", see " + bestBlock.toString() + ". Dis: " + bestDistance + ", ray: " + rayResult.toString());
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

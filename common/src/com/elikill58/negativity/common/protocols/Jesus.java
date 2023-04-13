@@ -34,7 +34,7 @@ public class Jesus extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground-water", description = "Ground and on water", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_SNEAK, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_BLOCK_MID_AROUND })
+			CheckConditions.NO_SNEAK, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_SWIM })
 	public void onGroundWater(PlayerMoveEvent e, NegativityPlayer np, JesusData data) {
 		if (!e.isMovePosition())
 			return;

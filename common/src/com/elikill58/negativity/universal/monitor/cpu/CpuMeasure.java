@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.monitor.cpu.function;
+package com.elikill58.negativity.universal.monitor.cpu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,7 @@ public class CpuMeasure {
 		double l = ((double) data.getTotal() / ((System.nanoTime() - timeBegin) / 1000)) * 100;
 		if (l <= 0.01)
 			return null;
-		return ChatColor.GREEN + (name.isEmpty() ? "" : name + " ") + ChatColor.YELLOW + data.getAverage() + "μs "
-				+ ChatColor.GRAY + "(Min/Max: " + data.getMin() + "/" + data.getMax()
+		return ChatColor.GREEN + (name.isEmpty() ? "" : name + " ") + ChatColor.YELLOW + data.getAverage() + "μs " + ChatColor.GRAY + "(Min/Max: " + data.getMin() + "/" + data.getMax()
 				+ ") " + ChatColor.AQUA + (l <= 0.01 ? ">0%" : String.format("%.2f", l) + "%");
 	}
 
@@ -54,11 +53,11 @@ public class CpuMeasure {
 	public String getName() {
 		return measureName;
 	}
-	
+
 	public List<String> getResult() {
 		List<String> result = new ArrayList<>();
 		String printed = printData(getName(), globalData);
-		if(printed != null)
+		if (printed != null)
 			result.add(printed);
 		return result;
 	}
@@ -68,13 +67,13 @@ public class CpuMeasure {
 		datas.forEach((check, data) -> {
 			if (data.has()) {
 				String printed = printData(check, data);
-				if(printed != null)
+				if (printed != null)
 					result.add(printed);
 			}
 		});
 		return result;
 	}
-	
+
 	public List<MonitorMeasure> getResults(String key) {
 		List<MonitorMeasure> result = new ArrayList<>();
 		datas.forEach((check, data) -> {

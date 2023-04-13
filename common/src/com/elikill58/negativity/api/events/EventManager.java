@@ -18,7 +18,7 @@ import com.elikill58.negativity.common.server.NegativityPacketOutListener;
 import com.elikill58.negativity.common.server.ProxyEventsManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.monitor.MonitorType;
-import com.elikill58.negativity.universal.monitor.cpu.function.CpuMeasure;
+import com.elikill58.negativity.universal.monitor.cpu.CpuMeasure;
 
 public class EventManager {
 
@@ -173,7 +173,8 @@ public class EventManager {
 				if(tag.priority().equals(priority)) {
 					long beginTime = System.nanoTime();
 					method.call(ev);
-					cpuMeasure.add(method.getMethod().getName(), (System.nanoTime() - beginTime) / 1000);
+					if(cpuMeasure != null)
+						cpuMeasure.add(method.getMethod().getName(), (System.nanoTime() - beginTime) / 1000);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

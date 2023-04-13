@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.elikill58.negativity.api.json.JSONArray;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 
@@ -19,7 +18,7 @@ public class VerifData {
 	 * @param type the type of the data counter
 	 * @return the data counter
 	 */
-	public <T> DataCounter<T> getData(DataType<T> type){
+	public <T extends Number> DataCounter<T> getData(DataType<T> type){
 		return (DataCounter<T>) data.computeIfAbsent(type, DataType::create);
 	}
 
@@ -55,13 +54,13 @@ public class VerifData {
 			JSONObject jsonCounter = new JSONObject();
 			jsonCounter.put("type", type.getName());
 			jsonCounter.put("display", type.getDisplay());
-			jsonCounter.put("data", new JSONArray(counter.getList()));
+			jsonCounter.put("data", counter.getTotal());
 			list.add(jsonCounter);
 		});
 		return list;
 	}
 
-	public static class DataType<T> {
+	public static class DataType<T extends Number> {
 		
 		private final DataTypeCallable<T> create;
 		private final String name, display;
@@ -105,7 +104,7 @@ public class VerifData {
 			return create.call();
 		}
 		
-		public interface DataTypeCallable<T> {
+		public interface DataTypeCallable<T extends Number> {
 			DataCounter<T> call();
 		}
 		

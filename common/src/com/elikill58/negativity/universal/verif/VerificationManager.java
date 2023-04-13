@@ -128,7 +128,7 @@ public class VerificationManager {
 	 * @param type the type of the data
 	 * @param value the recorded value
 	 */
-	public static <T> void recordData(UUID target, Cheat cheat, VerifData.DataType<T> type, T value) {
+	public static <T extends Number> void recordData(UUID target, Cheat cheat, VerifData.DataType<T> type, T value) {
 		getVerifications(target).forEach(verif -> verif.getVerifData(cheat).ifPresent(data -> data.getData(type).add(value)));
 	}
 }

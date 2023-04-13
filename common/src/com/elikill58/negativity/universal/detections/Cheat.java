@@ -285,7 +285,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @param type the data type
 	 * @param value the value recorded
 	 */
-	public final <T> void recordData(UUID target, VerifData.DataType<T> type, T value) {
+	public final <T extends Number> void recordData(UUID target, VerifData.DataType<T> type, T value) {
 		VerificationManager.recordData(target, this, type, value);
 	}
 	

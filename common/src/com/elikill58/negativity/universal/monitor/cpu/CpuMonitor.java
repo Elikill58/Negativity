@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.monitor.MonitorManager;
 import com.elikill58.negativity.universal.monitor.MonitorMeasure;
-import com.elikill58.negativity.universal.monitor.cpu.function.CpuMeasure;
 
 public class CpuMonitor extends MonitorManager {
 
@@ -35,11 +35,15 @@ public class CpuMonitor extends MonitorManager {
 		return measures;
 	}
 	
-	public CpuMeasure getMeasure(Object o) {
+	public @Nullable CpuMeasure getMeasure(Object o) {
+		if(!isEnabled())
+			return null;
 		return getMeasure((String) (o instanceof Special ? ((Special) o).getKey().getLowerKey() : o.getClass().getSimpleName()));
 	}
 	
-	public CpuMeasure getMeasure(String s) {
+	public @Nullable CpuMeasure getMeasure(String s) {
+		if(!isEnabled())
+			return null;
 		return measures.computeIfAbsent(s, CpuMeasure::new);
 	}
 	

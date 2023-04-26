@@ -133,6 +133,13 @@ public class Utils {
 				"Click here", "https://www.spigotmc.org/resources/48399/")
 				.sendToPlayer(p);
 	}
+	
+	public static long sumTps(long[] array) {
+		long l = 0L;
+		for (long m : array)
+			l += m;
+		return l / array.length;
+	}
 
 	public static double getLastTPS() {
 		double[] tps = getTPS();

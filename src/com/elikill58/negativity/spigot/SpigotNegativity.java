@@ -5,7 +5,6 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -319,11 +318,10 @@ public class SpigotNegativity extends JavaPlugin {
 			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
 			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);
 			fieldLastTimeTps.setAccessible(true);
-			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper", "util.").getDeclaredMethod("a", long[].class);
 			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 				try {
 					Object lastTime = fieldLastTimeTps.get(mcServer);
-					double i = ((double) mathHelperMethod.invoke(null, lastTime)) * 1.0E-6D;
+					double i = ((double) Utils.sumTps((long[]) lastTime)) * 1.0E-6D;
 					if(timeDrop && i < 50) { // if disabled and need to be enabled
 						timeDrop = false;
 					} else if(!timeDrop && i > 50) { // if disabled but need to be

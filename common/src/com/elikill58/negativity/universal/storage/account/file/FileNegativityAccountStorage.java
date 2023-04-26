@@ -54,7 +54,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 					String ip = acc.getString("ip");
 					List<String> uuidPerIP = ipConfig.getStringList(ip);
 					uuidPerIP.add(f.getName().split("\\.")[0]);
-					ipConfig.set(ip, uuidPerIP);
+					ipConfig.set(ip, uuidPerIP.stream().distinct().collect(Collectors.toList()));
 				}
 				ipConfig.save();
 				Adapter.getAdapter().getLogger().info("Old version detected, adding index file for players IPs.");
@@ -109,7 +109,6 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				}
 			}
 			Configuration accountConfig = YamlConfiguration.load(file);
-			String oldIp = accountConfig.getString("ip");
 			accountConfig.set("playername", account.getPlayerName());
 			accountConfig.set("lang", account.getLang());
 			accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
@@ -122,22 +121,10 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			accountConfig.directSave();
 			
 			// now check for IP file
-			if(oldIp == null) { // new account, should just add the UUID to the new IP
-				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
-				uuidPerIP.add(uuid);
-				ipConfig.set(account.getIp(), uuidPerIP);
-				ipConfig.directSave();
-			} else if(!oldIp.equalsIgnoreCase(account.getIp())) { // if the IP change
-				List<String> uuidOnOldIp = ipConfig.getStringList(oldIp);
-				if(uuidOnOldIp.size() == 1 && uuidOnOldIp.get(0).equalsIgnoreCase(uuid)) { // only this UUID for this IP
-					ipConfig.set(oldIp, null);
-				}
-				// now add to new IP
-				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
-				uuidPerIP.add(uuid);
-				ipConfig.set(account.getIp(), uuidPerIP);
-				ipConfig.directSave();
-			}
+			List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
+			uuidPerIP.add(uuid);
+			ipConfig.set(account.getIp(), uuidPerIP.stream().distinct().collect(Collectors.toList()));
+			ipConfig.directSave();
 		});
 	}
 

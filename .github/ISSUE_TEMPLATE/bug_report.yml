@@ -16,7 +16,9 @@ body:
     - Spigot
     - Paper
     - Sponge 7
-    - Sponge 8
+    - Sponge 8/9/10
+    - Minestom
+    - Fabric
     - Bungeecord
     - Velocity
     - Other
@@ -26,7 +28,6 @@ body:
     label: "Versions of Negativity and of the server"
     description: "Show output result of `/n debug` command"
     placeholder: "Negativity v1.0, paper v1_8_R3"
-    value: "My version is: "
   validations:
     required: true
 - type: textarea

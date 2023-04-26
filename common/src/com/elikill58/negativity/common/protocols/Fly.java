@@ -77,7 +77,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_FLY, CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_FLY, CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_CLIMB_BLOCK })
 	public void omegaCraft(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

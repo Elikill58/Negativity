@@ -21,7 +21,7 @@ public class LocationUtils {
 	public static boolean isUsingElevator(Player p) {
 		Location loc = p.getLocation().clone();
 		Material m = loc.getBlock().getType();
-		return m.getId().contains("WATER") || p.getBoundingBox().add(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER", "BUBBLE");
+		return m.getId().contains("WATER") || p.getBoundingBox().add(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER", "BUBBLE", "KELP");
 	}
 
 	public static boolean isBlockOfType(Location location, String... materials) {

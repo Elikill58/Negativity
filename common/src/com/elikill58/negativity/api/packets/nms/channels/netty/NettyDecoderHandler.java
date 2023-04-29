@@ -54,7 +54,7 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 					if (event.isCancelled())
 						return;
 					super.channelRead(ctx, obj); // call before use
-					EventManager.callEvent(new PacketReceiveEvent(packet, p));
+					getNegativityPlayer().getExecutor().submit(() -> EventManager.callEvent(new PacketReceiveEvent(packet, p)));
 				} else
 					super.channelRead(ctx, obj); 
 				msg.release();

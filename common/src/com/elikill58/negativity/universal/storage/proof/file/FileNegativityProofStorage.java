@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,10 +58,10 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			}
 			if (migrated > 0)
 				Adapter.getAdapter().getLogger().info("Migrated " + migrated + " files from old (txt) to new system (yml).");
-			Adapter.getAdapter().getScheduler().runRepeating(() -> {
+			Adapter.getAdapter().getScheduler().runRepeatingAsync(() -> {
 				new ArrayList<>(filetoSave.values()).forEach(Configuration::directSave);
 				filetoSave.clear();
-			}, 20 * 5);
+			}, Duration.ofSeconds(5), Duration.ofSeconds(5), "proof-storage");
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().printError("Failed to migrate old proof file to new one.", e);
 		}

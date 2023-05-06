@@ -42,7 +42,7 @@ public class UnexpectedPacket extends Cheat {
 				data.vehicleLeft = System.currentTimeMillis();
 				data.waitGround = true;
 			}
-		} else if(e.getPacket().getPacketType().isFlyingPacket())
+		} else if(e.getPacket().getPacketType().equals(Client.POSITION_LOOK))
 			data.waitGround = false;
 	}
 

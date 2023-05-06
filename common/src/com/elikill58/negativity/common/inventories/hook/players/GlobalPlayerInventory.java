@@ -74,7 +74,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		
 		inv.set(27, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(28, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
-		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(cible.isOp() || Perm.hasPerm(np, Perm.MOD) )) {
+		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(cible.isOp() || Perm.hasPerm(np, Perm.MOD))) {
 			inv.set(29, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())).build());
 		}
 		

@@ -29,7 +29,7 @@ public enum CheckConditions {
 	NO_ICE_AROUND("No ice around", (p) -> NegativityPlayer.getNegativityPlayer(p).iceCounter == 0, false),
 	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
 	//NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
-	NO_CLIMB_BLOCK("No climb block around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
+	NO_CLIMB_BLOCK("No climb block around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "LADDER", "VINE", "KELP"), true),
 
 	NO_FIGHT("Not fighting", p -> !NegativityPlayer.getNegativityPlayer(p).isInFight),
 	NO_TELEPORT("No teleport", p -> !NegativityPlayer.getNegativityPlayer(p).isTeleporting),

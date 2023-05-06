@@ -19,7 +19,7 @@ A complete wiki explain [how to install](https://github.com/Elikill58/Negativity
 
 ## I want to test it before download !
 
-You can check it on **play.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
+You can check it on **play.negativity.fr** (server in 1.19). Warn: it can be offline.
 
 ## What are the detected cheat ?
 
@@ -64,6 +64,7 @@ We support a lot of languages :
 - **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498
 - **English (GB)** (*en_GB*) By NEWBTW#2108
 - **Turkish** (*tr_TR*) By 'Eternal The God 🕶#0707
+- **Japanese** (*ja_JP*) By RamuneRemonedo
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

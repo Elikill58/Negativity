@@ -91,7 +91,7 @@ public class Fly extends Cheat implements Listeners {
 
 		double d = to.getY() - from.getY();
 		if (d == 0) {
-			for (Block b : p.getBoundingBox().add(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
+			for (Block b : p.getBoundingBox().move(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
 				if (b.getType().isSolid()) {
 					data.flyMove.clear();
 					return;

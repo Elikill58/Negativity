@@ -84,7 +84,7 @@ public class Jesus extends Cheat implements Listeners {
 		double val = data.getYDiff();
 		boolean isInWater = e.getTo().getBlock().getType().getId().contains("WATER");
 		if (dif == val && isInWater) {
-			if (!p.isSwimming() && !p.getBoundingBox().remove(0, 1, 0).getBlocks(p.getWorld()).hasOther("AIR", "WATER")) {
+			if (!p.isSwimming() && !p.getBoundingBox().move(0, -1, 0).getBlocks(p.getWorld()).hasOther("AIR", "WATER")) {
 				Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dif + 5) * 10),
 						"dif-y-2-move", "Difference between 2 y: " + dif + " (other: " + val + ")");
 			}

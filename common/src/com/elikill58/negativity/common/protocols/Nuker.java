@@ -31,14 +31,18 @@ public class Nuker extends Cheat implements Listeners {
 		Block b = e.getBlock();
 		if (p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
-		int diff = np.getTicks() - data.ticks;
-		if (diff <= getConfig().getInt("checks.time.time_ticks", 5) && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand())) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 100 - diff, "time", "Type: " + e.getBlock().getType().getId() + ". Ticks: " + diff,
+		int diff = np.getTicks() - data.oldTicks;
+		if(diff < 200) {
+			data.ticks.add(diff);
+		} else // too old
+			data.ticks.clear();
+		if (data.ticks.size() >= 2 && data.ticks.stream().mapToDouble(a -> a).average().orElse(0.0) <= getConfig().getInt("checks.time.time_ticks", 4) && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand())) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 100 - diff, "time", "Type: " + e.getBlock().getType().getId() + ". Ticks: " + diff + ", olds: " + data.ticks,
 					hoverMsg("breaked_in", "%time%", String.format("%.2f", ((double) diff) / 20)));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-		data.ticks = np.getTicks();
+		data.oldTicks = np.getTicks();
 	}
 
 	private boolean isInstantBlock(String m) {

@@ -27,7 +27,7 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
-			CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

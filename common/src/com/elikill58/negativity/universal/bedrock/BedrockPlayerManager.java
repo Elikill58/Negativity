@@ -32,7 +32,7 @@ public class BedrockPlayerManager {
 		});
 		CHECKERS.add((uuid) -> {
 			NegativityPlayer np = NegativityPlayer.getCached(uuid);
-			return np != null && np.getClientName() != null && np.getClientName().equalsIgnoreCase("Geyser");
+			return np != null && np.getClientName() != null && np.getClientName().contains("Geyser"); // on velocity it's "Geyser (Velocity)" and not only "Geyser"
 		});
 		
 		DATA_GETTERS.clear();

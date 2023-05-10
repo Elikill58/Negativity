@@ -281,7 +281,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public World getServerWorld(Player p) {
-		org.bukkit.World w = Bukkit.getPlayer(p.getUniqueId()).getWorld();
+		org.bukkit.World w = ((org.bukkit.entity.Player) p.getDefault()).getWorld();
 		return World.getWorld(w.getName(), (a) -> new SpigotWorld(w));
 	}
 }

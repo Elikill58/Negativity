@@ -41,7 +41,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		SpigotLocation loc = new SpigotLocation(p.getLocation()), to = e.getTo(), from = e.getFrom(),
 				under = loc.clone().subtract(0, 1, 0);
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED")
+		if (to.getWorld() != from.getWorld() || hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED")
 				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE",
 						"BED"))
 			return;

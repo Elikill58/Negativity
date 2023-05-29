@@ -55,7 +55,7 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		SpigotLocation from = e.getFrom(), to = e.getTo();
 		SpigotLocation down = to.clone().subtract(0, 1, 0);
-		if(down.getBlock().getType().name().contains("SHULKER") || to.getBlock().getType().name().contains("SNOW"))
+		if(to.getWorld() != from.getWorld() || down.getBlock().getType().name().contains("SHULKER") || to.getBlock().getType().name().contains("SNOW"))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

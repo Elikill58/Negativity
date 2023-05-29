@@ -92,7 +92,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public Location lastSpiderLoc;
-	public InventoryMoveData inventoryMoveData = null;
+	public InventoryMoveData inventoryMoveData = new InventoryMoveData(this);
 	public List<String> proof = new ArrayList<>();
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;

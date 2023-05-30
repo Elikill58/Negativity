@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.packets.nms.channels.netty;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -48,15 +49,19 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 				ByteBuf msg = ((ByteBuf) obj).copy();
 				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
 				if(packet != null) {
-					PacketReceiveEvent event = new PacketReceiveEvent(packet, p);
+					PacketPreReceiveEvent event = new PacketPreReceiveEvent(packet, p);
 					EventManager.callEvent(event);
 					if (event.isCancelled())
 						return;
-				}
-			}
+					super.channelRead(ctx, obj); // call before use
+					getNegativityPlayer().getExecutor().submit(() -> EventManager.callEvent(new PacketReceiveEvent(packet, p)));
+				} else
+					super.channelRead(ctx, obj); 
+				msg.release();
+			} else
+				super.channelRead(ctx, obj); 
 		} catch (Throwable e) { // manage error myself to let everything continue
 			NettyHandlerCommon.manageError(ctx, e, "internal receiving");
 		}
-		super.channelRead(ctx, obj);
 	}
 }

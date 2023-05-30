@@ -116,7 +116,7 @@ public class NoFall extends Cheat {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if (p.getBoundingBox().add(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER") || distance == 0.0D || from.getY() < to.getY())
+		if (p.getBoundingBox().expand(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER") || distance == 0.0D || from.getY() < to.getY())
 			return;
 		Vector direction = p.getVelocity().clone();
 		double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
@@ -148,7 +148,7 @@ public class NoFall extends Cheat {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if (p.getBoundingBox().add(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER") || distance == 0.0D || from.getY() < to.getY())
+		if (p.getBoundingBox().expand(0.5, 0.5, 0.5).getBlocks(p.getWorld()).has("WATER") || distance == 0.0D || from.getY() < to.getY())
 			return;
 		double motionY = from.getY() - to.getY();
 		Material justUnder = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();

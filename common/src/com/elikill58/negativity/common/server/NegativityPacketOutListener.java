@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutCustomPayload;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.logger.Debug;
@@ -26,7 +27,8 @@ public class NegativityPacketOutListener implements Listeners {
 		if(type.equals(PacketType.Server.BLOCK_CHANGE)) {
 			NPacketPlayOutBlockChange change = (NPacketPlayOutBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
-			w.addTimingBlock(p.getPing(), change.type, change.pos.getX(), change.pos.getY(), change.pos.getZ());
+			if(change.type != null) // type founded
+				w.addTimingBlock(p.getPing(), change.type, change.pos.getX(), change.pos.getY(), change.pos.getZ());
 		} else if(type.equals(PacketType.Server.MULTI_BLOCK_CHANGE)) {
 			NPacketPlayOutMultiBlockChange change = (NPacketPlayOutMultiBlockChange) packet;
 			CompensatedWorld w = p.getWorld();
@@ -34,7 +36,9 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.CUSTOM_PAYLOAD)) {
 			NPacketPlayOutCustomPayload a = (NPacketPlayOutCustomPayload) packet;
 			Adapter.getAdapter().debug(Debug.GENERAL, "Channel: " + a.channel);
-		} else if(type.equals(PacketType.Server.POSITION))
-			NegativityPlayer.getNegativityPlayer(p).invincibilityTicks += 5;
+		} else if(type.equals(PacketType.Server.ENTITY_TELEPORT)) {
+			if(((NPacketPlayOutEntityTeleport) packet).entityId == p.getEntityId())
+				NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(5, "Teleport Accept"); // when in unloaded chunk
+		}
 	}
 }

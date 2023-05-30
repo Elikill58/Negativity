@@ -209,9 +209,9 @@ public class DiscordWebhook implements Webhook {
 					queue.add(msg);
 				}
 				Object tryAfter = json.get("retry_after");
-				long retryAfter = tryAfter instanceof Long ? (Long) tryAfter : (tryAfter instanceof Double ? ((Double) tryAfter).longValue() : Long.parseLong(tryAfter.toString()));
-				time = System.currentTimeMillis() + retryAfter; // wait 5 s until next send
-				ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter / 1000) + " secs more.");
+				long retryAfter = tryAfter instanceof Number ? ((Number) tryAfter).longValue() : Long.parseLong(tryAfter.toString());
+				time = System.currentTimeMillis() + retryAfter + 500; // wait 5 s until next send
+				ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter < 1000 ? retryAfter + " ms": (retryAfter / 1000) + " s") + " more.");
 			} else if (code == 405) {
 				enabled = false;
 				executorService.shutdown();

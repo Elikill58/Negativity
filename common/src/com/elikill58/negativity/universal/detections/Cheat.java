@@ -171,7 +171,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @return true if enabled
 	 */
 	public boolean isSetBack() {
-		return config.getBoolean("set_back.active", false);
+		return config.getBoolean("set_back.active", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.set_back.active", false);
 	}
 
 	/**
@@ -180,7 +180,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @return true if kick is allowed
 	 */
 	public boolean allowKick() {
-		return config.getBoolean("kick.active", false);
+		return config.getBoolean("kick.active", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.kick.active", false);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @param type the data type
 	 * @param value the value recorded
 	 */
-	public final <T> void recordData(UUID target, VerifData.DataType<T> type, T value) {
+	public final <T extends Number> void recordData(UUID target, VerifData.DataType<T> type, T value) {
 		VerificationManager.recordData(target, this, type, value);
 	}
 	

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -32,7 +32,7 @@ public class IncorrectPacket extends Cheat {
 	}
 
 	@Check(name = "distance", description = "Check distance between player and sent packet", conditions = { CheckConditions.NO_TELEPORT, CheckConditions.NO_USE_TRIDENT })
-	public void onPacket(PacketReceiveEvent e) {
+	public void onPacket(PacketPreReceiveEvent e) {
 		if (!e.hasPlayer())
 			return;
 		NPacket packet = e.getPacket();

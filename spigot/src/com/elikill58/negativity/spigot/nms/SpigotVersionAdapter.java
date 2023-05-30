@@ -29,7 +29,7 @@ import io.netty.channel.ChannelFuture;
 
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	protected Method getPlayerHandle, mathTps, getEntityLookup, getBukkitEntity;
+	protected Method getPlayerHandle, getEntityLookup, getBukkitEntity;
 	protected Field recentTpsField, pingField, tpsField, playerConnectionField;
 	protected Field minX, minY, minZ, maxX, maxY, maxZ, entityLookup;
 	protected Object dedicatedServer;
@@ -38,9 +38,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		this.version = Version.getVersionByProtocolID(protocolVersion);
 		try {
 			dedicatedServer = PacketUtils.getDedicatedServer();
-
-			Class<?> mathHelperClass = PacketUtils.getNmsClass("MathHelper", "util.");
-			mathTps = mathHelperClass.getDeclaredMethod("a", long[].class);
 
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
@@ -77,9 +74,9 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 			this.getBukkitEntity = PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBukkitEntity");
 
-			if(version.isNewerOrEquals(Version.V1_17)) {
+			if (version.isNewerOrEquals(Version.V1_17)) {
 				Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
-	
+
 				try {
 					getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
 				} catch (NoSuchMethodException e) { // method not present
@@ -101,7 +98,11 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public double getAverageTps() {
 		try {
-			return (double) mathTps.invoke(null, tpsField.get(dedicatedServer));
+			long[] array = (long[]) tpsField.get(dedicatedServer);
+			long l = 0L;
+			for (long m : array)
+				l += m;
+			return l / array.length;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -213,13 +214,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 
 	public List<Entity> getEntities(World w) {
-		if(!version.isNewerOrEquals(Version.V1_17))
-			return w.getEntities();
-		List<Entity> entities = new ArrayList<>();
 		try {
+			if (!version.isNewerOrEquals(Version.V1_17))
+				return w.getEntities();
+			List<Entity> entities = new ArrayList<>();
 			Object worldServer = PacketUtils.getWorldServer(w);
 			Object lookup;
-			if(getEntityLookup != null)
+			if (getEntityLookup != null)
 				lookup = getEntityLookup.invoke(worldServer);
 			else {
 				Object persistentEntityManager = entityLookup.get(worldServer);
@@ -236,10 +237,10 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 					}
 				}
 			});
-		} catch (Exception e) {
-			e.printStackTrace();
+			return entities;
+		} catch (Exception e) { // shitty spigot -> entities not loaded yet
+			return new ArrayList<>();
 		}
-		return entities;
 	}
 
 	private static SpigotVersionAdapter instance;
@@ -279,6 +280,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_19_R1();
 			case "v1_19_R2":
 				return instance = new Spigot_1_19_R2();
+			case "v1_19_R3":
+				return instance = new Spigot_1_19_R3();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

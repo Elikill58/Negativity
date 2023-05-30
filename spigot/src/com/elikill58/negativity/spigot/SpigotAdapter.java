@@ -127,7 +127,7 @@ public class SpigotAdapter extends Adapter {
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		for (org.bukkit.entity.Player temp : Utils.getOnlinePlayers())
-			list.add(NegativityPlayer.getNegativityPlayer(temp.getUniqueId(), () -> new SpigotPlayer(temp)).getPlayer());
+			list.add(NegativityPlayer.getPlayer(temp.getUniqueId(), () -> new SpigotPlayer(temp)));
 		return list;
 	}
 
@@ -281,7 +281,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public World getServerWorld(Player p) {
-		org.bukkit.World w = Bukkit.getPlayer(p.getUniqueId()).getWorld();
+		org.bukkit.World w = ((org.bukkit.entity.Player) p.getDefault()).getWorld();
 		return World.getWorld(w.getName(), (a) -> new SpigotWorld(w));
 	}
 }

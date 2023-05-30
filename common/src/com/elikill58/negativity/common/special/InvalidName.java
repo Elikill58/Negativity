@@ -33,7 +33,7 @@ public class InvalidName extends Special implements Listeners {
 		NegativityAccount account = NegativityAccount.get(playerId);
 		if (UniversalUtils.isValidName(e.getName())) // valid name, ignoring
 			return;
-		if (BedrockPlayerManager.isBedrockPlayer(playerId)) // bedrock player, we are sure about this
+		if (BedrockPlayerManager.isBedrockPlayer(playerId) || couldBeAdded(e.getName())) // bedrock player, we are sure about this
 			return;
 		if (ProxyCompanionManager.isIntegrationEnabled() && UniversalUtils.isValidName(e.getName().substring(1)))
 			return; // seems to be geyser player with invalid char at begin
@@ -42,24 +42,24 @@ public class InvalidName extends Special implements Listeners {
 		if (getConfig().getBoolean("ban")) {
 			if (!BanManager.banActive) {
 				Adapter ada = Adapter.getAdapter();
-				ada.getLogger()
-						.warn("Cannot ban player " + e.getName() + " for " + getName() + " because ban is NOT config.");
+				ada.getLogger().warn("Cannot ban player " + e.getName() + " for " + getName() + " because ban is NOT config.");
 				ada.getLogger().warn("Please, enable ban in config and restart your server");
 				if (getConfig().getBoolean("kick")) {
-					e.setKickMessage(
-							Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
+					e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 					e.setLoginResult(Result.KICK_OTHER);
 				}
 			} else {
-				BanManager.executeBan(Ban.active(playerId, getName(), "Negativity", SanctionnerType.PLUGIN,
-						getConfig().getInt("ban.time"), getName(), e.getAddress().getHostAddress()));
+				BanManager.executeBan(Ban.active(playerId, getName(), "Negativity", SanctionnerType.PLUGIN, getConfig().getInt("ban.time"), getName(), e.getAddress().getHostAddress()));
 				e.setLoginResult(Result.KICK_BANNED);
 			}
 		} else if (getConfig().getBoolean("kick")) {
-			e.setKickMessage(
-					Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
+			e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 			e.setLoginResult(Result.KICK_OTHER);
 		} else
 			Adapter.getAdapter().getLogger().info("Player " + e.getName() + " has an invalid name.");
+	}
+	
+	private boolean couldBeAdded(String name) {
+		return name.replaceAll("[0-9A-Za-z-_*]{3," + name.length() + "}", "").replace("*", "").replace(".", "").length() > 0;
 	}
 }

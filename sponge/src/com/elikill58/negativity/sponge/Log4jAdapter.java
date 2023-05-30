@@ -29,7 +29,7 @@ public class Log4jAdapter implements LoggerAdapter {
     }
 
 	@Override
-	public void printError(String message, Exception e) {
+	public void printError(String message, Throwable e) {
 		logger.error(message, e);
 	}
 }

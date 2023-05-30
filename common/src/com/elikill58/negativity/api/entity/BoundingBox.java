@@ -354,20 +354,7 @@ public class BoundingBox {
 	 * @param z move in Z axis
 	 * @return new box
 	 */
-	public BoundingBox add(double x, double y, double z) {
+	public BoundingBox move(double x, double y, double z) {
 		return new BoundingBox(minX + x, minY + y, minZ + z, maxX + x, maxY + y, maxZ + z);
-	}
-	
-	/**
-	 * Create new bounding box with moved position<br>
-	 * This doesn't change the size of box, just move it
-	 * 
-	 * @param x move in X axis
-	 * @param y move in Y axis
-	 * @param z move in Z axis
-	 * @return new box
-	 */
-	public BoundingBox remove(double x, double y, double z) {
-		return new BoundingBox(minX - x, minY - y, minZ - z, maxX - x, maxY - y, maxZ - z);
 	}
 }

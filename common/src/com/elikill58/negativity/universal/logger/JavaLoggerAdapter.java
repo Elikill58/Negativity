@@ -27,7 +27,7 @@ public class JavaLoggerAdapter implements LoggerAdapter {
 	}
 
 	@Override
-	public void printError(String message, Exception e) {
+	public void printError(String message, Throwable e) {
 		logger.log(Level.SEVERE, message, e);
 	}
 }

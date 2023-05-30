@@ -34,6 +34,10 @@ public class TeleportProcessor implements SetBackProcessor {
 
 	@Override
 	public void perform(Player p) {
+		if(direction == null) {
+			Adapter.getAdapter().getLogger().error("You wrongly config teleport processor.");
+			return;
+		}
 		Adapter.getAdapter().runSync(() -> p.teleport(p.getLocation().clone().add(direction)));
 	}
 	

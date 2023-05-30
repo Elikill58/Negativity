@@ -8,9 +8,10 @@ import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
-import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
@@ -29,8 +30,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 
 public class NegativityPacketInListener implements Listeners {
 
-	@EventListener
-	public void onPacketReceive(PacketReceiveEvent e) {
+	@EventListener(priority = EventPriority.PRE)
+	public void onPacketReceive(PacketPreReceiveEvent e) {
 		if (!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();
@@ -60,9 +61,8 @@ public class NegativityPacketInListener implements Listeners {
 					}
 				}
 			}
-		} else if (type == PacketType.Client.TELEPORT_ACCEPT) {
-			np.invincibilityTicks += 3; // when in unloaded chunk
 		} else if (type.isFlyingPacket()) {
+			np.addTick();
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if (flying.hasLocation()) {
 				if (p.getLocation() == null) {
@@ -75,8 +75,8 @@ public class NegativityPacketInListener implements Listeners {
 				else
 					p.setLocation(flying.getLocation(p.getWorld()));
 			}
-			if(flying.hasPos && np.invincibilityTicks > 0)
-				np.invincibilityTicks--;
+			if(flying.hasPos)
+				np.downInvincibilityTicks();
 		} else if (packet instanceof NPacketPlayInEntityAction) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) packet;
 

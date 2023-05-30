@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -69,7 +70,7 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 					} else {
 						lore.addAll(Arrays.asList("&cCannot be detected.", "&7Reason: &c" + np.getWhyDetectionNotActive(c)));
 					}
-					inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(ChatColor.RESET + c.getName()).lore(lore).build());
+					inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).itemFlag(ItemFlag.HIDE_ATTRIBUTES).displayName(ChatColor.RESET + c.getName()).lore(lore).build());
 				}
 			}
 		} else

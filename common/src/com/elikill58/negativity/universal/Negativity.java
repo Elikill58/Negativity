@@ -51,6 +51,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.warn.WarnManager;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.webhooks.messages.AlertWebhookMessage;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
 public class Negativity {
@@ -163,6 +164,7 @@ public class Negativity {
 					// don't run set back options because player will be offline
 				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
+				WebhookManager.send(new WebhookMessage(WebhookMessageType.KICK, p, "Negativity", System.currentTimeMillis(), "%reason%", np.getReason(c)));
 				return false;
 			}
 		}

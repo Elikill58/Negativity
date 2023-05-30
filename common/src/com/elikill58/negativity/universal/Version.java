@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_10;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_11;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_12;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_12_2;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_13;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_14;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_14_4;
@@ -17,6 +18,7 @@ import com.elikill58.negativity.api.packets.nms.versions.Version1_18;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_19;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_19_2;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_19_3;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_19_4;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_8;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_9;
 import com.elikill58.negativity.api.packets.nms.versions.VersionUnknown;
@@ -28,7 +30,8 @@ public enum Version {
 	V1_9("1.9", 9, Version1_9::new, 48, 110),
 	V1_10("1.10", 10, Version1_10::new, 201, 210),
 	V1_11("1.11", 11, Version1_11::new, 301, 316),
-	V1_12("1.12", 12, Version1_12::new, 317, 340),
+	V1_12("1.12", 12, Version1_12::new, 317, 335),
+	V1_12_2("1.12.2", 12.2, Version1_12_2::new, 336, 340),
 	V1_13("1.13", 13, Version1_13::new, 341, 404),
 	V1_14("1.14", 14, Version1_14::new, 441, 489),
 	V1_14_4("1.14.4", 14.4, Version1_14_4::new, 490, 500),
@@ -38,7 +41,8 @@ public enum Version {
 	V1_18("1.18", 18, Version1_18::new, 757, 758),
 	V1_19("1.19", 19, Version1_19::new, 759),
 	V1_19_2("1.19.2", 19.2, Version1_19_2::new, 760),
-	V1_19_3("1.19.3", 19.3, Version1_19_3::new, 761, 999),
+	V1_19_3("1.19.3", 19.3, Version1_19_3::new, 761),
+	V1_19_4("1.19.4", 19.4, Version1_19_4::new, 762, 999),
 	HIGHER("higher", 42, VersionUnknown::new, 1000);
 
 	private final double power;

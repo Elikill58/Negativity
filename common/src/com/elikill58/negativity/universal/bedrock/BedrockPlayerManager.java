@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.packets.BedrockClientData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -28,6 +29,10 @@ public class BedrockPlayerManager {
 				return true;
 			}
 			return false;
+		});
+		CHECKERS.add((uuid) -> {
+			NegativityPlayer np = NegativityPlayer.getCached(uuid);
+			return np != null && np.getClientName() != null && np.getClientName().contains("Geyser"); // on velocity it's "Geyser (Velocity)" and not only "Geyser"
 		});
 		
 		DATA_GETTERS.clear();

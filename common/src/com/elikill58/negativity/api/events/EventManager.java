@@ -18,7 +18,7 @@ import com.elikill58.negativity.common.server.NegativityPacketOutListener;
 import com.elikill58.negativity.common.server.ProxyEventsManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.monitor.MonitorType;
-import com.elikill58.negativity.universal.monitor.cpu.function.EventCpuMeasure;
+import com.elikill58.negativity.universal.monitor.cpu.CpuMeasure;
 
 public class EventManager {
 
@@ -142,7 +142,7 @@ public class EventManager {
 	 * @param ev the event which have to be called
 	 */
 	public static void callEvent(Event ev) {
-		EventCpuMeasure cpuMeasure = MonitorType.CPU.getMonitor().getMeasureForEvent(ev.getClass());
+		CpuMeasure cpuMeasure = MonitorType.CPU.getMonitor().getMeasure(ev);
 		HashMap<ListenerCaller, EventListener> allMethods = new HashMap<>();
 		allMethods.putAll(getEventForClass(ev, ev.getClass()));
 		Class<?> superClass = ev.getClass().getSuperclass();
@@ -167,13 +167,14 @@ public class EventManager {
 		}
 	}
 	
-	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods, EventCpuMeasure cpuMeasure) {
+	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods, CpuMeasure cpuMeasure) {
 		allMethods.forEach((method, tag) -> {
 			try {
 				if(tag.priority().equals(priority)) {
 					long beginTime = System.nanoTime();
 					method.call(ev);
-					cpuMeasure.add(method.getMethod(), (System.nanoTime() - beginTime) / 1000);
+					if(cpuMeasure != null)
+						cpuMeasure.add(method.getMethod().getName(), (System.nanoTime() - beginTime) / 1000);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

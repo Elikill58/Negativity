@@ -1,15 +1,19 @@
 package com.elikill58.negativity.universal.storage.proof.file;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -22,9 +26,16 @@ import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.storage.proof.OldProofFileMigration;
 
+/**
+ * TODO Complete refactor to make saving on same thread or just changing content of it
+ * 
+ * @author Elikill58
+ *
+ */
 public class FileNegativityProofStorage extends NegativityProofStorage {
 
 	private final File proofDir;
+	private final ConcurrentHashMap<UUID, Configuration> filetoSave = new ConcurrentHashMap<>();
 
 	public FileNegativityProofStorage(File proofDir) {
 		this.proofDir = proofDir;
@@ -47,6 +58,10 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			}
 			if (migrated > 0)
 				Adapter.getAdapter().getLogger().info("Migrated " + migrated + " files from old (txt) to new system (yml).");
+			Adapter.getAdapter().getScheduler().runRepeatingAsync(() -> {
+				new ArrayList<>(filetoSave.values()).forEach(Configuration::directSave);
+				filetoSave.clear();
+			}, Duration.ofSeconds(5), Duration.ofSeconds(5), "proof-storage");
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().printError("Failed to migrate old proof file to new one.", e);
 		}
@@ -118,16 +133,27 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 	public void saveProof(Proof proof) {
 		CompletableFuture.runAsync(() -> {
 			try {
-				File file = new File(proofDir, proof.getUUID().toString() + ".yml");
-				if (!file.exists()) {
-					try {
-						proofDir.mkdirs();
-						file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
+				Configuration accountConfig = filetoSave.computeIfAbsent(proof.getUUID(), (uuid) -> {
+					File file = new File(proofDir, uuid.toString() + ".yml");
+					if (!file.exists()) {
+						try {
+							proofDir.mkdirs();
+							file.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
-				}
-				Configuration accountConfig = YamlConfiguration.load(file);
+					try {
+						return YamlConfiguration.load(file);
+					} catch (Exception e) {
+						try {
+							new PrintWriter(file).close();
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+						return YamlConfiguration.load(file);
+					}
+				});
 				Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
 				if (cheatSection == null)
 					cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
@@ -145,9 +171,13 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 				proofConfig.set("version", proof.getVersion().name());
 				proofConfig.set("warn", proof.getWarn());
 				proofConfig.set("tps", tpsToFile(proof.getTps()));
-				accountConfig.directSave();
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().printError("Failed to save proof for " + proof.getUUID().toString(), e);
+				try {
+					// just reset if can't save
+					new PrintWriter(new File(proofDir, proof.getUUID().toString() + ".yml")).close();
+				} catch (FileNotFoundException e1) {
+					Adapter.getAdapter().getLogger().printError("Failed to save proof for " + proof.getUUID().toString(), e1);
+				}
 			}
 		});
 	}
@@ -159,16 +189,27 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>()).computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
 
 			proofsPerUUID.forEach((uuid, proofPerKey) -> {
-				File file = new File(proofDir, uuid.toString() + ".yml");
-				if (!file.exists()) {
-					try {
-						proofDir.mkdirs();
-						file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
+				Configuration accountConfig = filetoSave.computeIfAbsent(uuid, (a) -> {
+					File file = new File(proofDir, uuid.toString() + ".yml");
+					if (!file.exists()) {
+						try {
+							proofDir.mkdirs();
+							file.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
-				}
-				Configuration accountConfig = YamlConfiguration.load(file);
+					try {
+						return YamlConfiguration.load(file);
+					} catch (Exception e) {
+						try {
+							new PrintWriter(file).close();
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+						return YamlConfiguration.load(file);
+					}
+				});
 				proofPerKey.forEach((cheatKey, proofs) -> {
 					Configuration cheatSection = accountConfig.getSection(cheatKey.getLowerKey());
 					if (cheatSection == null)
@@ -191,7 +232,6 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 						key++;
 					}
 				});
-				accountConfig.directSave();
 			});
 		});
 	}

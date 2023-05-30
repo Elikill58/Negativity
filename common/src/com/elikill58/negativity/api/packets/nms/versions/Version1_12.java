@@ -13,7 +13,7 @@ public class Version1_12 extends NamedVersion {
 	public Version1_12() {
 		super("1.12");
 		int i = 0;
-		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TAB_COMPLETE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.PONG, Client.ENCHANT_ITEM,
+		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.AUTO_RECIPE, Client.TAB_COMPLETE, Client.CHAT, Client.CLIENT_COMMAND, Client.SETTINGS, Client.PONG, Client.ENCHANT_ITEM,
 				Client.WINDOW_CLICK, Client.CLOSE_WINDOW, Client.CUSTOM_PAYLOAD, Client.USE_ENTITY, Client.KEEP_ALIVE, Client.FLYING, Client.POSITION, Client.POSITION_LOOK, Client.LOOK,
 				Client.VEHICLE_MOVE, Client.BOAT_MOVE, Client.ABILITIES, Client.BLOCK_DIG, Client.ENTITY_ACTION, Client.STEER_VEHICLE, Client.RECIPE_DISPLAYED, Client.RESOURCE_PACK_STATUS,
 				Client.ADVANCEMENTS, Client.HELD_ITEM_SLOT, Client.SET_CREATIVE_SLOT, Client.UPDATE_SIGN, Client.ARM_ANIMATION, Client.SPECTATE, Client.BLOCK_PLACE, Client.USE_ITEM)) {

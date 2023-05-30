@@ -70,6 +70,15 @@ public class MonitorMeasure {
 		return duration == 0;
 	}
 	
+	/**
+	 * Check if this measure is very low. Can be used to don't show empty values
+	 * 
+	 * @return true if very low
+	 */
+	public boolean isVeryLow() {
+		return getDuration() <= 3 || String.format("%.2f", getPercent()).equalsIgnoreCase("0,00");
+	}
+	
 	public void save(Configuration config) {
 		config.set(key + ".result", toString());
 		config.set(key + ".duration", getDuration());

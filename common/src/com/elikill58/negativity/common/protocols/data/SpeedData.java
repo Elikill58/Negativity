@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.protocols.CheckData;
 public class SpeedData extends CheckData {
 
 	public int oldSpeedLevel = 0, oldSlowLevel = 0, highSpeedAmount = 0;
-	public double sameDiffY = 0, oldFriction = 0, walkSpeedBuffer = 0, deltaXZ = 0;
+	public double sameDiffY = 0, oldFriction = 0, walkSpeedBuffer = 0, deltaXZ = 0, distanceJumpingBuffer = 0;
 	
 	public SpeedData(NegativityPlayer np) {
 		super(np);
@@ -44,6 +44,13 @@ public class SpeedData extends CheckData {
 		walkSpeedBuffer -= r;
     	if(walkSpeedBuffer < 0) {
     		walkSpeedBuffer = 0;
+    	}
+	}
+	
+	public void reduceDistanceJumpingBuffer(double r) {
+		distanceJumpingBuffer -= r;
+    	if(distanceJumpingBuffer < 0) {
+    		distanceJumpingBuffer = 0;
     	}
 	}
 }

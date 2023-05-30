@@ -103,8 +103,6 @@ public class PacketListener implements Listeners {
 		if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
-		} else if (type == PacketType.Client.STEER_VEHICLE) {
-			np.invincibilityTicks += 5;
 		} else if (type == PacketType.Client.PONG) {
 			NPacketPlayInPong pong = (NPacketPlayInPong) packet;
 			if(np.idWaitingAppliedVelocity != -1 && np.idWaitingAppliedVelocity == pong.id) {

@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanStatus;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class CommandBanProcessor implements BanProcessor {
 
@@ -29,14 +30,16 @@ public class CommandBanProcessor implements BanProcessor {
 	@Override
 	public BanResult executeBan(Ban ban) {
 		Adapter adapter = Adapter.getAdapter();
-		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
+		NegativityPlayer np = NegativityPlayer.getCached(ban.getPlayerId());
+		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), np, ban.getReason())));
 		return new BanResult(ban);
 	}
 
 	@Override
 	public BanResult revokeBan(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
-		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
+		NegativityPlayer np = NegativityPlayer.getCached(playerId);
+		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, np, "Unknown")));
 		return new BanResult(new Ban(playerId, "Unknown", "Unknown", SanctionnerType.UNKNOW, 0, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
 	}
 
@@ -50,7 +53,7 @@ public class CommandBanProcessor implements BanProcessor {
 	public List<Ban> getLoggedBans(UUID playerId) {
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
@@ -60,38 +63,33 @@ public class CommandBanProcessor implements BanProcessor {
 	public List<Ban> getAllBans() {
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Command";
 	}
-	
+
 	@Override
 	public List<String> getDescription() {
-		return Arrays.asList(ChatColor.YELLOW + "Use command to ban/unban.", "", "&cNot available:", "&6Everything that need to get data.",
-				"&7- Active bans", "&7- All bans", "&7- Ban on same IP", "&7- Logged/Old bans");
+		return Arrays.asList(ChatColor.YELLOW + "Use command to ban/unban.", "", "&cNot available:", "&6Everything that need to get data.", "&7- Active bans", "&7- All bans",
+				"&7- Ban on same IP", "&7- Logged/Old bans");
 	}
 
-	private static String applyPlaceholders(String rawCommand, UUID playerId, String reason) {
+	private static String applyPlaceholders(String rawCommand, UUID playerId, NegativityPlayer np, String reason) {
 		String life = "?";
 		String name = "???";
-		String level = "?";
+		int level = 0;
 		String gamemode = "?";
 		String walkSpeed = "?";
-		Player nPlayer = NegativityPlayer.getCached(playerId).getPlayer();
-		if (nPlayer != null) {
-			life = String.valueOf(nPlayer.getHealth());
-			name = nPlayer.getName();
-			level = String.valueOf(nPlayer.getLevel());
-			gamemode = nPlayer.getGameMode().getName();
-			walkSpeed = String.valueOf(nPlayer.getWalkSpeed());
+		Player p = np == null ? NegativityPlayer.getPlayer(playerId) : np.getPlayer();
+		if (p != null) {
+			life = String.format("%.2f", p.getHealth());
+			name = p.getName();
+			level = p.getLevel();
+			gamemode = p.getGameMode().getName();
+			walkSpeed = String.format("%.2f", p.getWalkSpeed());
 		}
-		return rawCommand.replace("%uuid%", playerId.toString())
-				.replace("%name%", name)
-				.replace("%reason%", reason)
-				.replace("%life%", life)
-				.replace("%level%", level)
-				.replace("%gm%", gamemode)
-				.replace("%walk_speed%", walkSpeed);
+		return UniversalUtils.replacePlaceholders(rawCommand, "%uuid%", playerId.toString(), "%name%", name, "%reason%", reason, "%life%", life, "%level%", level, "%gm%", gamemode,
+				"%walk_speed%", walkSpeed, "%alert%", np == null ? "" : np.getReason(null));
 	}
 }

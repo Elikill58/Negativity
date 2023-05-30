@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.Version;
  */
 public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
-	public Hand hand;
+	public Hand hand = Hand.MAIN;
 	public BlockFace face;
 	public BlockPosition pos;
 	public boolean insideBlock;
@@ -29,13 +29,12 @@ public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		if (version.equals(Version.V1_8))
-			this.hand = Hand.MAIN;
-		else
+		if (version.isNewerOrEquals(Version.V1_14))
 			this.hand = serializer.getEnum(Hand.class);
-
 		this.pos = serializer.readBlockPosition(version);
 		this.face = BlockFace.getById(serializer.readUnsignedByte());
+		if (version.isNewerOrEquals(Version.V1_9) && !version.isNewerOrEquals(Version.V1_14)) // between 1.9 to 1.13
+			this.hand = serializer.getEnum(Hand.class);
 		if (version.equals(Version.V1_8)) {
 			serializer.readItemStack(version); // skip item index
 			this.cursorX = serializer.readUnsignedByte() / 16.0F;

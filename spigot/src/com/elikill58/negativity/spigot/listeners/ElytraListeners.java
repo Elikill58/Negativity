@@ -12,6 +12,6 @@ public class ElytraListeners implements Listener {
 	@EventHandler
 	public void onGlide(EntityToggleGlideEvent e) {
 		if(!e.isGliding() && e.getEntity() instanceof Player)
-			NegativityPlayer.getCached(e.getEntity().getUniqueId()).invincibilityTicks += 5;
+			NegativityPlayer.getCached(e.getEntity().getUniqueId()).addInvincibilityTicks(5, "Glide");
 	}
 }

@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.monitor.MonitorType;
+import com.elikill58.negativity.universal.monitor.cpu.CpuMonitor;
 
 public class CheckManager implements Listeners {
 
@@ -60,6 +61,7 @@ public class CheckManager implements Listeners {
 		if(!e.hasPlayer())
 			return;
 		HashMap<CheckConditions, Boolean> conditionResult = new HashMap<>();
+		CpuMonitor cpu = MonitorType.CPU.getMonitor();
 		new ArrayList<>(allChecks).forEach((check) -> {
 			Player p = e.getPlayer();
 			if(check.getCheat().isActive() && check.getMethod().getParameterTypes()[0].equals(e.getClass())) {
@@ -78,7 +80,8 @@ public class CheckManager implements Listeners {
 					}
 				}
 				check.invoke(e, np);
-				MonitorType.CPU.getMonitor().getMeasureForDetection(check.getCheat().getKey()).add(check.getCheck(), (System.nanoTime() - beginTime) / 1000);
+				if(cpu.isEnabled())
+					cpu.getMeasureForDetection(check.getCheat().getKey()).add(check.getCheck().name(), (System.nanoTime() - beginTime) / 1000);
 			}
 		});
 	}

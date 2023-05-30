@@ -74,7 +74,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		
 		inv.set(27, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(28, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
-		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(cible.isOp() || Perm.hasPerm(np, Perm.MOD) )) {
+		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(cible.isOp() || Perm.hasPerm(np, Perm.MOD))) {
 			inv.set(29, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())).build());
 		}
 		
@@ -92,7 +92,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond(), click = np.getClick();
 		try {
-			inv.set(9, getClickItem(getMessage(p, "inventory.main.last_click", "%clicks%", click), click).build());
+			inv.set(9, getClickItem(getMessage(p, "inventory.main.actual_click", "%clicks%", click), click).build());
 			Object[] clickPlaceholders = new Object[] {"%last_clicks%", np.lastClick, "%max_clicks%", betterClick};
 			inv.set(10, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), betterClick).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
 

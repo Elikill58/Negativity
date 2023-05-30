@@ -49,12 +49,12 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 				getNegativityPlayer().getExecutor().submit(() -> {
 					try {
 						NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "encode");
-						if(packet == null)
-							return;
-						EventManager.callEvent(new PacketSendEvent(packet, p));
+						if(packet != null)
+							EventManager.callEvent(new PacketSendEvent(packet, p));
 					} catch (Exception e) {
 						Adapter.getAdapter().getLogger().printError("Failed to read packet and call event", e);
 					}
+					msg.release();
 				});
 			}
 		} catch (Throwable e) { // manage error myself to let everything continue

@@ -77,7 +77,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_FLY, CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_FLY, CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_CLIMB_BLOCK })
 	public void omegaCraft(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -91,7 +91,7 @@ public class Fly extends Cheat implements Listeners {
 
 		double d = to.getY() - from.getY();
 		if (d == 0) {
-			for (Block b : p.getBoundingBox().add(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
+			for (Block b : p.getBoundingBox().move(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
 				if (b.getType().isSolid()) {
 					data.flyMove.clear();
 					return;
@@ -123,7 +123,8 @@ public class Fly extends Cheat implements Listeners {
 					}
 				}
 			}
-			if (amount > 1) {
+			amount /= 2;
+			if (amount > 1 && i > 0.01) {
 				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((np.isBedrockPlayer() ? 70 : 85) + amount), "omega-craft",
 						data.flyMove + " > " + onGround + " : " + data.wasOnGround + ", i: " + i + ", d: " + d + ", under: " + blockUnder.getType().getId(),
 						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"), amount > 1 ? amount - 1 : 1) && isSetBack())
@@ -140,7 +141,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground-checker", description = "Check for ground on no-ground packet", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FLY,
-			CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK })
+			CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.SURVIVAL, CheckConditions.NO_BOAT_AROUND })
 	public void onGroundChecker(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
@@ -152,16 +153,16 @@ public class Fly extends Cheat implements Listeners {
 			if (positionGround != flying.isGround) {
 				if (data.groundWarn++ > 4) {
 					if (Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "ground-checker",
-							"Motion: " + positionGround + " / " + flying.isGround + ", y: " + flying.getY(), null, (long) (data.groundWarn - 3)) && isSetBack())
+							"Motion: " + positionGround + " / " + flying.isGround + ", gw: " + data.groundWarn + ", y: " + flying.getY(), null, (long) (data.groundWarn - 3)) && isSetBack())
 						LocationUtils.teleportPlayerOnGround(p);
 				}
 			} else {
-				data.groundWarn = Math.max(data.groundWarn - 0.3, 0);
+				data.groundWarn = Math.max(data.groundWarn - 0.5, 0);
 			}
 		}
 	}
 
-	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND,
+	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND,
 			CheckConditions.NO_INSIDE_VEHICLE })
 	public void onSuspiciousY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
@@ -199,7 +200,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "not-moving-y", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
-			CheckConditions.NO_FLY })
+			CheckConditions.NO_FLY, CheckConditions.SURVIVAL })
 	public void onNotMovingY(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 

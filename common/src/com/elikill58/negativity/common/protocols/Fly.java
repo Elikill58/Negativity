@@ -37,7 +37,7 @@ public class Fly extends Cheat implements Listeners {
 		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, FlyData::new, CheatDescription.NO_FIGHT);
 	}
 
-	@Check(name = "no-ground-down", description = "When not in ground, check Y move", conditions = CheckConditions.NO_GROUND)
+	@Check(name = "no-ground-down", description = "When not in ground, check Y move", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_ALLOW_FLY })
 	public void boatManager(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
@@ -249,7 +249,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "no-ground-i", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
-			CheckConditions.NO_SPRINT })
+			CheckConditions.NO_SPRINT, CheckConditions.NO_ALLOW_FLY })
 	public void notGroundI(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 

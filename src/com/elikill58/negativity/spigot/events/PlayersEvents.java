@@ -190,8 +190,10 @@ public class PlayersEvents implements Listener {
 		SpigotNegativityPlayer.getNegativityPlayer(p).mustToBeSaved = true;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onTeleport(PlayerTeleportEvent e) {
+		if(e.isCancelled())
+			return;
 		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
 	}
 	

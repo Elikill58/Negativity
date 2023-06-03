@@ -31,7 +31,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || np.isUsingTrident() || np.hasElytra() || p.isInsideVehicle() || p.getFallDistance() > 0.5 || np.inventoryMoveData == null
-				|| LocationUtils.isInWater(new SpigotLocation(p.getLocation())) || p.getVelocity().length() > 0.1 || !np.inventoryMoveData.active) {
+				|| LocationUtils.isInWater(new SpigotLocation(p.getLocation())) || p.getVelocity().length() > 0.1 || !np.inventoryMoveData.active || LocationUtils.hasMaterialsAround(new SpigotLocation(e.getFrom()), "PISTON")) {
 			Adapter.getAdapter().debug("Velocity length: " + p.getVelocity().length());
 			return;
 		}

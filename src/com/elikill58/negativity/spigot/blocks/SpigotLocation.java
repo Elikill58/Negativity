@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
+import com.elikill58.negativity.spigot.utils.LocationUtils;
+
 public final class SpigotLocation extends Location {
 
 	private SpigotWorld w;
@@ -33,6 +35,10 @@ public final class SpigotLocation extends Location {
 
 	public Vector toBlockVector() {
 		return new Vector(getBlockX(), getBlockY(), getBlockZ());
+	}
+	
+	public double distanceXZ(Location loc) {
+		return Math.sqrt(LocationUtils.square(getX() - loc.getX()) + LocationUtils.square(getZ() - loc.getZ()));
 	}
 	
 	@Override

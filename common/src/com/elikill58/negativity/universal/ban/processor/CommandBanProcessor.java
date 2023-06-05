@@ -76,11 +76,11 @@ public class CommandBanProcessor implements BanProcessor {
 	}
 
 	private static String applyPlaceholders(String rawCommand, UUID playerId, NegativityPlayer np, String reason) {
-		String life = "?";
-		String name = "???";
+		String life = "-";
+		String name = "-";
 		int level = 0;
-		String gamemode = "?";
-		String walkSpeed = "?";
+		String gamemode = "-";
+		String walkSpeed = "-";
 		Player p = np == null ? NegativityPlayer.getPlayer(playerId) : np.getPlayer();
 		if (p != null) {
 			life = String.format("%.2f", p.getHealth());
@@ -90,6 +90,6 @@ public class CommandBanProcessor implements BanProcessor {
 			walkSpeed = String.format("%.2f", p.getWalkSpeed());
 		}
 		return UniversalUtils.replacePlaceholders(rawCommand, "%uuid%", playerId.toString(), "%name%", name, "%reason%", reason, "%life%", life, "%level%", level, "%gm%", gamemode,
-				"%walk_speed%", walkSpeed, "%alert%", np == null ? "" : np.getReason(null));
+				"%walk_speed%", walkSpeed, "%alert%", np == null ? "" : np.getReason(null), "%ip%", np == null ? "-" : np.getAccount().getIp());
 	}
 }

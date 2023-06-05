@@ -49,6 +49,10 @@ processor: "file"
 # %ip% : ip of the banned player
 # %reason% : detected cheat
 # %alert% : The message that contains all detected cheat as "Cheat (Cheat1, Cheat2)"
+# %life% : Player health formatted like 15.20
+# %level% : Level of XP
+# %gm% : Gamemode name
+# %walk_speed% : Speed of walk formatted 1.20
 command:
   ban:
   - "ban %uuid% %reason%"

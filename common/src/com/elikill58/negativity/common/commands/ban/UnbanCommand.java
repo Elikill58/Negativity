@@ -35,7 +35,7 @@ public class UnbanCommand implements CommandListeners, TabListeners {
 			return false;
 		}
 
-		if (!BanManager.isBanned(cible.getUniqueId())) {
+		if (!BanManager.isBanned(cible.getUniqueId()) && !BanManager.getProcessorId().equalsIgnoreCase("command")) {
 			Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
 			return false;
 		}

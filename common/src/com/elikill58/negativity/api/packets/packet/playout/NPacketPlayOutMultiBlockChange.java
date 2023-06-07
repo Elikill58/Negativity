@@ -29,7 +29,8 @@ public class NPacketPlayOutMultiBlockChange implements NPacketPlayOut {
 			this.chunkX = pos.getX();
 			this.chunkY = pos.getY();
 			this.chunkZ = pos.getZ();
-			this.suppressLightUpdate = serializer.readBoolean();
+			if(!version.isNewerOrEquals(Version.V1_20))
+				this.suppressLightUpdate = serializer.readBoolean();
 			int amount = serializer.readVarInt();
 			for (int i = 0; i < amount; i++) {
 				long val = serializer.readVarLong();

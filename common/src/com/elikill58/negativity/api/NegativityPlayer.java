@@ -92,7 +92,7 @@ public class NegativityPlayer {
 
 	// general values
 	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false, isInvisible = false, isAttacking = false, shouldCheckSensitivity = true,
-			buggedVersion = false;
+			buggedVersion = false, hadValidPing = false;
 	private boolean isBedrockPlayer = false, disconnecting = false;
 	public double sensitivity = 0.0;
 	private String clientName, invincibilityReason = "";
@@ -206,6 +206,11 @@ public class NegativityPlayer {
 			return false;
 		if (BypassManager.hasBypass(p, c))
 			return false;
+		if(!hadValidPing) {
+			if(hadValidPing = (p.getPing() > 0)) {
+				return false;
+			}
+		}
 		return p.getPing() < c.getMaxAlertPing();
 	}
 
@@ -243,6 +248,8 @@ public class NegativityPlayer {
 			return "Allowed to fly";
 		if (BypassManager.hasBypass(p, c))
 			return "Has bypass";
+		if(!hadValidPing)
+			return "Not valid ping yet";
 		if (p.getPing() > c.getMaxAlertPing())
 			return "Too high ping (" + p.getPing() + " > " + c.getMaxAlertPing() + ")";
 		return "Unknown";

@@ -46,7 +46,10 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
 
 			Class<?> entityPlayerClass = PacketUtils.getNmsClass("EntityPlayer", "server.level.");
-			if (version.isNewerOrEquals(Version.V1_17)) {
+			if(version.isNewerOrEquals(Version.V1_20)) {
+				pingField = entityPlayerClass.getDeclaredField("f");
+				playerConnectionField = entityPlayerClass.getDeclaredField("c");
+			} else if (version.isNewerOrEquals(Version.V1_17)) {
 				pingField = entityPlayerClass.getDeclaredField("e");
 				playerConnectionField = entityPlayerClass.getDeclaredField("b");
 			} else {
@@ -282,6 +285,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_19_R2();
 			case "v1_19_R3":
 				return instance = new Spigot_1_19_R3();
+			case "v1_20_R1":
+				return instance = new Spigot_1_20_R1();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

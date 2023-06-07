@@ -1,10 +1,10 @@
 # Negativity
 
 It's a Minecraft AntiCheat for multiples platforms :
-- **Spigot** 1.8.8 to 1.19 (*and fork like PaperSpigot or Tuinity*)
+- **Spigot** 1.8.8 to 1.20 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8, 9 & 10
-- **Fabric** MC 1.18.2, 1.19 & 1.19.2 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
-- **Minestom** 1.19
+- **Fabric** MC 1.18.2, 1.19 to 1.19.4 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
+- **Minestom** 1.19.3
 
 Proxies:
 - **BungeeCord**
@@ -16,7 +16,7 @@ If you are using proxy, you should put the plugins on all sub servers where you 
 
 Need help ? Have a question or something to suggest ?
 
-Contact me via Discord private messages (`Elikill58#0743`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
+Contact me via Discord private messages (`Elikill58`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
 
 Suggestions and bug reports can also be filled in [this repository issue tracker](https://github.com/Elikill58/Negativity/issues).
 

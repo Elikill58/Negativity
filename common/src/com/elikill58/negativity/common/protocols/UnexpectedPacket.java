@@ -61,14 +61,17 @@ public class UnexpectedPacket extends Cheat {
 	public void onHeldChange(PacketReceiveEvent e, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT)) {
-			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket();
-			if (data.lastSlot == slot.slot) {
-				Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change", "Change held slot to the same: " + slot.slot, new CheatHover.Literal("Change held slot to the same"),
-						slot.slot + data.timeSlot);
-				data.timeSlot++;
+			NPacketPlayInHeldItemSlot packet = (NPacketPlayInHeldItemSlot) e.getPacket();
+			if (data.lastSlot == packet.slot) {
+				if(data.timeSlot > 5)
+					Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change", "Change held slot to the same: " + packet.slot, new CheatHover.Literal("Change held slot to the same"),
+							packet.slot + data.timeSlot);
+				data.timeSlot += 20;
 			} else
 				data.timeSlot = 0;
-			data.lastSlot = slot.slot;
+			data.lastSlot = packet.slot;
+		} else if(data.timeSlot > 0 && e.getPacket().getPacketType().isFlyingPacket()) {
+			data.timeSlot--;
 		}
 	}
 }

@@ -39,6 +39,8 @@ public class NegativityPacketOutListener implements Listeners {
 		} else if(type.equals(PacketType.Server.ENTITY_TELEPORT)) {
 			if(((NPacketPlayOutEntityTeleport) packet).entityId == p.getEntityId())
 				NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(5, "Teleport Accept"); // when in unloaded chunk
+		} else if(type.equals(PacketType.Server.RESPAWN)) {
+			NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(5, "Respawn");
 		}
 	}
 }

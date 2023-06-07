@@ -1,13 +1,15 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.19) and **Sponge** ([more informations](https://github.com/Elikill58/Negativity/wiki#im-on-sponge-and-wtf-)) (*also works on fork of Spigot*).
+A Minecraft AntiCheat for **Spigot** (1.8.8 to 1.20) (*also works on fork of Spigot*).
 It is also compatible with **Bungeecord** and **Velocity**.
+
+*(note: Spigot 1.7.10 and Sponge are not compatible with Negativity after the 1.13.)*
 
 You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
 
 ## Informations
 
-If you need help, you can: Contact me via Discord private messages (`Elikill58#0743`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
+If you need help, you can: Contact me via Discord private messages (`Elikill58`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
 
 Suggestions and bug reports can also be filled in [this repository issue tracker](https://github.com/Elikill58/Negativity/issues).
 

@@ -28,7 +28,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -76,10 +75,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					double maxReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach");
 					if (dis > maxReach && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA") && (dis > (maxReach + 1))) {
 						Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-							String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
 							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 									"With: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Distance: " + dis,
-									hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+									hoverMsg("distance", "%name%", cible.getName(), "%distance%", nf.format(dis)));
 							if (isSetBack() && mayCancel)
 								e.setCancelled(true);
 						});

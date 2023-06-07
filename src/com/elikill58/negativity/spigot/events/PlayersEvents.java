@@ -160,6 +160,7 @@ public class PlayersEvents implements Listener {
 		WebhookManager.getWebhooks().forEach(w -> w.clean(e.getPlayer()));
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();

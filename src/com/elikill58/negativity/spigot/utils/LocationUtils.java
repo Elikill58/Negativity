@@ -12,15 +12,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.blocks.SpigotLocation;
-import com.elikill58.negativity.spigot.packets.PacketContent;
-import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
-import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
@@ -313,68 +308,7 @@ public class LocationUtils {
 	public static boolean canSeeEntity(Player p, Entity entityToSee, int maxDistance) {
 		if (SpigotNegativity.isCraftBukkit)
 			return true; // bugged "hasLineOfSight" for craftbukkit
-		if (Version.getVersion().isNewerOrEquals(Version.V1_8))
-			return p.hasLineOfSight(entityToSee);
-		Location loc = p.getLocation().clone().add(0, 1.5, 0);
-		World w = p.getWorld();
-		Vector baseVector = loc.getDirection().normalize();
-		Vector vector = baseVector.clone().multiply(0.5); // *0.5 for multiple point
-		Vector vectorNear = baseVector.clone().multiply(0.1); // *0.1 for a lot of multiple point
-		if (maxDistance > 500)
-			maxDistance = 500;
-		double maxX, maxY, maxZ;
-		double minX, minY, minZ;
-		if (Version.getVersion().isNewerOrEquals(Version.V1_14)) {
-			BoundingBox box = entityToSee.getBoundingBox();
-			minX = box.getMinX();
-			minY = box.getMinY();
-			minZ = box.getMinZ();
-			maxX = box.getMaxX();
-			maxY = box.getMaxY();
-			maxZ = box.getMaxZ();
-		} else {
-			PacketContent content = null;
-			try {
-				Object nmsEntity = PacketUtils.getNMSEntity(entityToSee);
-				content = new PacketContent(PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(nmsEntity));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			ContentModifier<Double> doubles = content.getSpecificModifier(double.class);
-			minX = doubles.read("a");
-			minY = doubles.read("b");
-			minZ = doubles.read("c");
-			maxX = doubles.read("d");
-			maxY = doubles.read("e");
-			maxZ = doubles.read("f");
-		}
-		for (int i = 0; i < maxDistance; i++) {
-			if (loc.distance(entityToSee.getLocation()) < 1.5)
-				loc.add(vectorNear);
-			else
-				loc.add(vector);
-			Material type = w.getBlockAt(loc).getType();
-			if (type.isSolid()) {
-				if (!w.getBlockAt(loc.clone().add(0, 0.1, 0)).getType().isSolid()) {
-					loc.add(0, 0.1, 0);
-					continue;
-				}
-				if (!w.getBlockAt(loc.clone().subtract(0, 0.1, 0)).getType().isSolid()) {
-					loc.subtract(0, 0.1, 0);
-					continue;
-				}
-				Adapter.getAdapter().debug("Type " + type.name() + " is solid. " + loc.toString());
-				return false;
-			}
-			if (maxX > loc.getX() && maxY > loc.getY() && maxZ > loc.getZ()) { // check max
-				if (minX < loc.getX() && minY < loc.getY() && minZ < loc.getZ()) { // check min
-					return true;
-				}
-			}
-		}
-		boolean seeLoc = canSeeLocation(p, new SpigotLocation(entityToSee.getLocation()), 100);
-		Adapter.getAdapter().debug("Checking default see location " + entityToSee.getLocation() + ", result: " + seeLoc);
-		return seeLoc;
+		return p.hasLineOfSight(entityToSee);
 	}
 
 	/**

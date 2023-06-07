@@ -108,10 +108,7 @@ public class PacketUtils {
 	public static Object getPlayerConnection(Player p) {
 		try {
 			Object entityPlayer = getEntityPlayer(p);
-			if(Version.getVersion().isNewerOrEquals(Version.V1_17))
-				return entityPlayer.getClass().getField("b").get(entityPlayer);
-			else
-				return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+			return ReflectionUtils.getFirstWith(entityPlayer, entityPlayer.getClass(), getNmsClass("PlayerConnection", "server.network."));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -126,8 +123,7 @@ public class PacketUtils {
 	 */
 	public static Object getEntityPlayer(Player p) {
 		try {
-			Object craftPlayer = CRAFT_PLAYER_CLASS.cast(p);
-			return craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
+			return CRAFT_PLAYER_CLASS.getMethod("getHandle").invoke(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -142,8 +138,7 @@ public class PacketUtils {
 	 */
 	public static Object getCraftServer() {
 		try {
-			Object craftServer = CRAFT_SERVER_CLASS.cast(Bukkit.getServer());
-			return craftServer.getClass().getMethod("getHandle").invoke(craftServer);
+			return CRAFT_SERVER_CLASS.getMethod("getHandle").invoke(Bukkit.getServer());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -158,8 +153,7 @@ public class PacketUtils {
 	 */
 	public static Object getNMSEntity(Entity et) {
 		try {
-			Object craftEntity = CRAFT_ENTITY_CLASS.cast(et);
-			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
+			return CRAFT_ENTITY_CLASS.getMethod("getHandle").invoke(et);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -187,18 +181,17 @@ public class PacketUtils {
 			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
 				Object chatBaseComponent = getNmsClass("Entity", "world.entity.").getDeclaredMethod("getDisplayName").invoke(nmsEntity);
 				return (String) getNmsClass("IChatBaseComponent", "network.chat.").getDeclaredMethod("getString").invoke(chatBaseComponent);
-			} else {
-				return (String) getNmsClass("Entity", "world.entity.").getDeclaredMethod("getName").invoke(nmsEntity);
 			}
+			return (String) getNmsClass("Entity", "world.entity.").getDeclaredMethod("getName").invoke(nmsEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static Object getBoundingBox(Entity p) {
+	public static Object getBoundingBox(Entity entity) {
 		try {
-			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(CRAFT_ENTITY_CLASS.cast(p));
+			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(entity);
 			return ReflectionUtils.getFirstWith(ep, getNmsClass("Entity", "world.entity."), getNmsClass("AxisAlignedBB", "world.phys."));
 		} catch (Exception e) {
 			e.printStackTrace();

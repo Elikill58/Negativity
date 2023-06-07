@@ -15,7 +15,6 @@ import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
 import com.elikill58.negativity.spigot.packets.custom.channel.INC2Channel;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
-import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
 import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.PacketType;
@@ -33,8 +32,6 @@ public class CustomPacketManager extends PacketManager implements Listener {
 		Version version = Version.getVersion(Utils.VERSION);
 		if (version.isNewerOrEquals(Version.V1_17))
 			channel = new INC2Channel(this);
-		else if (version.equals(Version.V1_7))
-			channel = new NMUChannel(this);
 		else
 			channel = new INCChannel(this);
 		pl.getServer().getPluginManager().registerEvents(this, pl);

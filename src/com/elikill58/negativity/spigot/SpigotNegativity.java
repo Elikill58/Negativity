@@ -115,6 +115,11 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
 		Version v = Version.getVersion(Utils.VERSION);
+		if (v.equals(Version.V1_7)) {
+			getLogger().severe("The 1.7 version of Minecraft is not supported. The 1.13 version is the latest one to do it.");
+			setEnabled(false);
+			return;
+		}
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else
@@ -139,7 +144,7 @@ public class SpigotNegativity extends JavaPlugin {
 			} else {
 				getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
 				getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
-				getLogger().info("WARN: Support for free Negativity will be dropped in 01/09/2023.");
+				getLogger().warning("WARN: Support for free Negativity will be dropped in 01/09/2023.");
 			}
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
@@ -149,10 +154,10 @@ public class SpigotNegativity extends JavaPlugin {
 			if(System.currentTimeMillis() >= 1693526399999l) {
 				getLogger().warning("This plugin has no longer support since 01/09/2023. Only the premium version is now updated.");
 				getLogger().warning("You can find it at: https://www.spigotmc.org/resources/86874.");
-			}
+			} else
+				getLogger().warning("WARN: Support for free Negativity will be dropped in 01/09/2023.");
 		}
-		if(!v.equals(Version.V1_7))// MC 1.7 isn't supported
-			getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
+		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));

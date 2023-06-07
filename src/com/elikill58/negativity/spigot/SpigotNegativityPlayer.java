@@ -432,6 +432,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		getPlayer().kickPlayer(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isOnGround() {
 		return isOnGround || getPlayer().isOnGround();
 	}

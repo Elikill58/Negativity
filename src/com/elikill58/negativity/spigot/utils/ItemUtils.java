@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 
@@ -94,12 +93,10 @@ public class ItemUtils {
 	}
 	
 	public static ItemStack hideAttributes(ItemStack stack) {
-		if (Version.getVersion().isNewerThan(Version.V1_7)) {
-			ItemMeta meta = stack.getItemMeta();
-			// All ItemFlags are used to hide attributes, their javadoc says so too.
-			meta.addItemFlags(ItemFlag.values());
-			stack.setItemMeta(meta);
-		}
+		ItemMeta meta = stack.getItemMeta();
+		// All ItemFlags are used to hide attributes, their javadoc says so too.
+		meta.addItemFlags(ItemFlag.values());
+		stack.setItemMeta(meta);
 		return stack;
 	}
 	

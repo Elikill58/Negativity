@@ -99,11 +99,10 @@ public class Utils {
 	 */
 	public static int getPing(Player p) {
 		try {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_16))
+				return p.getPing();
 			Object entityPlayer = PacketUtils.getEntityPlayer(p);
-			if(Version.getVersion().isNewerOrEquals(Version.V1_17))
-				return entityPlayer.getClass().getField("e").getInt(entityPlayer);
-			else
-				return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

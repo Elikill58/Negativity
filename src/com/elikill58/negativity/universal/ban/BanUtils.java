@@ -6,8 +6,6 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import com.elikill58.deps.mariuszgromada.mxparser.Expression;
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;

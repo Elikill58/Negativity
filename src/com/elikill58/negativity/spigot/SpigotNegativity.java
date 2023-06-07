@@ -82,7 +82,6 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
-import com.elikill58.negativity.universal.ban.support.DKBansProcessor;
 import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
 import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
@@ -246,11 +245,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("LiteBans") != null) {
 			BanManager.registerProcessor("litebans", new LiteBansProcessor());
 			supportedPluginName.add("LiteBans");
-		}
-
-		if (Bukkit.getPluginManager().getPlugin("DKBans") != null) {
-			BanManager.registerProcessor("dkbans", new DKBansProcessor());
-			supportedPluginName.add("DKBans");
 		}
 		
 		if (Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {

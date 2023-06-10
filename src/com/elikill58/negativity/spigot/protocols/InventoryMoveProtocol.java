@@ -87,7 +87,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	@EventHandler
 	public void onClose(InventoryCloseEvent e) {
 		if (e.getPlayer() instanceof Player)
-			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getPlayer()).inventoryMoveData.reset();
+			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getPlayer()).inventoryMoveData.reset((Player) e.getPlayer());
 	}
 
 	private void checkInvMove(SpigotNegativityPlayer np, Player p, String from) {
@@ -103,14 +103,13 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 
 	public static class InventoryMoveData {
 
-		public SpigotNegativityPlayer np;
+		public Player p;
 		public double distance = 0, distanceXZ = 0;
 		public int timeSinceOpen = 0;
 		public boolean sprint, sneak, active;
 
-		public InventoryMoveData(SpigotNegativityPlayer np) {
-			this.np = np;
-			reset();
+		public InventoryMoveData() {
+			reset(null);
 		}
 
 		public void update(double distance, double distanceXZ) {
@@ -119,9 +118,9 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 			this.timeSinceOpen++;
 		}
 
-		public void reset() {
-			this.sprint = np.getPlayer().isSprinting();
-			this.sneak = np.getPlayer().isSneaking();
+		public void reset(Player p) {
+			this.sprint = p == null ? false : p.isSprinting();
+			this.sneak = p == null ? false : p.isSneaking();
 			this.active = false;
 			this.distance = 0;
 			this.distanceXZ = 0;

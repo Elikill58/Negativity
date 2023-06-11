@@ -11,7 +11,9 @@ import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.logger.Debug;
 import com.github.steveice10.opennbt.NBTIO;
 import com.github.steveice10.opennbt.tag.TagRegistry;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
@@ -99,7 +101,12 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	}
 
 	public <T extends Enum<T>> T getEnum(Class<T> oclass) {
-		return (T) ((Enum[]) oclass.getEnumConstants())[readVarInt()];
+		try {
+			return (T) ((Enum[]) oclass.getEnumConstants())[readVarInt()];
+		} catch(ArrayIndexOutOfBoundsException e) {
+			Adapter.getAdapter().debug(Debug.GENERAL, "ArrayIndexOutOfBoundsException for " + e.getMessage() + ": " + e.getStackTrace()[0]);
+		}
+		return null;
 	}
 
 	public void writeEnum(Enum<?> oenum) {

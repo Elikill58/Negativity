@@ -243,7 +243,7 @@ public class PacketSerializer extends UnpooledHeapByteBuf {
 	}
 
 	public BlockPosition readBlockPosition(Version version) {
-		return version.isNewerOrEquals(Version.V1_18) ? readBlockPositionNew() : readBlockPositionOld();
+		return version.isNewerOrEquals(Version.V1_17) ? readBlockPositionNew() : readBlockPositionOld();
 	}
 
 	private BlockPosition readBlockPositionNew() {

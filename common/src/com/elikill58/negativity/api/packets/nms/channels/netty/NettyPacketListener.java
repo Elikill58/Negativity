@@ -61,7 +61,7 @@ public abstract class NettyPacketListener {
 		if(shouldFixViaversion && ada.getPlatformID().equals(Platform.SPIGOT)) { // can have viaversion issue
 			Version serverVersion = ada.getServerVersion();
 			boolean playerIs19 = version.name().startsWith("V1_19");
-			boolean serverIs19 = serverVersion.name().startsWith("V1_19");
+			boolean serverIs19 = serverVersion.isNewerOrEquals(Version.V1_19);
 			if(playerIs19 && !serverIs19) {
 				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.19+ on 1.18- servers).");
 				version = serverVersion;

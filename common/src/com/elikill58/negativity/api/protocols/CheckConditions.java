@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.utils.LocationUtils;
 
@@ -33,7 +34,7 @@ public enum CheckConditions {
 
 	NO_FIGHT("Not fighting", p -> !NegativityPlayer.getNegativityPlayer(p).isInFight),
 	NO_TELEPORT("No teleport", p -> !NegativityPlayer.getNegativityPlayer(p).isTeleporting),
-	NO_BOAT_AROUND("No boat around", (p) -> !LocationUtils.hasBoatAroundHim(p.getWorld(), p.getLocation()), true),
+	NO_MID_ENTITY_AROUND("No mid entity around", (p) -> !LocationUtils.hasEntityAround(p.getWorld(), p.getLocation(), EntityType.BOAT, EntityType.SHULKER), true),
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
 	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),

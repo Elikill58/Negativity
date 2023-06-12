@@ -278,9 +278,22 @@ public class LocationUtils {
 	 * @return true if there is a boat
 	 */
 	public static boolean hasBoatAroundHim(CompensatedWorld world, Location loc) {
+		return hasEntityAround(world, loc, EntityType.BOAT);
+	}
+
+	/**
+	 * Check is there is a boat around the location (Distance of 3)
+	 * 
+	 * @param world the world of entities
+	 * @param loc   The location to check
+	 * @param types
+	 * @return true if there is a boat
+	 */
+	public static boolean hasEntityAround(CompensatedWorld world, Location loc, EntityType... typesArray) {
+		List<EntityType> types = Arrays.asList(typesArray);
 		for (Entity entity : world.getEntities()) {
 			Location l = entity.getLocation();
-			if (entity.getType().equals(EntityType.BOAT) && l.distance(loc) < 3)
+			if (types.contains(EntityType.BOAT) && l.distance(loc) < 3)
 				return true;
 		}
 		return false;

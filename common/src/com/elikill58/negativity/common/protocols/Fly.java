@@ -141,7 +141,7 @@ public class Fly extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground-checker", description = "Check for ground on no-ground packet", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FLY,
-			CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.SURVIVAL, CheckConditions.NO_BOAT_AROUND })
+			CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.SURVIVAL, CheckConditions.NO_MID_ENTITY_AROUND })
 	public void onGroundChecker(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
@@ -162,7 +162,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND,
+	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FIGHT, CheckConditions.NO_MID_ENTITY_AROUND,
 			CheckConditions.NO_INSIDE_VEHICLE })
 	public void onSuspiciousY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
@@ -180,7 +180,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "no-ground-y", description = "When not in ground, check y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
+	@Check(name = "no-ground-y", description = "When not in ground, check y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_MID_ENTITY_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onGroundY(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
@@ -199,7 +199,7 @@ public class Fly extends Cheat implements Listeners {
 			data.notMovingY = 0;
 	}
 
-	@Check(name = "not-moving-y", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
+	@Check(name = "not-moving-y", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_MID_ENTITY_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.NO_FLY, CheckConditions.SURVIVAL })
 	public void onNotMovingY(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
@@ -248,7 +248,7 @@ public class Fly extends Cheat implements Listeners {
 			data.lastY = flying.y;
 	}
 
-	@Check(name = "no-ground-i", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
+	@Check(name = "no-ground-i", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_MID_ENTITY_AROUND, CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.NO_SPRINT, CheckConditions.NO_ALLOW_FLY })
 	public void notGroundI(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();

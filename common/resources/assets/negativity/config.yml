@@ -406,6 +406,9 @@ webhooks:
   enable: false
   hook:
     discord-example:
+      # You can disable each webhook one by one
+      enabled: true
+      # Type of webhook
       type: "discord"
       # register the webhook URL used by Negativity
       url: "https://discord.com/api/webhooks/theRestOfDiscordUrl"
@@ -436,8 +439,6 @@ webhooks:
         # %reliability% : Reliability of the cheat
         alert:
           enabled: true
-          # Cooldown between 2 alerts sent to discord (will combine all)
-          cooldown: 5000
           # Reliability needed to send the webhook
           reliability_need: 90
           # Amount of alert needed to send the webhook
@@ -692,3 +693,48 @@ webhooks:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
               icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+
+    telegram-example:
+      # You can disable each webhook one by one
+      enabled: true
+      # Type of webhook
+      type: "telegram"
+      # The token of the bot like "app_id:app_hash"
+      token: "my:token"
+      # The chat ID. Can be given by the bot @raw_data_bot
+      chat_id: "my chat id"
+      # Cooldown between each message
+      cooldown: 1000
+      # Configure messages presentation
+      # If you don't set one of them, it will get the default configuration
+      #
+      # Placeholders available everywhere :
+      # %name% : Name of the player which procude the message
+      # %uuid% : UUID of the player which procude the message
+      # %ip% : IP of the player which produce the message
+      # %date% : Date when the player procude the message
+      # %sender% : The sender of the message (such as banner or reporter)
+      # %ping% : The ping of the player
+      # %world% : The world of the player
+      # %server_name% : The name of the server where the player is
+      # %server_version% : Version of the server
+      # %player_version% : Version of the player
+      # %tps% : Actual server TPS
+      # 
+      messages:
+        # Configure discord webhook message for ban.
+        #
+        # Placeholders available :
+        # %cheat% : the cheat name
+        # %amount% : Amount of alert made by player
+        # %reliability% : Reliability of the cheat
+        alert:
+          enabled: true
+          header:
+          - "--------- Negativity ---------"
+          - ""
+          # The line with "cheat" will be duplicated for each alert
+          per-player:
+          - "%name% (%ping% ms) on %server_name% seems to use:"
+          - "  - %cheat% %amount%x (Reliability: %reliability%%)"
+          footer: []

@@ -8,12 +8,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,22 +27,16 @@ import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook.D
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
-public class DiscordWebhook implements Webhook {
+public class DiscordWebhook extends Webhook {
 
-	private final Configuration config;
 	private final String webhookUrl;
-	private final ScheduledExecutorService executorService;
 	private final List<UUID> alreadySent = new ArrayList<>();
 	private final Content<Long> players = new Content<>();
-	private List<WebhookMessage> queue = new ArrayList<>();
-	private long time = 0, cooldown = 0;
-	private boolean enabled = true;
+	private long cooldown = 0;
 
 	public DiscordWebhook(Configuration config) {
-		this.config = config;
-		this.cooldown = config.getLong("cooldown", 0);
+		super("Discord", config);
 		this.webhookUrl = config.getString("url");
-		this.executorService = Executors.newScheduledThreadPool(1);
 	}
 
 	private long getTheoricCooldown(WebhookMessageType type) {
@@ -66,75 +57,15 @@ public class DiscordWebhook implements Webhook {
 	}
 
 	@Override
-	public void close() {
-		if (!executorService.isShutdown())
-			executorService.shutdown();
-	}
-
-	@Override
-	public String getWebhookName() {
-		return "Discord";
-	}
-
-	@Override
 	public void clean(Player p) {
+		super.clean(p);
 		for (WebhookMessageType type : WebhookMessageType.values())
 			players.remove(type, p.getUniqueId().toString());
 		alreadySent.remove(p.getUniqueId());
 	}
 
 	@Override
-	public void addToQueue(WebhookMessage msg) {
-		if (msg == null || !enabled || !msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
-			return;
-		if (!msg.canCombine()) // don't need to queued it, can only send it
-			send(msg);
-		else
-			queue.add(msg); // maybe another that can be combined will come
-	}
-
-	@Override
-	public void runQueue() {
-		if (time > System.currentTimeMillis() || !enabled) // should skip
-			return;
-
-		List<WebhookMessage> messages = new ArrayList<>(queue); // copy list
-		messages.sort(Comparator.naturalOrder());
-		this.queue = new ArrayList<>(); // clean list to let other thread add new msg
-
-		// firstly, combine all
-		while (!messages.isEmpty()) {
-			WebhookMessage msg = messages.remove(0);
-			if (!messages.isEmpty()) { // removed is last
-				List<WebhookMessage> toRemove = new ArrayList<>();
-				for (int i = 0; i < messages.size(); i++) {
-					if (messages.size() <= i)
-						break;
-					WebhookMessage other = messages.get(i);
-					WebhookMessage third = msg.combine(other);
-					if (third != null) {
-						msg = third;
-						toRemove.add(other);
-					}
-				}
-				messages.removeAll(toRemove);
-			}
-			send(msg); // send
-		}
-	}
-
-	@Override
-	public void send(WebhookMessage msg) {
-		if (!msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
-			return;
-		try {
-			executorService.execute(() -> sendAsync(msg));
-		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().printError("Error while executing async webhook message about " + msg.getConcerned().getName(), e);
-		}
-	}
-
-	private void sendAsync(WebhookMessage msg) {
+	protected void sendAsync(WebhookMessage msg) {
 		try {
 			sendAsyncWithException(msg);
 		} catch (Exception e) {
@@ -214,7 +145,6 @@ public class DiscordWebhook implements Webhook {
 				ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter < 1000 ? retryAfter + " ms": (retryAfter / 1000) + " s") + " more.");
 			} else if (code == 405) {
 				enabled = false;
-				executorService.shutdown();
 				ada.getLogger().warn("A discord issue appear. The webhook is disabled until next restart: " + webhookResult.getB());
 			} else
 				ada.getLogger().warn("Error while trying to send webhook request (code: " + code + "): " + webhookResult.getB());

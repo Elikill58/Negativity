@@ -8,8 +8,10 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -65,48 +67,37 @@ public class DiscordWebhook extends Webhook {
 	}
 
 	@Override
-	protected void sendAsync(WebhookMessage msg) {
+	protected void sendAsync(WebhookMessageType type, Player p, List<WebhookMessage> msg) {
 		try {
-			sendAsyncWithException(msg);
+			sendAsyncWithException(type, p, msg);
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().printError("Error while sending webhook message about " + msg.getConcerned().getName(), e);
+			Adapter.getAdapter().getLogger().printError("Error while sending webhook message about " + p.getName(), e);
 		}
 	}
 
-	private void sendAsyncWithException(WebhookMessage msg) throws Exception {
-		Configuration confMsg = config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT));
+	private void sendAsyncWithException(WebhookMessageType type, Player p, List<WebhookMessage> msgs) throws Exception {
+		Configuration confMsg = config.getSection("messages." + type.name().toLowerCase(Locale.ROOT));
 		if (confMsg == null) // not config
 			return;
 		Adapter ada = Adapter.getAdapter();
-		if (!confMsg.getBoolean("enabled", true)) {
-			ada.debug(Debug.FEATURE, "Webhook for " + msg.getMessageType().name() + " is not enabled.");
-			return;
-		}
-		// if offline, don't care about cooldown
-		if (time > System.currentTimeMillis() || (msg.getConcerned().isOnline() && hasCooldown(msg.getConcerned(), msg.getMessageType()))) {
-			// should skip
-			queue.add(msg);
-			ada.debug(Debug.FEATURE, "Skipping " + msg.getMessageType().name() + ": "
-					+ (time > System.currentTimeMillis() ? "waiting for discord" : "player cooldown: " + getCooldown(msg.getConcerned(), msg.getMessageType())));
-			return;
-		}
-		ada.debug(Debug.FEATURE, "Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": " + getCooldown(msg.getConcerned(), msg.getMessageType()));
-		setCooldown(msg.getConcerned(), msg.getMessageType());
+		ada.debug(Debug.FEATURE, "Sending webhook " + type.name() + " for " + p.getName() + ": " + getCooldown(p, type));
+		setCooldown(p, type);
+		WebhookMessage msg = msgs.get(msgs.size() - 1);
 		DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 		webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
-		if (alreadySent.contains(msg.getConcerned().getUniqueId())) { // if already sent first message
-			webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
+		if (alreadySent.contains(p.getUniqueId())) { // if already sent first message
+			webhook.setContent(getMessageReplaced(p, msgs, confMsg.get("content")));
 		} else { // is first message
-			alreadySent.add(msg.getConcerned().getUniqueId());
-			webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content_first", confMsg.getString("content", ""))));
+			alreadySent.add(p.getUniqueId());
+			webhook.setContent(getMessageReplaced(p, msgs, confMsg.get("content_first", confMsg.get("content"))));
 		}
 		webhook.setAvatarUrl(msg.applyPlaceHolders(confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 		Configuration embed = confMsg.getSection("embed");
 		if (embed != null) {
 			EmbedObject obj = new DiscordWebhookRequest.EmbedObject();
 			obj.setColor(Color.getColor(embed.getString("color", "red")));
-			obj.setTitle(msg.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase(Locale.ROOT))));
-			obj.setDescription(msg.applyPlaceHolders(embed.getString("description", "")));
+			obj.setTitle(msg.applyPlaceHolders(embed.getString("title", type.name().toLowerCase(Locale.ROOT))));
+			obj.setDescription(getMessageReplaced(p, msgs, embed.get("description")));
 
 			Configuration fields = embed.getSection("fields");
 			if (fields != null) {
@@ -137,7 +128,7 @@ public class DiscordWebhook extends Webhook {
 			if (code == 429) { // good config and error while sending
 				JSONObject json = (JSONObject) new JSONParser().parse(webhookResult.getB());
 				synchronized (queue) {
-					queue.add(msg);
+					queue.addAll(msgs);
 				}
 				Object tryAfter = json.get("retry_after");
 				long retryAfter = tryAfter instanceof Number ? ((Number) tryAfter).longValue() : Long.parseLong(tryAfter.toString());
@@ -151,6 +142,28 @@ public class DiscordWebhook extends Webhook {
 		}
 	}
 
+	private String getMessageReplaced(Player p, List<WebhookMessage> msgs, Object content) {
+		StringJoiner text = new StringJoiner("\n");
+		List<String> lines;
+		if(content == null)
+			lines = new ArrayList<>();
+		else if(content instanceof String)
+			lines = Arrays.asList((String) content);
+		else if(content instanceof List)
+			lines = (List<String>) content;
+		else
+			return "";
+		for(String line : lines) {
+			if (line.contains("%cheat%")) {// should be duplicated
+				for (WebhookMessage eachMsg : msgs) {
+					text.add(eachMsg.applyPlaceHolders(line));
+				}
+			} else
+				text.add(msgs.get(msgs.size() - 1).applyPlaceHolders(line));
+		}
+		return text.toString();
+	}
+	
 	@Override
 	public boolean ping(String asker) {
 		DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);

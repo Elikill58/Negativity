@@ -9,6 +9,7 @@ import com.elikill58.negativity.universal.webhooks.integrations.TelegramWebhook;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class WebhookManager {
 	
@@ -51,7 +52,7 @@ public class WebhookManager {
 			return;
 		WEBHOOKS.forEach((w) -> {
 			try {
-				w.send(msg);
+				w.send(msg.getMessageType(), msg.getConcerned(), Arrays.asList(msg));
 			} catch (Exception e) {
 				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}

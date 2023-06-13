@@ -6,29 +6,31 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
 public abstract class Webhook {
 
 	protected static final ExecutorService executor = Executors.newSingleThreadExecutor((r) -> new Thread(r, "negativity-webhook"));
-	
+
 	protected final String name;
 	protected final Configuration config;
 	protected final List<WebhookMessage> queue = new ArrayList<>();
 	protected boolean enabled = true;
 	protected long time = 0, cooldown = 0;
-	
+
 	public Webhook(String name, Configuration config) {
 		this.name = name;
 		this.config = config;
 		this.enabled = config.getBoolean("enabled", true);
 		this.cooldown = config.getLong("cooldown", 0);
 	}
-	
+
 	/**
 	 * Close webhook
 	 */
@@ -36,7 +38,7 @@ public abstract class Webhook {
 		if (!executor.isShutdown())
 			executor.shutdown();
 	}
-	
+
 	/**
 	 * Get the webhook name
 	 * 
@@ -54,12 +56,9 @@ public abstract class Webhook {
 	public void addToQueue(WebhookMessage msg) {
 		if (msg == null || !enabled || !msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
 			return;
-		if (!msg.canCombine()) // don't need to queued it, can only send it
-			send(msg);
-		else
-			queue.add(msg); // maybe another that can be combined will come
+		queue.add(msg); // maybe another that can be combined will come
 	}
-	
+
 	/**
 	 * Run queue each seconds.
 	 */
@@ -71,6 +70,7 @@ public abstract class Webhook {
 		messages.sort(Comparator.naturalOrder());
 		this.queue.clear();
 
+		List<WebhookMessage> combinedMessages = new ArrayList<>();
 		// firstly, combine all
 		while (!messages.isEmpty()) {
 			WebhookMessage msg = messages.remove(0);
@@ -88,8 +88,12 @@ public abstract class Webhook {
 				}
 				messages.removeAll(toRemove);
 			}
-			send(msg); // send
+			combinedMessages.add(msg);
 		}
+		combinedMessages.stream().collect(Collectors.groupingBy(WebhookMessage::getMessageType, Collectors.groupingBy(WebhookMessage::getConcerned, Collectors.toList()))).forEach((type, messagesPerPlayer) -> {
+			messagesPerPlayer.forEach((p, web) -> send(type, p, web));
+		});
+		
 	}
 
 	/**
@@ -97,16 +101,16 @@ public abstract class Webhook {
 	 * 
 	 * @param msg the message to send
 	 */
-	public void send(WebhookMessage msg) {
-		if (!msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
+	public void send(WebhookMessageType type, Player p, List<WebhookMessage> msg) {
+		if (!config.getBoolean("messages." + type.name().toLowerCase(Locale.ROOT) + ".enabled", true))
 			return;
 		try {
-			executor.execute(() -> sendAsync(msg));
+			executor.execute(() -> sendAsync(type, p, msg));
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().printError("Error while executing async webhook message about " + msg.getConcerned().getName(), e);
+			Adapter.getAdapter().getLogger().printError("Error while executing async webhook message about " + p.getName(), e);
 		}
 	}
-	
+
 	/**
 	 * Send test message to webhook
 	 * 
@@ -114,7 +118,7 @@ public abstract class Webhook {
 	 * @return true if the message is well sent
 	 */
 	public abstract boolean ping(String asker);
-	
+
 	/**
 	 * Clean all data for the given player. Called when the player left.
 	 * 
@@ -124,5 +128,5 @@ public abstract class Webhook {
 		queue.clear();
 	}
 
-	protected abstract void sendAsync(WebhookMessage msg);
+	protected abstract void sendAsync(WebhookMessageType type, Player p, List<WebhookMessage> msg);
 }

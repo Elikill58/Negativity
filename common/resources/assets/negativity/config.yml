@@ -439,10 +439,6 @@ webhooks:
         # %reliability% : Reliability of the cheat
         alert:
           enabled: true
-          # Reliability needed to send the webhook
-          reliability_need: 90
-          # Amount of alert needed to send the webhook
-          amount_need: 1
           # The name which will send the message
           username: "Negativity Alert"
           # The content of the message
@@ -457,7 +453,9 @@ webhooks:
             # The embed title
             title: "Negativity Alert"
             # Main description
-            description: "%name% seems to use %cheat% %amount%x (Reliability: %reliability%%)"
+            description:
+            - "%name% seems to use :"
+            - "-  %cheat% %amount%x (Reliability: %reliability%%)"
             # All fields.
             # There is 3 fields per line MAX.
             # Else, they will automatically be on the next line.
@@ -731,7 +729,7 @@ webhooks:
         alert:
           enabled: true
           header:
-          - "--------- Negativity ---------"
+          - "--------- **Negativity** ---------"
           - ""
           # The line with "cheat" will be duplicated for each alert
           per-player:

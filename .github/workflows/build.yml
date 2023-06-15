@@ -33,11 +33,9 @@ jobs:
       run: ./gradlew build
       # continue even if there is an issue to save all cache
       continue-on-error: true
-    - name: Send file to discord channel
-      uses: sinshutu/upload-to-discord@master
-      # if last action is fine
-      if: steps.build-gradle.outcome == 'success'
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
       with:
-        args: build/libs/*.jar
+        name: openguild-data
+        path: |
+          target

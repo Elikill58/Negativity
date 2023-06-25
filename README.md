@@ -60,7 +60,7 @@ We support a lot of languages :
 - **Polish** (*pl_PL*) By Tytano#5336
 - **Romanian** (*ro_RO*) By @Edward205
 - **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
-- **Hungarian** (*hu_HU*) By @HasX
+- **Hungarian** (*hu_HU*) By @hasx
 - **Korean** (*ko_KR*) By soshimee#4397
 - **Indonesian** (*id_ID*) By Dave9123#0757
 - **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498

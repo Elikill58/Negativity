@@ -1,6 +1,6 @@
 # Negativity
 
-Negativity is a Minecraft AntiCheat plugin designed for Spigot (versions 1.8.8 to 1.20) and is also compatible with forks of Spigot. It can be used with both Bungeecord and Velocity.
+Negativity is a Minecraft **AntiCheat** plugin designed for **Spigot (versions 1.8.8 to 1.20)** and is also compatible with **forks of Spigot**. It can be used with both **Bungeecord** and **Velocity**.
 
 Please note that Negativity is not compatible with Spigot 1.7.10 and Sponge versions after 1.13.
 
@@ -30,7 +30,7 @@ A comprehensive list of all the cheats that Negativity can detect is available o
 When enabled, Negativity performs various checks on player movements, actions, and packets to detect cheats. However, if you do not require cheat detection, you can disable it to save resources.
 
 ## Bad Connection and TPS Drop
-By default, if a player's ping exceeds 200 ms, Negativity will not create an alert. Additionally, if the server's TPS (Ticks Per Second) drops below 19, alerts will be disabled.
+By default, if a player's ping **exceeds 200 ms**, Negativity will not create an alert. Additionally, if the server's TPS (Ticks Per Second) **drops below 19**, alerts will be disabled.
 
 ## Translation
 

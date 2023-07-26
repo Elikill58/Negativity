@@ -63,7 +63,7 @@ public class Spider extends Cheat {
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to)
+		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 || y == 0.05000000000001137 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to)
 				|| hasBypassBlockAround(to.clone().sub(0, 1, 0))) {
 			data.lastY.clear();
 			return;

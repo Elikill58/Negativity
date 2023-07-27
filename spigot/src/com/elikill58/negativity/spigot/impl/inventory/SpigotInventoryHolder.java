@@ -5,19 +5,19 @@ import com.elikill58.negativity.api.inventory.PlatformHolder;
 
 public class SpigotInventoryHolder extends InventoryHolder {
 
-	private final org.bukkit.inventory.InventoryHolder holder;
-	
-	public SpigotInventoryHolder(org.bukkit.inventory.InventoryHolder holder) {
-		this.holder = holder;
-	}
+    private final org.bukkit.inventory.InventoryHolder holder;
 
-	public org.bukkit.inventory.InventoryHolder getHolder() {
-		return holder;
-	}
+    public SpigotInventoryHolder(org.bukkit.inventory.InventoryHolder holder) {
+        this.holder = holder;
+    }
 
-	@Override
-	public PlatformHolder getBasicHolder() {
-		return null;
-	}
+    public org.bukkit.inventory.InventoryHolder getHolder() {
+        return holder;
+    }
+
+    @Override
+    public PlatformHolder getBasicHolder() {
+        return null;
+    }
 
 }

@@ -1,8 +1,5 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
-import org.bukkit.Bukkit;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
@@ -10,86 +7,88 @@ import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
+import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class SpigotInventory extends Inventory {
 
-	private final String inventoryName;
-	private final int size;
-	private final SpigotNegativityHolder holder;
-	private final org.bukkit.inventory.Inventory inv;
-	
-	public SpigotInventory(org.bukkit.inventory.Inventory inv) {
-		this.inventoryName = "";
-		this.size = inv.getSize();
-		if(inv.getHolder() instanceof SpigotNegativityHolder) {
-			this.holder = (SpigotNegativityHolder) inv.getHolder();
-		} else
-			this.holder = (inv.getHolder() == null ? null : new SpigotNegativityHolder(new SpigotInventoryHolder(inv.getHolder())));
-		this.inv = inv;
-	}
-	
-	public SpigotInventory(String inventoryName, int size, NegativityHolder holder) {
-		this.inventoryName = inventoryName;
-		this.size = size;
-		this.holder = new SpigotNegativityHolder(holder);
-		this.inv = Bukkit.createInventory(this.holder, size, inventoryName);
-	}
-	
-	@Override
-	public ItemStack get(int slot) {
-		org.bukkit.inventory.ItemStack item = inv.getItem(slot);
-		if(item == null)
-			return null;
-		return new SpigotItemStack(item);
-	}
+    private final String inventoryName;
+    private final int size;
+    private final SpigotNegativityHolder holder;
+    private final org.bukkit.inventory.Inventory inv;
 
-	@Override
-	public void set(int slot, ItemStack item) {
-		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    public SpigotInventory(org.bukkit.inventory.Inventory inv) {
+        this.inventoryName = "";
+        this.size = inv.getSize();
+        if (inv.getHolder() instanceof SpigotNegativityHolder) {
+            this.holder = (SpigotNegativityHolder) inv.getHolder();
+        } else
+            this.holder = (inv.getHolder() == null ? null : new SpigotNegativityHolder(new SpigotInventoryHolder(inv.getHolder())));
+        this.inv = inv;
+    }
 
-	@Override
-	public void remove(int slot) {
-		inv.setItem(slot, null);
-	}
+    public SpigotInventory(String inventoryName, int size, NegativityHolder holder) {
+        this.inventoryName = inventoryName;
+        this.size = size;
+        this.holder = new SpigotNegativityHolder(holder);
+        this.inv = Bukkit.createInventory(this.holder, size, inventoryName);
+    }
 
-	@Override
-	public int getSize() {
-		return size;
-	}
+    @Override
+    public ItemStack get(int slot) {
+        org.bukkit.inventory.ItemStack item = inv.getItem(slot);
+        if (item == null)
+            return null;
+        return new SpigotItemStack(item);
+    }
 
-	@Override
-	public String getInventoryName() {
-		return inventoryName;
-	}
+    @Override
+    public void set(int slot, ItemStack item) {
+        inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
 
-	@Override
-	public @Nullable PlatformHolder getHolder() {
-		return holder == null ? null : holder.getBasicHolder();
-	}
+    @Override
+    public void remove(int slot) {
+        inv.setItem(slot, null);
+    }
 
-	@Override
-	public Object getDefault() {
-		return inv;
-	}
+    @Override
+    public int getSize() {
+        return size;
+    }
 
-	@Override
-	public InventoryType getType() {
-		return InventoryType.valueOf(inv.getType().name());
-	}
+    @Override
+    public String getInventoryName() {
+        return inventoryName;
+    }
 
-	@Override
-	public void clear() {
-		inv.clear();
-	}
+    @Override
+    public @Nullable PlatformHolder getHolder() {
+        return holder == null ? null : holder.getBasicHolder();
+    }
 
-	@Override
-	public void addItem(ItemStack build) {
-		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
-	}
-	
-	@Override
-	public boolean contains(Material type) {
-		return inv.contains((org.bukkit.Material) type.getDefault());
-	}
+    @Override
+    public Object getDefault() {
+        return inv;
+    }
+
+    @Override
+    public InventoryType getType() {
+        return InventoryType.valueOf(inv.getType().name());
+    }
+
+    @Override
+    public void clear() {
+        inv.clear();
+    }
+
+    @Override
+    public void addItem(ItemStack build) {
+        inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
+    }
+
+    @Override
+    public boolean contains(Material type) {
+        return inv.contains((org.bukkit.Material) type.getDefault());
+    }
 }

@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.players.offline.CheckMenuOfflineHolder;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -66,18 +67,9 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive)
 			sanctionItems.add(ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
 
-		if(sanctionItems.size() == 1)
-			inv.set(4, sanctionItems.get(0));
-		else if(!sanctionItems.isEmpty()) { // can only be upper than 1
-			inv.set(3, sanctionItems.remove(0)); // get first
-			inv.set(5, sanctionItems.remove(0)); // get second
-			if(!sanctionItems.isEmpty()) // if stay one
-				inv.set(4, sanctionItems.remove(0));
-		}
+        GlobalPlayerInventory.sanctionSize1(p, inv, sanctionItems);
 
-		inv.set(8, Inventory.getCloseItem(p));
-		
-		inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
+        inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		Object[] clickPlaceholders = new Object[] {"%last_clicks%", 0, "%max_clicks%", account.getMostClicksPerSecond()};
 		inv.set(10, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), account.getMostClicksPerSecond()).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
 		inv.set(11, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());

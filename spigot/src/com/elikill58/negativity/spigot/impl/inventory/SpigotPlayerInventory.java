@@ -1,149 +1,148 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
-import java.util.Optional;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.Optional;
 
 public class SpigotPlayerInventory extends PlayerInventory {
 
-	private final org.bukkit.inventory.PlayerInventory inv;
-	
-	public SpigotPlayerInventory(org.bukkit.inventory.PlayerInventory inv) {
-		this.inv = inv;
-	}
-	
-	private Optional<ItemStack> getItem(org.bukkit.inventory.ItemStack item) {
-		return item == null ? Optional.empty() : Optional.of(new SpigotItemStack(item));
-	}
-	
-	@Override
-	public ItemStack get(int slot) {
-		return getItem(inv.getItem(slot)).orElse(null);
-	}
+    private final org.bukkit.inventory.PlayerInventory inv;
 
-	@Override
-	public void set(int slot, ItemStack item) {
-		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    public SpigotPlayerInventory(org.bukkit.inventory.PlayerInventory inv) {
+        this.inv = inv;
+    }
 
-	@Override
-	public void remove(int slot) {
-		inv.setItem(slot, null);
-	}
+    private Optional<ItemStack> getItem(org.bukkit.inventory.ItemStack item) {
+        return item == null ? Optional.empty() : Optional.of(new SpigotItemStack(item));
+    }
 
-	@Override
-	public int getSize() {
-		return inv.getSize();
-	}
+    @Override
+    public ItemStack get(int slot) {
+        return getItem(inv.getItem(slot)).orElse(null);
+    }
 
-	@Override
-	public String getInventoryName() {
-		return inv.getHolder().getName();
-	}
+    @Override
+    public void set(int slot, ItemStack item) {
+        inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
 
-	@Override
-	public @Nullable NegativityHolder getHolder() {
-		return null;
-	}
+    @Override
+    public void remove(int slot) {
+        inv.setItem(slot, null);
+    }
 
-	@Override
-	public ItemStack[] getArmorContent() {
-		ItemStack[] items = new ItemStack[inv.getArmorContents().length];
-		int i = 0;
-		for(org.bukkit.inventory.ItemStack tempItem : inv.getArmorContents()) {
-			items[i] = getItem(tempItem).orElse(null);
-			i++;
-		}
-		return items;
-	}
+    @Override
+    public int getSize() {
+        return inv.getSize();
+    }
 
-	@Override
-	public InventoryType getType() {
-		return InventoryType.PLAYER;
-	}
+    @Override
+    public String getInventoryName() {
+        return inv.getHolder().getName();
+    }
 
-	@Override
-	public void clear() {
-		inv.clear();
-	}
-	
-	@Override
-	public void setArmorContent(ItemStack[] items) {
-		int size = inv.getArmorContents().length;
-		org.bukkit.inventory.ItemStack[] armor = new org.bukkit.inventory.ItemStack[size];
-		for(int i = 0; i < size; i++) {
-			if(items == null || items.length < i)
-				armor[i] = null;
-			else
-				armor[i] = (org.bukkit.inventory.ItemStack) items[i].getDefault();
-		}
-		inv.setArmorContents(armor);
-	}
+    @Override
+    public @Nullable NegativityHolder getHolder() {
+        return null;
+    }
 
-	@Override
-	public int getHeldItemSlot() {
-		return inv.getHeldItemSlot();
-	}
+    @Override
+    public ItemStack[] getArmorContent() {
+        ItemStack[] items = new ItemStack[inv.getArmorContents().length];
+        int i = 0;
+        for (org.bukkit.inventory.ItemStack tempItem : inv.getArmorContents()) {
+            items[i] = getItem(tempItem).orElse(null);
+            i++;
+        }
+        return items;
+    }
 
-	@Override
-	public void addItem(ItemStack build) {
-		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
-	}
+    @Override
+    public void setArmorContent(ItemStack[] items) {
+        int size = inv.getArmorContents().length;
+        org.bukkit.inventory.ItemStack[] armor = new org.bukkit.inventory.ItemStack[size];
+        for (int i = 0; i < size; i++) {
+            if (items == null || items.length < i)
+                armor[i] = null;
+            else
+                armor[i] = (org.bukkit.inventory.ItemStack) items[i].getDefault();
+        }
+        inv.setArmorContents(armor);
+    }
 
-	@Override
-	public Object getDefault() {
-		return inv;
-	}
+    @Override
+    public InventoryType getType() {
+        return InventoryType.PLAYER;
+    }
 
-	@Override
-	public void setHelmet(@Nullable ItemStack item) {
-		inv.setHelmet(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    @Override
+    public void clear() {
+        inv.clear();
+    }
 
-	@Override
-	public void setChestplate(@Nullable ItemStack item) {
-		inv.setChestplate(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    @Override
+    public int getHeldItemSlot() {
+        return inv.getHeldItemSlot();
+    }
 
-	@Override
-	public void setLegging(@Nullable ItemStack item) {
-		inv.setLeggings(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    @Override
+    public void addItem(ItemStack build) {
+        inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
+    }
 
-	@Override
-	public void setBoot(@Nullable ItemStack item) {
-		inv.setBoots(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
-	}
+    @Override
+    public Object getDefault() {
+        return inv;
+    }
 
-	@Override
-	public Optional<ItemStack> getHelmet() {
-		return getItem(inv.getHelmet());
-	}
+    @Override
+    public void setBoot(@Nullable ItemStack item) {
+        inv.setBoots(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
 
-	@Override
-	public Optional<ItemStack> getChestplate() {
-		return getItem(inv.getChestplate());
-	}
+    @Override
+    public Optional<ItemStack> getHelmet() {
+        return getItem(inv.getHelmet());
+    }
 
-	@Override
-	public Optional<ItemStack> getLegging() {
-		return getItem(inv.getLeggings());
-	}
+    @Override
+    public void setHelmet(@Nullable ItemStack item) {
+        inv.setHelmet(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
 
-	@Override
-	public Optional<ItemStack> getBoots() {
-		return getItem(inv.getBoots());
-	}
-	
-	@Override
-	public boolean contains(Material type) {
-		return inv.contains((org.bukkit.Material) type.getDefault());
-	}
+    @Override
+    public Optional<ItemStack> getChestplate() {
+        return getItem(inv.getChestplate());
+    }
+
+    @Override
+    public void setChestplate(@Nullable ItemStack item) {
+        inv.setChestplate(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
+
+    @Override
+    public Optional<ItemStack> getLegging() {
+        return getItem(inv.getLeggings());
+    }
+
+    @Override
+    public void setLegging(@Nullable ItemStack item) {
+        inv.setLeggings(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+    }
+
+    @Override
+    public Optional<ItemStack> getBoots() {
+        return getItem(inv.getBoots());
+    }
+
+    @Override
+    public boolean contains(Material type) {
+        return inv.contains((org.bukkit.Material) type.getDefault());
+    }
 }

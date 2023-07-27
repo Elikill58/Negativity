@@ -93,6 +93,7 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, AlertHolder nh) {
 		Player cible = nh.getCible();
 		if (m.equals(Materials.ARROW))
+
 			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, cible);
 		else if (m.equals(Materials.BONE)) {
 			NegativityAccount account = NegativityAccount.get(cible.getUniqueId());

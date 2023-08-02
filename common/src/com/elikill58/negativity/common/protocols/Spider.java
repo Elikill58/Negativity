@@ -24,7 +24,7 @@ public class Spider extends Cheat {
 		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE, SpiderData::new);
 	}
 
-	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA,
+	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.NO_ON_BEDROCK, CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA,
 			CheckConditions.NO_LIQUID_AROUND, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NO_USE_TRIDENT,
 			CheckConditions.NO_USE_SLIME, CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {

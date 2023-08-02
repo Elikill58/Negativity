@@ -132,7 +132,7 @@ public class Fly extends Cheat implements Listeners {
 			}
 		}
 		if ((onGround && data.wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle() || !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent()
-				|| isInWater || isOnWater || e.getTo().getBlockChecker(1.5).has("FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED", "WEB", "SNOW"))
+				|| isInWater || isOnWater || e.getTo().getBlockChecker(1.5).has("FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED", "WEB", "SNOW", "COBWEB"))
 			data.flyMove.clear();
 		else
 			data.flyMove.add(d);

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.alerts.hook;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -50,13 +51,15 @@ public class TimeAlertSender extends AlertSender {
 	public void stop() {
 		if(task != null)
 			task.cancel();
+		task = null;
 	}
 	
 	@Override
 	public void config(Configuration config) {
+		stop();
 		time = config.getInt("value", getDefaultValue());
 		task = Adapter.getAdapter().getScheduler().runRepeating(() -> {
-			NegativityPlayer.getAllPlayers().forEach((uuid, np) -> {
+			new HashMap<>(NegativityPlayer.getAllPlayers()).forEach((uuid, np) -> {
 				for(PlayerCheatAlertEvent alert : new ArrayList<>(np.getAlertForAllCheat()))
 					Negativity.sendAlertMessage(np, alert);
 			});

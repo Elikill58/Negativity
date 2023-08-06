@@ -313,6 +313,10 @@ public class UniversalUtils {
 	}
 
 	public static boolean isValidName(String name) {
+		if(name.charAt(0) == '.' || name.charAt(0) == '*')
+			name = name.substring(1);
+		if(name.charAt(name.length() - 1) == '.' || name.charAt(name.length() - 1) == '*')
+			name = name.substring(0, name.length() - 1);
 		return name.matches("[0-9A-Za-z-_*]{3," + name.length() + "}");
 	}
 

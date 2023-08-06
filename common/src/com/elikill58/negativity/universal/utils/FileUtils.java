@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -8,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.MessageDigest;
+import java.util.Formatter;
 
 public class FileUtils {
 
@@ -28,6 +31,24 @@ public class FileUtils {
 		}
 
 		return Files.walkFileTree(originalDir, new DirectoryMover(originalDir, destinationDir));
+	}
+
+	public static String getHashSHA256(File file) throws Exception {
+		return getHash(file, "SHA-256");
+	}
+
+	public static String getHash(File file, String algo) throws Exception {
+		MessageDigest messageDigest = MessageDigest.getInstance(algo);
+		messageDigest.reset();
+		messageDigest.update(Files.readAllBytes(file.toPath()));
+		byte[] digest = messageDigest.digest();
+		StringBuilder sb = new StringBuilder(digest.length * 2);
+		try (Formatter formatter = new Formatter(sb)) {
+			for (byte b : digest) {
+				formatter.format("%02x", b);
+			}
+		}
+		return sb.toString();
 	}
 
 	private static final class DirectoryCleaner extends SimpleFileVisitor<Path> {

@@ -3,13 +3,7 @@
 #                            Negativity                           #
 #                      AntiCheat by Elikill58                     #
 #                                                                 #
-#              If you have a problem or a suggestion,             #
-#                    You can contact me on:                       #
-#                  - Discord: @Elikill58#0743                     #
-#       - my Discord server: https://discord.gg/KHRVTX2           #
-#               - Mail: arpetzouille@gmail.com                    #
-#                   - SpigotMC: Elikill58                         #
-#                  - Minecraft.fr: Elikill                        #
+#                       NO LONGER SUPPORTED                       #
 #                                                                 #
 ###################################################################
 
@@ -24,14 +18,6 @@ commands:
   
   # Enable /nreport: (Alias: /report)
   report: true
-
-  # Enable /nban: (Alias: /ban)
-  ban: false
-  # ^ YOU MIGHT WANT THIS ON!
-
-  # Enable /nunban (Alias: /unban)
-  unban: false
-  # ^ YOU MIGHT WANT THIS ON!
 
   # Enable /nkick: (Alias: /kick)
   kick: true
@@ -67,7 +53,6 @@ Database:
 
 inventory:
   alerts:
-
     no_started_verif_cheat: false # Don't see if the player isn't analyse for this cheat
 
     # Don't send alerts for inactive cheats
@@ -153,66 +138,8 @@ Permissions:
     all:
       # Immune to all cheats
       default: "negativity.bypass.all"
-    airplace:
-      default: "negativity.bypass.airplace"
-    forcefield:
-      default: "negativity.bypass.forcefield"
-    fastplace:
-      default: "negativity.bypass.fastplace"
-    speed:
-      default: "negativity.bypass.speed"
-    autoclick:
-      default: "negativity.bypass.autoclick"
-    fly:
-      default: "negativity.bypass.fly"
-    antipotion:
-      default: "negativity.bypass.antipotion"
-    fasteat:
-      default: "negativity.bypass.fasteat"
-    regen:
-      default: "negativity.bypass.regen"
-    jesus:
-      default: "negativity.bypass.jesus"
-    nofall:
-      default: "negativity.bypass.nofall"
-    blink:
-      default: "negativity.bypass.blink"
-    spider:
-      default: "negativity.bypass.spider"
-    fastbow:
-      default: "negativity.bypass.fastbow"
-    scaffold:
-      default: "negativity.bypass.scaffold"
-    step:
-      default: "negativity.bypass.step"
-    noslowdown:
-      default: "negativity.bypass.noslowdown"
-    fastladder:
-      default: "negativity.bypass.fastladder"
-    phase:
-      default: "negativity.bypass.phase"
-    autosteal:
-      default: "negativity.bypass.autosteal"
-    nuker:
-      default: "negativity.bypass.nuker"
-    airjump:
-      default: "negativity.bypass.airjump"
-    chat:
-      default: "negativity.bypass.chat"
-    noweb:
-      default: "negativity.bypass.noweb"
-    critical:
-      default: "negativity.bypass.critical"
-    inventorymove:
-      default: "negativity.bypass.inventorymove"
-    faststairs:
-      default: "negativity.bypass.faststairs"
-    nopitchlimit:
-      default: "negativity.bypass.nopitchlimit"
-    timer:
-      default: "negativity.bypass.timer"
-    pingspoof:
-      default: "negativity.bypass.pingspoof"
+    somecheat:
+      default: "negativity.bypass.somecheat"
 
 Translation:
   active: false # enable or disable per-player translation with /nlang
@@ -275,6 +202,12 @@ alert:
 ban:
   # Enable auto-banning players
   active: false
+
+  # Enable /nban: (Alias: /ban)
+  ban-command-enabled: false
+
+  # Enable /nunban (Alias: /unban)
+  unban-command-enabled: false
 
   # Processors manage how bans are stored. Only one processor can be used at the time.
   # Available processors :

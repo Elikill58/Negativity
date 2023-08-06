@@ -367,7 +367,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand banCmd = getCommand("nban");
-		if (commandSection != null && !commandSection.getBoolean("ban", true))
+		if (getConfig().getBoolean("ban.ban-command-enabled", false))
 			unRegisterBukkitCommand(banCmd);
 		else {
 			banCmd.setAliases(Arrays.asList("ban", "negban"));
@@ -376,7 +376,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand unbanCmd = getCommand("nunban");
-		if (commandSection != null && !commandSection.getBoolean("unban", true))
+		if (getConfig().getBoolean("ban.unban-command-enabled", false))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
 			unbanCmd.setAliases(Arrays.asList("unban", "negunban"));

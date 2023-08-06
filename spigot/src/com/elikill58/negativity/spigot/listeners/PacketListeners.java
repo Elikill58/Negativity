@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +15,10 @@ import io.netty.channel.Channel;
 
 public class PacketListeners extends NettyPacketListener implements Listener {
 
+	public PacketListeners() {
+		Bukkit.getOnlinePlayers().stream().map(SpigotEntityManager::getPlayer).forEach(this::join);
+	}
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();

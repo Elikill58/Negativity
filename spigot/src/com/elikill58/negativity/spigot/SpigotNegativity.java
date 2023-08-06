@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
@@ -210,6 +211,8 @@ public class SpigotNegativity extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Negativity.closeNegativity();
+		PacketListeners l = new PacketListeners();
+		Bukkit.getOnlinePlayers().stream().map(SpigotEntityManager::getPlayer).forEach(l::left);
 	}
 
 	public static SpigotNegativity getInstance() {

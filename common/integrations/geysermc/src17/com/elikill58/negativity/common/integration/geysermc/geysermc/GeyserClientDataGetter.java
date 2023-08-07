@@ -14,8 +14,6 @@ import com.elikill58.negativity.universal.bedrock.data.BedrockClientDataGetter;
 
 public class GeyserClientDataGetter implements BedrockClientDataGetter {
 	
-	private boolean shouldCheckFloodgate = false;
-	
 	@Override
 	public @Nullable BedrockClientData getClientData(UUID uuid) {
 		GeyserSession session = GeyserImpl.getInstance().connectionByUuid(uuid);
@@ -24,14 +22,13 @@ public class GeyserClientDataGetter implements BedrockClientDataGetter {
 		org.geysermc.geyser.session.auth.BedrockClientData data = session.getClientData();
 		Adapter ada = Adapter.getAdapter();
 		String osName = null;
-		if(shouldCheckFloodgate && ada.hasPlugin("floodgate"))
+		if(ada.hasPlugin("floodgate"))
 			osName = FloodgateApi.getInstance().getPlayer(uuid).getDeviceOs().name();
 		else {
 			try {
 				osName = data.getDeviceOs().name();
 			} catch (LinkageError e) {
 				ada.getLogger().warn("LinkageError between GeyserMC and Floodgate. Trying to fix ...");
-				shouldCheckFloodgate = true;
 			}
 		}
 		if(osName == null) {

@@ -69,10 +69,10 @@ public class Chat extends Cheat {
 		String msg = e.getMessage();
 		PlayerChatEvent lastChat = data.lastChatEvent;
 		if (lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage())
-				&& (System.currentTimeMillis() - data.timeLastMessage < 5000)) {
+				&& (System.currentTimeMillis() - data.timeLastMessage < 5000) && (data.amountSameMessage + 1 >= getConfig().getInt("checks.spam.amount"))) {
 			data.amountSameMessage++;
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(95 + data.amountSameMessage), "spam",
+					UniversalUtils.parseInPorcent(90 + data.amountSameMessage), "spam",
 					"Spam " + lastChat.getMessage() + " " + data.amountSameMessage + " times",
 					hoverMsg("spam", "%msg%", lastChat.getMessage(), "%nb%", data.amountSameMessage));
 			if (mayCancel && isSetBack())

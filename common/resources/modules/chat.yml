@@ -42,6 +42,8 @@ checks:
   # Spam a message
   spam:
     active: true
+    # Amount before alerting
+    amount: 2
   # Disable insults
   insult:
     active: true

@@ -196,6 +196,8 @@ public class NegativityPlayer {
 		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
+		if (p.getGameMode().equals(GameMode.SPECTATOR))
+			return false;
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return false;
@@ -238,6 +240,8 @@ public class NegativityPlayer {
 		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return "Low TPS";
 		Player p = getPlayer();
+		if (p.getGameMode().equals(GameMode.SPECTATOR))
+			return "Spectating";
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return "Should ignore movement";

@@ -28,7 +28,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	}
 
 	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA,
-			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_ON_BEDROCK })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np, InventoryMoveData data) {
 		if (e.isMoveLook() || !data.active)
 			return;

@@ -22,10 +22,10 @@ public class Sneak extends Cheat {
 		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER, SneakData::new);
 	}
 
-	@Check(name = "sneak-sprint", description = "Sneak while sprinting", conditions = { CheckConditions.SURVIVAL, CheckConditions.SPRINT, CheckConditions.NO_FLY })
+	@Check(name = "sneak-sprint", description = "Sneak while sprinting", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np, SneakData data) {
 		Player p = e.getPlayer();
-		if (data.wasSneaking) {
+		if (data.wasSneaking && p.isSprinting()) {
 			double distance = e.getFrom().distanceXZ(e.getTo()) / 2;
 			if(p.getWalkSpeed() <= distance && p.getVelocity().length() < 0.5 && p.getFallDistance() < 1) { // high distance and no velocity
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)),

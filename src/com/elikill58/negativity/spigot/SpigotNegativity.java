@@ -138,23 +138,14 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("");
 			getLogger().info(" > Thanks for downloading Negativity :)");
 			getLogger().info("I'm trying to make the best anti-cheat as possible.");
-			if(System.currentTimeMillis() >= 1693526399999l) { // already dropped
-				getLogger().severe("WARN: This plugin has no longer support since 01/09/2023.");
-			} else {
-				getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
-				getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
-				getLogger().warning("WARN: Support for free Negativity will be dropped in 01/09/2023.");
-			}
+			getLogger().severe("WARN: This plugin has no longer support since 01/09/2023.");
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		} else {
-			if(System.currentTimeMillis() >= 1693526399999l) {
-				getLogger().warning("This plugin has no longer support since 01/09/2023. Only the premium version is now updated.");
-				getLogger().warning("You can find it at: https://www.spigotmc.org/resources/86874.");
-			} else
-				getLogger().warning("WARN: Support for free Negativity will be dropped in 01/09/2023.");
+			getLogger().warning("This plugin has no longer support since 01/09/2023. Only the premium version is now updated.");
+			getLogger().warning("You can find it at: https://www.spigotmc.org/resources/86874.");
 		}
 		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();

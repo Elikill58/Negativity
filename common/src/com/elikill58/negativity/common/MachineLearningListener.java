@@ -21,7 +21,7 @@ public class MachineLearningListener {
 				File modelFile = getModelFile();
 				if(modelFile.exists()) {
 					String sha = FileUtils.getHashSHA256(modelFile);
-					String real = UniversalUtils.getContentFromURL("https://api.negativity.fr").orElse("nothing");
+					String real = UniversalUtils.getContentFromURL("https://api.negativity.fr/ml").orElse("nothing");
 					if(real.equalsIgnoreCase("nothing") || sha.equalsIgnoreCase(real))
 						return; // no need to change it
 				}

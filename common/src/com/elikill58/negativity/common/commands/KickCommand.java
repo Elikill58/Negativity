@@ -20,7 +20,7 @@ public class KickCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
-		if(!Perm.hasPerm(sender, Perm.MOD)) {
+		if (!Perm.hasPerm(sender, Perm.MOD)) {
 			Messages.sendMessage(sender, "not_permission");
 			return false;
 		}
@@ -28,10 +28,10 @@ public class KickCommand implements CommandListeners, TabListeners {
 			Messages.sendMessage(sender, "kick.help");
 			return false;
 		}
-
-		Player target = Adapter.getAdapter().getPlayer(arg[0]);
+		Adapter ada = Adapter.getAdapter();
+		Player target = ada.getPlayer(arg[0]);
 		if (target == null) {
-			for (Player onlinePlayer : Adapter.getAdapter().getOnlinePlayers()) {
+			for (Player onlinePlayer : ada.getOnlinePlayers()) {
 				if (arg[0].equalsIgnoreCase(onlinePlayer.getName())) {
 					target = onlinePlayer;
 					break;

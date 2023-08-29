@@ -164,6 +164,11 @@ public class Negativity {
 					// don't run set back options because player will be offline
 				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
+				for (Player pl : Adapter.getAdapter().getOnlinePlayers()) {
+					if (Perm.hasPerm(pl, Perm.MOD)) {
+						Messages.sendMessage(pl, "kick.well_kick", "%name%", p.getName(), "%reason%", np.getReason(c));
+					}
+				}
 				WebhookManager.send(new WebhookMessage(WebhookMessageType.KICK, p, "Negativity", System.currentTimeMillis(), "%reason%", np.getReason(c)));
 				return false;
 			}

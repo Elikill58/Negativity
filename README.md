@@ -1,43 +1,36 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.8.8 to 1.20) (*also works on fork of Spigot*).
-It is also compatible with **Bungeecord** and **Velocity**.
+Negativity is a Minecraft **AntiCheat** plugin designed for **Spigot (versions 1.8.8 to 1.20)** and is also compatible with **forks of Spigot**. It can be used with both **Bungeecord** and **Velocity**.
 
-*(note: Spigot 1.7.10 and Sponge are not compatible with Negativity after the 1.13.)*
+Please note that Negativity is not compatible with Spigot 1.7.10 and Sponge versions after 1.13.
 
-You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
+Even if you plan to use it on your proxy server, you still need to install the plugin on your Spigot or Sponge server.
 
 ## Informations
 
-If you need help, you can: Contact me via Discord private messages (`Elikill58`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
+If you need assistance, you can reach out to me through Discord private messages (`Elikill58`) or join my Discord server ([join link](https://discord.gg/KHRVTX2)).
+You can also provide suggestions and report bugs through the [issue tracker](https://github.com/Elikill58/Negativity/issues) on the repository.
 
-Suggestions and bug reports can also be filled in [this repository issue tracker](https://github.com/Elikill58/Negativity/issues).
+A premium version of the plugin is available. You can download it from [here](https://www.spigotmc.org/resources/86874/). You can learn about the differences between the free and premium versions [here](https://github.com/Elikill58/Negativity/wiki/V1-and-V2-:-Description,-differencies-and-explainations).
 
-A premium version is available. See [here](https://www.spigotmc.org/resources/86874/) for download. You can read all differencies [here](https://github.com/Elikill58/Negativity/wiki/V1-and-V2-:-Description,-differencies-and-explainations).
+## Installation Guide
 
-## How to install ?
+For detailed instructions on how to install Negativity on various platforms (Spigot (including forks), Sponge, Bungeecord, Velocity), you can refer to the complete installation guide available on the [wiki](https://github.com/Elikill58/Negativity/wiki/Installation).
 
-A complete wiki explain [how to install](https://github.com/Elikill58/Negativity/wiki/Installation) it on all platform (Spigot, Sponge, Bungeecord, Velocity)
+## Testing Before Buying
 
-## I want to test it before download !
+If you want to test the plugin before buying, you can try it out on the server **play.negativity.fr**. Please note that the server may be offline at times.
 
-You can check it on **play.negativity.fr** (server in 1.19). Warn: it can be offline.
+## Detected Cheats
 
-## What are the detected cheat ?
+A comprehensive list of all the cheats that Negativity can detect is available on the [wiki](https://github.com/Elikill58/Negativity/wiki/Cheat). This list provides detailed explanations of what each cheat does.
 
-We made a wiki for all [detected cheat](https://github.com/Elikill58/Negativity/wiki/Cheat) which explain what every hack does.
+## Detection and Checks
 
-## How detection works ? What do you check ?
+When enabled, Negativity performs various checks on player movements, actions, and packets to detect cheats. However, if you do not require cheat detection, you can disable it to save resources.
 
-If they are enabled, I'm checking a lot of things : movement, action, packet ...
-
-Else, I'm doing anything. So, if you don't need detection, disable it and you will keep resources.
-
-## And for bad connection ? TPS drop ?
-
-By default, if the player have a **ping higher than 200 ms**, it will not create alert.
-
-Also by default, if the server is **less than 19 TPS**, alert will be disabled
+## Bad Connection and TPS Drop
+By default, if a player's ping **exceeds 200 ms**, Negativity will not create an alert. Additionally, if the server's TPS (Ticks Per Second) **drops below 19**, alerts will be disabled.
 
 ## Translation
 
@@ -60,7 +53,7 @@ We support a lot of languages :
 - **Polish** (*pl_PL*) By Tytano#5336
 - **Romanian** (*ro_RO*) By @Edward205
 - **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
-- **Hungarian** (*hu_HU*) By HasX#1966
+- **Hungarian** (*hu_HU*) By @hasx
 - **Korean** (*ko_KR*) By soshimee#4397
 - **Indonesian** (*id_ID*) By Dave9123#0757
 - **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498
@@ -68,16 +61,11 @@ We support a lot of languages :
 - **Turkish** (*tr_TR*) By 'Eternal The God 🕶#0707
 - **Japanese** (*ja_JP*) By RamuneRemonedo
 
-To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
+To change the language, you can use the "/nlang" command or modify the "Translation.default" setting in the configuration. If you find a grammar error or would like to contribute your own translation, you can contact me on Discord.
 
-You find a grammar error on your language ? You want to add your own ? Contact me on discord (link below) (For developer, you can set your own translation system)
-
-## I don't understand the config, HELP !
-
-For general config, [click here](https://github.com/Elikill58/Negativity/wiki/Configurations).
-
-For ban config, [click here](https://github.com/Elikill58/Negativity/wiki/Bans).
-
-For permissions config, [click here](https://github.com/Elikill58/Negativity/wiki/Permissions).
-
-For help with commands, [click here](https://github.com/Elikill58/Negativity/wiki/Commands).
+## Configuration Assistance
+If you need help understanding the configuration files, you can refer to the following resources:
+- General Configuration: [click here](https://github.com/Elikill58/Negativity/wiki/Configurations).
+- Ban Configuration: [click here](https://github.com/Elikill58/Negativity/wiki/Bans).
+- Permissions Configuration: [click here](https://github.com/Elikill58/Negativity/wiki/Permissions).
+- Commands information: [click here](https://github.com/Elikill58/Negativity/wiki/Commands).

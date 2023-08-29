@@ -23,14 +23,12 @@ public class Stats {
     }
     
 	private static void sendUpdateStats(String url, String post) {
-		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET || UniversalUtils.TPS_DROP) {
-			Adapter.getAdapter().getLogger().info("No internet " + STATS_IN_MAINTENANCE);
+		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET || UniversalUtils.TPS_DROP)
 			return;
-		}
 		Adapter ada = Adapter.getAdapter();
 		Runnable task = () -> {
 			try {
-				String end = UniversalUtils.getContentFromURL(SITE_FILE + "/" + url, post + "&type=" + ada.getName() + "&version=" + ada.getPluginVersion()).orElse(null);
+				String end = UniversalUtils.getContentFromURL(SITE_FILE + "/" + url, post + "&type=" + ada.getName() + "&version=" + ada.getPluginVersion() + "&version_mc=" + ada.getVersion()).orElse(null);
 				if(end == null) {
 					STATS_IN_MAINTENANCE = true;
 				}

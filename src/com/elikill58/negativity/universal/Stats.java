@@ -3,76 +3,46 @@ package com.elikill58.negativity.universal;
 import java.util.HashMap;
 import java.util.Locale;
 
+import com.elikill58.deps.json.JSONObject;
+import com.elikill58.deps.json.parser.JSONParser;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Stats {
 
-	//private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
-	
-    private static final String SITE_FILE = "https://api.eliapp.fr/negativity.php";
+    private static final String SITE_FILE = "https://api.negativity.fr/stats";
     public static boolean STATS_IN_MAINTENANCE = false;
-    private static final HashMap<Cheat, CheatStats> CHEAT_STATS = new HashMap<>();
+    private static final HashMap<Cheat, Integer> CHEAT_STATS = new HashMap<>();
 
-    public static void updateStats(StatsType type, Object... value) {
-    	updateStats(false, type, value);
-    }
-
-    public static void updateStats(boolean forceSync, StatsType type, Object... value) {
-    	if(!Adapter.getAdapter().getConfig().getBoolean("stats") || STATS_IN_MAINTENANCE)
-    		return;
-    	String post = "";
-    	switch (type) {
-		case BAN:
-			post = "&value=" + value[0];
-			break;
-		case CHEAT:
-			//post = "&hack=" + value[0] + "&reliability=" + value[1] + "&amount=" + (value.length > 2 ? value[2] : "1");
-			CHEAT_STATS.computeIfAbsent((Cheat) value[0], (c) -> new CheatStats()).add((int) value[1], value.length > 2 ? (int) value[2] : 1);
-			return;
-		case ONLINE:
-			post = "&value=" + value[0];
-			break;
-		case PORT:
-			post = "&value=" + value[0];
-			break;
-		}
-    	sendUpdateStats(forceSync, type, "platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + post);
+    public static void updateMessage(NegativityPlayer player, String message) {
+    	sendUpdateStats("message", "author_uuid=" + player.getUUID() + "&author_name=" + player.getName() + "&message=" + message);
     }
     
-	private static void sendUpdateStats(boolean forceSync, StatsType type, String post) {
-		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET)
+    public static void updateCheat(Cheat c, int amount) {
+    	CHEAT_STATS.put(c, CHEAT_STATS.getOrDefault(c, 0) + amount);
+    }
+    
+	private static void sendUpdateStats(String url, String post) {
+		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET || UniversalUtils.TPS_DROP) {
+			Adapter.getAdapter().getLogger().info("No internet " + STATS_IN_MAINTENANCE);
 			return;
+		}
 		Adapter ada = Adapter.getAdapter();
-		final LoggerAdapter log = ada.getLogger();
 		Runnable task = () -> {
 			try {
-				String end = UniversalUtils.getContentFromURL(SITE_FILE, post).orElse(null);
+				String end = UniversalUtils.getContentFromURL(SITE_FILE + "/" + url, post + "&type=" + ada.getName() + "&version=" + ada.getPluginVersion()).orElse(null);
 				if(end == null) {
-					log.info("Error while updating stats, it seems to be a firewall that blocking the stats.");
 					STATS_IN_MAINTENANCE = true;
-				} else if (!end.equalsIgnoreCase("")) {
-					log.info("Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
-					log.info(end);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		};
-		if(forceSync)
-			task.run();
-		else
-			ada.runAsync(task);
-		/*try {
-			THREAD_POOL.submit(task);
-		} catch (RejectedExecutionException e) {
-			log.error("Could not update stats: " + e.getMessage());
-		}*/
+		ada.runAsync(task);
 	}
 	
 	public static void update() {
-		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(false, StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase(Locale.ROOT) + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
+		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats("cheat", "cheat_name=" + c.getKey().toLowerCase(Locale.ROOT) + "&amount=" + cs));
 		CHEAT_STATS.clear();
 	}
 	
@@ -86,36 +56,18 @@ public class Stats {
 				if(!UniversalUtils.HAVE_INTERNET)
 					STATS_IN_MAINTENANCE = true;
 				else {
-					String result = UniversalUtils.getContentFromURL("https://api.eliapp.fr/status.php?plateforme=negativity").orElse("off");
-					STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
-					if (STATS_IN_MAINTENANCE)
-						Adapter.getAdapter().getLogger().info("Website is in maintenance mode.");
+					String result = UniversalUtils.getContentFromURL("https://api.negativity.fr/status").orElse(null);
+					if(result == null)
+						STATS_IN_MAINTENANCE = true;
+					else {
+						JSONObject json = (JSONObject) new JSONParser().parse(result);
+						STATS_IN_MAINTENANCE = !json.get("status").toString().equalsIgnoreCase("ok");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
-		/*try {
-			THREAD_POOL.submit(task);
-		} catch (RejectedExecutionException e) {
-			Adapter.getAdapter().getLogger()
-					.error("Could not load stats: " + e.getMessage());
-			e.printStackTrace();
-		}*/
-	}
-	
-	public static enum StatsType {
-		ONLINE("online"), PORT("port"), CHEAT("cheat"), BAN("ban");
-
-		private String key;
-
-		private StatsType(String key) {
-			this.key = key;
-		}
-
-		public String getKey() {
-			return key;
-		}
 	}
 	
 	public static class CheatStats {

@@ -168,7 +168,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean hasDetectionActive(Cheat c) {
-		if (!c.isActive() || SpigotNegativity.timeDrop)
+		if (!c.isActive() || UniversalUtils.TPS_DROP)
 			return false;
 		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
@@ -193,7 +193,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public String getWhyDetectionNotActive(Cheat c) {
 		if (!c.isActive())
 			return "Cheat disabled";
-		if (SpigotNegativity.timeDrop)
+		if (UniversalUtils.TPS_DROP)
 			return "TPS drop";
 		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return "Player invincibility";

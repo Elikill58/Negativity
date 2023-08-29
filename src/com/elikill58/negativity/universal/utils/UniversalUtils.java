@@ -43,7 +43,7 @@ public class UniversalUtils {
 
 	public static final String PLUGIN_VERSION = "1.13.1";
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	public static boolean HAVE_INTERNET = true;
+	public static boolean HAVE_INTERNET = true, TPS_DROP = false;
 	private static boolean DEBUG = false;
 
 	public static boolean isDebugMode() {

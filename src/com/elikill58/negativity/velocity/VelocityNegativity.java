@@ -11,7 +11,6 @@ import com.elikill58.deps.md_5.config.ConfigurationProvider;
 import com.elikill58.deps.md_5.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.VelocityAdapter;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
@@ -83,19 +82,12 @@ public class VelocityNegativity {
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new VelocityPermissionChecker());
 
 		Stats.loadStats();
-		Stats.updateStats(StatsType.ONLINE, 1 + "");
-		try {
-			Stats.updateStats(StatsType.PORT, getServer().getBoundAddress().getPort() + "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
     	getLogger().info("Negativity enabled");
 	}
 
     @Subscribe
     public void onProxyDisable(ProxyShutdownEvent e) {
 		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
 
     public final InputStream getResourceAsStream(final String name) {

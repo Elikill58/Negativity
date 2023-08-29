@@ -17,6 +17,7 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -30,6 +31,7 @@ public class ChatProtocol extends Cheat implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		Stats.updateMessage(np, e.getMessage());
 		if (!np.hasDetectionActive(this))
 			return;
 		String msg = e.getMessage();

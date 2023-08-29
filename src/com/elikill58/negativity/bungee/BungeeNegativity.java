@@ -1,16 +1,13 @@
 package com.elikill58.negativity.bungee;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.LinkedHashMap;
 import java.util.StringJoiner;
 
 import com.elikill58.deps.md_5.config.ConfigurationProvider;
 import com.elikill58.deps.md_5.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -77,18 +74,10 @@ public class BungeeNegativity extends Plugin {
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BungeePermissionChecker());
 
 		Stats.loadStats();
-		Stats.updateStats(StatsType.ONLINE, 1 + "");
-		try {
-			Stats.updateStats(StatsType.PORT, ((LinkedHashMap<?, ?>) ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
-							.getList("listeners").get(0)).get("query_port") + "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
 	public void onDisable() {
 		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
 }

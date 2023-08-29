@@ -73,7 +73,6 @@ import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
@@ -98,7 +97,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, timeDrop = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, isCraftBukkit = false, isMagma = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
@@ -198,8 +197,6 @@ public class SpigotNegativity extends JavaPlugin {
 		});
 		getServer().getScheduler().runTaskAsynchronously(this, () -> {
 			Stats.loadStats();
-			Stats.updateStats(StatsType.ONLINE, 1 + "");
-			Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 		});
 		if(getConfig().getBoolean("stats", true))
 			getServer().getScheduler().runTaskTimerAsynchronously(this, Stats::update, 20 * 60 * 5, 20 * 60 * 5);
@@ -312,10 +309,10 @@ public class SpigotNegativity extends JavaPlugin {
 				try {
 					Object lastTime = fieldLastTimeTps.get(mcServer);
 					double i = ((double) Utils.sumTps((long[]) lastTime)) * 1.0E-6D;
-					if(timeDrop && i < 50) { // if disabled and need to be enabled
-						timeDrop = false;
-					} else if(!timeDrop && i > 50) { // if disabled but need to be
-						timeDrop = true;
+					if(UniversalUtils.TPS_DROP && i < 50) { // if disabled and need to be enabled
+						UniversalUtils.TPS_DROP = false;
+					} else if(!UniversalUtils.TPS_DROP && i > 50) { // if disabled but need to be
+						UniversalUtils.TPS_DROP = true;
 						Adapter.getAdapter().debug("Disabling detection because of TPS lagspike: " + i);
 					}
 				} catch (Exception e) {
@@ -409,7 +406,6 @@ public class SpigotNegativity extends JavaPlugin {
 			SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
 		}
 		Database.close();
-		Stats.updateStats(true, StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
 		packetTimer.cancel();
 		if(runSpawnFakePlayer != null)
@@ -540,7 +536,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability) != null) {
 			return false;
 		}
-		Stats.updateStats(StatsType.CHEAT, c, reliability, amount);
+		Stats.updateCheat(c, amount);
 		if (c.allowKick() && ((long) (oldWarn / c.getAlertToKick())) < ((long) (np.getWarn(c) / c.getAlertToKick()))) { // if reach new alert state
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			callSyncEvent(kick);

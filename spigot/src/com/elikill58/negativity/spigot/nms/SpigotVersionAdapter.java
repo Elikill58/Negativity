@@ -20,6 +20,8 @@ import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
+import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -128,6 +130,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 
 	public double[] getTps() {
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.FOLIA)) {
+			try {
+				return (double[]) Bukkit.class.getDeclaredMethod("getTPS").invoke(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		try {
 			return (double[]) recentTpsField.get(dedicatedServer);
 		} catch (Exception e) {

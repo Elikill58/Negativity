@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -39,15 +40,17 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	private static final SubPlatform platform = SubPlatform.getSubPlatform();
+
 	public static SubPlatform getSubPlatform() {
 		return platform;
 	}
+
 	public static String CHANNEL_NAME_FML = "";
-	
+
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
-		
+
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath(), "config.yml").exists()) {
 			// show message before setting adapter (which create config file)
@@ -72,8 +75,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Negativity.loadNegativity();
 
-		new Metrics(this, 1743)
-				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		new Metrics(this, 1743).addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersListeners(), this);
@@ -82,20 +84,21 @@ public class SpigotNegativity extends JavaPlugin {
 		pm.registerEvents(new EntityListeners(), this);
 		pm.registerEvents(new CommandsListeners(), this);
 		pm.registerEvents(new PacketListeners(), this);
-		if(v.isNewerOrEquals(Version.V1_9))
+		if (v.isNewerOrEquals(Version.V1_9))
 			pm.registerEvents(new ElytraListeners(), this);
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelListeners channelListeners = new ChannelListeners();
-		//loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
+		// loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID,
+		// channelListeners);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML = v.isNewerOrEquals(Version.V1_13) ? "fml:hs" : "FML|HS", channelListeners);
 		messenger.registerOutgoingPluginChannel(this, "BungeeCord");
-		
+
 		loadCommand();
-		
+
 		NegativityAccountStorage.setDefaultStorage("file");
-		
-		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+
+		Adapter.getAdapter().getScheduler().runRepeatingAsync(() -> {
 			try {
 				double i = SpigotVersionAdapter.getVersionAdapter().getAverageTps() * 1.0E-6D;
 				if (Negativity.tpsDrop && i < 50) { // if disabled and need to be enabled
@@ -107,9 +110,9 @@ public class SpigotNegativity extends JavaPlugin {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}, 1, 1);
+		}, Duration.ofMillis(50), Duration.ofMillis(50), "negativity-tps");
 	}
-	
+
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelListeners event) {
 		if (!messenger.getOutgoingChannels().contains(channel))
 			messenger.registerOutgoingPluginChannel(this, channel);
@@ -154,9 +157,7 @@ public class SpigotNegativity extends JavaPlugin {
 			unRegisterBukkitCommand(modCmd);
 		else
 			modCmd.setExecutor(command);
-		
-		
-		
+
 		Configuration banConfig = BanManager.getBanConfig().getSection("commands");
 		PluginCommand banCmd = getCommand("nban");
 		if (!banConfig.getBoolean("ban", true))
@@ -176,7 +177,6 @@ public class SpigotNegativity extends JavaPlugin {
 			unbanCmd.setTabCompleter(command);
 		}
 
-		
 		Configuration warnConfig = BanManager.getBanConfig().getSection("commands");
 		PluginCommand warnCmd = getCommand("nwarn");
 		if (!warnConfig.getBoolean("warn", true))
@@ -186,7 +186,6 @@ public class SpigotNegativity extends JavaPlugin {
 			warnCmd.setExecutor(command);
 			warnCmd.setTabCompleter(command);
 		}
-		
 
 		PluginCommand clearCheatCmd = getCommand("nclearchat");
 		if (!commandSection.getBoolean("chat.clear", true))

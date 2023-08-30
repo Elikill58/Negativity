@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 import io.netty.buffer.ByteBuf;
@@ -49,12 +50,18 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 				ByteBuf msg = ((ByteBuf) obj).copy();
 				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
 				if(packet != null) {
-					PacketPreReceiveEvent event = new PacketPreReceiveEvent(packet, p);
-					EventManager.callEvent(event);
-					if (event.isCancelled())
-						return;
-					super.channelRead(ctx, obj); // call before use
-					getNegativityPlayer().getExecutor().submit(() -> EventManager.callEvent(new PacketReceiveEvent(packet, p)));
+					Adapter.getAdapter().getScheduler().runEntity(p, () -> {
+						PacketPreReceiveEvent event = new PacketPreReceiveEvent(packet, p);
+						EventManager.callEvent(event);
+						if (event.isCancelled())
+							return;
+						try {
+							NettyDecoderHandler.super.channelRead(ctx, obj);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} // call before use
+						EventManager.callEvent(new PacketReceiveEvent(packet, p));
+					});
 				} else
 					super.channelRead(ctx, obj); 
 				msg.release();

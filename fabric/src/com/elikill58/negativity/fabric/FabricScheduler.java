@@ -33,6 +33,11 @@ public class FabricScheduler implements Scheduler {
 	}
 	
 	@Override
+	public void run(Runnable task) {
+		task.run(); // not sure about this
+	}
+	
+	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {
 		schedule(task, delayTicks, intervalTicks, null);
 	}

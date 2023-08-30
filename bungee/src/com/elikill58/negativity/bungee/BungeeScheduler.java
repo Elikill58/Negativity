@@ -23,14 +23,18 @@ public class BungeeScheduler implements Scheduler {
 	}
 
 	@Override
+	public void run(Runnable task) {
+		task.run();
+	}
+
+	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {
 		throw new UnsupportedOperationException("Scheduler runRepeating is not support on bungeecord yet.");
 	}
 
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int delayTicks, int intervalTicks) {
-		return new BungeeRunnableWrapper(
-				scheduler.schedule(plugin, task, toMs(delayTicks), toMs(intervalTicks), TimeUnit.MILLISECONDS));
+		return new BungeeRunnableWrapper(scheduler.schedule(plugin, task, toMs(delayTicks), toMs(intervalTicks), TimeUnit.MILLISECONDS));
 	}
 
 	@Override

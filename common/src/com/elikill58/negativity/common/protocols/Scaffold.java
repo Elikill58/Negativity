@@ -50,7 +50,7 @@ public class Scaffold extends Cheat {
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
 		if (ping > 120)
 			return;
-		Scheduler.getInstance().runDelayed(() -> {
+		Scheduler.getInstance().runEntityDelayed(p, () -> {
 			Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
 			if(BYPASS_TYPES.contains(placed))
 				return;

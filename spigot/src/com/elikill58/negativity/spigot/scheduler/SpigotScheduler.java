@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot;
+package com.elikill58.negativity.spigot.scheduler;
 
 import java.time.Duration;
 import java.util.function.Consumer;
@@ -18,6 +18,11 @@ public class SpigotScheduler implements Scheduler {
 	
 	public SpigotScheduler(Plugin plugin) {
 		this.plugin = plugin;
+	}
+	
+	@Override
+	public void run(Runnable task) {
+		Bukkit.getScheduler().runTask(plugin, task);
 	}
 	
 	@Override

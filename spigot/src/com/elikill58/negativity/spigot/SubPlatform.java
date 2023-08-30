@@ -13,6 +13,13 @@ public enum SubPlatform {
 		}
 	}),
 	SPIGOT("Spigot", () -> false),
+	FOLIA("Folia", () -> {
+		try {
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+			return true;
+		} catch (ClassNotFoundException e) {}
+		return false;
+	}),
 	PAPER("Paper", () -> {
 		try {
 			Class.forName("com.destroystokyo.paper.PaperVersionFetcher");

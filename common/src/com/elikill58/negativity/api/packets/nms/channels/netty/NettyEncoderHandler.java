@@ -46,7 +46,7 @@ public class NettyEncoderHandler extends ChannelOutboundHandlerAdapter {
 		try {
 			if(obj instanceof ByteBuf) { // firstly start running everything for us
 				ByteBuf msg = ((ByteBuf) obj).copy();
-				getNegativityPlayer().getExecutor().submit(() -> {
+				Adapter.getAdapter().getScheduler().runEntity(p, () -> {
 					try {
 						NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "encode");
 						if(packet != null)

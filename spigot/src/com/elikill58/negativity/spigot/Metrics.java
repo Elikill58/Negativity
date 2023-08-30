@@ -48,6 +48,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.elikill58.negativity.universal.Adapter;
+
 public class Metrics {
 
 	private final Plugin plugin;
@@ -93,7 +95,7 @@ public class Metrics {
 		boolean logSentData = config.getBoolean("logSentData", false);
 		boolean logResponseStatusText = config.getBoolean("logResponseStatusText", false);
 		metricsBase = new MetricsBase("bukkit", serverUUID, serviceId, enabled, this::appendPlatformData, this::appendServiceData,
-				submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask), plugin::isEnabled, (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
+				submitDataTask -> Adapter.getAdapter().getScheduler().run(submitDataTask), plugin::isEnabled, (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
 				(message) -> this.plugin.getLogger().log(Level.INFO, message), logErrors, logSentData, logResponseStatusText);
 	}
 

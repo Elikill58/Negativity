@@ -18,6 +18,11 @@ public class VelocityScheduler implements Scheduler {
 		this.plugin = plugin;
 		this.scheduler = plugin.getServer().getScheduler();
 	}
+	
+	@Override
+	public void run(Runnable task) {
+		scheduler.buildTask(plugin, task).schedule();
+	}
 
 	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {

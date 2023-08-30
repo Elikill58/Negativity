@@ -157,7 +157,7 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public void runSync(Runnable call) {
-		pl.getServer().getScheduler().buildTask(pl, call);
+		pl.getServer().getScheduler().buildTask(pl, call).schedule();
 	}
 
 	@Override

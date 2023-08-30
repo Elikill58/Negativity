@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
@@ -173,15 +172,12 @@ public class Negativity {
 				return false;
 			}
 		}
-		if(BanManager.isBanned(np.getUUID())) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
+		Stats.updateCheat(c, (int) amount);
+		if(BanManager.isBanned(np.getUUID()))
 			return false;
-		}
 
-		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability, oldWarn).isSuccess()) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability, oldWarn).isSuccess())
 			return false;
-		}
 		manageAlertCommand(np, type, p, c, reliability);
 		AlertSender.getAlertShower().alert(np, alert);
 		if(c.isSetBack())
@@ -265,7 +261,6 @@ public class Negativity {
 			}
 			if(hasPermPeople) {
 				np.alertNotShowed.remove(c.getKey());
-				Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			}
 		}
 	}

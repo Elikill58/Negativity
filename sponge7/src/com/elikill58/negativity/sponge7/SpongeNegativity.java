@@ -2,7 +2,6 @@ package com.elikill58.negativity.sponge7;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -55,7 +54,6 @@ import com.elikill58.negativity.sponge7.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge7.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -131,8 +129,6 @@ public class SpongeNegativity {
 			fmlChannel.addListener(new FmlRawDataListener());
 		}
 		bungeecordChannel = channelRegistrar.getOrCreateRaw(this, "BungeeCord");
-
-		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
 	}
 
 	public void reloadCommands() {

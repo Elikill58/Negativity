@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -86,7 +85,6 @@ public class VelocityNegativity {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
-		Stats.sendStartupStats(getServer().getBoundAddress().getPort());
 		getLogger().info("Negativity enabled");
 	}
 

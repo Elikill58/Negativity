@@ -27,7 +27,6 @@ import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.database.Database;
@@ -93,8 +92,6 @@ public class SpigotNegativity extends JavaPlugin {
 		messenger.registerOutgoingPluginChannel(this, "BungeeCord");
 		
 		loadCommand();
-		
-		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 		

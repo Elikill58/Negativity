@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
@@ -19,6 +20,7 @@ import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.SanctionnerType;
+import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.AltAccountBan;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -134,5 +136,10 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onLeft(PlayerLeaveEvent e) {
 		WebhookManager.getWebhooks().forEach(w -> w.clean(e.getPlayer()));
+	}
+	
+	@EventListener
+	public void onMessage(PlayerChatEvent e) {
+		Stats.updateMessage(NegativityPlayer.getNegativityPlayer(e.getPlayer()), e.getMessage());
 	}
 }

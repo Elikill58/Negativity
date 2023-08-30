@@ -1,7 +1,6 @@
 package com.elikill58.negativity.sponge;
 
 import java.io.File;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -44,7 +43,6 @@ import com.elikill58.negativity.sponge.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -102,7 +100,6 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
-		Stats.sendStartupStats(Sponge.server().boundAddress().map(InetSocketAddress::getPort).orElse(-1));
 		logger.info("Negativity v{} fully started !", container.metadata().version());
 	}
 	

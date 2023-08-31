@@ -6,9 +6,11 @@ Please note that Negativity is not compatible with Spigot 1.7.10 and Sponge vers
 
 Even if you plan to use it on your proxy server, you still need to install the plugin on your Spigot or Sponge server.
 
+**The free version has no longer support. Only the premium one has**.
+
 ## Informations
 
-If you need assistance, you can reach out to me through Discord private messages (`Elikill58`) or join my Discord server ([join link](https://discord.gg/KHRVTX2)).
+If you need assistance (*except for free version*), you can reach out to me through Discord private messages (`Elikill58`) or join my Discord server ([join link](https://discord.gg/KHRVTX2)).
 You can also provide suggestions and report bugs through the [issue tracker](https://github.com/Elikill58/Negativity/issues) on the repository.
 
 A premium version of the plugin is available. You can download it from [here](https://www.spigotmc.org/resources/86874/). You can learn about the differences between the free and premium versions [here](https://github.com/Elikill58/Negativity/wiki/V1-and-V2-:-Description,-differencies-and-explainations).

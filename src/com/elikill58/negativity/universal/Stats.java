@@ -67,32 +67,4 @@ public class Stats {
 			}
 		});
 	}
-	
-	public static class CheatStats {
-		
-		private int reliability;
-		private int amount;
-
-		public CheatStats() {
-			this(0, 0);
-		}
-		
-		public CheatStats(int reliability, int amount) {
-			this.reliability = reliability;
-			this.amount = amount;
-		}
-		
-		public int getReliability() {
-			return reliability;
-		}
-		
-		public int getAmount() {
-			return amount;
-		}
-		
-		public void add(int reliability, int amount) {
-			this.reliability += reliability;
-			this.amount += amount;
-		}
-	}
 }

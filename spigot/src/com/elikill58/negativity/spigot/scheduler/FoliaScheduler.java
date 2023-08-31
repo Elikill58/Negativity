@@ -100,8 +100,8 @@ public class FoliaScheduler implements Scheduler {
 	public ScheduledTask runEntityDelayed(Entity entity, Runnable task, int delayTicks) {
 		try {
 			Object scheduler = getEntityScheduler(entity);
-			Method method = scheduler.getClass().getDeclaredMethod("runDelayed", Plugin.class, Consumer.class, long.class);
-			return new TaskWrapper(method.invoke(scheduler, this.plugin, (Consumer<?>) (scheduledTask) -> task.run(), delayTicks));
+			Method method = scheduler.getClass().getDeclaredMethod("runDelayed", Plugin.class, Consumer.class, Runnable.class ,long.class);
+			return new TaskWrapper(method.invoke(scheduler, this.plugin, (Consumer<?>) (scheduledTask) -> task.run(), null, delayTicks));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

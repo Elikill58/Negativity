@@ -6,10 +6,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.spongepowered.api.world.server.ServerWorld;
+import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge.impl.block.SpongeBlock;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntity;
@@ -57,6 +59,11 @@ public class SpongeWorld extends World {
 	@Override
 	public Optional<Entity> getEntityById(int id) {
 		return w.entities().stream().filter(et -> et.uniqueId().hashCode() == id).findFirst().map(SpongeEntity::new);
+	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		return w.nearbyEntities(new Vector3d(loc.getX(), loc.getY(), loc.getZ()), distance).stream().map(SpongeEntity::new).collect(Collectors.toList());
 	}
 
 	@Override

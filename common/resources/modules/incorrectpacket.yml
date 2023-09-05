@@ -1,7 +1,7 @@
 # Send packet everywhere in the world
 
 # The display name of cheat
-exact_name: "IncorrectPacket"
+name: "IncorrectPacket"
 
 # enable/disable detection
 active: true

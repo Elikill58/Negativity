@@ -1,7 +1,7 @@
 # You can look 360° around you (all direction)
 
 # The display name of cheat
-exact_name: "NoPitchLimit"
+name: "NoPitchLimit"
 
 # enable/disable detection
 active: true

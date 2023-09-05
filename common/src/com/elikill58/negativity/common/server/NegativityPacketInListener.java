@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
@@ -52,14 +51,12 @@ public class NegativityPacketInListener implements Listeners {
 			np.isAttacking = true;
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
 			if (useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-				for (Entity entity : p.getWorld().getEntities()) {
-					if (entity.isSameId(useEntityPacket.entityId)) {
-						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
-						EventManager.callEvent(event);
-						if (event.isCancelled())
-							e.setCancelled(event.isCancelled());
-					}
-				}
+				p.getWorld().getEntityById(useEntityPacket.entityId).ifPresent(entity -> {
+					PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
+					EventManager.callEvent(event);
+					if (event.isCancelled())
+						e.setCancelled(event.isCancelled());
+				});
 			}
 		} else if (type.isFlyingPacket()) {
 			np.addTick();

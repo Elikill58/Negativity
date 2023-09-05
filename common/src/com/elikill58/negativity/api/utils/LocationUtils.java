@@ -278,7 +278,7 @@ public class LocationUtils {
 	 * @return true if there is a boat
 	 */
 	public static boolean hasBoatAroundHim(CompensatedWorld world, Location loc) {
-		return hasEntityAround(world, loc, EntityType.BOAT);
+		return hasEntityAround(world, loc, EntityType.BOAT, EntityType.CHEST_BOAT);
 	}
 
 	/**
@@ -290,12 +290,10 @@ public class LocationUtils {
 	 * @return true if there is a boat
 	 */
 	public static boolean hasEntityAround(CompensatedWorld world, Location loc, EntityType... typesArray) {
-		List<EntityType> types = Arrays.asList(typesArray);
-		for (Entity entity : world.getEntities()) {
-			Location l = entity.getLocation();
-			if (types.contains(EntityType.BOAT) && l.distance(loc) < 3)
+		List<EntityType> types = typesArray.length == 0 ? Arrays.asList(EntityType.BOAT, EntityType.CHEST_BOAT) : Arrays.asList(typesArray);
+		for (Entity entity : world.getNearEntity(loc, 3.5))
+			if (types.contains(entity.getType()))
 				return true;
-		}
 		return false;
 	}
 

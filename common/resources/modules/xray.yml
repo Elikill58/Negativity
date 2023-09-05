@@ -1,7 +1,7 @@
 # Edit visual block. You can see ore through block.
 
 # The display name of cheat
-exact_name: "Xray"
+name: "Xray"
 
 # enable/disable detection
 active: true

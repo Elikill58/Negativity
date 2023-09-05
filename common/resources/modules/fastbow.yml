@@ -1,7 +1,7 @@
 # Shoot a lot of arrow in no much time
 
 # The display name of cheat
-exact_name: "FastBow"
+name: "FastBow"
 
 # enable/disable detection
 active: true

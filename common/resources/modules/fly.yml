@@ -1,9 +1,8 @@
 # Allow player to fly.
 # Some cheat make the player moving too fast, so it can be detected as Speed.
-# There is also FlyNCP to fly on server who have NoCheatPlus plugin.
 
 # The display name of fly
-exact_name: "Fly"
+name: "Fly"
 
 # enable/disable fly detection
 active: true

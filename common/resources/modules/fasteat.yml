@@ -1,7 +1,7 @@
 # Eat instantly, usually use in combat
 
 # The display name of cheat
-exact_name: "FastEat"
+name: "FastEat"
 
 # enable/disable detection
 active: true

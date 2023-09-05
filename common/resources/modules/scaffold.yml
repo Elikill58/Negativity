@@ -1,7 +1,7 @@
 # Make you placing block just behind you, but without looking it.
 
 # The display name of cheat
-exact_name: "Scaffold"
+name: "Scaffold"
 
 # enable/disable detection
 active: true

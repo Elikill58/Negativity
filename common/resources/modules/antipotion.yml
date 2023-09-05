@@ -1,7 +1,7 @@
 # Remove bad potion effect like poison
 
 # The display name of cheat
-exact_name: "AntiPotion"
+name: "AntiPotion"
 
 # enable/disable detection
 active: true

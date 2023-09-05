@@ -1,7 +1,7 @@
 # Attack entity around
 
 # The display name of cheat
-exact_name: "AimBot"
+name: "AimBot"
 
 # enable/disable detection
 active: true

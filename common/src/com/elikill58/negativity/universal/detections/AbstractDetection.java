@@ -18,6 +18,8 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	protected final T key;
 	protected final Material material;
 	protected Configuration config;
+	protected boolean active = false;
+	protected String name;
 	
 	public AbstractDetection(T key, Material material) {
 		this.key = key;
@@ -43,6 +45,8 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 			Adapter.getAdapter().getLogger().error("Failed to load cheat " + this.key);
 			e.printStackTrace();
 		}
+		this.active = config.getBoolean("active", true);
+		this.name = config.getString("name", config.getString("exact_name", key.getLowerKey()));
 	}
 	
 	/**
@@ -80,7 +84,16 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	 * @return the name
 	 */
 	public String getName() {
-		return config.getString("name", key.getLowerKey());
+		return name;
+	}
+	
+	/**
+	 * Get the exact name of the cheat but for command (without special char, space ...)
+	 * 
+	 * @return the name formatted
+	 */
+	public String getCommandName() {
+		return name.replace(" ", "").replace("-", "").replace("_", "");
 	}
 
 	/**
@@ -89,7 +102,7 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	 * @return true if is active
 	 */
 	public boolean isActive() {
-		return config.getBoolean("active", true);
+		return active;
 	}
 	
 	/**
@@ -101,6 +114,7 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	 */
 	public boolean setActive(boolean active) {
 		config.set("active", active);
+		this.active = active;
 		return active;
 	}
 	

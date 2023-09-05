@@ -1,7 +1,7 @@
 # Teleport player on block, like if they jump, but more than 1 blocks up
 
 # The display name of cheat
-exact_name: "Step"
+name: "Step"
 
 # enable/disable detection
 active: true

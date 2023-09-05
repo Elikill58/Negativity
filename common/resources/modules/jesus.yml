@@ -1,7 +1,7 @@
 # Allow to walk and/or jump on water
 
 # The display name of cheat
-exact_name: "Jesus"
+name: "Jesus"
 
 # enable/disable detection
 active: true

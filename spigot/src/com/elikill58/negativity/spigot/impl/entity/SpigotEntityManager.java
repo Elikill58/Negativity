@@ -9,6 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.EntityType;
 
 public class SpigotEntityManager {
 
@@ -49,5 +50,9 @@ public class SpigotEntityManager {
 		if(sender instanceof Player)
 			return getPlayer((Player) sender);
 		return new SpigotCommandSender(sender);
+	}
+	
+	public static EntityType getEntityType(org.bukkit.entity.Entity entity) {
+		return EntityType.get(entity.getType().name());
 	}
 }

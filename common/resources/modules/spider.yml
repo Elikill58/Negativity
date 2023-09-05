@@ -1,7 +1,7 @@
 # Allow to walk on wall like a spider
 
 # The display name of cheat
-exact_name: "Spider"
+name: "Spider"
 
 # enable/disable detection
 active: true

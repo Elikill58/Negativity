@@ -1,7 +1,7 @@
 # Allow player to quickly edit inventory
 
 # The display name of cheat
-exact_name: "AutoSteal"
+name: "AutoSteal"
 
 # enable/disable detection
 active: true

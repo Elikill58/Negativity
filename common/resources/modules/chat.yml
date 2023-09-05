@@ -1,7 +1,7 @@
 # Spam or insult players
 
 # The display name of cheat
-exact_name: "Chat"
+name: "Chat"
 
 # enable/disable detection
 active: true

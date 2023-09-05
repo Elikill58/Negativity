@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntity;
@@ -67,6 +68,11 @@ public class SpigotWorld extends World {
 	@Override
 	public Optional<Entity> getEntityById(int id) {
 		return getEntities().stream().filter(e -> e.getEntityId() == id).findFirst();
+	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		return w.getNearbyEntities(SpigotLocation.fromCommon(loc), distance, distance, distance).stream().map(SpigotEntity::new).collect(Collectors.toList());
 	}
 
 	@Override

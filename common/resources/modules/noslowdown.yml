@@ -1,7 +1,7 @@
 # Move while eating at same speed than when you're not eating
 
 # The display name of cheat
-exact_name: "NoSlowDown"
+name: "NoSlowDown"
 
 # enable/disable detection
 active: true

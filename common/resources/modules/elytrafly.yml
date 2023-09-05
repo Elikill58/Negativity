@@ -1,7 +1,7 @@
 # Fly when using elytra
 
 # The display name of cheat
-exact_name: "ElytraFly"
+name: "ElytraFly"
 
 # enable/disable detection
 active: true

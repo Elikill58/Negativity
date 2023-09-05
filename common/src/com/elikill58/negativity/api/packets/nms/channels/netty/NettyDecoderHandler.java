@@ -49,21 +49,22 @@ public class NettyDecoderHandler extends ChannelInboundHandlerAdapter {
 			if (obj instanceof ByteBuf) {
 				ByteBuf msg = ((ByteBuf) obj).copy();
 				NPacket packet = NettyHandlerCommon.readPacketFromByteBuf(p, version, direction, msg, "decode");
+				super.channelRead(ctx, obj); // let other plugin/server manage it
 				if(packet != null) {
 					Adapter.getAdapter().getScheduler().runEntity(p, () -> {
 						PacketPreReceiveEvent event = new PacketPreReceiveEvent(packet, p);
 						EventManager.callEvent(event);
 						if (event.isCancelled())
 							return;
-						try {
+						/*try {
 							NettyDecoderHandler.super.channelRead(ctx, obj);
 						} catch (Exception e) {
 							e.printStackTrace();
-						} // call before use
+						}*/ // call before use
 						EventManager.callEvent(new PacketReceiveEvent(packet, p));
 					});
-				} else
-					super.channelRead(ctx, obj); 
+				}/* else
+					super.channelRead(ctx, obj); */
 				msg.release();
 			} else
 				super.channelRead(ctx, obj); 

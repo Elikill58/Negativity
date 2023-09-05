@@ -1,7 +1,7 @@
 # Make you walk on cobweb exactly like on ground
 
 # The display name of cheat
-exact_name: "NoWeb"
+name: "NoWeb"
 
 # enable/disable detection
 active: true

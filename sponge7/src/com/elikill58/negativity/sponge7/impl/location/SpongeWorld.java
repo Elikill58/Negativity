@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge7.impl.block.SpongeBlock;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntity;
+import com.flowpowered.math.vector.Vector3d;
 
 public class SpongeWorld extends World {
 
@@ -54,6 +56,11 @@ public class SpongeWorld extends World {
 	public Optional<Entity> getEntityById(int id) {
 		return w.getEntities(et -> et.getUniqueId().hashCode() == id).stream().findFirst().map(SpongeEntity::new);
 	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		return w.getNearbyEntities(new Vector3d(loc.getX(), loc.getY(), loc.getZ()), distance).stream().map(SpongeEntity::new).collect(Collectors.toList());
+	}
 
 	@Override
 	public boolean isChunkLoaded(int chunkX, int chunkZ) {
@@ -64,5 +71,4 @@ public class SpongeWorld extends World {
 	public Object getDefault() {
 		return w;
 	}
-
 }

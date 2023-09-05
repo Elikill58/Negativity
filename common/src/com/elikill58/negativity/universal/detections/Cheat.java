@@ -88,25 +88,6 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	/**
-	 * Get the exact name of the cheat
-	 * 
-	 * @return the name
-	 */
-	@Override
-	public String getName() {
-		return config.getString("exact_name", key.getLowerKey());
-	}
-	
-	/**
-	 * Get the exact name of the cheat but for command (without special char, space ...)
-	 * 
-	 * @return the name formatted
-	 */
-	public String getCommandName() {
-		return config.getString("exact_name", key.getLowerKey()).replace(" ", "").replace("-", "").replace("_", "");
-	}
-	
-	/**
 	 * Check if a detection is active
 	 * 
 	 * @param checkName the name of the detection

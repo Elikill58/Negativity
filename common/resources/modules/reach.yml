@@ -1,7 +1,7 @@
 # Upgrade distance to touch entities
 
 # The display name of cheat
-exact_name: "Reach"
+name: "Reach"
 
 # enable/disable detection
 active: true

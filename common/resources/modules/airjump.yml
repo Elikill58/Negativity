@@ -1,7 +1,7 @@
 # Allow to jump on the air
 
 # The display name of cheat
-exact_name: "AirJump"
+name: "AirJump"
 
 # enable/disable detection
 active: true

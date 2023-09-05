@@ -1,7 +1,7 @@
 # Fake own ping
 
 # The display name of cheat
-exact_name: "PingSpoof"
+name: "PingSpoof"
 
 # enable/disable detection
 active: true

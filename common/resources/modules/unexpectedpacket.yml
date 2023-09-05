@@ -1,7 +1,7 @@
 # Receive packet that should not be sent
 
 # The display name of cheat
-exact_name: "UnexpectedPacket"
+name: "UnexpectedPacket"
 
 # enable/disable detection
 active: true

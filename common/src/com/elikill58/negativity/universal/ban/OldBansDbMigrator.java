@@ -28,6 +28,8 @@ public class OldBansDbMigrator {
 
 		Connection connection = Database.getConnection();
 		checkState(connection != null, () -> "Could not find connection to the database.");
+		if(connection == null)
+			return;
 
 		checkState(tableExists(connection, banTable), () -> "The original bans table does not exist.");
 

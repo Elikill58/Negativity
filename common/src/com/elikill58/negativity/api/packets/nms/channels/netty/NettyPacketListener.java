@@ -8,10 +8,8 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
-import com.elikill58.negativity.universal.utils.SemVer;
 
 import io.netty.channel.Channel;
 
@@ -27,15 +25,9 @@ public abstract class NettyPacketListener {
 	}
 
 	public List<Channel> checked = new ArrayList<>();
-	private boolean shouldFixViaversion = false;
 
 	public NettyPacketListener() {
 		instance = this;
-		Adapter ada = Adapter.getAdapter();
-		if(ada.hasPlugin("ViaVersion")) {
-			// 4.4.9 doesn't exist but it's latest before 4.5
-			shouldFixViaversion = SemVer.parse(ada.getPlugin("ViaVersion").getVersion()).isNewerThan(SemVer.parse("4.4.9"));
-		}
 	}
 
 	public void join(Player p) {
@@ -51,29 +43,12 @@ public abstract class NettyPacketListener {
 	}
 
 	private void addChannel(Player p) {
-		Version version = PlayerVersionManager.getPlayerVersion(p);
 		Adapter ada = Adapter.getAdapter();
+		Version version = ada.getServerVersion(); // now it seems ViaVersion do thing before us
 		if(version.equals(Version.HIGHER) || version.equals(Version.LOWER)) {
 			ada.getLogger().warn("Player " + p.getName() + " seems to login with unknow version, protocol: " + PlayerVersionManager.getPlayerProtocolVersion(p));
 			NegativityPlayer.getNegativityPlayer(p).buggedVersion = true;
 			return;
-		}
-		if(shouldFixViaversion && ada.getPlatformID().equals(Platform.SPIGOT)) { // can have viaversion issue
-			Version serverVersion = ada.getServerVersion();
-			boolean playerIs19 = version.isNewerOrEquals(Version.V1_19);
-			boolean serverIs19 = serverVersion.isNewerOrEquals(Version.V1_19);
-			if(playerIs19 && !serverIs19) {
-				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.19+ on 1.18- servers).");
-				version = serverVersion;
-			} else if(serverIs19 && !serverVersion.equals(version)) {
-				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.18- on 1.19+ servers).");
-				version = serverVersion;
-			} else if(version.equals(Version.V1_8) && serverVersion.equals(Version.V1_18))  {
-				ada.getLogger().warn("Player " + p.getName() + " have different support because of ViaVersion issue (Player 1.8 on 1.18 servers).");
-				version = serverVersion;
-				
-			}
-			p.setPlayerVersion(version);
 		}
 		Channel channel = getChannel(p);
 		boolean hadChannel = checked.contains(channel);

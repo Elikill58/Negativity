@@ -76,6 +76,8 @@ public class DiscordWebhook extends Webhook {
 	}
 
 	private void sendAsyncWithException(WebhookMessageType type, Player p, List<WebhookMessage> msgs) throws Exception {
+		if(time > System.currentTimeMillis())
+			return;
 		Configuration confMsg = config.getSection("messages." + type.name().toLowerCase(Locale.ROOT));
 		if (confMsg == null) // not config
 			return;

@@ -55,10 +55,9 @@ import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.Webho
 
 public class Negativity {
 
-	public static boolean log = false;
-	public static boolean log_console = false;
-	public static boolean hasBypass = false;
-	public static boolean tpsDrop = false;
+	public static boolean log = false, log_console = false, hasBypass = false, tpsDrop = false;
+	public static boolean disabledJava, disabledBedrock = false;
+	public static double tpsDropStop = 19;
 	
 	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
 
@@ -338,6 +337,9 @@ public class Negativity {
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
+		disabledBedrock = config.getBoolean("config_all.bedrock.disabled", false);
+		disabledJava = config.getBoolean("config_all.java.disabled", false);
+		tpsDropStop = config.getDouble("tps_alert_stop", 19);
 		
 		if (!integratedPlugins.isEmpty()) {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");

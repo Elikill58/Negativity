@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -18,7 +19,7 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	protected final T key;
 	protected final Material material;
 	protected Configuration config;
-	protected boolean active = false;
+	protected boolean active = false, disabledJava = false, disabledBedrock = false;
 	protected String name;
 	
 	public AbstractDetection(T key, Material material) {
@@ -47,6 +48,8 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 		}
 		this.active = config.getBoolean("active", true);
 		this.name = config.getString("name", config.getString("exact_name", key.getLowerKey()));
+		this.disabledBedrock = config.getBoolean("bedrock.disabled", false);
+		this.disabledJava = config.getBoolean("java.disabled", false);
 	}
 	
 	/**
@@ -119,19 +122,21 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	}
 	
 	public boolean isDisabledForBedrock() {
-		return config.getBoolean("bedrock.disabled", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.bedrock.disabled", false);
+		return disabledBedrock || Negativity.disabledBedrock;
 	}
 	
 	public boolean setDisabledForBedrock(boolean b) {
+		disabledBedrock = b;
 		config.getBoolean("bedrock.disabled", b);
 		return b;
 	}
 	
 	public boolean isDisabledForJava() {
-		return config.getBoolean("java.disabled", false) || Adapter.getAdapter().getConfig().getBoolean("config_all.java.disabled", false);
+		return disabledJava || Negativity.disabledJava;
 	}
 	
 	public boolean setDisabledForJava(boolean b) {
+		disabledJava = b;
 		config.getBoolean("java.disabled", b);
 		return b;
 	}

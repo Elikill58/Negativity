@@ -175,14 +175,13 @@ public class NegativityPlayer {
 			return false;
 		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return false;
-		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
-				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
+		if(Negativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().getLowerKey())
+				|| Perm.hasPerm(this, Perm.BYPASS_ALL)))
 			return false;
-		Adapter ada = Adapter.getAdapter();
-		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+		if (Negativity.tpsDropStop > Adapter.getAdapter().getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if (p.getGameMode().equals(GameMode.SPECTATOR))
+		if (p.getGameMode().equals(GameMode.SPECTATOR) || p.getGameMode().equals(GameMode.CREATIVE))
 			return false;
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
@@ -222,12 +221,12 @@ public class NegativityPlayer {
 		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
 				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
 			return "Bypass permission";
-		Adapter ada = Adapter.getAdapter();
-		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
-			return "Low TPS " + ada.getLastTPS();
+		double tps = Adapter.getAdapter().getLastTPS();
+		if (Negativity.tpsDropStop > tps) // to make TPS go upper
+			return "Low TPS " + tps;
 		Player p = getPlayer();
-		if (p.getGameMode().equals(GameMode.SPECTATOR))
-			return "Spectating";
+		if (p.getGameMode().equals(GameMode.SPECTATOR) || p.getGameMode().equals(GameMode.CREATIVE))
+			return "Not in survival";
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return "Should ignore movement";

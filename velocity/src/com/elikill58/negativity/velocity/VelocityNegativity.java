@@ -85,7 +85,7 @@ public class VelocityNegativity {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
-		getLogger().info("Negativity enabled");
+		getLogger().info("Negativity enabled for server version " + getServer().getVersion().getVersion());
 	}
 
 	@Subscribe

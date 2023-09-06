@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.protocols.CheckData;
 public class SneakData extends CheckData {
 
 	public boolean wasSneaking = false, lastSecond = false;
+	public double buffer = 0;
 	
 	public SneakData(NegativityPlayer np) {
 		super(np);

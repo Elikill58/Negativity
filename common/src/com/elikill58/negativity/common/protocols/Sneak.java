@@ -28,14 +28,18 @@ public class Sneak extends Cheat {
 		if (data.wasSneaking && p.isSprinting()) {
 			double distance = e.getFrom().distanceXZ(e.getTo()) / 2;
 			if(p.getWalkSpeed() <= distance && p.getVelocity().length() < 0.5 && p.getFallDistance() < 1) { // high distance and no velocity
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)),
-						"sneak-sprint", "Sneak, sprint, no fly. Ws: " + p.getWalkSpeed() + ", speed: " + distance + ", fd: " + p.getFallDistance() + ", vel: " + p.getVelocity());
-				if(mayCancel && isSetBack()) {
-					e.setCancelled(true);
-					p.setSprinting(false);
+				data.buffer += 0.1;
+				if(data.buffer > 0.5) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(80 + data.buffer * 10),
+							"sneak-sprint", "Ws: " + p.getWalkSpeed() + ", speed: " + distance + ", fd: " + p.getFallDistance() + ", vel: " + p.getVelocity(), null, (long) data.buffer * 2);
+					if(mayCancel && isSetBack()) {
+						e.setCancelled(true);
+						p.setSprinting(false);
+					}
 				}
 			}
-		}
+		} else
+			data.buffer = 0;
 		data.wasSneaking = p.isSneaking() && (p.isOnGround() || data.wasSneaking); // not sneak while on air, or be one time on ground
 	}
 	

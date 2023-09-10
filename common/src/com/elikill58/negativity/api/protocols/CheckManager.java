@@ -60,13 +60,13 @@ public class CheckManager implements Listeners {
 	public void onPlayerEvent(PlayerEvent e) {
 		if(!e.hasPlayer())
 			return;
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		HashMap<CheckConditions, Boolean> conditionResult = new HashMap<>();
 		CpuMonitor cpu = MonitorType.CPU.getMonitor();
-		new ArrayList<>(allChecks).forEach((check) -> {
-			Player p = e.getPlayer();
-			if(check.getCheat().isActive() && check.getMethod().getParameterTypes()[0].equals(e.getClass())) {
+		allChecks.forEach((check) -> {
+			if(check.getCheat().isActive() && check.getFirstParam().equals(e.getClass())) {
 				// now checking all conditions
-				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 				if(!np.hasDetectionActive(check.getCheat()) || !check.getCheat().checkActive(check.getCheck().name()))
 					return;
 				long beginTime = System.nanoTime();
@@ -92,12 +92,14 @@ public class CheckManager implements Listeners {
 		private final Check check;
 		private final Method method;
 		private final MethodArgument[] arguments;
+		private final Class<?> firstParam;
 		
 		public CheckMethod(Cheat cheat, Check check, Method method, MethodArgument... arguments) {
 			this.cheat = cheat;
 			this.check = check;
 			this.method = method;
 			this.arguments = arguments;
+			this.firstParam = method.getParameterTypes()[0];
 		}
 		
 		public Cheat getCheat() {
@@ -110,6 +112,10 @@ public class CheckManager implements Listeners {
 		
 		public Method getMethod() {
 			return method;
+		}
+		
+		public Class<?> getFirstParam() {
+			return firstParam;
 		}
 		
 		public void invoke(PlayerEvent event, NegativityPlayer np) {

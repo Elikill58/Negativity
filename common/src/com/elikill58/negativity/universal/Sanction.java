@@ -34,7 +34,7 @@ public class Sanction {
 	}
 
 	private String applyPlaceholders(String value, OfflinePlayer cible) {
-		return value.replaceAll("%name%", cible.getName()).replaceAll("%reason%", name);
+		return value.replace("%name%", cible.getName()).replace("%reason%", name);
 	}
 
 	public String getKey() {

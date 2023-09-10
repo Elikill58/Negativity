@@ -1,6 +1,8 @@
 package com.elikill58.negativity.universal.permissions;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,19 +37,21 @@ public class Perm {
 	public static final String PLATFORM_CHECKER = "platform";
 
 	private static String checkerId = PLATFORM_CHECKER;
+	private static final List<String> perms = Arrays.asList(ADMIN, CHECK, CHAT_CLEAR, CHAT_LOCK, CHAT_LOCK_BYPASS, SHOW_ALERT, SHOW_REPORT, VERIF, MANAGE_CHEAT, RELOAD, REPORT, REPORT_WAIT, BAN, UNBAN, MOD, LANG, BYPASS_ALL, BYPASS_BAN);
 	private static final Map<String, PermissionChecker> checkers = new HashMap<>();
+	private static final Map<String, String> permissions = new HashMap<>();
 
 	public static boolean hasPerm(CommandSender sender, String perm) {
 		if(sender instanceof Player) {
 			PermissionChecker checker = getActiveChecker();
-			return checker != null && checker.hasPermission(NegativityPlayer.getNegativityPlayer((Player) sender), perm);
-		} else
-			return true;
+			return checker != null && checker.hasPermission(NegativityPlayer.getNegativityPlayer((Player) sender), permissions.get(perm));
+		}
+		return true;
 	}
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
 		PermissionChecker checker = getActiveChecker();
-		return checker != null && checker.hasPermission(np, perm);
+		return checker != null && checker.hasPermission(np, permissions.get(perm));
 	}
 
 	@Nullable
@@ -63,5 +67,12 @@ public class Perm {
 		checkerId = Adapter.getAdapter().getConfig().getString("Permissions.checker");
 		
 		registerChecker(PLATFORM_CHECKER, new DefaultPermissionChecker());
+		
+		for(String all : values())
+			permissions.put(all, Adapter.getAdapter().getConfig().getString("Permissions." + all + ".default", "negativity." + all));
+	}
+	
+	public static List<String> values() {
+		return perms;
 	}
 }

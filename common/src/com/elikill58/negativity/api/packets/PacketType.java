@@ -67,9 +67,7 @@ public interface PacketType {
 	 * 
 	 * @return the packet name
 	 */
-	default String getPacketName() {
-		return ChatUtils.capitalize(name());
-	}
+	String getPacketName();
 	
 	/**
 	 * Check if it's flying packet
@@ -225,6 +223,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Client() {
 			this(NPacketPlayInUnset::new);
@@ -232,6 +231,12 @@ public interface PacketType {
 		
 		Client(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -391,6 +396,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 
 		Server() {
 			this(NPacketPlayOutUnset::new);
@@ -398,6 +404,12 @@ public interface PacketType {
 		
 		Server(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -436,6 +448,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Login() {
 			this(NPacketLoginUnset::new);
@@ -443,6 +456,12 @@ public interface PacketType {
 		
 		Login(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -478,6 +497,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Status() {
 			this(NPacketStatusUnset::new);
@@ -485,6 +505,12 @@ public interface PacketType {
 		
 		Status(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -515,6 +541,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Handshake() {
 			this(NPacketHandshakeUnset::new);
@@ -522,6 +549,12 @@ public interface PacketType {
 		
 		Handshake(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 
 		@Override

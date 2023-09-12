@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketContent;
+import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
@@ -48,7 +49,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
 
 			Class<?> entityPlayerClass = PacketUtils.getNmsClass("EntityPlayer", "server.level.");
-			if(version.isNewerOrEquals(Version.V1_20)) {
+			if (version.isNewerOrEquals(Version.V1_20)) {
 				pingField = entityPlayerClass.getDeclaredField("f");
 				playerConnectionField = entityPlayerClass.getDeclaredField("c");
 			} else if (version.isNewerOrEquals(Version.V1_17)) {
@@ -130,7 +131,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 
 	public double[] getTps() {
-		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.FOLIA)) {
+		if (SpigotNegativity.getSubPlatform().equals(SubPlatform.FOLIA)) {
 			try {
 				return (double[]) Bukkit.class.getDeclaredMethod("getTPS").invoke(null);
 			} catch (Exception e) {
@@ -167,7 +168,16 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public Channel getChannel(Player p) {
 		try {
 			PacketContent packet = new PacketContent(getNetworkManager(p));
-			return version.equals(Version.V1_17) ? (Channel) packet.getAllObjects().read("k") : packet.getSpecificModifier(Channel.class).readSafely(0);
+			if (version.equals(Version.V1_17)) {
+				ContentModifier<Object> all = packet.getAllObjects();
+				if (all.has("k"))
+					return (Channel) all.read("k");
+			} else if (version.equals(Version.V1_16)) {
+				ContentModifier<Object> all = packet.getAllObjects();
+				if (all.has("channel"))
+					return (Channel) all.read("channel");
+			}
+			return packet.getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

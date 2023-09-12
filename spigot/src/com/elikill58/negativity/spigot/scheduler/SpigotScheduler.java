@@ -22,7 +22,10 @@ public class SpigotScheduler implements Scheduler {
 	
 	@Override
 	public void run(Runnable task) {
-		Bukkit.getScheduler().runTask(plugin, task);
+		if(Bukkit.isPrimaryThread())
+			task.run();
+		else
+			Bukkit.getScheduler().runTask(plugin, task);
 	}
 	
 	@Override

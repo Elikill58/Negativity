@@ -428,9 +428,6 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	}
 
 	private void runSync(Runnable task) {
-		if (Bukkit.isPrimaryThread())
-			task.run();
-		else
-			Adapter.getAdapter().getScheduler().run(task);
+		Adapter.getAdapter().getScheduler().runEntity(this, task);
 	}
 }

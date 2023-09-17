@@ -22,7 +22,7 @@ public abstract class Webhook {
 	protected final Configuration config;
 	protected final List<WebhookMessage> queue = new ArrayList<>();
 	protected boolean enabled = true;
-	protected long time = 0, cooldown = 0;
+	protected long time = 0, cooldown = 0, timeWaitCooldown = 0;
 
 	public Webhook(String name, Configuration config) {
 		this.name = name;
@@ -47,7 +47,7 @@ public abstract class Webhook {
 	public String getWebhookName() {
 		return name;
 	}
-
+	
 	/**
 	 * Add message to queue of given webhook
 	 * 
@@ -65,6 +65,7 @@ public abstract class Webhook {
 	public void runQueue() {
 		if (time > System.currentTimeMillis() || !enabled) // should skip
 			return;
+		time = System.currentTimeMillis() + cooldown;
 
 		List<WebhookMessage> messages = new ArrayList<>(queue); // copy list
 		messages.sort(Comparator.naturalOrder());

@@ -54,7 +54,7 @@ public class WebhookManager {
 			try {
 				w.send(msg.getMessageType(), msg.getConcerned(), Arrays.asList(msg));
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
+				Adapter.getAdapter().getLogger().error("Error while sending webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}
 		});
 	}
@@ -66,7 +66,7 @@ public class WebhookManager {
 			try {
 				w.addToQueue(msg);
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
+				Adapter.getAdapter().getLogger().error("Error while adding to queue webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}
 		});
 	}

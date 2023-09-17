@@ -62,6 +62,8 @@ public class CheckManager implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		if(!np.canBeCheck()) // optimize for not allowed users
+			return;
 		HashMap<CheckConditions, Boolean> conditionResult = new HashMap<>();
 		CpuMonitor cpu = MonitorType.CPU.getMonitor();
 		allChecks.forEach((check) -> {

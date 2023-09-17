@@ -75,7 +75,7 @@ public class NegativityPlayer {
 	public long loginTime;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0, ticks = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean isOnLadders = false, isTeleporting = false;
+	public boolean isOnLadders = false, isTeleporting = false, cancelNextFlyingPacket = false;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 

@@ -4,7 +4,9 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.entity.EntityDismountEvent;
 import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
@@ -171,12 +173,12 @@ public class Speed extends Cheat implements Listeners {
 		double max, veryHigh;
 		switch (vehicle.getType()) {
 		case PIG:
-			max = 0.13;
-			veryHigh = 0.2;
+			max = 0.14;
+			veryHigh = 0.25;
 			break;
 		case HORSE:
-			max = 0.8;
-			veryHigh = 1.3;
+			max = 1.2;
+			veryHigh = 1.6;
 			break;
 		default:
 			return; // don't support this entity
@@ -186,7 +188,14 @@ public class Speed extends Cheat implements Listeners {
 			if(cancel && isSetBack())
 				e.setCancelled(true);
 		}
-			
+		
 		data.locVehicle = toVec;
+	}
+	
+	@EventListener
+	public void onEntityDismount(EntityDismountEvent e) {
+		if(e.getEntity() instanceof Player) {
+			NegativityPlayer.getNegativityPlayer((Player) e.getEntity()).<SpeedData>getCheckData(this).locVehicle = null;
+		}
 	}
 }

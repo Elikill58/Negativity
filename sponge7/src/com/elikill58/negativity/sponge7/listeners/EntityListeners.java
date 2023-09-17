@@ -5,10 +5,12 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.HealEntityEvent;
+import org.spongepowered.api.event.entity.RideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.First;
 
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.entity.EntityDismountEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
@@ -27,5 +29,10 @@ public class EntityListeners {
 		PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpongeEntityManager.getPlayer(p));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
+	}
+
+	@Listener
+	public void onDismount(RideEntityEvent.Dismount e, @First Player player) {
+		EventManager.callEvent(new EntityDismountEvent(SpongeEntityManager.getEntity(player), SpongeEntityManager.getEntity(e.getTargetEntity())));
 	}
 }

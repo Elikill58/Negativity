@@ -130,7 +130,8 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onTeleport(PlayerTeleportEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(3, "Teleportation");
+		if(e.getFrom().distance(e.getTo()) > 200) // should reload chunks
+			NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(3, "Teleportation");
 	}
 
 	@EventListener

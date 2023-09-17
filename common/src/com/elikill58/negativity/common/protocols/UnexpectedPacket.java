@@ -29,7 +29,7 @@ public class UnexpectedPacket extends Cheat {
 		if (e.getPacket().getPacketType().equals(Client.STEER_VEHICLE)) {
 			if (!p.isInsideVehicle() && !data.waitGround) {
 				long timeLeftVehicle = np.getTicks() - data.vehicleLeft;
-				if (timeLeftVehicle < 20)
+				if (timeLeftVehicle < 60)
 					return; // just left, strange packet but prevent issue
 				long amount = timeLeftVehicle / 40;
 				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(amount < 100 ? 50 + amount : 100), "vehicle-steer",

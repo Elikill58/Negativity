@@ -2,12 +2,15 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -27,7 +30,7 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
-			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_ALLOW_FLY })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -156,4 +159,34 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
+	@Check(name = "distance-vehicle", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.INSIDE_VEHICLE,
+			CheckConditions.NO_ICE_AROUND })
+	public void onMoveWithVehicle(PacketPreReceiveEvent e, NegativityPlayer np, SpeedData data) {
+		Player p = e.getPlayer();
+		if(!e.getPacket().getPacketType().equals(PacketType.Client.STEER_VEHICLE))
+			return;
+		Entity vehicle = p.getVehicle();
+		Location fromVec = data.locVehicle == null ? vehicle.getLocation() : data.locVehicle, toVec = vehicle.getLocation();
+		double diff = fromVec.distanceXZ(toVec);
+		double max, veryHigh;
+		switch (vehicle.getType()) {
+		case PIG:
+			max = 0.13;
+			veryHigh = 0.2;
+			break;
+		case HORSE:
+			max = 0.8;
+			veryHigh = 1.3;
+			break;
+		default:
+			return; // don't support this entity
+		}
+		if(diff > max) {
+			boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(60 + (diff - max) * 50), "distance-vehicle", "Diff: " + diff + ", max: " + max + ", vehicle: " + vehicle, null, (veryHigh < diff ? 10 : 1));
+			if(cancel && isSetBack())
+				e.setCancelled(true);
+		}
+			
+		data.locVehicle = toVec;
+	}
 }

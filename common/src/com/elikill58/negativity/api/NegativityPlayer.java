@@ -64,7 +64,7 @@ public class NegativityPlayer {
 
 	// packets
 	public Object2IntMap<PacketType> packets = new Object2IntArrayMap<>();
-	public int allPackets = 0, lastClick = 0, invincibilityTicks = 0;
+	public int lastClick = 0, invincibilityTicks = 0;
 
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;

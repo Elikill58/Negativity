@@ -72,6 +72,8 @@ public class SpigotWorld extends World {
 	
 	@Override
 	public List<Entity> getNearEntity(Location loc, double distance) {
+		if(!Bukkit.isPrimaryThread()) // prevent error
+			return getEntities().stream().filter(e -> e.getLocation().distance(loc) <= distance).collect(Collectors.toList()); // not optimized but working
 		return w.getNearbyEntities(SpigotLocation.fromCommon(loc), distance, distance, distance).stream().map(SpigotEntity::new).collect(Collectors.toList());
 	}
 

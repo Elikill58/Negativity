@@ -76,7 +76,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    	data.onSoulSand = false;
 	}
 
-	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
+	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void foodCheck(PlayerItemConsumeEvent e, NegativityPlayer np, NoSlowDownData data) {
 		Player p = e.getPlayer();
 		if (data.eatingDistance > p.getWalkSpeed()) {

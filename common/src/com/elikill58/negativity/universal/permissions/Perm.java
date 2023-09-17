@@ -37,7 +37,7 @@ public class Perm {
 	public static final String PLATFORM_CHECKER = "platform";
 
 	private static String checkerId = PLATFORM_CHECKER;
-	private static final List<String> perms = Arrays.asList(ADMIN, CHECK, CHAT_CLEAR, CHAT_LOCK, CHAT_LOCK_BYPASS, SHOW_ALERT, SHOW_REPORT, VERIF, MANAGE_CHEAT, RELOAD, REPORT, REPORT_WAIT, BAN, UNBAN, MOD, LANG, BYPASS_ALL, BYPASS_BAN);
+	private static final List<String> perms = Arrays.asList(ADMIN, CHECK, CHAT_CLEAR, CHAT_LOCK, CHAT_LOCK_BYPASS, SHOW_ALERT, SHOW_REPORT, VERIF, MANAGE_CHEAT, RELOAD, REPORT, REPORT_WAIT, BAN, UNBAN, MOD, LANG, WARN, BYPASS_ALL, BYPASS_BAN);
 	private static final Map<String, PermissionChecker> checkers = new HashMap<>();
 	private static final Map<String, String> permissions = new HashMap<>();
 

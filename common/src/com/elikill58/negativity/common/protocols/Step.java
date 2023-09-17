@@ -33,7 +33,7 @@ public class Step extends Cheat implements Listeners {
 
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY,
 			CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_BLOCK_MID_AROUND,
-			CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_CLIMB_BLOCK })
+			CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

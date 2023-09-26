@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.permissions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +38,14 @@ public class Perm {
 	public static final String PLATFORM_CHECKER = "platform";
 
 	private static String checkerId = PLATFORM_CHECKER;
-	private static final List<String> perms = Arrays.asList(ADMIN, CHECK, CHAT_CLEAR, CHAT_LOCK, CHAT_LOCK_BYPASS, SHOW_ALERT, SHOW_REPORT, VERIF, MANAGE_CHEAT, RELOAD, REPORT, REPORT_WAIT, BAN, UNBAN, MOD, LANG, WARN, BYPASS_ALL, BYPASS_BAN);
+	private static final List<String> perms = new ArrayList<>(Arrays.asList(ADMIN, CHECK, CHAT_CLEAR, CHAT_LOCK, CHAT_LOCK_BYPASS, SHOW_ALERT, SHOW_REPORT, VERIF, MANAGE_CHEAT, RELOAD, REPORT, REPORT_WAIT, BAN, UNBAN, MOD, LANG, WARN, BYPASS_ALL, BYPASS_BAN));
 	private static final Map<String, PermissionChecker> checkers = new HashMap<>();
 	private static final Map<String, String> permissions = new HashMap<>();
 
 	public static boolean hasPerm(CommandSender sender, String perm) {
 		if(sender instanceof Player) {
 			PermissionChecker checker = getActiveChecker();
-			return checker != null && checker.hasPermission(NegativityPlayer.getNegativityPlayer((Player) sender), permissions.get(perm));
+			return checker != null && checker.hasPermission(NegativityPlayer.getNegativityPlayer((Player) sender), permissions.getOrDefault(perm, perm));
 		}
 		return true;
 	}
@@ -74,5 +75,9 @@ public class Perm {
 	
 	public static List<String> values() {
 		return perms;
+	}
+	
+	public static Map<String, String> getPermissions() {
+		return permissions;
 	}
 }

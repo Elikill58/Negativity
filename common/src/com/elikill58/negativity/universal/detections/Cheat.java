@@ -29,6 +29,7 @@ import com.elikill58.negativity.api.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
@@ -358,6 +359,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		Adapter ada = Adapter.getAdapter();
 		int futurCheat = 0;
 		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
+			Perm.getPermissions().put("bypass." + cheat.getKey().getLowerKey(), ada.getConfig().getString("Permissions.bypass." + cheat.getKey().getLowerKey() + ".default"));
 			if(cheat instanceof Listeners) {
 				try {
 					EventManager.registerEvent((Listeners) cheat);

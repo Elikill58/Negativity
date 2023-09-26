@@ -142,6 +142,8 @@ public class Fly extends Cheat implements Listeners {
 			CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.SURVIVAL, CheckConditions.NO_MID_ENTITY_AROUND, CheckConditions.NO_LIQUID_AROUND })
 	public void onGroundChecker(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
+		if(p.getPlayerVersion().isNewerOrEquals(Version.V1_20))
+			return; // disable until the replacement of '0.015625' is not found
 		NPacket packet = e.getPacket();
 		if (packet.getPacketType().equals(PacketType.Client.POSITION) || packet.getPacketType().equals(PacketType.Client.POSITION_LOOK)) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;

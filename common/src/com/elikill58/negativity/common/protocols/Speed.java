@@ -39,7 +39,7 @@ public class Speed extends Cheat implements Listeners {
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velLen = p.getVelocity().length();
 		boolean onGround = p.isOnGround();
-		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) {
+		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4 && Math.abs(p.getVelocity().getY()) < 0.4) {
 			data.distanceJumpingBuffer += 0.44;
 			if (data.distanceJumpingBuffer >= 0.9) {
 				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(y * 190), "distance-jumping",

@@ -40,11 +40,12 @@ public class Step extends Cheat implements Listeners {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
-		if (down.getBlock().getType().getId().contains("SHULKER"))
+		String downId = down.getBlock().getType().getId();
+		if (downId.contains("SHULKER"))
 			return;
 		double dif = to.getY() - from.getY();
 		if (dif > 0.45 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dif * 50), "dif", "Move " + dif + " blocks up.",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dif * 50), "dif", "Move " + dif + " blocks up, down: " + downId,
 					hoverMsg("main", "%block%", String.format("%.2f", dif)));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
@@ -62,7 +63,8 @@ public class Step extends Cheat implements Listeners {
 			return; // will go down
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
-		if (down.getBlock().getType().getId().contains("SHULKER"))
+		String downId = down.getBlock().getType().getId();
+		if (downId.contains("SHULKER"))
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
@@ -74,7 +76,7 @@ public class Step extends Cheat implements Listeners {
 					&& !(amplifier > 0 && diffBoost < 0.55)) {
 				Negativity.alertMod(
 						ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 120), "dif-boost", "Basic Y diff: " + dif + ", with boost: "
-								+ diffBoost + " (amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity(),
+								+ diffBoost + " (amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity() + ", down: " + downId,
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 			}
 		}

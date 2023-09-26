@@ -7,6 +7,7 @@ public class JesusData extends CheckData {
 
 	public boolean wasGround = false, yDifState = false;
 	private double yDifValueTrue = 0, yDifValueFalse = 0;
+	public double bufferDistanceIn = 0;
 	
 	public JesusData(NegativityPlayer np) {
 		super(np);
@@ -23,5 +24,11 @@ public class JesusData extends CheckData {
 			yDifValueFalse = d;
 		}
 		yDifState = !yDifState;
+	}
+	
+	public void reduceBufferDistanceIn() {
+		bufferDistanceIn -= 0.5;
+		if(bufferDistanceIn < 0)
+			bufferDistanceIn = 0;
 	}
 }

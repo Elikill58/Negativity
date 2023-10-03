@@ -15,8 +15,8 @@ import io.netty.channel.Channel;
 
 public abstract class NettyPacketListener {
 
-	private static final String ENCODER_KEY = "encoder", ENCODER_KEY_HANDLER = "encoder_negativity";
-	private static final String DECODER_KEY = "decoder", DECODER_KEY_HANDLER = "decoder_negativity";
+	protected static String ENCODER_KEY = "encoder", DECODER_KEY = "decoder";
+	protected static final String ENCODER_KEY_HANDLER = "encoder_negativity", DECODER_KEY_HANDLER = "decoder_negativity";
 
 	private static NettyPacketListener instance;
 
@@ -42,7 +42,7 @@ public abstract class NettyPacketListener {
 		removeChannel(channel, ENCODER_KEY_HANDLER);
 	}
 
-	private void addChannel(Player p) {
+	protected void addChannel(Player p) {
 		Adapter ada = Adapter.getAdapter();
 		Version version = ada.getServerVersion(); // now it seems ViaVersion do thing before us
 		if(version.equals(Version.HIGHER) || version.equals(Version.LOWER)) {

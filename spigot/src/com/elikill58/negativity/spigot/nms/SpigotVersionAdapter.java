@@ -52,6 +52,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			if (version.isNewerOrEquals(Version.V1_20_2)) {
 				Class<?> ServerCommonPacketListenerImplClass = PacketUtils.getNmsClass("ServerCommonPacketListenerImpl", "server.network.");
 				pingField = ServerCommonPacketListenerImplClass.getDeclaredField("i");
+				pingField.setAccessible(true);
 				playerConnectionField = entityPlayerClass.getDeclaredField("c");
 			} else if (version.isNewerOrEquals(Version.V1_20)) {
 				pingField = entityPlayerClass.getDeclaredField("f");
@@ -127,7 +128,11 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public int getPlayerPing(Player player) {
 		try {
-			return pingField.getInt(getPlayerHandle.invoke(player));
+			if (version.isNewerOrEquals(Version.V1_20_2)) {
+				return pingField.getInt(getPlayerConnection(player));
+			} else {
+				return pingField.getInt(getPlayerHandle.invoke(player));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

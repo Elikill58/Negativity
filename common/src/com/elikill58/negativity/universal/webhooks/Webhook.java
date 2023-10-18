@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -47,7 +49,7 @@ public abstract class Webhook {
 	public String getWebhookName() {
 		return name;
 	}
-	
+
 	/**
 	 * Add message to queue of given webhook
 	 * 
@@ -91,10 +93,12 @@ public abstract class Webhook {
 			}
 			combinedMessages.add(msg);
 		}
-		combinedMessages.stream().collect(Collectors.groupingBy(WebhookMessage::getMessageType, Collectors.groupingBy(WebhookMessage::getConcerned, Collectors.toList()))).forEach((type, messagesPerPlayer) -> {
-			messagesPerPlayer.forEach((p, web) -> send(type, p, web));
-		});
-		
+		for(Entry<WebhookMessageType, Map<Player, List<WebhookMessage>>> entries : combinedMessages.stream().collect(Collectors.groupingBy(WebhookMessage::getMessageType, Collectors.groupingBy(WebhookMessage::getConcerned, Collectors.toList()))).entrySet()) {
+			if (time > System.currentTimeMillis())
+				return;
+			entries.getValue().forEach((p, web) -> send(entries.getKey(), p, web));
+		}
+
 	}
 
 	/**

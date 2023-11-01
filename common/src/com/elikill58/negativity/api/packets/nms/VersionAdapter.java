@@ -48,18 +48,36 @@ public abstract class VersionAdapter<R> {
 		sendPacket(p, packet);
 	}
 	
+    //private final Deflater deflater = new Deflater();
+   // private final byte[] buffer = new byte[8192];
+	
 	public void sendPacket(Player p, NPacket packet) {
 		/*int packetId = version.getNamedVersion().getPacketId(packet.getPacketType());
-		PacketSerializer serializer = new PacketSerializer(p);
-		serializer.writeVarInt(packetId);
-		packet.write(serializer, version);
+		//PacketSerializer serializer = new PacketSerializer(p);
+		//serializer.writeVarInt(packetId);
+		//packet.write(serializer, version);
 
 		PacketSerializer send = new PacketSerializer(p);
-		send.writeVarInt(serializer.writerIndex());
+		//send.writeVarInt(serializer.writerIndex());
 		send.writeVarInt(packetId);
 		packet.write(send, version);
-		getPlayerChannel(getR(p)).write(send);
-		serializer.release();*/
+
+		PacketSerializer result = new PacketSerializer(p);
+		
+		int i = send.readableBytes();
+        byte[] abyte = new byte[i];
+        send.readBytes(abyte);
+        this.deflater.setInput(abyte, 0, i);
+        this.deflater.finish();
+
+        while (!this.deflater.finished()) {
+            int j = this.deflater.deflate(this.buffer);
+
+            result.writeBytes(this.buffer, 0, j);
+        }
+
+        this.deflater.reset();
+        getPlayerChannel(getR(p)).write(result);*/
 	}
 
 	protected <T> T get(Class<?> clazz, Object obj, String name) {

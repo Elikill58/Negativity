@@ -11,7 +11,11 @@ import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
+import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
+import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.common.protocols.data.ChatData;
@@ -23,7 +27,7 @@ import com.elikill58.negativity.universal.logger.Debug;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class Chat extends Cheat {
+public class Chat extends Cheat implements Listeners {
 
 	private final List<String> insults = new ArrayList<>();
 	
@@ -85,8 +89,26 @@ public class Chat extends Cheat {
 
 	@Check(name = "insult", description = "Manage insult")
 	public void onChatInsult(PlayerChatEvent e) {
+		checkInsult(e.getPlayer(), e, e.getMessage());
+	}
+
+	@Check(name = "caps", description = "Too many caps on same message")
+	public void onChatCaps(PlayerChatEvent e) {
+		checkCaps(e.getPlayer(), e, e.getMessage());
+	}
+	
+	@EventListener
+	public void onCmd(PlayerCommandPreProcessEvent e) {
 		Player p = e.getPlayer();
-		String msg = e.getMessage();
+		if(getConfig().getBoolean("checks.insult.commands", true) && !e.isCancelled() && checkActive("insult")) {
+			checkInsult(p, e, String.join(" ", e.getArgument()));
+		}
+		if(getConfig().getBoolean("checks.caps.commands", true) && !e.isCancelled() && checkActive("caps")) {
+			checkCaps(p, e, String.join(" ", e.getArgument()));
+		}
+	}
+	
+	private void checkInsult(Player p, CancellableEvent e, String msg) {
 		final StringJoiner foundInsults = new StringJoiner(", ");
 		for (String s : msg.toLowerCase(Locale.ENGLISH).split(" ")) {
 			if (insults.contains(s))
@@ -100,11 +122,9 @@ public class Chat extends Cheat {
 				e.setCancelled(true);
 		}
 	}
-
-	@Check(name = "caps", description = "Too many caps on same message")
-	public void onChatCaps(PlayerChatEvent e, NegativityPlayer np) {
+	
+	private void checkCaps(Player p, CancellableEvent e, String msg) {
 		double upperCase = 0;
-		String msg = e.getMessage();
 		if(msg.length() < 5)
 			return; // too low message
 		for (int i = 0; i < msg.length(); i++)
@@ -113,7 +133,7 @@ public class Chat extends Cheat {
 		double percent = upperCase / msg.length() * 100.0D;
 		Adapter.getAdapter().debug(Debug.CHECK, "Message: " + msg + ", upper: " + upperCase + ", percent: " + percent);
 		if(percent >= getConfig().getDouble("checks.caps.percent", 70)) {
-			if(Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, (int) percent, "caps", "Message: " + msg + ", percent: " + percent, new CheatHover.Literal("Caps message: " + msg + " (" + String.format("%.2f", percent) + "% caps)"), (long) (upperCase - 5)) && isSetBack()) {
+			if(Negativity.alertMod(ReportType.WARNING, p, this, (int) percent, "caps", "Message: " + msg + ", percent: " + percent, new CheatHover.Literal("Caps message: " + msg + " (" + String.format("%.2f", percent) + "% caps)"), (long) (upperCase - 5)) && isSetBack()) {
 				e.setCancelled(true);
 			}
 		}

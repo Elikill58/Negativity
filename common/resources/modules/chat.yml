@@ -48,7 +48,9 @@ checks:
   insult:
     active: true
     lang: en
+    commands: true
   # Caps on message
   caps:
     active: true
     percent: 80
+    commands: true

@@ -97,7 +97,7 @@ public class BungeeListeners implements Listener {
 
 	private String getReason(net.md_5.bungee.api.event.LoginEvent e) {
 		BaseComponent[] comp = e.getCancelReasonComponents();
-		if (comp == null || comp.length == 0)
+		if (comp == null || comp.length == 0 || comp[0] == null)
 			return "";
 		return comp[0].toPlainText();
 	}

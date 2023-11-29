@@ -4,4 +4,5 @@ com.elikill58.negativity.common.special.MaxPlayerPerIP
 com.elikill58.negativity.common.special.McLeaks
 com.elikill58.negativity.common.special.ServerCrasher
 com.elikill58.negativity.common.special.ToolboxChecker
+com.elikill58.negativity.common.special.VpnChecker
 com.elikill58.negativity.common.special.WorldDownloader

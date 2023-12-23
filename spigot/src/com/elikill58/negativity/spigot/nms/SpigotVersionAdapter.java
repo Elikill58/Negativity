@@ -45,6 +45,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
 			tpsField = mcServer.getDeclaredField(getTpsFieldName());
+			tpsField.setAccessible(true);
 
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
 
@@ -317,6 +318,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_20_R1();
 			case "v1_20_R2":
 				return instance = new Spigot_1_20_R2();
+			case "v1_20_R3":
+				return instance = new Spigot_1_20_R3();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

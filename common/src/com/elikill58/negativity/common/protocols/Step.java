@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -63,8 +64,9 @@ public class Step extends Cheat implements Listeners {
 			return; // will go down
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
-		String downId = down.getBlock().getType().getId();
-		if (downId.contains("SHULKER"))
+		Material downType = down.getBlock().getType();
+		String downId = downType.getId();
+		if (downId.contains("SHULKER") || downType.isTransparent())
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);

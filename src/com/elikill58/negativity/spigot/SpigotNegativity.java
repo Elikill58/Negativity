@@ -118,9 +118,13 @@ public class SpigotNegativity extends JavaPlugin {
 			setEnabled(false);
 			return;
 		}
-		if (v.equals(Version.HIGHER))
-			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
-		else
+		if (v.equals(Version.HIGHER) || (v.equals(Version.V1_20) && !Utils.VERSION.equalsIgnoreCase("v1_20_R1"))) {
+			getLogger().severe("This server version is NOT and will NEVER be supported. ");
+			getLogger().severe("This plugin has no longer support since 01/09/2023.");
+			Adapter.setAdapter(null);
+			setEnabled(false);
+			return;
+		} else
 			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
 		
 		try {
@@ -143,8 +147,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		} else {
-			getLogger().warning("This plugin has no longer support since 01/09/2023. Only the premium version is now updated.");
-			getLogger().warning("You can find it at: https://www.spigotmc.org/resources/86874.");
+			getLogger().warning("This plugin has no longer support since 01/09/2023.");
 		}
 		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();

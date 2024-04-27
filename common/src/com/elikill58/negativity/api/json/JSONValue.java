@@ -18,7 +18,6 @@ import com.elikill58.negativity.api.json.parser.JSONParser;
 /**
  * @author FangYidong
  */
-@SuppressWarnings("rawtypes")
 public class JSONValue {
 	/**
 	 * Parse JSON text into java object from the input source. Please use

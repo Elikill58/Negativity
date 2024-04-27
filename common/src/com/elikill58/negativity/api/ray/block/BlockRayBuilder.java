@@ -111,6 +111,7 @@ public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRa
 	 * 
 	 * @return the block ray
 	 */
+	@Override
 	public BlockRay build() {
 		if(search == null || !search.isValid(this))
 			throw new IllegalArgumentException("Please check what you set as param before running ray.");

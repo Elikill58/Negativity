@@ -74,7 +74,6 @@ public class InventoryManager implements Listeners {
 		AbstractInventory.getInventories().forEach(AbstractInventory::load);
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	@EventListener
 	public void onInventoryClick(InventoryClickEvent e) {
 		PlatformHolder holder = e.getClickedInventory().getHolder();

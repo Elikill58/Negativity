@@ -35,13 +35,6 @@ public interface Player extends OfflinePlayer {
 	String getIP();
 	
 	/**
-	 * Know if the player is dead
-	 * 
-	 * @return true if the player is dead
-	 */
-	boolean isDead();
-	
-	/**
 	 * Know if the player is sleeping
 	 * 
 	 * @return true is the player is sleeping
@@ -225,6 +218,7 @@ public interface Player extends OfflinePlayer {
 	 * 
 	 * @return the world where the player is
 	 */
+	@Override
 	CompensatedWorld getWorld();
 	
 	/**

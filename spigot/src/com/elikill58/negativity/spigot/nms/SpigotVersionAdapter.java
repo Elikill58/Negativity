@@ -194,6 +194,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 	}
 
+	@Override
 	public AbstractChannel getPlayerChannel(Player p) {
 		return new NettyChannel(getChannel(p));
 	}

@@ -96,6 +96,7 @@ public class EntityRayBuilder extends AbstractRayBuilder<EntityRayBuilder, Entit
 	 * 
 	 * @return the block ray
 	 */
+	@Override
 	public EntityRay build() {
 		return new EntityRay(w, position, vector, maxDistance, onlyPlayer, bypassEntities, searched);
 	}

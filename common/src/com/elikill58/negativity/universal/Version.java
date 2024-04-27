@@ -22,6 +22,7 @@ import com.elikill58.negativity.api.packets.nms.versions.Version1_19_4;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_20;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_20_2;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_20_4;
+import com.elikill58.negativity.api.packets.nms.versions.Version1_20_5;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_8;
 import com.elikill58.negativity.api.packets.nms.versions.Version1_9;
 import com.elikill58.negativity.api.packets.nms.versions.VersionUnknown;
@@ -48,7 +49,8 @@ public enum Version {
 	V1_19_4("1.19.4", 19.4, Version1_19_4::new, 762),
 	V1_20("1.20", 20, Version1_20::new, 763),
 	V1_20_2("1.20.2", 20.2, Version1_20_2::new, 764),
-	V1_20_4("1.20.4", 20.4, Version1_20_4::new, 765, 999),
+	V1_20_4("1.20.4", 20.4, Version1_20_4::new, 765),
+	V1_20_5("1.20.5", 20.5, Version1_20_5::new, 766, 999),
 	HIGHER("higher", 42, VersionUnknown::new, 1000);
 
 	private final double power;

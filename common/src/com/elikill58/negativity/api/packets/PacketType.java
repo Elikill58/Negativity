@@ -179,13 +179,25 @@ public interface PacketType {
 		CHAT(NPacketPlayInChat::new),
 		CHAT_ACK,
 		CHAT_COMMAND,
+		/**
+		 * Since MC 1.20.5
+		 */
+		CHAT_COMMAND_SIGNED,
 		CHAT_PREVIEW,
 		CHAT_SESSION_UPDATE,
 		CHUNK_BATCH_RECEIVED,
 		CLIENT_COMMAND,
 		CLOSE_WINDOW,
 		CONFIGURATION_ACKNOWLEDGED,
+		/**
+		 * Since MC 1.20.5
+		 */
+		COOKIE_RESPONSE,
 		CUSTOM_PAYLOAD(NPacketPlayInCustomPayload::new),
+		/**
+		 * Since MC 1.20.5
+		 */
+		DEBUG_SAMPLE_SUBSCRIPTION,
 		DIFFICULTY_CHANGE,
 		DIFFICULTY_LOCK,
 		ENCHANT_ITEM,
@@ -295,12 +307,15 @@ public interface PacketType {
 		COMBAT_ENTER_EVENT,
 		COMBAT_KILL_EVENT,
 		COMMANDS,
+		COOKIE_STORE,
+		COOKIE_REQUEST,
 		CHUNK_BATCH_FINISHED,
 		CHUNK_BATCH_STARTED,
 		CHUNK_BIOMES,
 		CUSTOM_PAYLOAD(NPacketPlayOutCustomPayload::new),
 		CUSTOM_SOUND_EFFECT,
 		DAMAGE_EVENT,
+		DEBUG_SAMPLE,
 		ENTITY,
 		ENTITY_DESTROY(NPacketPlayOutEntityDestroy::new),
 		ENTITY_EFFECT(NPacketPlayOutEntityEffect::new),
@@ -316,6 +331,7 @@ public interface PacketType {
 		GAME_STATE_CHANGE,
 		HELD_ITEM_SLOT,
 		HIT_ANIMATION,
+		HURT_ANIMATION,
 		INITIALIZE_BORDER,
 		KEEP_ALIVE(NPacketPlayOutKeepAlive::new),
 		KICK_DISCONNECT,
@@ -340,6 +356,7 @@ public interface PacketType {
 		PLAYER_INFO_UPDATE,
 		PLAYER_LIST_HEADER_FOOTER,
 		POSITION(NPacketPlayOutPosition::new),
+		PROJECTILE_POWER,
 		RECIPES,
 		RECIPE_UPDATE,
 		REL_ENTITY_LOOK(NPacketPlayOutRelEntityLook::new),
@@ -388,6 +405,7 @@ public interface PacketType {
 		TICKING_STEP,
 		TILE_ENTITY_DATA,
 		TITLE,
+		TRANSFERT,
 		PING(NPacketPlayOutPing::new),
 		PONG,
 		UNLOAD_CHUNK(NPacketPlayOutUnloadChunk::new),

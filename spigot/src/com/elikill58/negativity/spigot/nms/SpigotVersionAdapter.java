@@ -129,8 +129,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public int getPlayerPing(Player player) {
 		try {
-			if (version.isNewerOrEquals(Version.V1_20_2)) {
-				return pingField.getInt(getPlayerConnection(player));
+			if (version.isNewerOrEquals(Version.V1_17)) {
+				return (int) player.getClass().getDeclaredMethod("getPing").invoke(player);
 			} else {
 				return pingField.getInt(getPlayerHandle.invoke(player));
 			}
@@ -321,6 +321,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_20_R2();
 			case "v1_20_R3":
 				return instance = new Spigot_1_20_R3();
+			case "v1_20_R4":
+				return instance = new Spigot_1_20_R4();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

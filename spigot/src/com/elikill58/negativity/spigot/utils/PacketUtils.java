@@ -175,8 +175,11 @@ public class PacketUtils {
 	public static int getProtocolVersion() {
 		try {
 			Class<?> sharedConstants = PacketUtils.getNmsClass("SharedConstants", "");
+			try { // try get value directly
+				return (int) sharedConstants.getDeclaredField("RELEASE_NETWORK_PROTOCOL_VERSION").get(null);
+			} catch (Exception e) { e.printStackTrace(); }
 			return (int) sharedConstants.getDeclaredMethod("c").invoke(null);
-		} catch (Exception e) {} // ignore because it's just an old version
+		} catch (Exception e) { e.printStackTrace(); } // ignore because it's just an old version
 		try {
 			Class<?> serverClazz = getNmsClass("MinecraftServer", "server.");
 			Object server = serverClazz.getDeclaredMethod("getServer").invoke(null);

@@ -1,7 +1,7 @@
 # Place block faster
 
 # The display name of cheat
-exact_name: "FastPlace"
+name: "FastPlace"
 
 # enable/disable detection
 active: true

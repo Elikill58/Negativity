@@ -35,7 +35,6 @@ public class ChunkSectionReader1_16 {
 	
 	private static final int GLOBAL_PALETTE = 15;
 
-	@SuppressWarnings("null")
 	public static ChunkSection read(PacketSerializer serializer, Version version) {
         // Read bits per block
         int bitsPerBlock = serializer.readUnsignedByte();

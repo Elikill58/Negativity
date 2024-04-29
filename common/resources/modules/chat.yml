@@ -1,7 +1,7 @@
 # Spam or insult players
 
 # The display name of cheat
-exact_name: "Chat"
+name: "Chat"
 
 # enable/disable detection
 active: true
@@ -42,11 +42,15 @@ checks:
   # Spam a message
   spam:
     active: true
+    # Amount before alerting
+    amount: 2
   # Disable insults
   insult:
     active: true
     lang: en
+    commands: true
   # Caps on message
   caps:
     active: true
     percent: 80
+    commands: true

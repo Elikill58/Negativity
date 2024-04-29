@@ -1,7 +1,7 @@
 # Manage client click
 
 # The display name of cheat
-exact_name: "AutoClick"
+name: "AutoClick"
 
 # enable/disable detection
 active: true

@@ -1,7 +1,7 @@
 # Allow impossible direction change
 
 # The display name of cheat
-exact_name: "Strafe"
+name: "Strafe"
 
 # enable/disable detection
 active: true

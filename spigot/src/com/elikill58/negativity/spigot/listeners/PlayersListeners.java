@@ -1,14 +1,13 @@
 package com.elikill58.negativity.spigot.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -28,12 +27,12 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
+import com.elikill58.negativity.universal.Adapter;
 
 public class PlayersListeners implements Listener {
 	
@@ -46,7 +45,7 @@ public class PlayersListeners implements Listener {
 		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, e.getQuitMessage());
 		EventManager.callEvent(event);
 		e.setQuitMessage(event.getQuitMessage());
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
+		Adapter.getAdapter().getScheduler().runDelayed(() -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 	
 	@EventHandler

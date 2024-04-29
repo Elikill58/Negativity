@@ -17,9 +17,12 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketContent;
+import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.nms.channels.AbstractChannel;
 import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
+import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -30,7 +33,7 @@ import io.netty.channel.ChannelFuture;
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	protected Method getPlayerHandle, getEntityLookup, getBukkitEntity;
-	protected Field recentTpsField, pingField, tpsField, playerConnectionField;
+	protected Field recentTpsField, tpsField, playerConnectionField;
 	protected Field minX, minY, minZ, maxX, maxY, maxZ, entityLookup;
 	protected Object dedicatedServer;
 
@@ -42,21 +45,19 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			recentTpsField = mcServer.getDeclaredField("recentTps");
 			tpsField = mcServer.getDeclaredField(getTpsFieldName());
+			tpsField.setAccessible(true);
 
 			getPlayerHandle = PacketUtils.getObcClass("entity.CraftPlayer").getDeclaredMethod("getHandle");
 
-			Class<?> entityPlayerClass = PacketUtils.getNmsClass("EntityPlayer", "server.level.");
-			if(version.isNewerOrEquals(Version.V1_20)) {
-				pingField = entityPlayerClass.getDeclaredField("f");
-				playerConnectionField = entityPlayerClass.getDeclaredField("c");
+			Class<?> entityPlayerClass = PacketUtils.getNmsClass(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "ServerPlayer" : "EntityPlayer", "server.level.");
+			if (version.isNewerOrEquals(Version.V1_20)) {
+				playerConnectionField = entityPlayerClass.getDeclaredField(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "connection" : "c");
 			} else if (version.isNewerOrEquals(Version.V1_17)) {
-				pingField = entityPlayerClass.getDeclaredField("e");
 				playerConnectionField = entityPlayerClass.getDeclaredField("b");
 			} else {
-				pingField = entityPlayerClass.getDeclaredField("ping");
 				playerConnectionField = entityPlayerClass.getDeclaredField("playerConnection");
 			}
-			Class<?> bbClass = PacketUtils.getNmsClass("AxisAlignedBB", "world.phys.");
+			Class<?> bbClass = PacketUtils.getNmsClass(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "AABB" : "AxisAlignedBB", "world.phys.");
 
 			if (version.isNewerOrEquals(Version.V1_13) && hasMinField(bbClass)) {
 				minX = bbClass.getDeclaredField("minX");
@@ -78,7 +79,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			this.getBukkitEntity = PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBukkitEntity");
 
 			if (version.isNewerOrEquals(Version.V1_17)) {
-				Class<?> worldServer = PacketUtils.getNmsClass("WorldServer", "server.level.");
+				Class<?> worldServer = PacketUtils.getNmsClass(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "ServerLevel" : "WorldServer", "server.level.");
 
 				try {
 					getEntityLookup = worldServer.getDeclaredMethod("getEntityLookup");
@@ -120,7 +121,11 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public int getPlayerPing(Player player) {
 		try {
-			return pingField.getInt(getPlayerHandle.invoke(player));
+			if (version.isNewerOrEquals(Version.V1_17)) {
+				return (int) player.getClass().getDeclaredMethod("getPing").invoke(player);
+			} else {
+				return PacketUtils.getNmsClass("EntityPlayer", "server.level.").getDeclaredField("ping").getInt(getPlayerHandle.invoke(player));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -128,6 +133,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 
 	public double[] getTps() {
+		if (SpigotNegativity.getSubPlatform().equals(SubPlatform.FOLIA)) {
+			try {
+				return (double[]) Bukkit.class.getDeclaredMethod("getTPS").invoke(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		try {
 			return (double[]) recentTpsField.get(dedicatedServer);
 		} catch (Exception e) {
@@ -148,7 +160,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public Object getNetworkManager(Player p) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			return new PacketContent(playerConnection).getSpecificModifier(PacketUtils.getNmsClass("NetworkManager", "network.")).readSafely(0);
+			return new PacketContent(playerConnection).getSpecificModifier(PacketUtils.getNmsClass(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "Connection" : "NetworkManager", "network.")).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -158,13 +170,23 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public Channel getChannel(Player p) {
 		try {
 			PacketContent packet = new PacketContent(getNetworkManager(p));
-			return version.equals(Version.V1_17) ? (Channel) packet.getAllObjects().read("k") : packet.getSpecificModifier(Channel.class).readSafely(0);
+			if (version.equals(Version.V1_17)) {
+				ContentModifier<Object> all = packet.getAllObjects();
+				if (all.has("k"))
+					return (Channel) all.read("k");
+			} else if (version.equals(Version.V1_16)) {
+				ContentModifier<Object> all = packet.getAllObjects();
+				if (all.has("channel"))
+					return (Channel) all.read("channel");
+			}
+			return packet.getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	@Override
 	public AbstractChannel getPlayerChannel(Player p) {
 		return new NettyChannel(getChannel(p));
 	}
@@ -190,7 +212,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public BoundingBox getBoundingBox(Entity et) {
 		try {
 			Object ep = PacketUtils.getNMSEntity(et);
-			Object bb = ReflectionUtils.getFirstWith(ep, PacketUtils.getNmsClass("Entity", "world.entity."), PacketUtils.getNmsClass("AxisAlignedBB", "world.phys."));
+			Object bb = ReflectionUtils.getFirstWith(ep, PacketUtils.getNmsClass("Entity", "world.entity."), PacketUtils.getNmsClass(SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? "AABB" : "AxisAlignedBB", "world.phys."));
 
 			double minX = this.minX.getDouble(bb);
 			double minY = this.minY.getDouble(bb);
@@ -287,6 +309,12 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_19_R3();
 			case "v1_20_R1":
 				return instance = new Spigot_1_20_R1();
+			case "v1_20_R2":
+				return instance = new Spigot_1_20_R2();
+			case "v1_20_R3":
+				return instance = new Spigot_1_20_R3();
+			case "v1_20_R4":
+				return instance = new Spigot_1_20_R4();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

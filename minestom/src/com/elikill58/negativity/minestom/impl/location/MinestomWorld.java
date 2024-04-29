@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.minestom.impl.block.MinestomBlock;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntity;
@@ -57,6 +58,11 @@ public class MinestomWorld extends World {
 	@Override
 	public Optional<Entity> getEntityById(int id) {
 		return w.getEntities().stream().filter(e -> e.getEntityId() == id).findFirst().map(MinestomEntity::new);
+	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		return w.getNearbyEntities(MinestomLocation.fromCommon(loc), distance).stream().map(MinestomEntity::new).collect(Collectors.toList());
 	}
 
 	@Override

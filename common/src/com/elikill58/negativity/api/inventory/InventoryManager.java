@@ -71,17 +71,16 @@ public class InventoryManager implements Listeners {
 		new WarnProcessorManagerInventory();
 		new SeeWarnInventory();
 		new SeeProofInventory();
-		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
+		AbstractInventory.getInventories().forEach(AbstractInventory::load);
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	@EventListener
 	public void onInventoryClick(InventoryClickEvent e) {
 		PlatformHolder holder = e.getClickedInventory().getHolder();
 		if(!(holder instanceof NegativityHolder)) 
 			return;
 		NegativityHolder nh = ((NegativityHolder) holder).getBasicHolder();
-		for(AbstractInventory inv : AbstractInventory.INVENTORIES) {
+		for(AbstractInventory inv : AbstractInventory.getInventories()) {
 			if(inv.isInstance(nh)) {
 				e.setCancelled(true);
 				Player p = e.getPlayer();
@@ -97,7 +96,7 @@ public class InventoryManager implements Listeners {
 	}
 	
 	public static Optional<AbstractInventory<?>> getInventory(NegativityInventory type) {
-		for(AbstractInventory<?> inv : AbstractInventory.INVENTORIES)
+		for(AbstractInventory<?> inv : AbstractInventory.getInventories())
 			if(inv.getType().equals(type))
 				return Optional.of(inv);
 		return Optional.empty();

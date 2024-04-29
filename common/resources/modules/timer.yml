@@ -1,7 +1,7 @@
 # Make the player game faster. Exactly like if the player was in temporal loop, which make it does 1 minute in 10 seconds for other
 
 # The display name of cheat
-exact_name: "Timer"
+name: "Timer"
 
 # enable/disable detection
 active: true

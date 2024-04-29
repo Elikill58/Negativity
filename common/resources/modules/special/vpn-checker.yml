@@ -1,0 +1,18 @@
+# Special detection
+
+# Limit player for each IP (dynamically)
+active: true
+
+# The display name
+name: "VPN Checker"
+
+message-reason: "Using VPN/Proxy is NOT allowed."
+proxy:
+  kick: true
+  ban: false
+vpn:
+  # Set empty for definitive ban
+  # Else, set the time in seconds
+  time: "3600"
+  kick: true
+  ban: false

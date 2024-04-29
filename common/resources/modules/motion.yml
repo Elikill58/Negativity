@@ -1,7 +1,7 @@
 # Wrong player motion
 
 # The display name of cheat
-exact_name: "Motion"
+name: "Motion"
 
 # enable/disable detection
 active: true

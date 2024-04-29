@@ -33,8 +33,10 @@ public class ToolboxChecker extends Special implements Listeners {
 			Adapter.getAdapter().debug(Debug.CHECK, "Not phone");
 			return;
 		}
-		if (data.getDeviceModel() == null)
+		if (data.getDeviceModel() == null) {
+			Adapter.getAdapter().debug(Debug.CHECK, "Device model unknown");
 			return;
+		}
 		String modelName = data.getDeviceModel();
 		Pattern pattern = Pattern.compile("^([^\\s]+)");
 		Matcher matcher = pattern.matcher(modelName);

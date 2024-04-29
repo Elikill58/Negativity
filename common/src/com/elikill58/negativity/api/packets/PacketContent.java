@@ -123,6 +123,15 @@ public class PacketContent {
 		return new ContentModifier<Object>(obj, null);
 	}
 	
+	/**
+	 * Get the object which is used for the packet content
+	 * 
+	 * @return the object
+	 */
+	public Object getObject() {
+		return obj;
+	}
+	
 	public static class ContentModifier<T> {
 		
 		private Object obj;
@@ -259,6 +268,10 @@ public class PacketContent {
 		 */
 		public HashMap<Field, T> getContent(){
 			return content;
+		}
+		
+		public boolean has(String name) {
+			return read(name) != null;
 		}
 	}
 }

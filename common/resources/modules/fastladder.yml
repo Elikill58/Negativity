@@ -1,7 +1,7 @@
 # Move faster on ladder
 
 # The display name of cheat
-exact_name: "FastLadder"
+name: "FastLadder"
 
 # enable/disable detection
 active: true

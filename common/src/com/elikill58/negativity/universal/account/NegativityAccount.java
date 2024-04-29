@@ -107,7 +107,6 @@ public final class NegativityAccount {
 		warns.put(cheatKey, count);
 	}
 	
-	@SuppressWarnings("null")
 	public long countAllWarns() {
 		return warns.values().stream().reduce(0l, Long::sum);
 	}

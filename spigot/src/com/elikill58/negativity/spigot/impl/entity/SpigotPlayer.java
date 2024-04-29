@@ -43,7 +43,7 @@ import com.google.common.io.ByteStreams;
 public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	private org.bukkit.entity.Player entity;
-	
+
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		this.entity = p;
 		this.location = SpigotLocation.toCommon(p.getLocation(), this);
@@ -113,7 +113,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public void damage(double amount) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.damage(amount));
+		runSync(() -> entity.damage(amount));
 	}
 
 	@Override
@@ -128,11 +128,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public void kick(String reason) {
-		if(Bukkit.isPrimaryThread())
-			entity.kickPlayer(reason);
-		else {
-			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.kickPlayer(reason));
-		}
+		runSync(() -> entity.kickPlayer(reason));
 	}
 
 	@Override
@@ -169,7 +165,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public boolean isFlying() {
 		return entity.isFlying();
 	}
-	
+
 	@Override
 	public void setFlying(boolean b) {
 		entity.setFlying(b);
@@ -214,9 +210,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		List<PotionEffect> list = new ArrayList<>();
-		entity.getActivePotionEffects()
-				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()),
-						pe.getDuration(), pe.getAmplifier())));
+		entity.getActivePotionEffects().forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()), pe.getDuration(), pe.getAmplifier())));
 		return list;
 	}
 
@@ -231,8 +225,8 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
 		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
-		if(spigotType != null)
-			Adapter.getAdapter().runSync(() -> entity.removePotionEffect(spigotType));
+		if (spigotType != null)
+			runSync(() -> entity.removePotionEffect(spigotType));
 		// else can have error
 	}
 
@@ -258,7 +252,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
 		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
-		if(spigotType != null)
+		if (spigotType != null)
 			Adapter.getAdapter().runSync(() -> entity.addPotionEffect(new org.bukkit.potion.PotionEffect(spigotType, duration, amplifier)));
 	}
 
@@ -279,8 +273,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public void teleport(Location loc) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
-				() -> entity.teleport(SpigotLocation.fromCommon(loc)));
+		runSync(() -> entity.teleport(SpigotLocation.fromCommon(loc)));
 	}
 
 	@Override
@@ -301,8 +294,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.getNearbyEntities(x, y, z)
-				.forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
+		runSync(() -> entity.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
 		return list;
 	}
 
@@ -322,9 +314,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.getInventory().getItemInOffHand() != null
-				? new SpigotItemStack(entity.getInventory().getItemInOffHand())
-				: null;
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.getInventory().getItemInOffHand() != null ? new SpigotItemStack(entity.getInventory().getItemInOffHand()) : null;
 	}
 
 	@Override
@@ -339,30 +329,27 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.getOpenInventory() != null && entity.getOpenInventory().getTopInventory() != null
-				&& entity.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
+		return entity.getOpenInventory() != null && entity.getOpenInventory().getTopInventory() != null && entity.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
 	}
 
 	@Override
 	public Inventory getOpenInventory() {
-		return entity.getOpenInventory() == null || entity.getOpenInventory().getTopInventory() == null ? null
-				: new SpigotInventory(entity.getOpenInventory().getTopInventory());
+		return entity.getOpenInventory() == null || entity.getOpenInventory().getTopInventory() == null ? null : new SpigotInventory(entity.getOpenInventory().getTopInventory());
 	}
 
 	@Override
 	public void openInventory(Inventory inv) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
-				() -> entity.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
+		Adapter.getAdapter().getScheduler().run(() -> entity.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
 	}
 
 	@Override
 	public void closeInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), entity::closeInventory);
+		runSync(entity::closeInventory);
 	}
 
 	@Override
 	public void updateInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), entity::updateInventory);
+		runSync(entity::updateInventory);
 	}
 
 	@Override
@@ -374,16 +361,16 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public void setVanished(boolean vanished) {
 		if (vanished) {
 			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
-				if(Perm.hasPerm(other, Perm.ADMIN))
+				if (Perm.hasPerm(other, Perm.ADMIN))
 					continue;
-				if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+				if (Version.getVersion().isNewerOrEquals(Version.V1_13))
 					((org.bukkit.entity.Player) other.getDefault()).hidePlayer(SpigotNegativity.getInstance(), entity);
 				else
 					((org.bukkit.entity.Player) other.getDefault()).hidePlayer(entity);
 			}
 		} else {
 			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
-				if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+				if (Version.getVersion().isNewerOrEquals(Version.V1_13))
 					((org.bukkit.entity.Player) other.getDefault()).showPlayer(SpigotNegativity.getInstance(), entity);
 				else
 					((org.bukkit.entity.Player) other.getDefault()).showPlayer(entity);
@@ -395,12 +382,12 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public InetSocketAddress getAddress() {
 		return entity.getAddress();
 	}
-	
+
 	@Override
 	public BoundingBox getBoundingBox() {
 		return SpigotVersionAdapter.getVersionAdapter().getBoundingBox(entity);
 	}
-	
+
 	@Override
 	public void sendToServer(String serverName) {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -408,7 +395,7 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 		out.writeUTF(serverName);
 		entity.sendPluginMessage(SpigotNegativity.getInstance(), "BungeeCord", out.toByteArray());
 	}
-	
+
 	@Override
 	public String getServerName() {
 		return Utils.getBukkitServerName();
@@ -434,9 +421,13 @@ public class SpigotPlayer extends AbstractPlayer implements Player {
 	public void setVelocity(Vector vel) {
 		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
 	}
-	
+
 	@Override
 	public void sendMessage(String msg) {
 		entity.sendMessage(msg);
+	}
+
+	private void runSync(Runnable task) {
+		Adapter.getAdapter().getScheduler().runEntity(this, task);
 	}
 }

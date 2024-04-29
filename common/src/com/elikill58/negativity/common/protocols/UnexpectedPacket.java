@@ -3,6 +3,9 @@ package com.elikill58.negativity.common.protocols;
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.entity.EntityDismountEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType.Client;
@@ -17,7 +20,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class UnexpectedPacket extends Cheat {
+public class UnexpectedPacket extends Cheat implements Listeners {
 
 	public UnexpectedPacket() {
 		super(CheatKeys.UNEXPECTED_PACKET, CheatCategory.PLAYER, Materials.JUKEBOX, UnexpectedPacketData::new);
@@ -27,7 +30,7 @@ public class UnexpectedPacket extends Cheat {
 	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.STEER_VEHICLE)) {
-			if (!p.isInsideVehicle() && !data.waitGround) {
+			if (!p.isInsideVehicle() && p.getVehicle() != null && !data.waitGround) {
 				long timeLeftVehicle = np.getTicks() - data.vehicleLeft;
 				if (timeLeftVehicle < 20)
 					return; // just left, strange packet but prevent issue
@@ -39,12 +42,21 @@ public class UnexpectedPacket extends Cheat {
 		} else if (e.getPacket().getPacketType().equals(Client.ENTITY_ACTION)) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) e.getPacket();
 			if (action.action.equals(EnumPlayerAction.START_SNEAKING) && p.isInsideVehicle()) {
-				data.vehicleLeft = np.getTicks();
 				data.waitGround = true;
 			}
-		} else if(e.getPacket().getPacketType().equals(Client.POSITION_LOOK)) {
+		}/* else if(e.getPacket().getPacketType().equals(Client.POSITION_LOOK)) {
 			data.waitGround = false;
 			data.vehicleLeft = 0;
+		}*/
+	}
+	
+	@EventListener
+	public void onEntityDismount(EntityDismountEvent e) {
+		if(e.getEntity() instanceof Player) {
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer((Player) e.getEntity());
+			UnexpectedPacketData data = np.getCheckData(this);
+			data.vehicleLeft = np.getTicks();
+			data.waitGround = false;
 		}
 	}
 

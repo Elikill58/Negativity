@@ -19,6 +19,11 @@ public class MinestomScheduler implements Scheduler {
 	private final SchedulerManager sh = MinecraftServer.getSchedulerManager();
 	
 	@Override
+	public void run(Runnable task) {
+		sh.scheduleNextTick(task);
+	}
+	
+	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {
 		MinestomNegativity.getInstance().getLogger().error("MinestomScheduler#runRepeating isn't implemented yet.");
 	}

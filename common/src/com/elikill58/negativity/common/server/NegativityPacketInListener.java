@@ -4,13 +4,13 @@ import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
+import com.elikill58.negativity.api.events.entity.EntityDismountEvent;
 import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
@@ -52,16 +52,18 @@ public class NegativityPacketInListener implements Listeners {
 			np.isAttacking = true;
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet;
 			if (useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-				for (Entity entity : p.getWorld().getEntities()) {
-					if (entity.isSameId(useEntityPacket.entityId)) {
-						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
-						EventManager.callEvent(event);
-						if (event.isCancelled())
-							e.setCancelled(event.isCancelled());
-					}
-				}
+				p.getWorld().getEntityById(useEntityPacket.entityId).ifPresent(entity -> {
+					PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
+					EventManager.callEvent(event);
+					if (event.isCancelled())
+						e.setCancelled(event.isCancelled());
+				});
 			}
 		} else if (type.isFlyingPacket()) {
+			if(np.cancelNextFlyingPacket) { // to prevent some tp with high locs changes
+				np.cancelNextFlyingPacket = false;
+				return;
+			}
 			np.addTick();
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;
 			if (flying.hasLocation()) {
@@ -123,6 +125,14 @@ public class NegativityPacketInListener implements Listeners {
 				EventManager.callEvent(chatEvent);
 				e.setCancelled(chatEvent.isCancelled());
 			}
+		}
+	}
+	
+	@EventListener
+	public void onEntityDismount(EntityDismountEvent e) {
+		if(e.getEntity() instanceof Player) {
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer((Player) e.getEntity());
+			np.cancelNextFlyingPacket = true;
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package com.elikill58.negativity.api.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum EntityType {
 
 	ALLAY("minecraft:allay"),
@@ -133,17 +136,22 @@ public enum EntityType {
 	}
 	
 	EntityType(String name) {
-		this.name = name; // will be replaced by minecraft keys
+		this.name = name.toUpperCase(); // will be replaced by minecraft keys
 	}
 
 	public String getName() {
 		return name;
 	}
+	
+	private static final Map<String, EntityType> ENTITY_TYPE_PER_NAME = new HashMap<>();
 
 	public static EntityType get(String name) {
-		for(EntityType gm : EntityType.values())
-			if(gm.getName().equalsIgnoreCase(name) || gm.name().equalsIgnoreCase(name))
-				return gm;
-		return EntityType.UNKNOWN;
+		return ENTITY_TYPE_PER_NAME.computeIfAbsent(name, (s) -> {
+			s = s.toUpperCase();
+			for(EntityType gm : EntityType.values())
+				if(gm.getName().equals(s) || gm.name().equals(s))
+					return gm;
+			return EntityType.UNKNOWN;
+		});
 	}
 }

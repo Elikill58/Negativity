@@ -1,7 +1,7 @@
 # Fake blocks underneath player, allows player to do things like fly and nofall
 
 # The display name of cheat
-exact_name: "GroundSpoof"
+name: "GroundSpoof"
 
 # enable/disable detection
 active: true

@@ -2,12 +2,17 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.entity.EntityDismountEvent;
+import com.elikill58.negativity.api.events.packets.PacketPreReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -27,14 +32,14 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
-			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_ALLOW_FLY })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np, SpeedData data) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velLen = p.getVelocity().length();
 		boolean onGround = p.isOnGround();
-		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) {
+		if (!onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4 && Math.abs(p.getVelocity().getY()) < 0.4) {
 			data.distanceJumpingBuffer += 0.44;
 			if (data.distanceJumpingBuffer >= 0.9) {
 				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(y * 190), "distance-jumping",
@@ -156,4 +161,41 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
+	@Check(name = "distance-vehicle", description = "Check for same Y movement", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.INSIDE_VEHICLE,
+			CheckConditions.NO_ICE_AROUND })
+	public void onMoveWithVehicle(PacketPreReceiveEvent e, NegativityPlayer np, SpeedData data) {
+		Player p = e.getPlayer();
+		if(!e.getPacket().getPacketType().equals(PacketType.Client.STEER_VEHICLE))
+			return;
+		Entity vehicle = p.getVehicle();
+		Location fromVec = data.locVehicle == null ? vehicle.getLocation() : data.locVehicle, toVec = vehicle.getLocation();
+		double diff = fromVec.distanceXZ(toVec);
+		double max, veryHigh;
+		switch (vehicle.getType()) {
+		case PIG:
+			max = 0.14;
+			veryHigh = 0.25;
+			break;
+		case HORSE:
+			max = 1.2;
+			veryHigh = 1.6;
+			break;
+		default:
+			return; // don't support this entity
+		}
+		if(diff > max) {
+			boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(60 + (diff - max) * 50), "distance-vehicle", "Diff: " + diff + ", max: " + max + ", vehicle: " + vehicle, null, (veryHigh < diff ? 10 : 1));
+			if(cancel && isSetBack())
+				e.setCancelled(true);
+		}
+		
+		data.locVehicle = toVec;
+	}
+	
+	@EventListener
+	public void onEntityDismount(EntityDismountEvent e) {
+		if(e.getEntity() instanceof Player) {
+			NegativityPlayer.getNegativityPlayer((Player) e.getEntity()).<SpeedData>getCheckData(this).locVehicle = null;
+		}
+	}
 }

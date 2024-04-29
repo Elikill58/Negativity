@@ -10,7 +10,10 @@ import com.elikill58.negativity.api.item.Material;
 
 public abstract class AbstractInventory<T extends NegativityHolder> {
 
-	public static final List<AbstractInventory<?>> INVENTORIES = new ArrayList<>();
+	private static final List<AbstractInventory<?>> INVENTORIES = new ArrayList<>();
+	public static List<AbstractInventory<?>> getInventories() {
+		return INVENTORIES;
+	}
 	
 	private final NegativityInventory type;
 	private final Class<T> holderExample;

@@ -1,7 +1,7 @@
 # Sprint to make others take more knockback
 
 # The display name of cheat
-exact_name: "SuperKnockback"
+name: "SuperKnockback"
 
 # enable/disable detection
 active: true

@@ -71,6 +71,11 @@ public class CompensatedWorld extends World {
 	public Optional<Entity> getEntityById(int id) {
 		return getServerWorld().getEntityById(id);
 	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		return getServerWorld().getNearEntity(loc, distance);
+	}
 
 	@Override
 	public Difficulty getDifficulty() {

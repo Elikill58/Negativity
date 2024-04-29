@@ -1,7 +1,7 @@
 # Allow you to don't flinch when you are hit
 
 # The display name of cheat
-exact_name: "Anti-KB"
+name: "Anti-KB"
 
 # enable/disable detection
 active: true

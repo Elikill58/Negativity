@@ -67,9 +67,7 @@ public interface PacketType {
 	 * 
 	 * @return the packet name
 	 */
-	default String getPacketName() {
-		return ChatUtils.capitalize(name());
-	}
+	String getPacketName();
 	
 	/**
 	 * Check if it's flying packet
@@ -181,11 +179,25 @@ public interface PacketType {
 		CHAT(NPacketPlayInChat::new),
 		CHAT_ACK,
 		CHAT_COMMAND,
+		/**
+		 * Since MC 1.20.5
+		 */
+		CHAT_COMMAND_SIGNED,
 		CHAT_PREVIEW,
 		CHAT_SESSION_UPDATE,
+		CHUNK_BATCH_RECEIVED,
 		CLIENT_COMMAND,
 		CLOSE_WINDOW,
+		CONFIGURATION_ACKNOWLEDGED,
+		/**
+		 * Since MC 1.20.5
+		 */
+		COOKIE_RESPONSE,
 		CUSTOM_PAYLOAD(NPacketPlayInCustomPayload::new),
+		/**
+		 * Since MC 1.20.5
+		 */
+		DEBUG_SAMPLE_SUBSCRIPTION,
 		DIFFICULTY_CHANGE,
 		DIFFICULTY_LOCK,
 		ENCHANT_ITEM,
@@ -199,6 +211,7 @@ public interface PacketType {
 		KEEP_ALIVE(NPacketPlayInKeepAlive::new),
 		LOOK(NPacketPlayInLook::new),
 		PICK_ITEM,
+		PING,
 		POSITION(NPacketPlayInPosition::new),
 		POSITION_LOOK(NPacketPlayInPositionLook::new),
 		RECIPE_SETTINGS,
@@ -210,6 +223,7 @@ public interface PacketType {
 		SET_JIGSAW,
 		SETTINGS(NPacketPlayInSettings::new),
 		SPECTATE,
+		SLOT_STATE_CHANGE,
 		STEER_VEHICLE(NPacketPlayInSteerVehicle::new),
 		STRUCT,
 		TAB_COMPLETE,
@@ -225,6 +239,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Client() {
 			this(NPacketPlayInUnset::new);
@@ -232,6 +247,12 @@ public interface PacketType {
 		
 		Client(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -286,10 +307,15 @@ public interface PacketType {
 		COMBAT_ENTER_EVENT,
 		COMBAT_KILL_EVENT,
 		COMMANDS,
+		COOKIE_STORE,
+		COOKIE_REQUEST,
+		CHUNK_BATCH_FINISHED,
+		CHUNK_BATCH_STARTED,
 		CHUNK_BIOMES,
 		CUSTOM_PAYLOAD(NPacketPlayOutCustomPayload::new),
 		CUSTOM_SOUND_EFFECT,
 		DAMAGE_EVENT,
+		DEBUG_SAMPLE,
 		ENTITY,
 		ENTITY_DESTROY(NPacketPlayOutEntityDestroy::new),
 		ENTITY_EFFECT(NPacketPlayOutEntityEffect::new),
@@ -305,6 +331,7 @@ public interface PacketType {
 		GAME_STATE_CHANGE,
 		HELD_ITEM_SLOT,
 		HIT_ANIMATION,
+		HURT_ANIMATION,
 		INITIALIZE_BORDER,
 		KEEP_ALIVE(NPacketPlayOutKeepAlive::new),
 		KICK_DISCONNECT,
@@ -329,16 +356,19 @@ public interface PacketType {
 		PLAYER_INFO_UPDATE,
 		PLAYER_LIST_HEADER_FOOTER,
 		POSITION(NPacketPlayOutPosition::new),
+		PROJECTILE_POWER,
 		RECIPES,
 		RECIPE_UPDATE,
 		REL_ENTITY_LOOK(NPacketPlayOutRelEntityLook::new),
 		REL_ENTITY_MOVE(NPacketPlayOutRelEntityMove::new),
 		REL_ENTITY_MOVE_LOOK(NPacketPlayOutRelEntityMoveLook::new),
 		REMOVE_ENTITY_EFFECT,
+		RESOURCE_PACK_POP,
 		RESOURCE_PACK_SEND,
 		RESPAWN,
 		SCOREBOARD_DISPLAY_OBJECTIVE,
 		SCOREBOARD_OBJECTIVE,
+		SCOREBOARD_RESET,
 		SCOREBOARD_SCORE,
 		SCOREBOARD_TEAM,
 		SERVER_DATA,
@@ -365,14 +395,19 @@ public interface PacketType {
 		SPAWN_ENTITY_WEATHER,
 		SPAWN_PLAYER,
 		SPAWN_POSITION,
+		START_CONFIGURATION,
 		STATISTIC,
 		STOP_SOUND,
 		SYSTEM_CHAT,
 		TAB_COMPLETE,
 		TAGS,
+		TICKING_STATE,
+		TICKING_STEP,
 		TILE_ENTITY_DATA,
 		TITLE,
+		TRANSFERT,
 		PING(NPacketPlayOutPing::new),
+		PONG,
 		UNLOAD_CHUNK(NPacketPlayOutUnloadChunk::new),
 		UPDATE_ATTRIBUTES,
 		UPDATE_ENABLED_FEATURES,
@@ -391,6 +426,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 
 		Server() {
 			this(NPacketPlayOutUnset::new);
@@ -398,6 +434,12 @@ public interface PacketType {
 		
 		Server(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -436,6 +478,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Login() {
 			this(NPacketLoginUnset::new);
@@ -443,6 +486,12 @@ public interface PacketType {
 		
 		Login(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -478,6 +527,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Status() {
 			this(NPacketStatusUnset::new);
@@ -485,6 +535,12 @@ public interface PacketType {
 		
 		Status(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 		
 		@Override
@@ -515,6 +571,7 @@ public interface PacketType {
 		UNSET;
 		
 		private final Callable<NPacket> fun;
+		private final String packetName;
 		
 		Handshake() {
 			this(NPacketHandshakeUnset::new);
@@ -522,6 +579,12 @@ public interface PacketType {
 		
 		Handshake(Callable<NPacket> fun) {
 			this.fun = fun;
+			this.packetName = ChatUtils.capitalize(name());
+		}
+		
+		@Override
+		public String getPacketName() {
+			return packetName;
 		}
 
 		@Override

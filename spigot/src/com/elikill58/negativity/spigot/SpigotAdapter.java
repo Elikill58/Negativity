@@ -36,6 +36,8 @@ import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
+import com.elikill58.negativity.spigot.scheduler.FoliaScheduler;
+import com.elikill58.negativity.spigot.scheduler.SpigotScheduler;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
@@ -65,7 +67,7 @@ public class SpigotAdapter extends Adapter {
 				pl.getDataFolder().toPath().resolve("lang"), "Negativity", "CheatHover");
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
 		this.itemRegistrar = new SpigotItemRegistrar();
-		this.scheduler = new SpigotScheduler(pl);
+		this.scheduler = SubPlatform.getSubPlatform().equals(SubPlatform.FOLIA) ? new FoliaScheduler(pl) : new SpigotScheduler(pl);
 	}
 	
 	@Override
@@ -115,7 +117,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void runConsoleCommand(String cmd) {
-		Bukkit.getScheduler().callSyncMethod(pl, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd));
+		getScheduler().run(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd));
 	}
 
 	@Override
@@ -251,7 +253,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public void runSync(Runnable call) {
-		Bukkit.getScheduler().runTask(pl, call);
+		getScheduler().run(call);
 	}
 	
 	@Override

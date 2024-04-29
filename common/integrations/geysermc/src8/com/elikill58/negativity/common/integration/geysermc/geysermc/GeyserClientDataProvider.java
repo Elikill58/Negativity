@@ -13,6 +13,8 @@ public class GeyserClientDataProvider implements BedrockClientDataProvider, Plug
 			Class<?> processorClass = getClass().getClassLoader()
 					.loadClass("com.elikill58.negativity.common.integration.geysermc.geysermc.GeyserClientDataGetter");
 			return (BedrockClientDataGetter) processorClass.getConstructor().newInstance();
+		} catch (UnsupportedClassVersionError e) {
+			return null;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

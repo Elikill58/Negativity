@@ -140,7 +140,7 @@ public class Jesus extends Cheat implements Listeners {
 	}
 	
 	@Check(name = "distance-in", description = "Check distance when in water", conditions = { CheckConditions.SURVIVAL })
-	public void onDistanceIn(PlayerMoveEvent e) {
+	public void onDistanceIn(PlayerMoveEvent e, JesusData data) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation(), from = e.getFrom(), to = e.getTo();
 		Block toBlock = to.getBlock();
@@ -156,9 +156,12 @@ public class Jesus extends Cheat implements Listeners {
 			ws *= depthStriderLevel * (4 / 3);
 		if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > ws && !upper.getBlock().isLiquid()
 				&& !p.isFlying() && !loc.getBlockChecker(1).has("LILY", "WATER")) {
-			Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
-					"In water, distance: " + distanceAbs + ", ws: " + ws + ", depth strider: " + depthStriderLevel,
-					hoverMsg("main", "%distance%", String.format("%.2f", distanceAbs)));
-		}
+			data.bufferDistanceIn = (data.bufferDistanceIn + 0.2) * 1.5;
+			if(data.bufferDistanceIn > 1)
+				Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
+						"In water, distance: " + distanceAbs + ", ws: " + ws + ", depth strider: " + depthStriderLevel,
+						hoverMsg("main", "%distance%", String.format("%.2f", distanceAbs)));
+		} else
+			data.reduceBufferDistanceIn();
 	}
 }

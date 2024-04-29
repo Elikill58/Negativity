@@ -45,7 +45,7 @@ public class AirJump extends Cheat {
 		if (idDownDown.contains("STAIR") || idDown.contains("STAIR") || mDown.isSolid())
 			return;
 
-		Scheduler.getInstance().runDelayed(() -> {
+		Scheduler.getInstance().runEntityDelayed(p, () -> {
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
 			double velY = p.getVelocity().getY();
 			if (diffYtoFrom - (velY > 0 ? velY : 0) > 0.35 && data.diffY < diffYtoFrom && data.diffY > velY
@@ -75,7 +75,7 @@ public class AirJump extends Cheat {
 			return;
 		Vector oldVel = p.getVelocity();
 		// TODO soon don't use scheduler
-		Scheduler.getInstance().runDelayed(() -> {
+		Scheduler.getInstance().runEntityDelayed(p, () -> {
 			if (locDownDown.getBlock().getType().getId().contains("STAIR")
 					|| locDown.getBlock().getType().getId().contains("STAIR"))
 				return;

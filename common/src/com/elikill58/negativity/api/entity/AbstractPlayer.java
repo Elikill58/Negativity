@@ -59,7 +59,8 @@ public abstract class AbstractPlayer implements Player {
 	public Location getLocation() {
 		return location;
 	}
-	
+
+	@Override
 	public void setLocation(Location location) {
 		this.location = location;
 	}

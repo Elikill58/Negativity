@@ -21,6 +21,11 @@ public class SpongeScheduler implements Scheduler {
 	}
 	
 	@Override
+	public void run(Runnable task) {
+		Sponge.server().scheduler().submit(Task.builder().plugin(plugin).execute(task).build());
+	}
+	
+	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {
 		Sponge.server().scheduler().submit(Task.builder()
 			.plugin(this.plugin)

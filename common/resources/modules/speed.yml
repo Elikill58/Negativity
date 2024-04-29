@@ -1,7 +1,7 @@
 # Move faster
 
 # The display name of cheat
-exact_name: "Speed"
+name: "Speed"
 
 # enable/disable detection
 active: true

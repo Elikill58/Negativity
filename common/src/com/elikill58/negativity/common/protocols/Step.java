@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -33,18 +34,19 @@ public class Step extends Cheat implements Listeners {
 
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY,
 			CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_BLOCK_MID_AROUND,
-			CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_CLIMB_BLOCK })
+			CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
-		if (down.getBlock().getType().getId().contains("SHULKER"))
+		String downId = down.getBlock().getType().getId();
+		if (downId.contains("SHULKER"))
 			return;
 		double dif = to.getY() - from.getY();
 		if (dif > 0.45 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dif * 50), "dif", "Move " + dif + " blocks up.",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dif * 50), "dif", "Move " + dif + " blocks up, down: " + downId,
 					hoverMsg("main", "%block%", String.format("%.2f", dif)));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
@@ -62,7 +64,9 @@ public class Step extends Cheat implements Listeners {
 			return; // will go down
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
-		if (down.getBlock().getType().getId().contains("SHULKER"))
+		Material downType = down.getBlock().getType();
+		String downId = downType.getId();
+		if (downId.contains("SHULKER") || downType.isTransparent())
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
@@ -74,7 +78,7 @@ public class Step extends Cheat implements Listeners {
 					&& !(amplifier > 0 && diffBoost < 0.55)) {
 				Negativity.alertMod(
 						ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 120), "dif-boost", "Basic Y diff: " + dif + ", with boost: "
-								+ diffBoost + " (amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity(),
+								+ diffBoost + " (amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity() + ", down: " + downId,
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 			}
 		}

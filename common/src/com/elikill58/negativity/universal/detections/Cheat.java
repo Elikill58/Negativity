@@ -29,6 +29,7 @@ import com.elikill58.negativity.api.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
@@ -85,25 +86,6 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 				break;
 			}
 		});
-	}
-	
-	/**
-	 * Get the exact name of the cheat
-	 * 
-	 * @return the name
-	 */
-	@Override
-	public String getName() {
-		return config.getString("exact_name", key.getLowerKey());
-	}
-	
-	/**
-	 * Get the exact name of the cheat but for command (without special char, space ...)
-	 * 
-	 * @return the name formatted
-	 */
-	public String getCommandName() {
-		return config.getString("exact_name", key.getLowerKey()).replace(" ", "").replace("-", "").replace("_", "");
 	}
 	
 	/**
@@ -377,6 +359,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		Adapter ada = Adapter.getAdapter();
 		int futurCheat = 0;
 		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
+			Perm.getPermissions().put("bypass." + cheat.getKey().getLowerKey(), ada.getConfig().getString("Permissions.bypass." + cheat.getKey().getLowerKey() + ".default"));
 			if(cheat instanceof Listeners) {
 				try {
 					EventManager.registerEvent((Listeners) cheat);

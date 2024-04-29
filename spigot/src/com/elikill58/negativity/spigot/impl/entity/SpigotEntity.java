@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
@@ -56,10 +55,7 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	public EntityType getType() {
 		if(entity == null)
 			return EntityType.UNKNOWN;
-		String typeName = entity.getType().name().toUpperCase();
-		if(typeName.contains("BOAT"))
-			return EntityType.BOAT;
-		return EntityType.get(typeName);
+		return SpigotEntityManager.getEntityType(entity);
 	}
 
 	@Override
@@ -75,8 +71,6 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public String getName() {
-		if(entity instanceof HumanEntity) // prevent 1.7 error
-			return ((HumanEntity) entity).getName();
 		return entity.getName();
 	}
 	

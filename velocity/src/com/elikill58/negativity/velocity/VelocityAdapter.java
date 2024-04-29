@@ -46,8 +46,7 @@ public class VelocityAdapter extends ProxyAdapter {
 	public VelocityAdapter(VelocityNegativity pl) {
 		this.pl = pl;
 		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
-		this.translationProviderFactory = new NegativityTranslationProviderFactory(
-				pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new Slf4jLoggerAdapter(pl.getLogger());
 		this.scheduler = new VelocityScheduler(pl);
 	}
@@ -118,24 +117,18 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
-		pl.getServer().getAllPlayers().forEach((p) -> list
-				.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer()));
+		pl.getServer().getAllPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer()));
 		return list;
 	}
 
 	@Override
 	public @Nullable Player getPlayer(String name) {
-		return pl.getServer().getPlayer(name)
-				.map(player -> NegativityPlayer
-						.getNegativityPlayer(player.getUniqueId(), () -> new VelocityPlayer(player)).getPlayer())
-				.orElse(null);
+		return pl.getServer().getPlayer(name).map(player -> NegativityPlayer.getNegativityPlayer(player.getUniqueId(), () -> new VelocityPlayer(player)).getPlayer()).orElse(null);
 	}
 
 	@Override
 	public @Nullable Player getPlayer(UUID uuid) {
-		return pl.getServer().getPlayer(uuid)
-				.map(player -> NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(player)).getPlayer())
-				.orElse(null);
+		return pl.getServer().getPlayer(uuid).map(player -> NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(player)).getPlayer()).orElse(null);
 	}
 
 	@Override
@@ -150,14 +143,13 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public List<ExternalPlugin> getDependentPlugins() {
-		return pl.getServer().getPluginManager().getPlugins().stream()
-				.filter(plugin -> plugin.getDescription().getDependency("negativity").isPresent())
-				.map(VelocityExternalPlugin::new).collect(Collectors.toList());
+		return pl.getServer().getPluginManager().getPlugins().stream().filter(plugin -> plugin.getDescription().getDependency("negativity").isPresent()).map(VelocityExternalPlugin::new)
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public void runSync(Runnable call) {
-		pl.getServer().getScheduler().buildTask(pl, call);
+		pl.getServer().getScheduler().buildTask(pl, call).schedule();
 	}
 
 	@Override
@@ -173,16 +165,16 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public List<String> getAllPlugins() {
-		return VelocityNegativity.getInstance().getServer().getPluginManager().getPlugins().stream()
-				.map(PluginContainer::getDescription).map(PluginDescription::getId).collect(Collectors.toList());
+		return VelocityNegativity.getInstance().getServer().getPluginManager().getPlugins().stream().map(PluginContainer::getDescription).map(PluginDescription::getId)
+				.collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		com.velocitypowered.api.proxy.Player vp = (com.velocitypowered.api.proxy.Player) p.getDefault();
 		vp.sendMessage(Component.text(message).clickEvent(ClickEvent.runCommand(command)).hoverEvent(HoverEvent.showText(Component.text(hover))));
 	}
-	
+
 	@Override
 	public Scheduler getScheduler() {
 		return scheduler;

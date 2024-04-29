@@ -1,7 +1,7 @@
 # Break all blocks around the player
 
 # The display name of cheat
-exact_name: "Nuker"
+name: "Nuker"
 
 # enable/disable detection
 active: true

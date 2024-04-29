@@ -1,7 +1,7 @@
 # Even while sneaking, you can move as quickly as if you wasn't sneaking
 
 # The display name of cheat
-exact_name: "Sneak"
+name: "Sneak"
 
 # enable/disable detection
 active: true

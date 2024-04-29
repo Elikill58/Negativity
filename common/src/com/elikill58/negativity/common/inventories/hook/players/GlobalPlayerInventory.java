@@ -4,7 +4,9 @@ import static com.elikill58.negativity.universal.Messages.getMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -29,6 +31,8 @@ import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
+	
+	public static final HashMap<UUID, Player> PLAYER_SEE_PLAYER_INV = new HashMap<>();
 	
 	public GlobalPlayerInventory() {
 		super(NegativityInventory.GLOBAL_PLAYER, CheckMenuHolder.class);
@@ -150,6 +154,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 			p.closeInventory();
 		} else if(m.equals(Materials.SPIDER_EYE)){
 			p.openInventory(cible.getInventory());
+			PLAYER_SEE_PLAYER_INV.put(p.getUniqueId(), cible);
 		} else if(m.equals(Materials.TNT)) {
 			InventoryManager.open(NegativityInventory.ACTIVED_CHEAT, p, cible);
 		} else if(m.equals(Materials.PACKED_ICE)) {

@@ -4,6 +4,7 @@ version: ${version}
 authors: [Elikill58, RedNesto]
 description: It's an Advanced AntiCheat Detection, by Elikill58.
 api-version: 1.13
+folia-supported: true
 softdepend: [ProtocolLib, Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, LiteBans, ViaVersion, ProtocolSupport, floodgate, UltraPunishments, Geyser-Spigot]
 
 commands:

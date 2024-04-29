@@ -1892,7 +1892,7 @@ public class Expression {
 		int tokenIndex;
 		int pos;
 		int p;
-		List<Integer> commas = null;
+		List<Integer> commas = new ArrayList<Integer>();
 		int emptyLoopCounter = 0;
 
 		/* While exist token which needs to bee evaluated */
@@ -2072,8 +2072,6 @@ public class Expression {
 								bitwisePos = pos;
 						} else if (token.tokenTypeId == ParserSymbol.TYPE_ID) {
 							if ((token.tokenId == ParserSymbol.COMMA_ID)) {
-								if (commaPos < 0)
-									commas = new ArrayList<Integer>();
 								commas.add(pos);
 								commaPos = pos;
 							} else if ((token.tokenId == ParserSymbol.LEFT_PARENTHESES_ID) && (lParPos < 0))

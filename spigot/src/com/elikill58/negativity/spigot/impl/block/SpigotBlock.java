@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.universal.Version;
@@ -20,7 +21,11 @@ public class SpigotBlock extends Block {
 
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getType().name());
+		try {
+			return ItemRegistrar.getInstance().get(block.getType().name());
+		} catch (NullPointerException e) { // shitty folia
+			return Materials.AIR;
+		}
 	}
 
 	@Override

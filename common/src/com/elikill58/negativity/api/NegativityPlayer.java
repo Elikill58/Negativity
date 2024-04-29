@@ -9,8 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -66,7 +64,7 @@ public class NegativityPlayer {
 
 	// packets
 	public Object2IntMap<PacketType> packets = new Object2IntArrayMap<>();
-	public int allPackets = 0, lastClick = 0, invincibilityTicks = 0;
+	public int lastClick = 0, invincibilityTicks = 0;
 
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
@@ -77,7 +75,7 @@ public class NegativityPlayer {
 	public long loginTime;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0, ticks = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean isOnLadders = false, isTeleporting = false;
+	public boolean isOnLadders = false, isTeleporting = false, cancelNextFlyingPacket = false;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 
@@ -97,8 +95,6 @@ public class NegativityPlayer {
 	public double sensitivity = 0.0;
 	private String clientName, invincibilityReason = "";
 	private @Nullable ScheduledTask fightCooldownTask;
-	// one thread per person
-	private final ExecutorService executor;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -106,7 +102,6 @@ public class NegativityPlayer {
 		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
-		this.executor = Executors.newSingleThreadExecutor((r) -> new Thread(r, "negativity-player-" + p.getName()));
 		
 		// add processors like this: checkProcessors.add(new
 		// SpiderExampleCheckProcessor(this));
@@ -161,14 +156,32 @@ public class NegativityPlayer {
 	}
 
 	/**
-	 * Get executor for all players content
+	 * Check for general reason. If this return false, no check would be applied.
 	 * 
-	 * @return the executor service
+	 * @return true if can be checked
 	 */
-	public ExecutorService getExecutor() {
-		return executor;
+	public boolean canBeCheck() {
+		if (Negativity.tpsDrop || buggedVersion || disconnecting)
+			return false;
+		if (invincibilityTicks > 0)
+			return false;
+		if (isFreeze)
+			return false;
+		if(Negativity.hasBypass && Perm.hasPerm(this, Perm.BYPASS_ALL))
+			return false;
+		if (Negativity.tpsDropStop > Adapter.getAdapter().getLastTPS()) // to make TPS go upper
+			return false;
+		Player p = getPlayer();
+		if (p.getGameMode().equals(GameMode.SPECTATOR) || p.getGameMode().equals(GameMode.CREATIVE))
+			return false;
+		if(!hadValidPing) {
+			if(hadValidPing = (p.getPing() > 0)) {
+				return false;
+			}
+		}
+		return true;
 	}
-
+	
 	/**
 	 * Check if the player have be detected for the given cheat It also check for
 	 * bypass and TPS drop
@@ -177,11 +190,9 @@ public class NegativityPlayer {
 	 * @return true if the player can be detected
 	 */
 	public boolean hasDetectionActive(Cheat c) {
-		if (!c.isActive() || Negativity.tpsDrop || buggedVersion || disconnecting)
+		if(!canBeCheck())
 			return false;
-		if (invincibilityTicks > 0)
-			return false;
-		if (isFreeze)
+		if (!c.isActive())
 			return false;
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return false;
@@ -189,11 +200,7 @@ public class NegativityPlayer {
 			return false;
 		if (c.isDisabledForJava() && !BedrockPlayerManager.isBedrockPlayer(getUUID()))
 			return false;
-		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
-				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
-			return false;
-		Adapter ada = Adapter.getAdapter();
-		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+		if(Negativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().getLowerKey())))
 			return false;
 		Player p = getPlayer();
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
@@ -206,11 +213,6 @@ public class NegativityPlayer {
 			return false;
 		if (BypassManager.hasBypass(p, c))
 			return false;
-		if(!hadValidPing) {
-			if(hadValidPing = (p.getPing() > 0)) {
-				return false;
-			}
-		}
 		return p.getPing() < c.getMaxAlertPing();
 	}
 
@@ -234,10 +236,12 @@ public class NegativityPlayer {
 		if(Negativity.hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
 				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL)))
 			return "Bypass permission";
-		Adapter ada = Adapter.getAdapter();
-		if (ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
-			return "Low TPS";
+		double tps = Adapter.getAdapter().getLastTPS();
+		if (Negativity.tpsDropStop > tps) // to make TPS go upper
+			return "Low TPS " + tps;
 		Player p = getPlayer();
+		if (p.getGameMode().equals(GameMode.SPECTATOR) || p.getGameMode().equals(GameMode.CREATIVE))
+			return "Not in survival";
 		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 			if (PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 				return "Should ignore movement";

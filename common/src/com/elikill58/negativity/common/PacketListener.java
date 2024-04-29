@@ -36,7 +36,6 @@ public class PacketListener implements Listeners {
 		Player p = e.getPlayer();
 		NPacket packet = e.getPacket();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		np.allPackets++;
 		PacketType type = packet.getPacketType();
 		if(type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet;

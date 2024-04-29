@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
@@ -56,10 +55,9 @@ import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.Webho
 
 public class Negativity {
 
-	public static boolean log = false;
-	public static boolean log_console = false;
-	public static boolean hasBypass = false;
-	public static boolean tpsDrop = false;
+	public static boolean log = false, log_console = false, hasBypass = false, tpsDrop = false;
+	public static boolean disabledJava, disabledBedrock = false;
+	public static double tpsDropStop = 19;
 	
 	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
 
@@ -164,19 +162,21 @@ public class Negativity {
 					// don't run set back options because player will be offline
 				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
+				for (Player pl : Adapter.getAdapter().getOnlinePlayers()) {
+					if (Perm.hasPerm(pl, Perm.MOD)) {
+						Messages.sendMessage(pl, "kick.well_kick", "%name%", p.getName(), "%reason%", np.getReason(c));
+					}
+				}
 				WebhookManager.send(new WebhookMessage(WebhookMessageType.KICK, p, "Negativity", System.currentTimeMillis(), "%reason%", np.getReason(c)));
 				return false;
 			}
 		}
-		if(BanManager.isBanned(np.getUUID())) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
+		Stats.updateCheat(c, (int) amount);
+		if(BanManager.isBanned(np.getUUID()))
 			return false;
-		}
 
-		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability, oldWarn).isSuccess()) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability, oldWarn).isSuccess())
 			return false;
-		}
 		manageAlertCommand(np, type, p, c, reliability);
 		AlertSender.getAlertShower().alert(np, alert);
 		if(c.isSetBack())
@@ -260,7 +260,6 @@ public class Negativity {
 			}
 			if(hasPermPeople) {
 				np.alertNotShowed.remove(c.getKey());
-				Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			}
 		}
 	}
@@ -338,6 +337,9 @@ public class Negativity {
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
+		disabledBedrock = config.getBoolean("config_all.bedrock.disabled", false);
+		disabledJava = config.getBoolean("config_all.java.disabled", false);
+		tpsDropStop = config.getDouble("tps_alert_stop", 19);
 		
 		if (!integratedPlugins.isEmpty()) {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");

@@ -42,11 +42,18 @@ public class SimpleAccountManager extends NegativityAccountManager {
 		loadFuture.whenComplete((account, throwable) -> {
 			pendingRequests.remove(accountId);
 			if (throwable != null && !(throwable instanceof CancellationException)) {
-				Adapter.getAdapter().getLogger().printError("Account loading completed exceptionally:", throwable);
-				throwable.printStackTrace();
+				if(throwable instanceof CancellationException || throwable instanceof StackOverflowError) {
+					Adapter.getAdapter().getLogger().warn("Created new account for " + accountId);
+					NegativityAccount next = new NegativityAccount(accountId);
+					accounts.put(accountId, next);
+					NegativityAccountStorage.getStorage().saveAccount(next);
+				} else {
+					Adapter.getAdapter().getLogger().printError("Account loading completed exceptionally:", throwable);
+					throwable.printStackTrace();
+				}
 				return;
 			}
-			accounts.put(account.getPlayerId(), account);
+			accounts.put(accountId, account);
 		});
 		return loadFuture;
 	}

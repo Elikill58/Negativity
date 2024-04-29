@@ -180,7 +180,7 @@ public class UniversalUtils {
 	}
 	
 	public static boolean getBoolean(String s) {
-		return s.equalsIgnoreCase("true");
+		return s.equalsIgnoreCase("true") || s.equals("1");
 	}
 
 	public static Optional<String> getContentFromURL(String url){

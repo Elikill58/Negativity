@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols.data;
 import java.util.Optional;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.CheckData;
@@ -11,6 +12,7 @@ public class SpeedData extends CheckData {
 
 	public int oldSpeedLevel = 0, oldSlowLevel = 0, highSpeedAmount = 0;
 	public double sameDiffY = 0, oldFriction = 0, walkSpeedBuffer = 0, deltaXZ = 0, distanceJumpingBuffer = 0;
+	public Location locVehicle;
 	
 	public SpeedData(NegativityPlayer np) {
 		super(np);

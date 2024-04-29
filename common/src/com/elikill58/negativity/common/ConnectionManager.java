@@ -10,15 +10,22 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.inventory.InventoryCloseEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.inventory.InventoryType;
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.SanctionnerType;
+import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.AltAccountBan;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -128,11 +135,30 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onTeleport(PlayerTeleportEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(3, "Teleportation");
+		if(e.getFrom().distance(e.getTo()) > 200) // should reload chunks
+			NegativityPlayer.getNegativityPlayer(p).addInvincibilityTicks(3, "Teleportation");
 	}
 
 	@EventListener
 	public void onLeft(PlayerLeaveEvent e) {
-		WebhookManager.getWebhooks().forEach(w -> w.clean(e.getPlayer()));
+		Player p = e.getPlayer();
+		WebhookManager.getWebhooks().forEach(w -> w.clean(p));
+		GlobalPlayerInventory.PLAYER_SEE_PLAYER_INV.remove(p.getUniqueId());
+	}
+	
+	@EventListener
+	public void onMessage(PlayerChatEvent e) {
+		Stats.updateMessage(NegativityPlayer.getNegativityPlayer(e.getPlayer()), e.getMessage());
+	}
+	
+	@EventListener
+	public void onInventoryClose(InventoryCloseEvent e) {
+		Player p = e.getPlayer();
+		if(e.getInventory().getType().equals(InventoryType.PLAYER)) {
+			Player cible = GlobalPlayerInventory.PLAYER_SEE_PLAYER_INV.get(p.getUniqueId());
+			if(cible == null)
+				return;
+			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, cible);
+		}
 	}
 }

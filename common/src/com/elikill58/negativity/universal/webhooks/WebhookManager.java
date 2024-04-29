@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.webhooks;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -7,9 +9,6 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook;
 import com.elikill58.negativity.universal.webhooks.integrations.TelegramWebhook;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WebhookManager {
 	
@@ -42,31 +41,31 @@ public class WebhookManager {
 				ada.getLogger().warn("Unknow webhook type " + type + ".");
 			}
 		});
-		ada.getScheduler().runRepeating(() -> {
-			WEBHOOKS.forEach(Webhook::runQueue);
-		}, 20);
+		if(WEBHOOKS.size() > 0)
+			ada.getLogger().info("Loaded " + WEBHOOKS.size() + " webhooks.");
+		ada.getScheduler().runRepeating(() -> WEBHOOKS.forEach(Webhook::runQueue), 20);
 	}
 	
 	public static void send(WebhookMessage msg) {
-		if(!enabled)
+		if(!isEnabled())
 			return;
 		WEBHOOKS.forEach((w) -> {
 			try {
 				w.send(msg.getMessageType(), msg.getConcerned(), Arrays.asList(msg));
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
+				Adapter.getAdapter().getLogger().error("Error while sending webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}
 		});
 	}
 	
 	public static void addToQueue(WebhookMessage msg) {
-		if(!enabled)
+		if(!isEnabled())
 			return;
 		WEBHOOKS.forEach((w) -> {
 			try {
 				w.addToQueue(msg);
 			} catch (Exception e) {
-				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
+				Adapter.getAdapter().getLogger().error("Error while adding to queue webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}
 		});
 	}

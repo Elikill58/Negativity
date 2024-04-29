@@ -1,7 +1,7 @@
 # Remove damage effect from falling
 
 # The display name of cheat
-exact_name: "NoFall"
+name: "NoFall"
 
 # enable/disable detection
 active: true

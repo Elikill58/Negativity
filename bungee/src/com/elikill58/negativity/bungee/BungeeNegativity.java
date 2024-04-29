@@ -8,7 +8,6 @@ import org.bstats.bungeecord.MetricsLite;
 import com.elikill58.negativity.bungee.integrations.RedisSupport;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 
@@ -55,12 +54,6 @@ public class BungeeNegativity extends Plugin {
 			getProxy().registerChannel("RedisBungee");
 			RedisSupport.load(this);
 			getLogger().info("Loaded RedisBungee support.");
-		}
-		
-		try {
-			Stats.sendStartupStats(ProxyServer.getInstance().getConfigurationAdapter().getListeners().iterator().next().getQueryPort());
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

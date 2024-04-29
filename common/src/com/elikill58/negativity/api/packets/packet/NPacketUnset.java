@@ -12,7 +12,8 @@ public interface NPacketUnset extends NPacket {
 	}
 	
 	void setPacketName(String name);
-	
+
+	@Override
 	String getPacketName();
 
 	void setPacketTypeCible(PacketType type);

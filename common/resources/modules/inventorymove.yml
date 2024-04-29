@@ -1,7 +1,7 @@
 # When you walk, you can open and click on your inventory and always move
 
 # The display name of cheat
-exact_name: "InventoryMove"
+name: "InventoryMove"
 
 # enable/disable detection
 active: true

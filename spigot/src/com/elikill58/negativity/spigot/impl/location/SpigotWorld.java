@@ -9,11 +9,12 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.location.Difficulty;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntity;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotWorld extends World {
@@ -37,7 +38,7 @@ public class SpigotWorld extends World {
 			return new SpigotBlock(w.getBlockAt(x, y, z));
 		} catch (IllegalStateException e) {
 			// tried to load async
-			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> w.getBlockAt(x, y, z)); // ask for block, to be sure the chunk is loaded but sync
+			Adapter.getAdapter().getScheduler().run(() -> w.getBlockAt(x, y, z)); // ask for block, to be sure the chunk is loaded but sync
 			return emptyBlock;
 		}
 	}
@@ -67,6 +68,13 @@ public class SpigotWorld extends World {
 	@Override
 	public Optional<Entity> getEntityById(int id) {
 		return getEntities().stream().filter(e -> e.getEntityId() == id).findFirst();
+	}
+	
+	@Override
+	public List<Entity> getNearEntity(Location loc, double distance) {
+		if(!Bukkit.isPrimaryThread()) // prevent error
+			return getEntities().stream().filter(e -> e.getLocation().distance(loc) <= distance).collect(Collectors.toList()); // not optimized but working
+		return w.getNearbyEntities(SpigotLocation.fromCommon(loc), distance, distance, distance).stream().map(SpigotEntity::new).collect(Collectors.toList());
 	}
 
 	@Override

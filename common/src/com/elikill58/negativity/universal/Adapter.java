@@ -94,7 +94,7 @@ public abstract class Adapter {
 	 */
 	public void debug(Debug type, String msg) {
 		if(allowedDebugs != null) {
-			if(allowedDebugs.contains(type))
+			if(allowedDebugs.contains(type) || allowedDebugs.contains(Debug.ALL))
 				getLogger().debug(msg);
 			return;
 		}

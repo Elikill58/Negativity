@@ -152,6 +152,8 @@ public abstract class World implements NegativityObject {
 	
 	public abstract Optional<Entity> getEntityById(int id);
 
+	public abstract List<Entity> getNearEntity(Location loc, double distance);
+	
 	public boolean isChunkLoaded(Location loc) {
 		return isChunkLoaded(loc.getBlockX() / 16, loc.getBlockZ() / 16);
 	}

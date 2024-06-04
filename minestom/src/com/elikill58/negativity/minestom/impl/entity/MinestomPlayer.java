@@ -93,7 +93,7 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public float getFallDistance() {
-		return (float) entity.getGravityAcceleration();
+		return (float) entity.getAerodynamics().gravity();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public void damage(double amount) {
-		entity.damage(DamageType.VOID, (float) amount);
+		entity.damage(DamageType.GENERIC, (float) amount);
 	}
 
 	@Override
@@ -200,19 +200,19 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 	
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.getActiveEffects().stream().filter(p -> p.getPotion().effect().key().asString().equalsIgnoreCase(type.getId())).count() > 0;
+		return entity.getActiveEffects().stream().filter(p -> p.potion().effect().key().asString().equalsIgnoreCase(type.getId())).count() > 0;
 	}
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
-		return entity.getActiveEffects().stream().map(effect -> new PotionEffect(PotionEffectType.forId(effect.getPotion().effect().key().asString()), effect.getPotion().duration(), effect.getPotion().amplifier())).collect(Collectors.toList());
+		return entity.getActiveEffects().stream().map(effect -> new PotionEffect(PotionEffectType.forId(effect.potion().effect().key().asString()), effect.potion().duration(), effect.potion().amplifier())).collect(Collectors.toList());
 	}
 	
 	@Override
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
 		for(TimedPotion effect : entity.getActiveEffects()) {
-			if(effect.getPotion().effect().key().asString().equalsIgnoreCase(type.getId()))
-				return Optional.of(new PotionEffect(PotionEffectType.forId(effect.getPotion().effect().key().asString()), effect.getPotion().duration(), effect.getPotion().amplifier()));
+			if(effect.potion().effect().key().asString().equalsIgnoreCase(type.getId()))
+				return Optional.of(new PotionEffect(PotionEffectType.forId(effect.potion().effect().key().asString()), effect.potion().duration(), effect.potion().amplifier()));
 		}
 		return Optional.empty();
 	}

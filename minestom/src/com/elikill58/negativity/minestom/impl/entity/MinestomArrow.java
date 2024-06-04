@@ -4,7 +4,7 @@ import com.elikill58.negativity.api.entity.Arrow;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 
-import net.minestom.server.entity.metadata.arrow.ArrowMeta;
+import net.minestom.server.entity.metadata.projectile.ArrowMeta;
 
 public class MinestomArrow extends MinestomEntity<net.minestom.server.entity.Entity> implements Arrow {
 

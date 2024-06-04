@@ -41,6 +41,7 @@ import com.elikill58.negativity.universal.translation.NegativityTranslationProvi
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+import net.hollowcube.minestom.extensions.ExtensionBootstrap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -138,7 +139,7 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public double[] getTPS() {
-		return new double[] {MinecraftServer.TICK_PER_SECOND};
+		return new double[] { 20 };
 	}
 
 	@Override
@@ -193,12 +194,12 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public @Nullable Player getPlayer(String name) {
-		return MinestomEntityManager.getPlayer(MinecraftServer.getConnectionManager().getPlayer(name));
+		return MinestomEntityManager.getPlayer(MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(name));
 	}
 
 	@Override
 	public @Nullable Player getPlayer(UUID uuid) {
-		return MinestomEntityManager.getPlayer(MinecraftServer.getConnectionManager().getPlayer(uuid));
+		return MinestomEntityManager.getPlayer(MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid));
 	}
 
 	@Override
@@ -215,12 +216,12 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return MinecraftServer.getExtensionManager().hasExtension(name);
+		return ExtensionBootstrap.getExtensionManager().hasExtension(name);
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		Extension e = MinecraftServer.getExtensionManager().getExtension(name);
+		Extension e = ExtensionBootstrap.getExtensionManager().getExtension(name);
 		return e == null ? null : new MinestomExternalPlugin(e);
 	}
 	
@@ -264,12 +265,12 @@ public class MinestomAdapter extends Adapter {
 	
 	@Override
 	public List<String> getAllPlugins() {
-		return MinecraftServer.getExtensionManager().getExtensions().stream().map(Extension::getOrigin).map(DiscoveredExtension::getName).collect(Collectors.toList());
+		return ExtensionBootstrap.getExtensionManager().getExtensions().stream().map(Extension::getOrigin).map(DiscoveredExtension::getName).collect(Collectors.toList());
 	}
 
 	@Override
 	public World getServerWorld(Player p) {
-		Instance i = MinecraftServer.getConnectionManager().getPlayer(p.getUniqueId()).getInstance();
+		Instance i = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(p.getUniqueId()).getInstance();
 		return World.getWorld(i.getUniqueId().toString(), (a) -> new MinestomWorld(i));
 	}
 }

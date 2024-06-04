@@ -19,6 +19,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -81,7 +82,7 @@ public class PacketListeners {
 	public void onPacket(PlayerPacketOutEvent e) {
 		ServerPacket sp = e.getPacket();
 		Player p = MinestomEntityManager.getPlayer(e.getEntity());
-		NPacket packet = getPacketFromWriter(p, sp, sp.getId(), PacketDirection.SERVER_TO_CLIENT);
+		NPacket packet = getPacketFromWriter(p, sp, sp.getId(ConnectionState.PLAY), PacketDirection.SERVER_TO_CLIENT);
 		if(packet == null) {
 			return;
 		}

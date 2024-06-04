@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'io.github.goooler.shadow'
 }
 
 evaluationDependsOn(':common')
@@ -13,17 +13,16 @@ sourceSets {
     }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
     api project(':common')
-    compileOnly 'com.github.Minestom:Minestom:954e8b3915'
-    compileOnly 'io.netty:netty-all:4.1.85.Final'
+    compileOnly 'com.github.Minestom:Minestom:19bb74e942'
+    // https://mvnrepository.com/artifact/dev.hollowcube/minestom-ce-extensions
+	compileOnly 'dev.hollowcube:minestom-ce-extensions:1.2.0'
+    
+    compileOnly 'io.netty:netty-all:4.1.110.Final'
 }
-
-compileJava.javaCompiler.set(
-    javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
-)
 
 processResources {
     inputs.property "version", project.version
@@ -34,13 +33,12 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
+    it.options.release = 21
 }
 
 shadowJar {
     archiveBaseName.set('NegativityMinestom')
-    archiveAppendix.set('1.19.3')
+    archiveAppendix.set('1.20.4')
     archiveClassifier.set(null)
 
     mergeServiceFiles()

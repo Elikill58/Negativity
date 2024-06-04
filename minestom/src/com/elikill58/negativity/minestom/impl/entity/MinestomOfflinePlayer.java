@@ -27,7 +27,7 @@ public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlay
 
 	@Override
 	public boolean isOnline() {
-		return uuid != null && MinecraftServer.getConnectionManager().getPlayer(uuid) != null;
+		return uuid != null && MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid) != null;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlay
 	@Override
 	public String getName() {
 		ConnectionManager cm = MinecraftServer.getConnectionManager();
-		return name == null ? (uuid == null ? "??" : uuid.toString()) : (cm.getPlayer(uuid) == null ? uuid.toString() : cm.getPlayer(uuid).getUsername());
+		return name == null ? (uuid == null ? "??" : uuid.toString()) : (cm.getOnlinePlayerByUuid(uuid) == null ? uuid.toString() : cm.getOnlinePlayerByUuid(uuid).getUsername());
 	}
 
 	@Override

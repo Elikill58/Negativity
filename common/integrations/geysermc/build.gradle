@@ -17,8 +17,8 @@ configurations {
 
 repositories {
     maven {
-        name 'geyser'
-        url 'https://repo.opencollab.dev/maven-snapshots/'
+        name 'geyser-main'
+        url 'https://repo.opencollab.dev/main/'
     }
 }
 

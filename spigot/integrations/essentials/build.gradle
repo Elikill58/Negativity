@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly 'net.ess3:EssentialsX:2.18.2'
     api(project(':spigot'))
     compileOnly(project(path: ':spigot', configuration: 'spigot'))
 }

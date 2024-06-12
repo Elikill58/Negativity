@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'io.github.goooler.shadow'
 }
 
 evaluationDependsOn(':common') // Projects are evaluated by alphabetical order, but common should be evaluated before bungee
@@ -14,21 +14,18 @@ sourceSets {
 }
 
 repositories {
+	mavenCentral()
     maven {
         name 'sonatype'
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
-    maven {
-        name 'jitpack'
-        url 'https://jitpack.io'
     }
 }
 
 dependencies {
     api project(':common')
     implementation 'org.bstats:bstats-bungeecord-lite:1.7'
-    compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
-    compileOnly 'net.md-5:bungeecord-chat:1.19-R0.1-SNAPSHOT'
+    compileOnly 'net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT'
+    compileOnly 'net.md-5:bungeecord-chat:1.20-R0.1-SNAPSHOT'
     compileOnly 'com.github.minecrafter:RedisBungee:master'
 }
 

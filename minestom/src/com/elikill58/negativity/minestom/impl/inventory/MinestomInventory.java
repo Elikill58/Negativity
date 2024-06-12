@@ -74,6 +74,7 @@ public class MinestomInventory extends Inventory {
 			return InventoryType.SMOKER;
 		case STONE_CUTTER:
 			return InventoryType.STONECUTTER;
+		case CRAFTER_3X3:
 		case WINDOW_3X3:
 			return InventoryType.PLAYER;
 		}

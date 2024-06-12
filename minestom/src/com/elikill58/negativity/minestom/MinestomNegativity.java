@@ -2,6 +2,7 @@ package com.elikill58.negativity.minestom;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -129,7 +130,7 @@ public class MinestomNegativity extends Extension {
 					String url = "https://repo1.maven.org/maven2/io/netty/" + requiredJarNames + "/" + nettyVersion
 							+ "/" + fileName;
 					try {
-						try (InputStream in = new URL(url).openStream()) {
+						try (InputStream in = new URI(url).toURL().openStream()) {
 							File jarFile = new File(netty, fileName);
 							Files.copy(in, jarFile.toPath());
 							getLogger().info("[Negativity] Jar " + fileName + " downloaded.");

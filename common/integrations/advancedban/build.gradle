@@ -6,7 +6,7 @@ sourceSets {
 }
 
 dependencies {
-	compileOnly 'com.github.DevLeoko:AdvancedBan:v2.2.1'
+	compileOnly 'com.github.DevLeoko:AdvancedBan:v2.3.0'
     api project(':common')
     //compileOnly(project(':common'))
 }

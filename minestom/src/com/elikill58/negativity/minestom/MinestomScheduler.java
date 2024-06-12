@@ -30,22 +30,22 @@ public class MinestomScheduler implements Scheduler {
 	
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int delayTicks, int intervalTicks) {
-		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(delayTicks), TaskSchedule.tick(intervalTicks), ExecutionType.SYNC));
+		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(delayTicks), TaskSchedule.tick(intervalTicks), ExecutionType.TICK_START));
 	}
 	
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int intervalTicks, @Nullable String name) {
-		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(intervalTicks), TaskSchedule.tick(intervalTicks), ExecutionType.SYNC));
+		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(intervalTicks), TaskSchedule.tick(intervalTicks), ExecutionType.TICK_START));
 	}
 	
 	@Override
 	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
-		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.duration(delay), TaskSchedule.duration(interval), ExecutionType.ASYNC));
+		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.duration(delay), TaskSchedule.duration(interval), ExecutionType.TICK_END));
 	}
 	
 	@Override
 	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
-		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(delayTicks), TaskSchedule.stop(), ExecutionType.ASYNC));
+		return new TaskWrapper(sh.scheduleTask(task, TaskSchedule.tick(delayTicks), TaskSchedule.stop(), ExecutionType.TICK_END));
 	}
 	
 	private static class TaskWrapper implements ScheduledTask {

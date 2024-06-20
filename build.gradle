@@ -3,6 +3,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id 'java-library'
     id 'io.github.goooler.shadow' version '8.1.7'
+    id 'fabric-loom' version '1.7-SNAPSHOT' apply false
+    id 'org.spongepowered.gradle.plugin' version '2.2.0' apply false
+    id 'org.spongepowered.gradle.vanilla' version '0.2' apply false
 }
 
 shadowJar {

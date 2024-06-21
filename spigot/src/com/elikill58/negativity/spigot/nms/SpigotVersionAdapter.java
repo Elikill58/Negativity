@@ -102,11 +102,20 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public double getAverageTps() {
 		try {
-			long[] array = (long[]) tpsField.get(dedicatedServer);
-			long l = 0L;
-			for (long m : array)
-				l += m;
-			return l / array.length;
+			Object tps = tpsField.get(dedicatedServer);
+			if(tps instanceof long[]) {
+				long[] array = (long[]) tps;
+				long l = 0L;
+				for (long m : array)
+					l += m;
+				return l / array.length;
+			} else {
+				double[] array = (double[]) tps;
+				double l = 0L;
+				for (double m : array)
+					l += m;
+				return l / array.length;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -315,6 +324,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_20_R3();
 			case "v1_20_R4":
 				return instance = new Spigot_1_20_R4();
+			case "v1_21_R1":
+				return instance = new Spigot_1_21_R1();
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

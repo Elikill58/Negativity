@@ -177,7 +177,7 @@ public class PacketUtils {
 			Class<?> sharedConstants = PacketUtils.getNmsClass("SharedConstants", "");
 			try { // try get value directly
 				return (int) sharedConstants.getDeclaredField("RELEASE_NETWORK_PROTOCOL_VERSION").get(null);
-			} catch (Exception e) { e.printStackTrace(); }
+			} catch (Exception e) {}
 			return (int) sharedConstants.getDeclaredMethod("c").invoke(null);
 		} catch (Exception e) { e.printStackTrace(); } // ignore because it's just an old version
 		try {

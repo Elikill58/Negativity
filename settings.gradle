@@ -24,7 +24,7 @@ pluginManagement {
 rootProject.name = 'Negativity'
 
 // All global projects
-include 'common',
+include 'common'
 include 'spigot'
 
 

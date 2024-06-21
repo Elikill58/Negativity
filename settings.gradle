@@ -24,10 +24,9 @@ pluginManagement {
 rootProject.name = 'Negativity'
 
 // All global projects
-include 'common', 'bungee', 'velocity', 'minestom'
+include 'common',
 include 'spigot'
-include 'sponge', 'sponge7'
-include 'fabric'
+
 
 // All integrations
 // all integrations in common

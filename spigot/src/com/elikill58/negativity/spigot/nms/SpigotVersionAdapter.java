@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.nms;
 
-import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ import com.elikill58.negativity.api.packets.nms.channels.netty.NettyChannel;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
@@ -281,7 +280,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public static SpigotVersionAdapter getVersionAdapter() {
 		if (instance == null) {
-			switch (VERSION) {
+			switch (Adapter.getAdapter().getVersion()) {
 			case "v1_8_R3":
 				return instance = new Spigot_1_8_R3();
 			case "v1_9_R1":
@@ -324,10 +323,10 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return instance = new Spigot_1_20_R3();
 			case "v1_20_R4":
 				return instance = new Spigot_1_20_R4();
-			case "v1_21_R1":
+			case "": // 1.20.6 or upper
 				return instance = new Spigot_1_21_R1();
 			default:
-				return instance = new Spigot_UnknowVersion(VERSION);
+				return instance = new Spigot_UnknowVersion(Adapter.getAdapter().getVersion());
 			}
 		}
 		return instance;

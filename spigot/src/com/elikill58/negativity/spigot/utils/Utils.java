@@ -23,9 +23,6 @@ import com.google.common.base.Preconditions;
 @SuppressWarnings("deprecation")
 public class Utils {
 
-	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
-			.split(",")[3];
-
 	public static List<Player> getOnlinePlayers() {
 		return SpigotVersionAdapter.getVersionAdapter().getOnlinePlayers();
 	}

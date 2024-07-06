@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class PacketUtils {
@@ -19,14 +20,12 @@ public class PacketUtils {
 	 */
 	private static final HashMap<String, Class<?>> ALL_CLASS = new HashMap<>();
 
-	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
-			.split(",")[3];
 	private static final boolean isNewSystem = isNewSystem();
-	public static final String NMS_PREFIX = isNewSystem ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
+	public static final String NMS_PREFIX = isNewSystem ? "net.minecraft." : "net.minecraft.server." + Adapter.getAdapter().getVersion() + ".";
 	
 	private static boolean isNewSystem() {
 		try {
-			Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
+			Class.forName("net.minecraft.server." + Adapter.getAdapter().getVersion() + ".MinecraftServer");
 			return false;
 		} catch (Exception e) {
 		}
@@ -85,7 +84,8 @@ public class PacketUtils {
 		synchronized (ALL_CLASS) {
 			return ALL_CLASS.computeIfAbsent(name, (s) -> {
 				try {
-					return Class.forName("org.bukkit.craftbukkit." + VERSION + "." + name);
+					String version = Adapter.getAdapter().getVersion();
+					return Class.forName("org.bukkit.craftbukkit." + (version.equalsIgnoreCase("") ? "" : version + ".") + name);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

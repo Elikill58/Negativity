@@ -17,7 +17,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
     api project(':common')
-    compileOnly 'com.github.Minestom:Minestom:19bb74e942'
+    compileOnly 'com.github.Minestom:Minestom:e63c9def24'
     // https://mvnrepository.com/artifact/dev.hollowcube/minestom-ce-extensions
 	compileOnly 'dev.hollowcube:minestom-ce-extensions:1.2.0'
     
@@ -38,7 +38,7 @@ tasks.withType(JavaCompile).configureEach {
 
 shadowJar {
     archiveBaseName.set('NegativityMinestom')
-    archiveAppendix.set('1.20.4')
+    archiveAppendix.set('1.21')
     archiveClassifier.set(null)
 
     mergeServiceFiles()

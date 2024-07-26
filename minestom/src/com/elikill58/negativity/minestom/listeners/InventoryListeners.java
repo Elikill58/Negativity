@@ -11,7 +11,7 @@ import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
-import net.minestom.server.inventory.click.ClickType;
+import net.minestom.server.inventory.click.Click;
 
 public class InventoryListeners {
 
@@ -30,35 +30,33 @@ public class InventoryListeners {
 	}
 	
 	public void onInventoryClick(net.minestom.server.event.inventory.InventoryClickEvent e) {
-		if(e.getInventory() == null || e.getClickedItem() == null)
+		if(e.getInventory() == null || e.getChanges().isEmpty())
 			return;
-		EventManager.callEvent(new InventoryClickEvent(MinestomEntityManager.getPlayer(e.getPlayer()), getAction(e.getClickType()), e.getSlot(), new MinestomItemStack(e.getClickedItem()), new MinestomInventory(e.getInventory())));
+		e.getChanges().forEach(c -> {
+			if(c instanceof Click.Change.Container cc)
+				EventManager.callEvent(new InventoryClickEvent(MinestomEntityManager.getPlayer(e.getPlayer()), getAction(e.getClickInfo()), cc.slot(), new MinestomItemStack(cc.item()), new MinestomInventory(e.getInventory())));
+			if(c instanceof Click.Change.Player cc)
+				EventManager.callEvent(new InventoryClickEvent(MinestomEntityManager.getPlayer(e.getPlayer()), getAction(e.getClickInfo()), cc.slot(), new MinestomItemStack(cc.item()), new MinestomInventory(e.getInventory())));
+		});
 	}
 	
-	private InventoryAction getAction(ClickType type) {
-		switch (type) {
-		case DROP:
+	private InventoryAction getAction(Click.Info type) {
+		if(type instanceof Click.Info.DropSlot)
 			return InventoryAction.DROP;
-		case START_DOUBLE_CLICK:
-		case DOUBLE_CLICK:
+		if(type instanceof Click.Info.Double)
 			return InventoryAction.DOUBLE;
-		case LEFT_CLICK:
-		case LEFT_DRAGGING:
-			return InventoryAction.LEFT;
-		case RIGHT_CLICK:
-		case RIGHT_DRAGGING:
+		if(type instanceof Click.Info.Right)
 			return InventoryAction.RIGHT;
-		case START_SHIFT_CLICK:
-		case SHIFT_CLICK:
+		if(type instanceof Click.Info.Left)
+			return InventoryAction.LEFT;
+		if(type instanceof Click.Info.RightShift)
 			return InventoryAction.RIGHT_SHIFT;
-		case CHANGE_HELD:
+		if(type instanceof Click.Info.LeftShift)
 			return InventoryAction.LEFT_SHIFT;
-		case START_LEFT_DRAGGING:
-		case START_RIGHT_DRAGGING:
-		case END_LEFT_DRAGGING:
-		case END_RIGHT_DRAGGING:
-			return InventoryAction.UNKNOWN;
-		}
+		if(type instanceof Click.Info.CreativeDropItem || type instanceof Click.Info.CreativeSetItem)
+			return InventoryAction.CREATIVE;
+		if(type instanceof Click.Info.Middle || type instanceof Click.Info.MiddleDrag || type instanceof Click.Info.MiddleDropCursor)
+			return InventoryAction.MIDDLE;
 		return InventoryAction.UNKNOWN;
 	}
 	

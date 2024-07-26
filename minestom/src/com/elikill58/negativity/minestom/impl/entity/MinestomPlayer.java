@@ -29,9 +29,9 @@ import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
 import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.TimedPotion;
@@ -73,7 +73,7 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 
 	@Override
 	public float getWalkSpeed() {
-		return entity.getAttributeValue(Attribute.MOVEMENT_SPEED);
+		return (float) entity.getAttributeValue(Attribute.GENERIC_MOVEMENT_SPEED);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class MinestomPlayer extends AbstractPlayer implements Player {
 	
 	@Override
 	public double getMaxHealth() {
-		return entity.getMaxHealth();
+		return entity.getAttributeValue(Attribute.GENERIC_MAX_HEALTH);
 	}
 	
 	@Override

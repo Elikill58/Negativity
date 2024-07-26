@@ -132,6 +132,8 @@ public class Scaffold extends Cheat {
 		if (pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Player p = e.getPlayer();
 			NPacketPlayInBlockPlace packet = (NPacketPlayInBlockPlace) pa;
+			if(!packet.hasLocation())
+				return;
 			int amount = 0;
 			for(float f : Arrays.asList(packet.cursorX, packet.cursorY, packet.cursorZ)) {
 				if(f > 1.5) {

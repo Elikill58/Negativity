@@ -113,12 +113,14 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 			lastFlying = flying;
 		} else if(pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			NPacketPlayInBlockPlace place = (NPacketPlayInBlockPlace) pa;
-			Location loc = p.getLocation();
-			if(place.getBlockX() == loc.getBlockX() && place.getBlockY() == loc.getBlockY() - 1 && place.getBlockZ() == loc.getBlockZ()) {
-				if(amountInvalid > 40 && speed >= p.getWalkSpeed()) // if lot of invalid changes and go fast
-					Negativity.alertMod(ReportType.WARNING, p, c, UniversalUtils.parseInPorcent(amountInvalid), "rise-slot", proofs.toString(), new CheatHover.Literal("Pitch: " + lastFlying.pitch), amount);
-				else
-					Adapter.getAdapter().debug(Debug.CHECK, "Amount invalid: " + amountInvalid);
+			if(place.hasLocation()) {
+				Location loc = p.getLocation();
+				if(place.getBlockX() == loc.getBlockX() && place.getBlockY() == loc.getBlockY() - 1 && place.getBlockZ() == loc.getBlockZ()) {
+					if(amountInvalid > 40 && speed >= p.getWalkSpeed()) // if lot of invalid changes and go fast
+						Negativity.alertMod(ReportType.WARNING, p, c, UniversalUtils.parseInPorcent(amountInvalid), "rise-slot", proofs.toString(), new CheatHover.Literal("Pitch: " + lastFlying.pitch), amount);
+					else
+						Adapter.getAdapter().debug(Debug.CHECK, "Amount invalid: " + amountInvalid);
+				}
 			}
 		}
 	}

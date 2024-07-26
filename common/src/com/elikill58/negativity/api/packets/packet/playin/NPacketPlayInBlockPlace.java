@@ -18,10 +18,23 @@ import com.elikill58.negativity.universal.Version;
 public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 	public Hand hand = Hand.MAIN;
+	/**
+	 * This is no longer present since 1.21
+	 */
 	public BlockFace face;
+	/**
+	 * This is no longer present since 1.21
+	 */
 	public BlockPosition pos;
+	/**
+	 * This is no longer present since 1.21
+	 */
 	public boolean insideBlock;
+	/**
+	 * This is no longer present since 1.21
+	 */
 	public float cursorX, cursorY, cursorZ;
+	public float yaw, pitch;
 
 	public NPacketPlayInBlockPlace() {
 
@@ -29,24 +42,36 @@ public class NPacketPlayInBlockPlace implements NPacketPlayIn, LocatedPacket {
 
 	@Override
 	public void read(PacketSerializer serializer, Version version) {
-		if (version.isNewerOrEquals(Version.V1_14))
+		if (version.isNewerOrEquals(Version.V1_21)) {
 			this.hand = serializer.getEnum(Hand.class);
-		this.pos = serializer.readBlockPosition(version);
-		this.face = BlockFace.getById(serializer.readUnsignedByte());
-		if (version.isNewerOrEquals(Version.V1_9) && !version.isNewerOrEquals(Version.V1_14)) // between 1.9 to 1.13
-			this.hand = serializer.getEnum(Hand.class);
-		if (version.equals(Version.V1_8)) {
-			serializer.readItemStack(version); // skip item index
-			this.cursorX = serializer.readUnsignedByte() / 16.0F;
-			this.cursorY = serializer.readUnsignedByte() / 16.0F;
-			this.cursorZ = serializer.readUnsignedByte() / 16.0F;
+			serializer.readVarInt(); // sequence
+			this.yaw = serializer.readFloat();
+			this.pitch = serializer.readFloat();
 		} else {
-			this.cursorX = serializer.readFloat();
-			this.cursorY = serializer.readFloat();
-			this.cursorZ = serializer.readFloat();
+			if (version.isNewerOrEquals(Version.V1_14))
+				this.hand = serializer.getEnum(Hand.class);
+			this.pos = serializer.readBlockPosition(version);
+			this.face = BlockFace.getById(serializer.readUnsignedByte());
+			if (version.isNewerOrEquals(Version.V1_9) && !version.isNewerOrEquals(Version.V1_14)) // between 1.9 to 1.13
+				this.hand = serializer.getEnum(Hand.class);
+			if (version.equals(Version.V1_8)) {
+				serializer.readItemStack(version); // skip item index
+				this.cursorX = serializer.readUnsignedByte() / 16.0F;
+				this.cursorY = serializer.readUnsignedByte() / 16.0F;
+				this.cursorZ = serializer.readUnsignedByte() / 16.0F;
+			} else {
+				this.cursorX = serializer.readFloat();
+				this.cursorY = serializer.readFloat();
+				this.cursorZ = serializer.readFloat();
+			}
+			if (version.isNewerOrEquals(Version.V1_13))
+				this.insideBlock = serializer.readBoolean();
 		}
-		if (version.isNewerOrEquals(Version.V1_13))
-			this.insideBlock = serializer.readBoolean();
+	}
+	
+	@Override
+	public boolean hasLocation() {
+		return pos != null && LocatedPacket.super.hasLocation();
 	}
 
 	@Override

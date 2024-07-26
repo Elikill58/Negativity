@@ -7,9 +7,9 @@ import com.elikill58.negativity.api.packets.PacketType.Client;
 import com.elikill58.negativity.api.packets.PacketType.Server;
 import com.elikill58.negativity.api.packets.nms.NamedVersion;
 
-public class Version1_20_5 extends NamedVersion {
+public class Version1_20_6 extends NamedVersion {
 
-	public Version1_20_5() {
+	public Version1_20_6() {
 		super("1.20.5");
 		// packets ID seems not same as 1.20
 		int i = 0;
@@ -93,7 +93,7 @@ public class Version1_20_5 extends NamedVersion {
 				EntityType.ZOMBIE_VILLAGER, EntityType.PIG_ZOMBIE, EntityType.PLAYER, EntityType.FISHING_HOOK)) {
 			entityTypes.put(i++, types);
 		}
-		loadPostFlattening("/versions/v1_19_3/");
+		loadPostFlattening("/versions/v1_20_6/");
 
 		log();
 	}

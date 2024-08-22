@@ -27,7 +27,6 @@ rootProject.name = 'Negativity'
 include 'common'
 include 'spigot'
 
-
 // All integrations
 // all integrations in common
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:viaversion', 'common:integrations:floodgate', 'common:integrations:geysermc'

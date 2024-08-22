@@ -3,6 +3,8 @@ package com.elikill58.negativity.minestom.impl.item;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.Material;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 
 public class MinestomItemStack extends com.elikill58.negativity.api.item.ItemStack {
@@ -25,17 +27,17 @@ public class MinestomItemStack extends com.elikill58.negativity.api.item.ItemSta
 
 	@Override
 	public String getName() {
-		return item.getDisplayName().examinableName();
+		return LegacyComponentSerializer.legacySection().serialize(item.get(ItemComponent.ITEM_NAME));
 	}
 
 	@Override
 	public boolean hasEnchant(Enchantment enchant) {
-		return item.meta().getEnchantmentMap().containsKey(MinestomEnchants.getEnchant(enchant));
+		return item.get(ItemComponent.ENCHANTMENTS).enchantments().containsKey(MinestomEnchants.getEnchant(enchant));
 	}
 
 	@Override
 	public int getEnchantLevel(Enchantment enchant) {
-		Short lvl = item.meta().getEnchantmentMap().get(MinestomEnchants.getEnchant(enchant));
+		Integer lvl = item.get(ItemComponent.ENCHANTMENTS).enchantments().get(MinestomEnchants.getEnchant(enchant));
 		return lvl == null ? 0 : lvl;
 	}
 

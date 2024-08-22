@@ -97,7 +97,17 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public String getVersion() {
-		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+		String[] parts = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",");
+		if(parts.length > 3)
+			return parts[3];
+		/*try {
+			Object mcVersion = Bukkit.class.getDeclaredMethod("getMinecraftVersion").invoke(null);
+			return mcVersion.toString().replace(".", "_");
+		} catch (Exception e) {
+			getLogger().warn("Failed to get minecraft version");
+			e.printStackTrace();
+		}*/
+		return "";
 	}
 	
 	@Override

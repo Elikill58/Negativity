@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.minestom.impl.inventory.holders.MinestomNegativityHolder;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
 
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 
 public class MinestomPlayerInventory extends PlayerInventory {
@@ -27,21 +28,18 @@ public class MinestomPlayerInventory extends PlayerInventory {
 		this.inv = p.getInventory();
 	}
 
-	private ItemStack getItem(net.minestom.server.item.ItemStack i) {
-		return i == null || i.material().equals(net.minestom.server.item.Material.AIR) ? null : new MinestomItemStack(i);
-	}
-
-	private Optional<ItemStack> getItemOpt(net.minestom.server.item.ItemStack i) {
+	private Optional<ItemStack> getArmorItem(EquipmentSlot slot) {
+		net.minestom.server.item.ItemStack i = inv.getEquipment(slot, slot.armorSlot());
 		return i == null || i.material().equals(net.minestom.server.item.Material.AIR) ? Optional.empty() : Optional.of(new MinestomItemStack(i));
 	}
 	
 	@Override
 	public ItemStack[] getArmorContent() {
 		ItemStack[] armor = new ItemStack[4];
-		armor[0] = getItem(inv.getHelmet());
-		armor[1] = getItem(inv.getChestplate());
-		armor[2] = getItem(inv.getLeggings());
-		armor[3] = getItem(inv.getBoots());
+		armor[0] = getArmorItem(EquipmentSlot.HELMET).orElse(null);
+		armor[1] = getArmorItem(EquipmentSlot.CHESTPLATE).orElse(null);
+		armor[2] = getArmorItem(EquipmentSlot.LEGGINGS).orElse(null);
+		armor[3] = getArmorItem(EquipmentSlot.BOOTS).orElse(null);
 		return armor;
 	}
 
@@ -107,45 +105,49 @@ public class MinestomPlayerInventory extends PlayerInventory {
 	public Object getDefault() {
 		return inv;
 	}
+	
+	private void setArmorItem(EquipmentSlot slot, ItemStack item) {
+		inv.setEquipment(slot, slot.armorSlot(), (net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+	}
 
 	@Override
 	public void setHelmet(@Nullable ItemStack item) {
-		inv.setHelmet((net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+		setArmorItem(EquipmentSlot.HELMET, item);
 	}
 
 	@Override
 	public void setChestplate(@Nullable ItemStack item) {
-		inv.setChestplate((net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+		setArmorItem(EquipmentSlot.CHESTPLATE, item);
 	}
 
 	@Override
 	public void setLegging(@Nullable ItemStack item) {
-		inv.setLeggings((net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+		setArmorItem(EquipmentSlot.LEGGINGS, item);
 	}
 
 	@Override
 	public void setBoot(@Nullable ItemStack item) {
-		inv.setBoots((net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+		setArmorItem(EquipmentSlot.BOOTS, item);
 	}
 
 	@Override
 	public Optional<ItemStack> getHelmet() {
-		return getItemOpt(inv.getHelmet());
+		return getArmorItem(EquipmentSlot.HELMET);
 	}
 
 	@Override
 	public Optional<ItemStack> getChestplate() {
-		return getItemOpt(inv.getChestplate());
+		return getArmorItem(EquipmentSlot.CHESTPLATE);
 	}
 
 	@Override
 	public Optional<ItemStack> getLegging() {
-		return getItemOpt(inv.getLeggings());
+		return getArmorItem(EquipmentSlot.LEGGINGS);
 	}
 
 	@Override
 	public Optional<ItemStack> getBoots() {
-		return getItemOpt(inv.getBoots());
+		return getArmorItem(EquipmentSlot.BOOTS);
 	}
 	
 	@Override

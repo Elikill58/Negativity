@@ -22,6 +22,7 @@ import net.minestom.server.item.ItemStack.Builder;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.component.HeadProfile;
 import net.minestom.server.item.component.Unbreakable;
+import net.minestom.server.registry.DynamicRegistry;
 
 public class MinestomItemBuilder extends ItemBuilder {
 
@@ -30,7 +31,7 @@ public class MinestomItemBuilder extends ItemBuilder {
 	public MinestomItemBuilder(ItemStack def) {
 		net.minestom.server.item.ItemStack i = (net.minestom.server.item.ItemStack) def.getDefault();
 		this.item = net.minestom.server.item.ItemStack.builder(i.material());
-		for(DataComponent dc : DataComponent.values()) {
+		for(DataComponent dc : ItemComponent.values()) {
 			Object obj = i.get(dc);
 			if(obj != null)
 				this.item.set(dc, obj);
@@ -65,7 +66,7 @@ public class MinestomItemBuilder extends ItemBuilder {
 
 	@Override
 	public ItemBuilder enchant(Enchantment enchantment, int level) {
-		Map<net.minestom.server.item.enchant.Enchantment, Integer> enchantments = new HashMap<>();
+		Map<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>, Integer> enchantments = new HashMap<>();
 		enchantments.put(MinestomEnchants.getEnchant(enchantment), level);
 		item.set(ItemComponent.ENCHANTMENTS, new EnchantmentList(enchantments, false));
 		return this;

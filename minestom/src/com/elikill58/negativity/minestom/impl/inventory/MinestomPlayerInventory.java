@@ -29,7 +29,7 @@ public class MinestomPlayerInventory extends PlayerInventory {
 	}
 
 	private Optional<ItemStack> getArmorItem(EquipmentSlot slot) {
-		net.minestom.server.item.ItemStack i = inv.getEquipment(slot, slot.armorSlot());
+		net.minestom.server.item.ItemStack i = inv.getEquipment(slot);
 		return i == null || i.material().equals(net.minestom.server.item.Material.AIR) ? Optional.empty() : Optional.of(new MinestomItemStack(i));
 	}
 	
@@ -46,9 +46,9 @@ public class MinestomPlayerInventory extends PlayerInventory {
 	@Override
 	public void setArmorContent(ItemStack[] items) {
 		setHelmet(items[0]);
-		setChestplate(items[0]);
-		setLegging(items[0]);
-		setBoot(items[0]);
+		setChestplate(items[1]);
+		setLegging(items[2]);
+		setBoot(items[3]);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class MinestomPlayerInventory extends PlayerInventory {
 	}
 	
 	private void setArmorItem(EquipmentSlot slot, ItemStack item) {
-		inv.setEquipment(slot, slot.armorSlot(), (net.minestom.server.item.@NotNull ItemStack) item.getDefault());
+		inv.setEquipment(slot, (net.minestom.server.item.@NotNull ItemStack) item.getDefault());
 	}
 
 	@Override

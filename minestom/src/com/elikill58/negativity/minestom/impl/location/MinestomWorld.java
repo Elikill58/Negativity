@@ -42,12 +42,12 @@ public class MinestomWorld extends World {
 
 	@Override
 	public int getMaxHeight() {
-		return w.getDimensionType().getMaxY();
+		return w.getCachedDimensionType().maxY();
 	}
 
 	@Override
 	public int getMinHeight() {
-		return w.getDimensionType().getMinY();
+		return w.getCachedDimensionType().minY();
 	}
 	
 	@Override

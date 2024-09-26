@@ -22,6 +22,10 @@ repositories {
         name 'spigot'
         url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
+    maven {
+        name = "dmulloy2"
+    	url = "https://repo.dmulloy2.net/repository/public/"
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -33,7 +37,7 @@ configurations {
 
 dependencies {
     api project(':common')
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
     spigot 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
 }
 

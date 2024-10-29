@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.packets.nms.NamedVersion;
 public class Version1_21 extends NamedVersion {
 
 	public Version1_21() {
-		super("1.20.5");
+		super("1.21");
 		// packets ID seems not same as 1.20
 		int i = 0;
 		for (Client type : Arrays.asList(Client.TELEPORT_ACCEPT, Client.TILE_NBT_QUERY, Client.DIFFICULTY_CHANGE,

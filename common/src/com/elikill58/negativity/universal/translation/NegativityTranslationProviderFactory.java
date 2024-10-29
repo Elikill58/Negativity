@@ -41,7 +41,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 					continue;
 				}
 
-				for (String line : Files.readAllLines(file)) {
+				for (String line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
 					concatenatedBundles.append(line);
 					// Make sure we have a new line between concatenated files
 					concatenatedBundles.append(System.lineSeparator());

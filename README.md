@@ -1,9 +1,9 @@
 # Negativity
 
 It's a Minecraft AntiCheat for multiples platforms :
-- **Spigot** 1.8.8 to 1.20 (*and fork like PaperSpigot or Tuinity*)
+- **Spigot** 1.8.8 to 1.21 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8, 9 & 10
-- **Fabric** MC 1.18.2, 1.19 to 1.19.4 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
+- **WARN**: After internal issue, it's actually not available. **Fabric** MC 1.18.2, 1.19 to 1.19.4 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
 - **Minestom** 1.19.3
 
 Proxies:
@@ -90,7 +90,7 @@ For permissions config, [click here](https://github.com/Elikill58/Negativity/wik
 Prerequisites:
 - [Git](https://git-scm.com)
 - JDK 8 (any distribution should work, [AdoptOpenJDK](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot) for example)
-- JDK 17 (any distribution should work) recommended for latest minecraft version (also work with lower versions)
+- JDK 18 (any distribution should work) recommended for latest minecraft version (also work with lower versions)
 
 In the following instructions you will have to execute Gradle tasks. You **must** use the Gradle wrapper distributed in this repository.
 

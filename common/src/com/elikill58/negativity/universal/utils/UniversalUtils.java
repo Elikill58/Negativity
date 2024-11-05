@@ -179,6 +179,15 @@ public class UniversalUtils {
 		}
 	}
 	
+	public static boolean getBoolean(Object o) {
+		if(o == null)
+			return false;
+		if(o instanceof Boolean)
+			return ((Boolean) o).booleanValue();
+		String s = o.toString();
+		return s.equalsIgnoreCase("true") || s.equals("1");
+	}
+	
 	public static boolean getBoolean(String s) {
 		return s.equalsIgnoreCase("true") || s.equals("1");
 	}

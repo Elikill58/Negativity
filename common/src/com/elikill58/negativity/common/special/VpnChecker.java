@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.special;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -43,16 +42,14 @@ public class VpnChecker extends Special implements Listeners {
 				return;
 			}
 		}
-		CompletableFuture.runAsync(() -> {
-			UniversalUtils.getContentFromURL("https://api.negativity.fr/ip/" + ip).ifPresent(result -> {
-				try {
-					VpnResult vpn = new VpnResult((JSONObject) new JSONParser().parse(result));
-					subnets.put(vpn.getMatcher(), vpn);
-					manageVpn(e, ip, vpn);
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-			});
+		UniversalUtils.getContentFromURL("https://api.negativity.fr/ip/" + ip).ifPresent(result -> {
+			try {
+				VpnResult vpn = new VpnResult((JSONObject) new JSONParser().parse(result));
+				subnets.put(vpn.getMatcher(), vpn);
+				manageVpn(e, ip, vpn);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
 		});
 	}
 
@@ -85,9 +82,9 @@ public class VpnChecker extends Special implements Listeners {
 		private final String ip, code, name;
 
 		public VpnResult(JSONObject data) {
-			this.proxy = UniversalUtils.getBoolean(data.get("proxy").toString());
-			this.hosting = UniversalUtils.getBoolean(data.get("hosting").toString());
-			this.vpn = UniversalUtils.getBoolean(data.get("vpn").toString());
+			this.proxy = UniversalUtils.getBoolean(data.get("proxy"));
+			this.hosting = UniversalUtils.getBoolean(data.get("hosting"));
+			this.vpn = UniversalUtils.getBoolean(data.get("vpn"));
 
 			this.ip = data.get("ip").toString();
 			this.code = data.get("code").toString();

@@ -43,6 +43,7 @@ import com.elikill58.negativity.sponge.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -73,7 +74,7 @@ public class SpongeNegativity {
 	
 	@Listener
 	public void onConstructPlugin(ConstructPluginEvent event) {
-		Adapter.setAdapter(new SpongeAdapter(this));
+		Adapter.setAdapter(new SpongeAdapter(this, event.game().platform().minecraftVersion().dataVersion().orElse(Version.HIGHER.getFirstProtocolNumber())));
 		ChannelManager chan = Sponge.channelManager();
 		chan.ofType(ResourceKey.resolve("fml:hs"), RawDataChannel.class).play().addHandler(new FmlRawDataListener());
 		this.channel = chan.ofType(ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID), RawDataChannel.class);

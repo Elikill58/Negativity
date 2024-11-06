@@ -51,7 +51,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minecraft.SharedConstants;
 
 public class SpongeAdapter extends Adapter {
 	
@@ -66,13 +65,13 @@ public class SpongeAdapter extends Adapter {
 	private final SpongeItemRegistrar itemRegistrar = new SpongeItemRegistrar();
 	private final Scheduler scheduler;
 	
-	public SpongeAdapter(SpongeNegativity plugin) {
+	public SpongeAdapter(SpongeNegativity plugin, int version) {
 		this.plugin = plugin;
 		this.logger = new Log4jAdapter(plugin.getLogger());
 		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
 		
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(plugin.getConfigDir().resolve("lang"), "Negativity", "CheatHover");
-		this.serverVersion = Version.getVersionByProtocolID(SharedConstants.getProtocolVersion());
+		this.serverVersion = Version.getVersionByProtocolID(version);
 		this.scheduler = new SpongeScheduler(plugin.getContainer());
 	}
 	

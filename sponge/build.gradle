@@ -1,12 +1,10 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
-import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
 import org.spongepowered.plugin.metadata.model.PluginDependency
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id 'io.github.goooler.shadow'
     id 'org.spongepowered.gradle.plugin'
-    id 'org.spongepowered.gradle.vanilla'
 }
 
 evaluationDependsOn(':common')
@@ -20,12 +18,6 @@ sourceSets {
 
 dependencies {
     api project(':common')
-}
-
-minecraft {
-    version '1.16.5'
-    platform MinecraftPlatform.SERVER
-    injectRepositories false
 }
 
 sponge {
@@ -101,9 +93,3 @@ task prepareServer(type: Copy) {
     }
 }
 
-runServer {
-    def runDir = System.getProperty("sponge.run.dir")
-    if (runDir != null) {
-        workingDir(runDir)
-    }
-}

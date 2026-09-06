@@ -14,18 +14,25 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.minecraft.server.command.ServerCommandSource;
-
-public class CommandsExecutorManager implements Command<ServerCommandSource>, SuggestionProvider<ServerCommandSource> {
+/**
+ * Brigadier command bridge to Negativity events.
+ * <p>
+ * Kept generic on the command source type so that this class never references a Minecraft class:
+ * it is shipped once in Negativity and must load on every mapping namespace (see
+ * {@link GlobalFabricNegativity}).
+ *
+ * @param <S> the command source type of the running Minecraft version
+ */
+public class CommandsExecutorManager<S> implements Command<S>, SuggestionProvider<S> {
 
 	private final String cmd;
-	
+
 	public CommandsExecutorManager(String cmd) {
 		this.cmd = cmd;
 	}
-	
+
 	@Override
-	public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+	public int run(CommandContext<S> context) throws CommandSyntaxException {
 		String input = context.getInput();
 		String[] args = input.split(" ");
 		args = Arrays.copyOfRange(args, 1, args.length);
@@ -41,7 +48,7 @@ public class CommandsExecutorManager implements Command<ServerCommandSource>, Su
 	}
 
 	@Override
-	public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context,
+	public CompletableFuture<Suggestions> getSuggestions(CommandContext<S> context,
 			SuggestionsBuilder builder) throws CommandSyntaxException {
 		String input = context.getInput();
 		String[] args = input.split(" ");
@@ -55,7 +62,7 @@ public class CommandsExecutorManager implements Command<ServerCommandSource>, Su
 		TabExecutionEvent event = new TabExecutionEvent(cmd, GlobalFabricNegativity.getExecutor(context.getSource()), args, prefix);
 		EventManager.callEvent(event);
 		event.getTabContent().forEach(builder::suggest);
-		
+
 		return builder.buildFuture();
 	}
 }

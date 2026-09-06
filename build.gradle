@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
     id 'io.github.goooler.shadow' version '8.1.7'
     id 'fabric-loom' version '1.10.1' apply false
     id 'org.spongepowered.gradle.plugin' version '2.3.0' apply false
@@ -33,6 +34,18 @@ build.dependsOn shadowJar
 
 tasks.named('javadoc') {
     enabled false
+}
+
+// Single published artifact: the merged shadow jar (all platforms), as com.github.Elikill58:Negativity on JitPack.
+// JitPack runs `publishToMavenLocal -Pgroup=com.github.Elikill58 -Pversion=<ref>`; without an explicit publication
+// it injects one per subproject, which fails because their shadowJar and jar share the same (null) classifier.
+publishing {
+    publications {
+        negativity(MavenPublication) {
+            artifactId = 'Negativity'
+            artifact shadowJar
+        }
+    }
 }
 
 subprojects {

@@ -1,6 +1,5 @@
 jdk:
 - openjdk21
 before_install:
-- sdk install java 21-open
 - sdk install java 17-open
 - chmod +x gradlew

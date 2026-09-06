@@ -61,28 +61,38 @@ java {
 	withSourcesJar()
 }
 
+// Intermediate jar: yarn-mapped, NOT usable on a server. Must go through remapJar.
 shadowJar {
     archiveBaseName.set('NegativityFabric')
     archiveAppendix.set('common')
-    archiveClassifier.set(null)
-    
+    archiveClassifier.set('dev')
+
     dependencies {
         it.include(it.project(':common'))
     }
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)
-    
+
     exclude('mappings/*')
 }
 
-build.dependsOn shadowJar
+// Final jar: shadowJar output remapped from yarn to intermediary names.
+remapJar {
+    dependsOn shadowJar
+    inputFile.set(shadowJar.archiveFile)
+    archiveBaseName.set('NegativityFabric')
+    archiveAppendix.set('common')
+    archiveClassifier.set(null)
+}
+
+build.dependsOn remapJar
 
 parent.tasks.named('shadowJar', ShadowJar) {
-    it.from(shadowJar.outputs)
+    it.from(remapJar.outputs)
 }
 
 task prepareServer(type: Copy) {
-    from shadowJar.outputs
+    from remapJar.outputs
     rename { 'negativity.jar' }
     def pluginDir = System.getProperty('plugins.dir')
     if (pluginDir == null) {

@@ -32,6 +32,13 @@ task prepareServer(type: Copy) {
 
 build.dependsOn shadowJar
 
+// The root project has no sources: its plain jar would be empty and would write the same file as shadowJar
+// (Negativity-<version>.jar, no classifier). Gradle then rejects the publication because it consumes an output
+// of ':jar' without a declared dependency.
+tasks.named('jar') {
+    enabled = false
+}
+
 tasks.named('javadoc') {
     enabled false
 }

@@ -44,7 +44,7 @@ Also by default, if the server is **less than 19 TPS**, alert will be disabled
 We support a lot of languages :
 - **English** (*en_US*, default lang) By Elikill58 & RedNesto
 - **French** (*fr_FR*) By Elikill58
-- **Portuguese** (*pr_BR*) By jheyson
+- **Portuguese** (*pt_BR*) By jheyson
 - **Norwegian** (*no_NO*) By SuchHero
 - **Russian** (*ru_RU*) By VidTu
 - **Chinese** (*zh_CN*) By f0rb1d, SGYRE & Dust

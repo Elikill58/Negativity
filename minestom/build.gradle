@@ -28,11 +28,17 @@ sourceSets {
     }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+// Minestom 26.1+ requires Java 25 (class files are version 69).
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+def minestomVersion = '2026.08.28-26.2'
 
 dependencies {
     api project(':common')
-    compileOnly 'com.github.Minestom:Minestom:2025.10.05-1.21.8'
+    // Published on Maven Central since the move away from JitPack.
+    compileOnly "net.minestom:minestom:${minestomVersion}"
+    // Minestom exposes slf4j at runtime scope only; Extension#getLogger() returns an slf4j Logger.
+    compileOnly 'org.slf4j:slf4j-api:2.0.18'
     // https://mvnrepository.com/artifact/dev.hollowcube/minestom-ce-extensions
 	compileOnly 'dev.hollowcube:minestom-ce-extensions:1.2.0'
 
@@ -41,7 +47,7 @@ dependencies {
     // Manual integration test only — NEVER run as part of :test / CI.
     // Pulls Minestom & extension loader at runtime so the standalone server can boot.
     manualTestImplementation project(':common')
-    manualTestImplementation 'com.github.Minestom:Minestom:2025.10.05-1.21.8'
+    manualTestImplementation "net.minestom:minestom:${minestomVersion}"
     manualTestImplementation 'dev.hollowcube:minestom-ce-extensions:1.2.0'
     manualTestImplementation 'io.netty:netty-all:4.1.110.Final'
     manualTestImplementation 'org.slf4j:slf4j-simple:2.0.13'
@@ -49,7 +55,8 @@ dependencies {
     manualTestImplementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.21'
 
     // Auto-bot client to drive scenarios end-to-end without a real Minecraft client / LiquidBounce.
-    manualTestImplementation 'org.geysermc.mcprotocollib:protocol:1.21.7-1'
+    // Must speak the same protocol as the Minestom version above (26.2 = 776); no release yet for 26.2.
+    manualTestImplementation 'org.geysermc.mcprotocollib:protocol:26.2-SNAPSHOT'
 }
 
 processResources {
@@ -61,12 +68,12 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 shadowJar {
     archiveBaseName.set('NegativityMinestom')
-    archiveAppendix.set('1.21')
+    archiveAppendix.set('26.2')
     archiveClassifier.set(null)
 
     mergeServiceFiles()
@@ -97,7 +104,7 @@ task prepareServer(type: Copy) {
 //     ./gradlew :minestom:manualTest [-Pport=25565] [-Pworld=flat]
 //
 // Workflow:
-//   1. ./gradlew :shadowJar                  (builds NegativityMinestom-1.21.jar)
+//   1. ./gradlew :shadowJar                  (builds NegativityMinestom-26.2.jar)
 //   2. ./gradlew :minestom:manualTest        (starts Minestom server with extension loaded)
 //   3. Operator connects with a legit client + a LiquidBounce client (offline mode)
 //   4. Follows testResources/MANUAL_TEST_PLAN.md, then types `report` in the test console
@@ -115,10 +122,10 @@ task manualTest(type: JavaExec) {
     dependsOn manualTestPrepareExtension
     dependsOn sourceSets.manualTest.classesTaskName
 
-    // Pin to JDK 21. JavaExec does not inherit `java.toolchain` from the java extension by default,
-    // so it can pick whatever JAVA_HOME / first JDK Gradle discovers (e.g. 22) and break Minestom.
+    // Pin to JDK 25. JavaExec does not inherit `java.toolchain` from the java extension by default,
+    // so it can pick whatever JAVA_HOME / first JDK Gradle discovers and break Minestom.
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 
     mainClass.set('com.elikill58.negativity.minestom.manualtest.ManualTestServer')
@@ -141,7 +148,7 @@ task manualTestAuto(type: JavaExec) {
     dependsOn sourceSets.manualTest.classesTaskName
 
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 
     mainClass.set('com.elikill58.negativity.minestom.manualtest.ManualTestServer')

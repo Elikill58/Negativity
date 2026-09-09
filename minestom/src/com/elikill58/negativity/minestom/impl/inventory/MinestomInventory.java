@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.inventory.PlayerInventory;
 
 public class MinestomInventory extends Inventory {
@@ -119,7 +120,7 @@ public class MinestomInventory extends Inventory {
 
 	@Override
 	public String getInventoryName() {
-		return inv instanceof net.minestom.server.inventory.Inventory mi ? mi.getTitle().examinableName() : null;
+		return inv instanceof net.minestom.server.inventory.Inventory mi ? PlainTextComponentSerializer.plainText().serialize(mi.getTitle()) : null;
 	}
 
 	@Override

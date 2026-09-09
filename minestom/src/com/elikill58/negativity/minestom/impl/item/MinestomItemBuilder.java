@@ -20,8 +20,8 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack.Builder;
 import net.minestom.server.item.component.EnchantmentList;
-import net.minestom.server.item.component.HeadProfile;
 import net.minestom.server.item.component.TooltipDisplay;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Unit;
 
@@ -45,7 +45,7 @@ public class MinestomItemBuilder extends ItemBuilder {
 	
 	public MinestomItemBuilder(OfflinePlayer owner) {
 		this.item = net.minestom.server.item.ItemStack.builder(net.minestom.server.item.Material.PLAYER_HEAD);
-		this.item.set(DataComponents.PROFILE, new HeadProfile(owner.getName(), owner.getUniqueId(), Collections.emptyList()));
+		this.item.set(DataComponents.PROFILE, new ResolvableProfile(new ResolvableProfile.Partial(owner.getName(), owner.getUniqueId(), Collections.emptyList())));
 	}
 
 	@Override

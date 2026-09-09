@@ -21,6 +21,11 @@ pluginManagement {
     }
 }
 
+plugins {
+    // Auto-downloads the JDKs required by module toolchains (25 for :minestom since Minestom 26.1).
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 rootProject.name = 'Negativity'
 
 // All global projects

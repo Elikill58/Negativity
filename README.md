@@ -88,6 +88,7 @@ Prerequisites:
 - JDK 8 (any distribution should work, [AdoptOpenJDK](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot) for example)
 - JDK 17 (any distribution should work) recommended for latest minecraft version (also work with lower versions)
 - JDK 21 (any distribution should work) required for fabric platform
+- JDK 25 required for the minestom platform (Minestom 26.1+); downloaded automatically by Gradle if missing
 
 In the following instructions you will have to execute Gradle tasks. You **must** use the Gradle wrapper distributed in this repository.
 

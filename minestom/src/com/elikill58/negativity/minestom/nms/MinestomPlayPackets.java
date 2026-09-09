@@ -53,6 +53,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.play.*;
@@ -97,7 +98,7 @@ public class MinestomPlayPackets {
 	            n.viewDistance = s.viewDistance();
 	            n.chatMode = NPacketPlayInSettings.ChatMode.values()[s.chatMessageType().ordinal()];
 	            n.displayedSkinParts = s.displayedSkinParts() & 0xFF;
-	            n.mainHand = s.mainHand() == ClientSettings.MainHand.RIGHT ? Hand.MAIN : Hand.OFF;
+	            n.mainHand = s.mainHand() == MainHand.RIGHT ? Hand.MAIN : Hand.OFF;
 	            return n;
 	        });
 	        entry(ClientTabCompletePacket.class);
@@ -216,7 +217,7 @@ public class MinestomPlayPackets {
 	        entry(ClientSetTestBlockPacket.class);
 	        entry(ClientUpdateSignPacket.class);
 	        entry(ClientAnimationPacket.class, (p) -> new NPacketPlayInArmAnimation());
-	        entry(ClientSpectatePacket.class);
+	        // ClientSpectatePacket was removed in Minestom 26.x (now PlayerSpectateEntityEvent); not needed by any check.
 	        entry(ClientTestInstanceBlockActionPacket.class);
 	        entry(ClientPlayerBlockPlacementPacket.class, (p) -> {
 	            NPacketPlayInBlockPlace n = new NPacketPlayInBlockPlace();
@@ -278,16 +279,16 @@ public class MinestomPlayPackets {
                 NPacketPlayOutSpawnEntity n = new NPacketPlayOutSpawnEntity();
                 n.entityId = p.entityId();
                 n.entityUUID = p.uuid();
-                net.minestom.server.entity.EntityType met = net.minestom.server.entity.EntityType.fromId(p.type());
+                net.minestom.server.entity.EntityType met = p.type();
                 n.type = met == null ? EntityType.UNKNOWN : EntityType.get(met.name());
                 n.x = p.position().x();
                 n.y = p.position().y();
                 n.z = p.position().z();
                 n.yaw = p.position().yaw();
                 n.pitch = p.position().pitch();
-                n.modX = p.velocityX();
-                n.modY = p.velocityY();
-                n.modZ = p.velocityZ();
+                n.modX = p.velocity().x();
+                n.modY = p.velocity().y();
+                n.modZ = p.velocity().z();
                 return n;
             });
             entry(EntityAnimationPacket.class);
@@ -476,7 +477,7 @@ public class MinestomPlayPackets {
             entry(EntityVelocityPacket.class, (p) -> {
                 NPacketPlayOutEntityVelocity n = new NPacketPlayOutEntityVelocity();
                 n.entityId = p.entityId();
-                n.vec = new Vector(p.velocityX(), p.velocityY(), p.velocityZ());
+                n.vec = new Vector(p.velocity().x(), p.velocity().y(), p.velocity().z());
                 return n;
             });
             entry(EntityEquipmentPacket.class);
@@ -490,7 +491,7 @@ public class MinestomPlayPackets {
             entry(UpdateScorePacket.class);
             entry(UpdateSimulationDistancePacket.class);
             entry(SetTitleSubTitlePacket.class);
-            entry(TimeUpdatePacket.class);
+            entry(SetTimePacket.class);
             entry(SetTitleTextPacket.class);
             entry(SetTitleTimePacket.class);
             entry(EntitySoundEffectPacket.class);

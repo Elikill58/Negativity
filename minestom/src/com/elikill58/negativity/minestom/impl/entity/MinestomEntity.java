@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.entity.Entity;
 
 public class MinestomEntity<E extends Entity> extends AbstractEntity {
@@ -61,10 +62,9 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 		return entity;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getName() {
-		return entity.getCustomName() != null ? entity.getCustomName().examinableName() : entity.getEntityType().asValue().name();
+		return entity.getCustomName() != null ? PlainTextComponentSerializer.plainText().serialize(entity.getCustomName()) : entity.getEntityType().asValue().name();
 	}
 	
 	@Override

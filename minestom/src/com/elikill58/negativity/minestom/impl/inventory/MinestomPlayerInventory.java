@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.minestom.impl.inventory.holders.MinestomNegativityHolder;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
+import com.elikill58.negativity.minestom.impl.item.MinestomMaterial;
 
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
@@ -152,7 +153,9 @@ public class MinestomPlayerInventory extends PlayerInventory {
 	
 	@Override
 	public boolean contains(Material type) {
-		net.minestom.server.item.Material m = (net.minestom.server.item.Material) type.getDefault();
+		net.minestom.server.item.Material m = MinestomMaterial.itemOf(type);
+		if (m == null)
+			return false; // block-only material: can't be in an inventory
 		for(net.minestom.server.item.ItemStack i : inv.getItemStacks()) {
 			if(i.material().equals(m))
 				return true;

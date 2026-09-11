@@ -40,7 +40,10 @@ public class MinestomItemBuilder extends ItemBuilder {
 	}
 	
 	public MinestomItemBuilder(Material type) {
-		this.item = net.minestom.server.item.ItemStack.builder((net.minestom.server.item.Material) type.getDefault());
+		net.minestom.server.item.Material m = MinestomMaterial.itemOf(type);
+		if (m == null)
+			throw new IllegalArgumentException("Material " + type + " has no item form on Minestom");
+		this.item = net.minestom.server.item.ItemStack.builder(m);
 	}
 	
 	public MinestomItemBuilder(OfflinePlayer owner) {

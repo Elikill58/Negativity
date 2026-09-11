@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
+import com.elikill58.negativity.minestom.impl.item.MinestomMaterial;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.inventory.PlayerInventory;
@@ -135,7 +136,9 @@ public class MinestomInventory extends Inventory {
 	
 	@Override
 	public boolean contains(Material type) {
-		net.minestom.server.item.Material m = (net.minestom.server.item.Material) type.getDefault();
+		net.minestom.server.item.Material m = MinestomMaterial.itemOf(type);
+		if (m == null)
+			return false; // block-only material: can't be in an inventory
 		for(net.minestom.server.item.ItemStack i : inv.getItemStacks()) {
 			if(i.material().equals(m))
 				return true;

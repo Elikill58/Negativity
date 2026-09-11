@@ -11,6 +11,8 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 
+import net.minestom.server.instance.block.Block;
+
 public class MinestomItemRegistrar extends ItemRegistrar {
 
 	private final HashMap<String, Material> cache = new HashMap<>();
@@ -42,7 +44,12 @@ public class MinestomItemRegistrar extends ItemRegistrar {
 	}
 	
 	private @Nullable Material findMaterial(String key) {
-		net.minestom.server.item.Material m = net.minestom.server.item.Material.fromKey((key.contains(":") ? key : "minecraft:" + key).toLowerCase(Locale.ROOT));
-		return m == null ? null : new MinestomMaterial(m);
+		String namespaced = (key.contains(":") ? key : "minecraft:" + key).toLowerCase(Locale.ROOT);
+		net.minestom.server.item.Material m = net.minestom.server.item.Material.fromKey(namespaced);
+		if (m != null)
+			return new MinestomMaterial(m);
+		// block-only materials (water, lava, fire, ...) are not in the item registry
+		Block b = Block.fromKey(namespaced);
+		return b == null ? null : new MinestomMaterial(b);
 	}
 }

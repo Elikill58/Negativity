@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.minestom.impl.item.MinestomMaterial;
 import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 
 import net.minestom.server.coordinate.Point;
@@ -63,7 +64,10 @@ public class MinestomBlock extends Block {
 
 	@Override
 	public void setType(Material type) {
-		w.setBlock(position, ((net.minestom.server.item.Material) type.getDefault()).block());
+		net.minestom.server.instance.block.Block b = MinestomMaterial.blockOf(type);
+		if (b == null)
+			throw new IllegalArgumentException("Material " + type + " has no block form on Minestom");
+		w.setBlock(position, b);
 	}
 
 	@Override
